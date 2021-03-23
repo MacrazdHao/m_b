@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="151px" height="121px" viewBox="0 0 151 121" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>椭圆形</title>
+    <defs>
+        <linearGradient x1="11.0600378%" y1="24.4827759%" x2="83.9654349%" y2="82.6741461%" id="linearGradient-1">
+            <stop stop-color="#FFD83D" offset="0%"></stop>
+            <stop stop-color="#FFA724" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="生涯模式" transform="translate(-1769.000000, -1638.000000)" fill="url(#linearGradient-1)">
+            <g id="bg" transform="translate(0.000000, 100.000000)">
+                <g id="椭圆形-" transform="translate(1769.000000, 1538.000000)">
+                    <ellipse id="椭圆形" cx="81" cy="81.0980036" rx="81" ry="81.0980036"></ellipse>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
