@@ -11,7 +11,7 @@
       <div class="page-1-content">
         <p class="title wow fadeInDown">生涯成长和学校教育全链条生涯规划</p>
         <div class="page-1-item page-1-item1">
-          <div class="left wow fadeInLeft" data-wow-delay=".3s">
+          <div class="left wow fadeInLeft" data-wow-delay=".1s">
             <div class="left-title">
               <img src="../assets/icon_talent.svg" />
               <p>天赋探测</p>
@@ -22,12 +22,12 @@
           </div>
           <img
             class="right wow fadeInRight"
-            data-wow-delay=".3s"
+            data-wow-delay=".1s"
             src="../assets/career_1.svg"
           />
         </div>
         <div class="page-1-item page-1-item2">
-          <div class="left wow fadeInRight" data-wow-delay=".5s">
+          <div class="left wow fadeInRight" data-wow-delay=".2s">
             <div class="left-title">
               <img src="../assets/icon_travel.svg" />
               <p>奇妙旅程</p>
@@ -38,12 +38,12 @@
           </div>
           <img
             class="right wow fadeInLeft"
-            data-wow-delay=".5s"
+            data-wow-delay=".2s"
             src="../assets/career_2.svg"
           />
         </div>
         <div class="page-1-item page-1-item3">
-          <div class="left wow fadeInLeft" data-wow-delay=".5s">
+          <div class="left wow fadeInLeft" data-wow-delay=".3s">
             <div class="left-title">
               <img src="../assets/icon_track.svg" />
               <p>长线跟踪</p>
@@ -69,7 +69,7 @@
       </div>
       <div class="page-2-content">
         <div class="page-2-item page-2-item1">
-          <div class="left wow fadeInRight">
+          <div class="left wow fadeInRight" data-wow-delay=".4s">
             <div class="left-title">
               <p>CECP-个人解决方案</p>
             </div>
@@ -77,10 +77,14 @@
               项目为学生提供生涯咨询和教育解决方案，通过个人用户主页，用户能够随时掌握教育评估、申请、学习等进度，并了解更多的教育信息和机会。
             </p>
           </div>
-          <img class="right wow fadeInLeft" src="../assets/career_4.svg" />
+          <img
+            class="right wow fadeInLeft"
+            data-wow-delay=".4s"
+            src="../assets/career_4.svg"
+          />
         </div>
         <div class="page-2-item page-2-item2">
-          <div class="left wow fadeInLeft">
+          <div class="left wow fadeInLeft" data-wow-delay=".5s">
             <div class="left-title">
               <p>CECP-学校和机构解决方案</p>
             </div>
@@ -88,7 +92,11 @@
               通过对学校和机构进行需求评估后，平台分配相应数量的账号给到用户。通过已订阅的账号，学生可以在平台上使用生涯规划、学生咨询等服务，学校及机构可以进行后台管理，掌握学生的平台使用情况、学习情况并获得平台所提供的各项缝隙数据。
             </p>
           </div>
-          <img class="right wow fadeInRight" src="../assets/career_5.svg" />
+          <img
+            class="right wow fadeInRight"
+            data-wow-delay=".5s"
+            src="../assets/career_5.svg"
+          />
         </div>
       </div>
     </div>
@@ -160,6 +168,7 @@ export default {
   }
   .page-1 {
     // height: 46.875vw;
+    min-height: 86.41vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -254,6 +263,7 @@ export default {
   .page-2 {
     width: 100vw;
     // height: 46.875vw;
+    min-height: 76.04vw;
     display: flex;
     flex-direction: column;
     align-items: center;

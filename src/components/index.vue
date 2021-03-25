@@ -284,7 +284,7 @@
             </div>
           </div>
           <div class="page-4-content-item2">
-            <div class="feature wow fadeInDown" data-wow-duration=".6s">
+            <div class="feature wow fadeInDown" data-wow-duration="2.5s">
               <img src="../assets/icon_talent.svg" />
               <div class="feature-content">
                 <p class="title">01. 天赋探测</p>
@@ -293,7 +293,7 @@
                 </p>
               </div>
             </div>
-            <div class="feature wow fadeInDown" data-wow-duration=".6s">
+            <div class="feature wow fadeInDown" data-wow-duration="2.5s">
               <img src="../assets/icon_travel.svg" />
               <div class="feature-content">
                 <p class="title">02. 奇妙旅程</p>
@@ -302,7 +302,7 @@
                 </p>
               </div>
             </div>
-            <div class="feature wow fadeInDown" data-wow-duration=".6s">
+            <div class="feature wow fadeInDown" data-wow-duration="2.5s">
               <img src="../assets/icon_track.svg" />
               <div class="feature-content">
                 <p class="title">03. 长线跟踪</p>
@@ -314,7 +314,7 @@
           </div>
         </div>
         <div class="page-4-content-inbox" data-wow-delay=".7s">
-          <div class="solution wow fadeInDown" data-wow-duration="1.6s">
+          <div class="solution wow fadeInDown" data-wow-duration="3s">
             <div class="solution-header solution-header1">
               <p class="solution-title-en">Personal</p>
               <p class="solution-title-cn">个人解决方案</p>
@@ -323,7 +323,7 @@
               项目为学生提供生涯咨询和教育解决方案，通过个人用户主页，用户能够随时掌握教育评估、申请、学习等进度，并了解更多的教育信息和机会。
             </p>
           </div>
-          <div class="solution wow fadeInDown" data-wow-duration="1.6s">
+          <div class="solution wow fadeInDown" data-wow-duration="3s">
             <div class="solution-header solution-header2">
               <p class="solution-title-en">School and Institutional</p>
               <p class="solution-title-cn">学校和机构解决方案</p>

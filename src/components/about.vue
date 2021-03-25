@@ -11,25 +11,25 @@
       </div>
       <div class="page-item page-item1">
         <p class="title wow fadeInUp">MyFellas·简介</p>
-        <p class="content wow fadeInUp" data-wow-delay=".2s">
+        <p class="content wow fadeInUp" data-wow-delay=".1s">
           MyFellas国际教育交流平台，是由全球各国顶尖院校的高端人才倾力打造的一款专注中国国际教育垂直领域的SaaS服务平台。
           <br />
           MyFellas从国内国际学校存在的运营管理、教学实践、课外拓展等一系列问题出发，通过整合英国顶尖的教育资源，利用SaaS技术和大数据分析模型赋能，帮助更多的中国国际学校对接优质国际教育资源，全面提升综合实力，顺利完成国际化生涯规划升级。
         </p>
       </div>
       <div class="page-item page-item2">
-        <p class="title wow fadeInUp" data-wow-delay=".4s">MyFellas·服务理念</p>
-        <p class="content wow fadeInUp" data-wow-delay=".6s">
+        <p class="title wow fadeInUp" data-wow-delay=".12s">MyFellas·服务理念</p>
+        <p class="content wow fadeInUp" data-wow-delay=".14s">
           立足于国内国际学校实际，着眼于学生未来发展前景，致力为国际教育提供一站式生涯规划方案。
         </p>
       </div>
       <div id="topFlag" class="page-item page-item3">
-        <p class="title wow fadeInUp">MyFellas·服务团队</p>
-        <p class="content wow fadeInUp">
+        <p class="title wow fadeInUp" data-wow-delay=".16s">MyFellas·服务团队</p>
+        <p class="content wow fadeInUp" data-wow-delay=".18s">
           CECP成立以来已组成拥有15人的服务团队，成员学术背景覆盖教育学及计算机科学并均拥有多年的教育或数据分析行业经历。团队核心成员均来自QS世界排名TOP50高校，擅长领域包括教育心理学、市场营销管理、及大数据处理。团队全员坚持以学生成长为中心，致力于让CECP成为真正从学生角度出发的生涯规划服务提供商。
         </p>
         <img
-          class="wow fadeInUp"
+          class="wow fadeInUp" data-wow-delay=".2s"
           src="../assets/team.png"
         />
       </div>

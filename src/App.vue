@@ -9,7 +9,9 @@
         <p>登录</p>
       </div>
     </div>
-    <router-view />
+    <transition name="fade-transform" mode="out-in">
+    <router-view style="flex: 1 0 auto" />
+    </transition>
     <div class="footer">
       <div class="contact">
         <p>+(86-02) 87378806</p>
@@ -72,6 +74,8 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
+  display: flex;
+  flex-direction: column;
   p {
     margin: 0;
     width: fit-content;
@@ -88,6 +92,7 @@ export default {
     padding-bottom: 0.99vw;
     justify-content: center;
     align-items: center;
+    flex: 0 0 auto;
     div {
       p {
         cursor: pointer;
@@ -115,6 +120,7 @@ export default {
     }
   }
   .footer {
+    flex: 0 0 auto;
     background-color: #013047;
     display: flex;
     flex-direction: column;
@@ -127,6 +133,7 @@ export default {
     }
     p {
       font-size: 1.15vw;
+      white-space: nowrap;
       color: #ffffff;
       font-family: Alibaba-PuHuiTi-Regular;
     }
