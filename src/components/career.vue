@@ -134,7 +134,7 @@ export default {
   }
   .page {
     position: relative;
-    width: 100vw;
+    // width: 100vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -159,7 +159,6 @@ export default {
     }
   }
   .page-1 {
-    width: 100vw;
     // height: 46.875vw;
     display: flex;
     flex-direction: column;
@@ -181,6 +180,7 @@ export default {
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: 62.5vw;
       .title {
         font-size: 1.88vw;
         color: #013047;
@@ -194,7 +194,10 @@ export default {
       }
       .page-1-item {
         display: flex;
-        width: 62.5vw;
+        // flex-direction: row;
+        justify-content: space-between;
+        // width: 62.5vw;
+        width: 100%;
         .left {
           width: 25vw;
           .left-title {
@@ -223,6 +226,7 @@ export default {
         }
         .right {
           width: 31.7vw;
+          height: 100%;
           margin-top: 0.625vw;
         }
       }
@@ -230,13 +234,13 @@ export default {
       .page-1-item3 {
         flex-direction: row;
         .right {
-          margin-left: 5.78vw;
+          // margin-left: 5.78vw;
         }
       }
       .page-1-item2 {
         flex-direction: row-reverse;
         .right {
-          margin-right: 5.78vw;
+          // margin-right: 5.78vw;
         }
       }
       .page-1-item3 {
@@ -267,6 +271,7 @@ export default {
       }
     }
     .page-2-content {
+      width: 62.5vw;
       margin-top: 5.2vw;
       display: flex;
       flex-direction: column;
@@ -280,6 +285,7 @@ export default {
       }
       .page-2-item {
         display: flex;
+        justify-content: space-between;
         width: 62.5vw;
         .left {
           .left-title {
@@ -303,17 +309,19 @@ export default {
         }
         .right {
           width: 32.6vw;
+          height: 100%;
         }
       }
       .page-2-item1 {
         flex-direction: row-reverse;
         .left {
+          width: 25vw;
           p {
             color: #ffb706;
           }
         }
         .right {
-          margin-right: 5.78vw;
+          // margin-right: 5.78vw;
         }
       }
       .page-2-item2 {
@@ -322,12 +330,10 @@ export default {
           width: 25vw;
           p {
             color: #0856e8;
-            // text-justify: inter-ideograph;
-            // letter-spacing: 1px;
           }
         }
         .right {
-          margin-left: 5.78vw;
+          // margin-left: 5.78vw;
           letter-spacing: 10px;
         }
       }
