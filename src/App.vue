@@ -1,16 +1,18 @@
 <template>
   <div id="app">
     <div class="header">
-      <img @click="goIndex" src="./assets/logo.svg" />
-      <div>
-        <p @click="goIndex">首页</p>
-        <p @click="goCareer">生涯模式</p>
-        <p @click="goAbout">关于我们</p>
-        <p>登录</p>
+      <div class="header-inbox">
+        <img @click="goIndex" src="./assets/logo.svg" />
+        <div>
+          <p @click="goIndex">{{ $t("header.home") }}</p>
+          <p @click="goCareer">{{ $t("header.career") }}</p>
+          <p @click="goAbout">{{ $t("header.about") }}</p>
+          <p @click="goLogin">{{ $t("header.login") }}</p>
+        </div>
       </div>
     </div>
     <transition name="fade-transform" mode="out-in">
-    <router-view style="flex: 1 0 auto" />
+      <router-view style="flex: 1 0 auto" />
     </transition>
     <div class="footer">
       <div class="contact">
@@ -29,21 +31,20 @@
 </template>
 
 <script>
+import languageMixin from "./mixins/language";
 export default {
   name: "App",
+  mixins: [languageMixin],
   data() {
     return {
       showTop: false,
     };
   },
   mounted() {
+    // this.backToTop();
     window.onscroll = () => {
       this.showTop =
         window.pageYOffset > document.getElementById("topFlag").offsetTop;
-      console.log(
-        window.pageYOffset,
-        document.getElementById("topFlag").offsetTop
-      );
     };
   },
   methods: {
@@ -59,6 +60,9 @@ export default {
     },
     goAbout() {
       this.$router.push({ path: "/about" });
+    },
+    goLogin() {
+      this.language = this.language == "en" ? "zh" : "en";
     },
   },
 };
@@ -82,40 +86,47 @@ export default {
   }
   .header {
     position: absolute;
+    display: flex;
+    flex-direction: row;
+    // align-items: center;
+    justify-content: center;
     top: 0;
     left: 0;
     z-index: 1000;
-    display: flex;
-    flex-direction: row;
     width: 100%;
     padding-top: 0.99vw;
     padding-bottom: 0.99vw;
-    justify-content: center;
-    align-items: center;
     flex: 0 0 auto;
-    div {
-      p {
-        cursor: pointer;
-        font-family: Alibaba-PuHuiTi-Regular;
-      }
-    }
-    img {
-      width: 14.48vw;
-      height: 3.23vw;
-      cursor: pointer;
-    }
-    div {
+    .header-inbox {
       display: flex;
       flex-direction: row;
-      height: fit-content;
-      margin-left: 21.15vw;
-      p + p {
-        margin-left: 3.13vw;
+      justify-content: space-between;
+      align-items: center;
+      width: 62.5vw;
+      div {
+        p {
+          cursor: pointer;
+          font-family: Alibaba-PuHuiTi-Regular;
+        }
       }
-      p {
-        font-size: 1.46vw;
-        height: fit-content;
+      img {
+        width: 14.48vw;
+        height: 3.23vw;
         cursor: pointer;
+      }
+      div {
+        display: flex;
+        flex-direction: row;
+        height: fit-content;
+        // margin-left: 21.15vw;
+        p + p {
+          margin-left: 3.13vw;
+        }
+        p {
+          font-size: 1.46vw;
+          height: fit-content;
+          cursor: pointer;
+        }
       }
     }
   }
@@ -140,6 +151,12 @@ export default {
     .contact {
       display: flex;
       flex-direction: row;
+      p {
+        font-size: 1.15vw;
+        white-space: nowrap;
+        color: #ffffff;
+        font-family: Alibaba-PuHuiTi-Regular;
+      }
     }
     .longline {
       width: 62.5vw;

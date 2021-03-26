@@ -18,18 +18,23 @@
         </p>
       </div>
       <div class="page-item page-item2">
-        <p class="title wow fadeInUp" data-wow-delay=".12s">MyFellas·服务理念</p>
+        <p class="title wow fadeInUp" data-wow-delay=".12s">
+          MyFellas·服务理念
+        </p>
         <p class="content wow fadeInUp" data-wow-delay=".14s">
           立足于国内国际学校实际，着眼于学生未来发展前景，致力为国际教育提供一站式生涯规划方案。
         </p>
       </div>
       <div id="topFlag" class="page-item page-item3">
-        <p class="title wow fadeInUp" data-wow-delay=".16s">MyFellas·服务团队</p>
+        <p class="title wow fadeInUp" data-wow-delay=".16s">
+          MyFellas·服务团队
+        </p>
         <p class="content wow fadeInUp" data-wow-delay=".18s">
           CECP成立以来已组成拥有15人的服务团队，成员学术背景覆盖教育学及计算机科学并均拥有多年的教育或数据分析行业经历。团队核心成员均来自QS世界排名TOP50高校，擅长领域包括教育心理学、市场营销管理、及大数据处理。团队全员坚持以学生成长为中心，致力于让CECP成为真正从学生角度出发的生涯规划服务提供商。
         </p>
         <img
-          class="wow fadeInUp" data-wow-delay=".2s"
+          class="wow fadeInUp"
+          data-wow-delay=".2s"
           src="../assets/team.png"
         />
       </div>
@@ -39,25 +44,9 @@
 </template>
 
 <script>
-import "../assets/animate.css";
-import { WOW } from "wowjs";
+import mixins from "../mixins/animate";
 export default {
-  mounted() {
-    let wow = new WOW();
-    wow.init({
-      boxClass: "wow", // animated element css class (default is wow)
-      animateClass: "animated", // animation css class (default is animated)
-      offset: 0, // distance to the element when triggering the animation (default is 0)
-      mobile: true, // trigger animations on mobile devices (default is true)
-      live: true, // act on asynchronously loaded content (default is true)
-      callback: function (box) {
-        // the callback is fired every time an animation is started
-        // the argument that is passed in is the DOM node being animated
-      },
-      scrollContainer: null, // optional scroll container selector, otherwise use window
-    });
-    console.log(wow);
-  },
+  mixins,
 };
 </script>
 
