@@ -1,6 +1,6 @@
 import types from './types';
 import urls from './urls';
-import request from '../../utils/request';
+import request from '@/utils/request';
 
 export default {
   test: ({ commit, state }, data) => {
@@ -10,7 +10,21 @@ export default {
       console.log('测试请求出错:', err);
     })
   },
-  getUserinfo: ({ commit, state }, data) => {
-    commit(types.SET_USERINFO, data);
+  getMenu: ({ commit, state }, data) => {
+    return new Promise(resolve => {
+      console.log('获取菜单路由')
+      let res = [{
+        path: "/index",
+        name: "index",
+        component: "index",
+        children: [{
+          path: "/",
+          name: "Dashboard",
+          component: "Dashboard",
+        }]
+      }];
+      commit(types.SET_MENU, res);
+      resolve(res);
+    });
   }
 }

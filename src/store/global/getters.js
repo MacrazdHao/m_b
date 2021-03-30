@@ -1,5 +1,5 @@
 export default {
-  userinfo(state) {
-    return state.userinfo;
+  menu(state) {
+    return state.menu;
   }
 }

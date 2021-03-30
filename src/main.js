@@ -9,9 +9,13 @@ import ElementUI from 'element-ui';
 // import "./assets/font.css";
 import "./assets/animate.css";
 import 'element-ui/lib/theme-chalk/index.css'
-// import './utils/permission'
+import './utils/permission'
 
 Vue.config.productionTip = false
+
+// router.beforeEach((to, from, next) => {
+//   console.log(to, from)
+// })
 
 Vue.use(ElementUI)
 

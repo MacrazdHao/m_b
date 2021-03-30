@@ -1,6 +1,6 @@
-import router from './router'
-import store from './store'
-import { Message } from 'element-ui'
+import router from '../router'
+import { createDynamicRouter, resetSystemRouter } from './dynamic'
+import store from '../store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
@@ -9,9 +9,7 @@ import { getToken } from '@/utils/auth' // get token from cookie
 // console.log(process.env)
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login'] // no redirect whitelist
-
-
+const whiteList = ['/', '/register', '/forget'] // no redirect whitelist
 
 let getMessages = () => {
   // 获取系统消息列表
@@ -30,49 +28,62 @@ router.beforeEach(async (to, from, next) => {
   const hasToken = getToken()
 
   if (window.msgTimeout) clearInterval(window.msgTimeout)
+  // 是否存在token（已登录）
   if (hasToken) {
-    // 二级路由signup待确认
-    console.log('跳转目标', to.path)
-    if (to.path === '/login' || to.path === '/signup') {
+    // 已登录
+    // 当前页面是否为后台入口相关页面
+    if (to.path === '/' || to.path === '/register' || to.path === '/forget') {
+      // 当前页面是后台入口相关页面时
+      // 生成动态路由
+      // 获取系统消息
       getMessages()
-      next({ path: '/' })
+      createDynamicRouter(to, next, '/index')
       NProgress.done()
     } else {
+      // 当前页面不是后台入口相关页面时
       const hasGetUserInfo = store.getters.name
+      // 是否以获取用户信息
       if (hasGetUserInfo) {
+        // 已获取用户信息
         getMessages()
-        next()
+        // 组建动态路由
+        createDynamicRouter(to, next)
       } else {
+        // 未获取用户信息
         try {
-          // get user info
-          await store.dispatch('user/getInfo')
+          // 获取用户信息
+          await store.dispatch('user/getUserinfo')
           getMessages()
-          next()
+          // 组建动态路由
+          createDynamicRouter(to, next)
         } catch (error) {
-          // remove token and go to login page to re-login
+          // 获取用户信息失败
+          resetSystemRouter()
+          // 清空Token（重置user.state）
           await store.dispatch('user/resetToken')
-          Message.error(error || 'Has Error')
-          next(`/login?redirect=${to.path}`)
+          // 跳回至后台入口
+          next(`?redirect=${to.path}`)
           NProgress.done()
         }
       }
     }
   } else {
-    /* has no token*/
+    // 未登录
+    resetSystemRouter()
+    // 清空系统消息定时任务
     if (window.msgTimeout) clearInterval(window.msgTimeout)
     if (whiteList.indexOf(to.path) !== -1) {
-      // in the free login whitelist, go directly
+      // 要跳转的页面在白名单内（未登录也能进入的页面）则直接跳转
       next()
+      NProgress.done()
     } else {
-      // other pages that do not have permission to access are redirected to the login page.
-      if (to.path === '/signup') next()
-      else next(`/login?redirect=${to.path}`)
+      // 不在白名单内，跳至后台入口
+      next(`?redirect=${to.path}`)
       NProgress.done()
     }
   }
 })
 
 router.afterEach(() => {
-  // finish progress bar
   NProgress.done()
 })

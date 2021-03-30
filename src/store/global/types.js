@@ -1,3 +1,4 @@
 export default {
-  SET_USERINFO: 'SET_USERINFO'
+  RESET_STATE: 'RESET_STATE',
+  SET_MENU: 'SET_MENU',
 }

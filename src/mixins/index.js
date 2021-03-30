@@ -1,7 +1,9 @@
 import animateMixin from './animate';
 import languageMixin from './language';
+import redirectMixin from './redirect';
 
-export default [
+export {
   animateMixin,
-  languageMixin
-];
+  languageMixin,
+  redirectMixin
+}

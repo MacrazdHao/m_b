@@ -4,6 +4,7 @@ import actions from './actions';
 
 const state = {
   userinfo: null,
+  messages: []
 }
 
 export default {
