@@ -13,16 +13,24 @@ export default {
   getMenu: ({ commit, state }, data) => {
     return new Promise(resolve => {
       console.log('获取菜单路由')
-      let res = [{
-        path: "/index",
-        name: "index",
-        component: "index",
-        children: [{
-          path: "/",
-          name: "Dashboard",
-          component: "Dashboard",
+      let res = {
+        way1: [{
+          path: '/index',
+          children: [{
+            path: '/dashboard'
+          }]
+        }],
+        way2: [{
+          path: "/index",
+          name: "index",
+          component: "index",
+          children: [{
+            path: "/",
+            name: "Dashboard",
+            component: "Dashboard",
+          }]
         }]
-      }];
+      };
       commit(types.SET_MENU, res);
       resolve(res);
     });

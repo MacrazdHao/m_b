@@ -2,10 +2,39 @@
 
 import store from '../store'
 import router from '@/router'
+import routerMapping from './routerMapping'
 
 import Error from '@/pages/Error'
 
 import index from '@/pages'
+
+let test = [{
+  a: 999
+}, {
+  a: 999
+}, {
+  a: 999
+}];
+
+let test2 = [{
+  b: 0,
+  c: 10
+}, {
+  b: 1,
+  c: 11
+}, {
+  b: 2,
+  c: 12
+}]
+
+let res = test.filter((val, index) => {
+  // val = { ...test2 }  // 赋值失败
+  val.b = test2[index].b;  // 赋值成功
+  val.c = test2[index].c;  // 赋值成功
+  return true;
+});
+
+console.log('测试', res);
 
 let systemRouter;
 
@@ -16,23 +45,18 @@ export async function createDynamicRouter(to, next, aim) {
     if (aim) next({ path: aim });
     else next();
   } else {
-    let systemRouterStr = [{
-      path: '*',
-      name: 'error',
-      component: 'Error',
+    let systemRouterStr2 = [{
+      path: '/error',
       children: [{
-        path: '/Error404',
-        name: 'Error404',
-        component: 'Error404',
-      },
-      ]
+        path: '/404',
+      }]
     }];
     await store.dispatch('global/getMenu').then(res => {
       console.log('获取路由成功');
-      res.forEach(e => {
-        systemRouterStr.push(e);
+      res.way1.forEach(e => {
+        systemRouterStr2.push(e);
       });
-      systemRouter = systemRouterStr;
+      systemRouter = systemRouterStr2;
       routerNext(to, next);
     }).catch(err => {
       console.log('获取路由出错', err);
@@ -46,6 +70,7 @@ export function resetSystemRouter() {
 
 function routerNext(to, next) {
   const realRouter = routerFilter(systemRouter);
+  console.log('组建完成', realRouter)
   realRouter.forEach((e) => {
     router.addRoute(e);
   });
@@ -60,7 +85,13 @@ function routerNext(to, next) {
 function routerFilter(routerMap, isChild = false, parents = []) {
   const accessRouters = routerMap.filter(route => {
     let _parents = [...parents];
+    for (let key in routerMapping[route.path]) {
+      if (key == 'path') continue;
+      route[key] = routerMapping[route.path][key];
+    }
+    route.path = routerMapping[route.path].path;
     if (typeof (route.component) == 'string') {
+      console.log(route)
       let componentName = route.component;
       if (route.component) {
         switch (route.component) {
@@ -87,6 +118,7 @@ function routerFilter(routerMap, isChild = false, parents = []) {
     if (route.children && route.children.length) {
       route.children = routerFilter(route.children, true, [..._parents]);
     }
+    // console.log(route)
     return true;
   });
   return accessRouters;
