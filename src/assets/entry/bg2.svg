@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="857px" height="552px" viewBox="0 0 857 552" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>矩形2</title>
+    <defs>
+        <linearGradient x1="95.4968676%" y1="98.3957136%" x2="42.1600999%" y2="25.0281787%" id="linearGradient-1">
+            <stop stop-color="#8DC8E5" offset="0%"></stop>
+            <stop stop-color="#249EBC" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="登录&amp;注册" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.5">
+        <g id="学校-登录" fill="url(#linearGradient-1)">
+            <g id="矩形2-" transform="translate(-145.000000, -451.000000)">
+                <rect id="矩形2" transform="translate(517.000000, 517.000000) rotate(35.000000) translate(-517.000000, -517.000000) " x="146" y="146" width="742" height="742" rx="80"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

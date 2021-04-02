@@ -9,7 +9,7 @@ import { getToken } from '@/utils/auth' // get token from cookie
 // console.log(process.env)
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/', '/register', '/forget'] // no redirect whitelist
+const whiteList = ['/', '/register', '/register2', '/forget', '/reset', '/contact'] // no redirect whitelist
 
 let getMessages = () => {
   // 获取系统消息列表
@@ -22,7 +22,7 @@ let getMessages = () => {
 
 router.beforeEach(async (to, from, next) => {
   NProgress.start()
-  console.log('跳转title', to.meta)
+  // console.log('跳转title', to.meta)
   // document.title = getPageTitle(to.meta.title)
   // determine whether the user has logged in
   const hasToken = getToken()
