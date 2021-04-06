@@ -12,13 +12,28 @@ export default {
       console.log('测试请求出错:', err);
     })
   },
-  login: ({ commit, state }, data) => {
-    return new Promise(resolve => {
-      console.log('登陆成功')
-      // 这里需要组装router
-      commit(types.SET_USERINFO, { avatar: '', username: '豆豆' });
-      setToken('thisisatoken');
-      resolve();
+  schoolLogin: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post("/user/login/account/school", data).then(res => {
+        resolve(res);
+        console.log('登陆成功', res);
+        setToken(res.token);
+      }).catch(err => {
+        console.log('登录失败', err);
+        reject(err);
+      });
+    });
+  },
+  studentLogin: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post("/user/login/email", data).then(res => {
+        resolve(res);
+        console.log('登陆成功', res);
+        setToken(res.token);
+      }).catch(err => {
+        console.log('登录失败', err);
+        reject(err);
+      });
     });
   },
   getUserinfo: ({ commit, state }, data) => {

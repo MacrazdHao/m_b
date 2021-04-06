@@ -1,5 +1,6 @@
 import entry from '@/pages/Entry'
 import login from '@/pages/Entry/pages/login'
+import parents from '@/pages/Entry/pages/parents'
 import register from '@/pages/Entry/pages/register'
 import register2 from '@/pages/Entry/pages/register2'
 import forget from '@/pages/Entry/pages/forget'
@@ -15,6 +16,10 @@ const staticRouter = [
       path: '/',
       name: 'login',
       component: login,
+    }, {
+      path: '/parents',
+      name: 'parents',
+      component: parents,
     }, {
       path: '/register',
       name: 'register',

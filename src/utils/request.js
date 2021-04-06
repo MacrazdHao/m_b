@@ -2,11 +2,11 @@ import axios from 'axios'
 import { MessageBox, Message, Loading } from 'element-ui'
 import store from '@/store'
 import { getToken, removeToken } from '@/utils/auth'
-import { baseURL } from './config';
+import { baseURL, mockURL } from './config';
 import i18n from './language';
 
 const service = axios.create({
-  baseURL, // url = base url + request url
+  baseURL: mockURL, // url = base url + request url
   timeout: 5000 // request timeout
 })
 
@@ -26,6 +26,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response.data
+    console.log(response)
     if (window.loading) { window.loading.close(); window.loading = null; }
 
     if (res.code == 422) {

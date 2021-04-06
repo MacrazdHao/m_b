@@ -9,7 +9,7 @@ import { getToken } from '@/utils/auth' // get token from cookie
 // console.log(process.env)
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/', '/register', '/register2', '/forget', '/reset', '/contact'] // no redirect whitelist
+const whiteList = ['/', '/register', '/register2', '/forget', '/reset', '/contact', '/parents'] // no redirect whitelist
 
 let getMessages = () => {
   // 获取系统消息列表

@@ -6,6 +6,7 @@ export default {
     login: {
       loginTitle: '登录账号',
       registerButton: '注册',
+      parentsButton: '家长账号登陆',
       school: {
         usernamePlaceholder: '请输入账号',
         passwordPlaceholder: '请输入密码',
@@ -14,11 +15,15 @@ export default {
         usernamePlaceholder: '请输入邮箱账号',
         passwordPlaceholder: '请输入密码',
       },
+      parents: {
+        usernamePlaceholder: '请输入家长账号',
+        passwordPlaceholder: '请输入密码',
+      },
       consultant: {
         usernamePlaceholder: '请输入邮箱账号',
         passwordPlaceholder: '请输入密码',
       },
-      rememberTips: '记住密码15天',
+      rememberTips: '保持登录状态7天',
       forgetTips: '忘记密码？',
       forgetButton: '找回密码',
       loginButton: '登陆',

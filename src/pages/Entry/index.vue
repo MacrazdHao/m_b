@@ -319,7 +319,8 @@ export default {
         width: 23.958vw;
         min-width: 320px;
         // width: 460px;
-        // min-height: fit-content;
+        min-height: 100%;
+        height: fit-content;
         display: flex;
         flex-direction: column;
         align-items: center;

@@ -1,31 +1,20 @@
 <template>
-  <div class="Login">
+  <div class="Parents">
     <div class="titleBox">
+      <img src="@/assets/entry/icon_back.svg" @click="goback" />
       <p class="title">{{ $t("entry.login.loginTitle") }}</p>
-      <p class="register" v-if="identity != 0" @click="toRegister">
-        {{ $t("entry.login.registerButton") }}
-      </p>
+      <div class="white"></div>
     </div>
     <div class="loginForm">
       <entry-input
         class="loginForm-item"
-        :iconName="identity == 0 ? 'icon_account' : 'icon_email'"
+        iconName="icon_email"
         @input="
           (val) => {
             username = val;
           }
         "
-        :placeholder="
-          $t(
-            `entry.login.${
-              identity == 0
-                ? 'school'
-                : identity == 1
-                ? 'student'
-                : 'consultant'
-            }.usernamePlaceholder`
-          )
-        "
+        :placeholder="$t(`entry.login.parents.usernamePlaceholder`)"
       />
       <entry-input
         class="loginForm-item"
@@ -36,17 +25,7 @@
             password = val;
           }
         "
-        :placeholder="
-          $t(
-            `entry.login.${
-              identity == 0
-                ? 'school'
-                : identity == 1
-                ? 'student'
-                : 'consultant'
-            }.passwordPlaceholder`
-          )
-        "
+        :placeholder="$t(`entry.login.parents.passwordPlaceholder`)"
       />
       <div class="toolsBar">
         <div class="remember" @click="remember = !remember">
@@ -59,10 +38,6 @@
           />
           <p>{{ $t("entry.login.rememberTips") }}</p>
         </div>
-        <div class="forget" @click="toForget">
-          <p>{{ $t("entry.login.forgetTips") }}</p>
-          <p>{{ $t("entry.login.forgetButton") }}</p>
-        </div>
       </div>
     </div>
     <entry-button
@@ -70,19 +45,16 @@
       :title="$t('entry.login.loginButton')"
       @click="login"
     />
-    <p class="parentButton" v-if="identity == 1" @click="toParents">
-      {{ $t("entry.login.parentsButton") }}
-    </p>
+    <p class="parentButton" v-if="identity == 1">家长账号登陆</p>
   </div>
 </template>
 
 <script>
-import Cookies from "js-cookie";
-import { redirectMixin } from "@/mixins";
+import { entryRedirectMixin } from "@/mixins";
 import entryInput from "../components/input";
 import entryButton from "../components/button";
 export default {
-  mixins: [redirectMixin],
+  mixins: [entryRedirectMixin],
   components: {
     entryInput,
     entryButton,
@@ -97,14 +69,14 @@ export default {
   },
   watch: {},
   methods: {
+    goback() {
+      this.$router.go(-1);
+    },
     toRegister() {
       this.$router.push({ path: "/register" });
     },
     toForget() {
       this.$router.push({ path: "/forget" });
-    },
-    toParents() {
-      this.$router.push({ path: "/parents" });
     },
     login() {
       if (this.username == "") {
@@ -161,7 +133,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.Login {
+.Parents {
   width: 100%;
   // height: 100%;
   box-sizing: border-box;
@@ -179,18 +151,17 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     margin-top: 5.833vw;
     .title {
       font-size: 1.5625vw;
       color: #013047;
     }
-    .register {
-      position: absolute;
-      font-size: 0.9375vw;
-      right: 0;
-      bottom: 0.2083vw;
-      color: #ffb706;
+    img,
+    .white {
+      width: 1.25vw;
+    }
+    img {
       cursor: pointer;
     }
   }
