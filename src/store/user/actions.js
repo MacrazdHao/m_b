@@ -5,19 +5,12 @@ import { setToken, removeToken } from '@/utils/auth';
 import { resetRouter } from '@/router/resetRouter';
 
 export default {
-  test: ({ commit, state }, data) => {
-    request.get(urls.test).then(res => {
-      console.log('测试请求成功:', res);
-    }).catch(err => {
-      console.log('测试请求出错:', err);
-    })
-  },
   schoolLogin: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
       request.post("/user/login/account/school", data).then(res => {
-        resolve(res);
         console.log('登陆成功', res);
-        setToken(res.token);
+        setToken(res.data.token);
+        resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
         reject(err);
@@ -27,9 +20,21 @@ export default {
   studentLogin: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
       request.post("/user/login/email", data).then(res => {
-        resolve(res);
         console.log('登陆成功', res);
-        setToken(res.token);
+        setToken(res.data.token);
+        resolve(res);
+      }).catch(err => {
+        console.log('登录失败', err);
+        reject(err);
+      });
+    });
+  },
+  adminLogin: ({ commit }) => {
+    return new Promise((resolve, reject) => {
+      request.post("/admin/login/account", data).then(res => {
+        console.log('登陆成功', res);
+        setToken(res.data.token);
+        resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
         reject(err);
@@ -37,10 +42,15 @@ export default {
     });
   },
   getUserinfo: ({ commit, state }, data) => {
-    return new Promise(resolve => {
-      console.log('获取用户信息')
-      commit(types.SET_USERINFO, data);
-      resolve();
+    return new Promise((resolve, reject) => {
+      request.get("/user/info", data).then(res => {
+        console.log('获取用户信息成功', res);
+        commit(types.SET_USERINFO, res.data);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取用户信息失败', err);
+        reject(err);
+      });
     });
   },
   getMessages: ({ commit, state }, data) => {
@@ -51,15 +61,69 @@ export default {
     });
   },
   logout: ({ commit, state }, data) => {
-    return new Promise(resolve => {
-      console.log('退出登录')
-      resetRouter();
-      removeToken();
-      commit(types.RESET_STATE);
-      resolve();
+    return new Promise((resolve, reject) => {
+      request.post("/user/logout", data).then(res => {
+        console.log('登出成功', res);
+        resetRouter();
+        removeToken();
+        commit(types.RESET_STATE);
+        resolve(res);
+      }).catch(err => {
+        console.log('登出失败', err);
+        reject(err);
+      });
     });
   },
-  resetToken({ commit }) {
+  adminLogout: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post("/admin/logout", data).then(res => {
+        console.log('登出成功', res);
+        resetRouter();
+        removeToken();
+        commit(types.RESET_STATE);
+        resolve(res);
+      }).catch(err => {
+        console.log('登出失败', err);
+        reject(err);
+      });
+    });
+  },
+  emailVerify: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post("/user/register/email/code", data).then(res => {
+        console.log('发送验证码成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('发送验证码失败', err);
+        reject(err);
+      });
+    });
+  },
+  studentRegister: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post("/user/register/email", data).then(res => {
+        console.log('注册成功', res);
+        setToken(res.data.token);
+        resolve(res);
+      }).catch(err => {
+        console.log('注册失败', err);
+        reject(err);
+      });
+    });
+  },
+  adminRegister: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post("/admin/register/account", data).then(res => {
+        console.log('注册成功', res);
+        setToken(res.data.token);
+        resolve(res);
+      }).catch(err => {
+        console.log('注册失败', err);
+        reject(err);
+      });
+    });
+  },
+  resetToken: ({ commit }) => {
     return new Promise(resolve => {
       removeToken();
       commit(types.RESET_STATE);

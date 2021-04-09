@@ -10,6 +10,7 @@ import ElementUI from 'element-ui';
 import "./assets/animate.css";
 import 'element-ui/lib/theme-chalk/index.css'
 import './utils/permission'
+// import '@/assets/icons' // icon
 
 Vue.config.productionTip = false
 

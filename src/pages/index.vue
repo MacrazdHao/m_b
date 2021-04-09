@@ -1,13 +1,190 @@
 <template>
-  <div class="Index" @click="logout">
-    <!-- 左侧栏、顶部路径栏、头部 -->
-    <router-view />
+  <div class="Index">
+    <div class="menu">
+      <img class="logo" src="@/assets/index/logo.svg" />
+      <div class="route">
+        <div
+          :class="['menu-item']"
+          v-for="(item, index) in $store.state.global.menu.children"
+          :key="index"
+        >
+          <div
+            :class="['button', pageName == item.name ? 'button--selected' : '']"
+            v-if="index > 0"
+            @click="selectItem([item], `/index/${item.path}`)"
+          >
+            <div class="button-title">
+              <img :src="require(`@/assets/index/${item.meta.icon}.svg`)" />
+              <p>{{ item.meta.title }}</p>
+            </div>
+            <img
+              :class="[
+                'cmenuIcon',
+                pChildrenIsShow == item.name
+                  ? 'cmenuIcon--open'
+                  : 'cmenuIcon--close',
+              ]"
+              v-if="item.children"
+              :src="require(`@/assets/index/icon_pull.svg`)"
+            />
+          </div>
+          <div
+            :class="[
+              'children',
+              item.children &&
+              (pChildrenIsShow == item.name || pageName == item.name)
+                ? 'hide'
+                : '',
+            ]"
+            :id="`/index/${item.path}`"
+          >
+            <div v-for="(item2, index2) in item.children" :key="index2">
+              <div
+                :class="[
+                  'button',
+                  pageName == item2.name ? 'button--selected' : '',
+                ]"
+                v-if="index2 > 0"
+                @click="
+                  selectItem([item, item2], `/index/${item.path}/${item2.path}`)
+                "
+              >
+                <div class="button-title">
+                  <img />
+                  <p>{{ item2.meta.title }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="interface">
+      <div class="header">
+        <p class="title">{{ pageTitle }}</p>
+        <div class="toolsBar">
+          <!-- <p @click="logout">登出</p> -->
+          <div class="messageIconBox">
+            <img class="messages" src="@/assets/index/icon_news.svg" />
+            <p class="num">999</p>
+          </div>
+          <div
+            class="userMenu"
+            @mouseenter="userMenuShow = true"
+            @mouseleave="userMenuShow = false"
+          >
+            <img class="avatar" src="@/assets/index/anna.jpg" />
+            <p class="nickname">梁湛霞</p>
+            <transition name="slide-fade">
+              <div class="drawerBox" v-show="userMenuShow">
+                <div class="drawer">
+                  <div
+                    class="drawer-item"
+                    @mouseenter="userMenuHover = 'center'"
+                    @mouseleave="userMenuHover = ''"
+                  >
+                    <img
+                      v-show="userMenuHover != 'center'"
+                      src="@/assets/index/icon_personal.svg"
+                    />
+                    <img
+                      v-show="userMenuHover == 'center'"
+                      src="@/assets/index/icon_personal_selected.svg"
+                    />
+                    <p>个人中心</p>
+                  </div>
+                  <div
+                    class="drawer-item"
+                    @mouseenter="userMenuHover = 'logout'"
+                    @mouseleave="userMenuHover = ''"
+                  >
+                    <img
+                      v-show="userMenuHover != 'logout'"
+                      src="@/assets/index/icon_logout.svg"
+                    />
+                    <img
+                      v-show="userMenuHover == 'logout'"
+                      src="@/assets/index/icon_logout_selected.svg"
+                    />
+                    <p>退出登录</p>
+                  </div>
+                </div>
+              </div>
+            </transition>
+          </div>
+          <img class="language" src="@/assets/index/icon_language.svg" />
+        </div>
+      </div>
+      <div class="content">
+        <router-view />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      initial: true,
+      pageName: "Dashboard",
+      pChildrenIsShow: "",
+      pIndex: -1,
+      pagePath: [],
+      userMenuShow: false,
+      userMenuHover: "",
+    };
+  },
+  computed: {
+    pageTitle() {
+      return this.$route.meta.title;
+    },
+    navigation() {
+      console.log(this.pagePath);
+      return this.pagePath.length == 0
+        ? ""
+        : this.pagePath[this.pagePath.length - 1].name;
+    },
+  },
+  watch: {
+    pChildrenIsShow(val, oldVal) {
+      console.log(val);
+      this.menuAnimate(
+        document.getElementById(`/index/${this.pagePath[0].name}`),
+        oldVal == this.pagePath[0].name
+      );
+    },
+  },
+  mounted() {
+    this.pageName = this.$route.name;
+    if (this.$route.matched.length > 2) {
+      this.pagePath = this.$route.matched.slice(1, this.$route.matched.length);
+      this.pChildrenIsShow = this.$route.matched[
+        this.$route.matched.length - 1
+      ].parent.name;
+    }
+  },
   methods: {
+    menuAnimate(element, hide) {
+      element.style.height = "auto";
+      let targetHeight = window.getComputedStyle(element).height;
+      element.style.height = hide ? targetHeight : "0";
+      setTimeout(() => {
+        element.style.height = hide ? "0" : targetHeight;
+      }, 0);
+    },
+    selectItem(items, path) {
+      // console.log(items);
+      if (items[0].children && items.length == 1) {
+        this.pagePath = items;
+        this.pChildrenIsShow =
+          this.pChildrenIsShow == items[0].name ? "" : items[0].name;
+      } else {
+        // console.log(path);
+        this.pageName = items[items.length - 1].name;
+        this.$router.push({ path });
+      }
+    },
     logout() {
       this.$store.dispatch("user/logout").then((res) => {
         this.$router.push({ path: "/" });
@@ -19,5 +196,207 @@ export default {
 
 <style lang="scss" scoped>
 .Index {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #f1f2f6;
+  p {
+    margin: 0;
+  }
+  .menu {
+    background-color: #191a23;
+    width: 240px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .logo {
+      width: 149px;
+      margin: 14px 20px 14px;
+      cursor: pointer;
+    }
+    .route {
+      height: 100%;
+      .menu-item {
+        display: flex;
+        flex-direction: column;
+        .button {
+          // max-height: 100px;
+          width: 100%;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          padding: 11px 20px;
+          cursor: pointer;
+          transition: all 0.3s;
+          .button-title {
+            display: flex;
+            flex-direction: row;
+            p {
+              margin-left: 8px;
+              font-size: 14px;
+              color: #fff;
+              line-height: 20px;
+            }
+          }
+          .cmenuIcon {
+            width: 14px;
+            transition: all 0.3s;
+          }
+          .cmenuIcon--open {
+            // 调转箭头动画
+            transform: rotate(180deg);
+          }
+          .cmenuIcon--close {
+            // 调转箭头动画
+            transform: rotate(0deg);
+          }
+        }
+        .button:hover {
+          background-color: #242531;
+        }
+        .button--selected,
+        .button--selected:hover {
+          background-color: #4b78f6;
+        }
+        .children {
+          height: 0;
+          transition: 0.3s height ease-in-out;
+          overflow: hidden;
+          background: #1f212c;
+        }
+        .hide {
+        }
+      }
+    }
+  }
+  .interface {
+    width: calc(100% - 264px);
+    display: flex;
+    flex-direction: column;
+    .header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      background: #fff;
+      box-shadow: 0px 2px 6px 0px rgba(224, 224, 224, 0.5);
+      padding: 18px 24px;
+      box-sizing: border-box;
+      .title {
+        font-size: 18px;
+        line-height: 25px;
+        color: #333333;
+      }
+      .toolsBar {
+        display: flex;
+        flex-direction: row;
+        .messageIconBox {
+          position: relative;
+          display: flex;
+          cursor: pointer;
+          .messages {
+            width: 20px;
+          }
+          .num {
+            position: absolute;
+            background-color: #ff4d4f;
+            border-radius: 10px;
+            padding: 1px 6px;
+            font-size: 16px;
+            color: #ffffff;
+            // line-height: 22px;
+            top: -11px;
+            left: 11px;
+          }
+        }
+        .userMenu {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          height: 24px;
+          margin-left: 34px;
+          cursor: pointer;
+          position: relative;
+          .avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+          }
+          .nickname {
+            margin-left: 8px;
+            font-size: 14px;
+            color: #333333;
+            line-height: 20px;
+          }
+          .slide-fade-enter-active {
+            transition: all 0.08s ease;
+          }
+          .slide-fade-leave-active {
+            transition: all 0.08s cubic-bezier(1, 0.5, 0.8, 1);
+          }
+          .slide-fade-enter,
+          .slide-fade-leave-to {
+            opacity: 0;
+          }
+          .drawerBox {
+            position: absolute;
+            left: -78px;
+            bottom: 0;
+            padding-top: 24px;
+            transform: translate(0, 100%);
+            cursor: default;
+            .drawer {
+              display: flex;
+              flex-direction: column;
+              padding: 4px 0;
+              background-color: #fff;
+              box-shadow: 0px 4px 8px 0px #e0e0e0;
+              border-radius: 2px;
+              min-width: 138px;
+              overflow: hidden;
+              .drawer-item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                padding: 7px 12px;
+                transition: all 0.1s;
+                cursor: pointer;
+                img {
+                  width: 12px;
+                }
+                p {
+                  color: #666666;
+                  line-height: 20px;
+                  font-size: 14px;
+                  margin-left: 12px;
+                }
+              }
+              .drawer-item + .drawer-item {
+                border-top: 1px solid #d3d3d3;
+              }
+              .drawer-item:hover {
+                background-color: #f1f4ff;
+                p {
+                  color: #4b77f6;
+                }
+              }
+            }
+          }
+        }
+        .language {
+          width: 24px;
+          margin-left: 24px;
+          cursor: pointer;
+        }
+      }
+    }
+    .content {
+      margin-top: 24px;
+    }
+  }
 }
 </style>

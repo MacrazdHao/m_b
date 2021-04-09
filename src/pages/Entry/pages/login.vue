@@ -128,7 +128,7 @@ export default {
               ? "schoolLogin"
               : this.identity == 1
               ? "studentLogin"
-              : "consultantLogin"
+              : "adminLogin"
           }`,
           {
             email: this.username,

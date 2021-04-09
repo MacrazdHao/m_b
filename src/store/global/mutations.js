@@ -2,7 +2,8 @@ import types from './types';
 
 const getDefaultState = () => {
   return {
-    userinfo: null
+    userinfo: null,
+    menu: []
   }
 }
 

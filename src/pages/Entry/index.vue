@@ -242,7 +242,8 @@ export default {
       display: flex;
       flex-direction: row;
       // align-items: center;
-      height: 31.25vw;
+      height: calc(32.292vw + 14px);
+      min-height: 320px;
       justify-content: center;
       box-shadow: 0 0.833vw 1.354vw 0.521vw #e2e5ef;
       // background-color: #fff;

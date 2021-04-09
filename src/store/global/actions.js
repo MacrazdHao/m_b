@@ -18,21 +18,21 @@ export default {
           path: '/index',
           children: [{
             path: '/dashboard'
-          }]
-        }],
-        way2: [{
-          path: "/index",
-          name: "index",
-          component: "index",
-          children: [{
-            path: "/",
-            name: "Dashboard",
-            component: "Dashboard",
+          }, {
+            path: "/testing",
+            children: [{
+              path: "/testing1",
+            }, {
+              path: "/testing2",
+            }]
           }]
         }]
       };
       commit(types.SET_MENU, res);
       resolve(res);
     });
+  },
+  setMenu: ({ commit, state }, data) => {
+    commit(types.SET_MENU, data);
   }
 }

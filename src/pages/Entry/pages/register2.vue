@@ -6,14 +6,14 @@
       <div class="white"></div>
     </div>
     <div class="emailTips">
-      <p>{{ $t("entry.register.sendEmailTips", { email: form.username }) }}</p>
+      <p>{{ $t("entry.register.sendEmailTips", { email: form.email }) }}</p>
       <p>{{ $t("entry.register.sendEmailTips2") }}</p>
     </div>
     <entryInput
       class="formItem"
       @input="
         (val) => {
-          form.code = val;
+          form.emailCode = val;
         }
       "
       :placeholder="$t(`entry.register.codePlaceholder`)"
@@ -44,7 +44,7 @@
       class="formItem"
       @input="
         (val) => {
-          form.iCode = val;
+          form.schoolInviteCode = val;
         }
       "
       :placeholder="
@@ -89,17 +89,18 @@ export default {
   data() {
     return {
       form: {
-        username: "",
-        code: "",
+        email: "",
+        emailCode: "",
         password: "",
         cPassword: "",
-        iCode: "",
+        schoolInviteCode: "",
       },
       errorType: 0,
     };
   },
   mounted() {
-    this.form.username = this.$route.params.username;
+    console.log(this.$route.params);
+    this.form.email = this.$route.params.username;
   },
   methods: {
     goback() {
@@ -107,7 +108,7 @@ export default {
     },
     submit() {
       this.errorType = 0;
-      if (this.form.code == "") {
+      if (this.form.emailCode == "") {
         this.$message.warning(
           this.$t("entry.register.alertTips.codeEmptyTips")
         );
@@ -122,7 +123,7 @@ export default {
           this.$t("entry.register.alertTips.cPasswordEmptyTips")
         );
         return;
-      } else if (this.form.iCode == "") {
+      } else if (this.form.schoolInviteCode == "") {
         this.$message.warning(
           this.$t("entry.register.alertTips.iCodeEmptyTips")
         );
@@ -136,6 +137,30 @@ export default {
         return;
       }
       this.errorType = 0;
+      console.log(this.form);
+      this.$store
+        .dispatch(
+          `user/${this.identity == 1 ? "studentRegister" : "adminRegister"}`,
+          this.form
+        )
+        .then((res) => {
+          console.log(res);
+          if (this.redirect) {
+            this.$router.push({
+              path: this.redirect,
+              query: this.otherQuery,
+            });
+          } else {
+            this.$router.push({ path: "index" });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.warning(
+            this.$t("entry.login.alertTips.loginErrorTips")
+          );
+          return;
+        });
     },
   },
 };

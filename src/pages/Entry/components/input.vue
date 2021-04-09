@@ -40,6 +40,7 @@ export default {
 .input {
   width: 100%;
   height: 2.083vw;
+  min-height: 21px;
   // padding-top: 0.625vw;
   // padding-bottom: 0.625vw;
   padding-left: 1.042vw;

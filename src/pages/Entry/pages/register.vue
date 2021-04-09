@@ -44,15 +44,31 @@ export default {
     },
     goNext() {
       if (this.username == "") {
-        this.$message.warning(this.$t('entry.register.alertTips.emailEmptyTips'));
+        this.$message.warning(
+          this.$t("entry.register.alertTips.emailEmptyTips")
+        );
         return;
       }
-      this.$router.push({
-        name: "register2",
-        params: {
-          username: this.username,
-        },
-      });
+
+      this.$store
+        .dispatch(`user/emailVerify`, {
+          email: this.username,
+          operateType: 1,
+        })
+        .then((res) => {
+          console.log(res);
+          this.$router.push({
+            name: "register2",
+            params: {
+              username: this.username,
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.warning(this.$t("tips.sendEmailError"));
+          return;
+        });
     },
   },
 };

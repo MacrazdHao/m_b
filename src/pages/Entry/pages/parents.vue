@@ -45,7 +45,6 @@
       :title="$t('entry.login.loginButton')"
       @click="login"
     />
-    <p class="parentButton" v-if="identity == 1">家长账号登陆</p>
   </div>
 </template>
 
@@ -94,21 +93,12 @@ export default {
         // Cookies.set(`user${this.username}`, this.password, { expires: 15 });
       }
       this.$store
-        .dispatch(
-          `user/${
-            this.identity == 0
-              ? "schoolLogin"
-              : this.identity == 1
-              ? "studentLogin"
-              : "consultantLogin"
-          }`,
-          {
-            email: this.username,
-            account: this.username,
-            password: this.password,
-            rememberMe: this.remember,
-          }
-        )
+        .dispatch(`user/studentLogin`, {
+          email: this.username,
+          account: this.username,
+          password: this.password,
+          rememberMe: this.remember,
+        })
         .then((res) => {
           console.log(res);
           if (this.redirect) {

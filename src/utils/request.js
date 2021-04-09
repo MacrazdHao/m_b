@@ -40,11 +40,11 @@ service.interceptors.response.use(
 
     if (!res.success) {
       Message({
-        message: res.msg || 'Error',
+        message: res[i18n.t('tips.msgKey')] || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
-      return Promise.reject(new Error(res.msg || 'Error'))
+      return Promise.reject(new Error(res[i18n.t('tips.msgKey')] || 'Error'))
     } else {
       return res
     }
