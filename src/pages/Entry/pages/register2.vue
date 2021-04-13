@@ -140,7 +140,7 @@ export default {
       console.log(this.form);
       this.$store
         .dispatch(
-          `user/${this.identity == 1 ? "studentRegister" : "adminRegister"}`,
+          `user/${this.identity == 1 ? "student" : "admin"}Register`,
           this.form
         )
         .then((res) => {

@@ -51,7 +51,7 @@ export default {
       }
 
       this.$store
-        .dispatch(`user/emailVerify`, {
+        .dispatch(`user/${this.identity==1?'student':'admin'}EmailVerify`, {
           email: this.username,
           operateType: 1,
         })

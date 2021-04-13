@@ -125,11 +125,11 @@ export default {
         .dispatch(
           `user/${
             this.identity == 0
-              ? "schoolLogin"
+              ? "school"
               : this.identity == 1
-              ? "studentLogin"
-              : "adminLogin"
-          }`,
+              ? "student"
+              : "admin"
+          }Login`,
           {
             email: this.username,
             account: this.username,

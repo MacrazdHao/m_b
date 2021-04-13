@@ -10,6 +10,7 @@ import ElementUI from 'element-ui';
 import "./assets/animate.css";
 import 'element-ui/lib/theme-chalk/index.css'
 import './utils/permission'
+import Dialog from './components/Dialog/dialog.js';
 // import '@/assets/icons' // icon
 
 Vue.config.productionTip = false
@@ -19,6 +20,8 @@ Vue.config.productionTip = false
 // })
 
 Vue.use(ElementUI)
+
+Vue.use(Dialog)
 
 /* eslint-disable no-new */
 new Vue({

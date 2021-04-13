@@ -1,8 +1,9 @@
 import types from './types';
+import i18n from '@/utils/language';
 
 const getDefaultState = () => {
   return {
-    userinfo: null,
+    language: i18n.locale,
     menu: []
   }
 }

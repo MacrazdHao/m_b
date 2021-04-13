@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <transition name="fade-transform" mode="out-in">
-      <router-view style="flex: 1 0 auto" />
+      <router-view style="flex: 1 0 auto" :language="language" />
     </transition>
   </div>
 </template>
@@ -16,10 +16,8 @@ export default {
       showTop: false,
     };
   },
-  mounted() {
-  },
-  methods: {
-  },
+  mounted() {},
+  methods: {},
 };
 </script>
 

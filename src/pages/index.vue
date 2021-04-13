@@ -14,8 +14,16 @@
             @click="selectItem([item], `/index/${item.path}`)"
           >
             <div class="button-title">
-              <img :src="require(`@/assets/index/${item.meta.icon}.svg`)" />
-              <p>{{ item.meta.title }}</p>
+              <img
+                :src="
+                  require(`@/assets/index/${item.meta.icon}${
+                    pageName == item.name ? '_selected' : ''
+                  }.svg`)
+                "
+              />
+              <p>
+                {{ language == "zh" ? item.meta.title : item.meta.enTitle }}
+              </p>
             </div>
             <img
               :class="[
@@ -51,7 +59,11 @@
               >
                 <div class="button-title">
                   <img />
-                  <p>{{ item2.meta.title }}</p>
+                  <p>
+                    {{
+                      language == "zh" ? item2.meta.title : item2.meta.enTitle
+                    }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -61,7 +73,17 @@
     </div>
     <div class="interface">
       <div class="header">
-        <p class="title">{{ pageTitle }}</p>
+        <div class="titleBox">
+          <p class="title">{{ pageTitle }}</p>
+          <div
+            class="suffixMenu"
+            v-for="(item, index) in suffixMenu"
+            :key="index"
+          >
+            <img src="@/assets/index/icon_arrow.svg" />
+            <p>{{ item }}</p>
+          </div>
+        </div>
         <div class="toolsBar">
           <!-- <p @click="logout">登出</p> -->
           <div class="messageIconBox">
@@ -91,10 +113,11 @@
                       v-show="userMenuHover == 'center'"
                       src="@/assets/index/icon_personal_selected.svg"
                     />
-                    <p>个人中心</p>
+                    <p>{{ $t("home.header.personal") }}</p>
                   </div>
                   <div
                     class="drawer-item"
+                    @click="logout"
                     @mouseenter="userMenuHover = 'logout'"
                     @mouseleave="userMenuHover = ''"
                   >
@@ -106,7 +129,7 @@
                       v-show="userMenuHover == 'logout'"
                       src="@/assets/index/icon_logout_selected.svg"
                     />
-                    <p>退出登录</p>
+                    <p>{{ $t("home.header.logout") }}</p>
                   </div>
                 </div>
               </div>
@@ -116,7 +139,9 @@
         </div>
       </div>
       <div class="content">
-        <router-view />
+        <transition name="slide-fade">
+          <router-view @setSuffixMenu="setSuffixMenu" />
+        </transition>
       </div>
     </div>
   </div>
@@ -133,11 +158,17 @@ export default {
       pagePath: [],
       userMenuShow: false,
       userMenuHover: "",
+      suffixMenu: [],
     };
   },
   computed: {
+    language() {
+      return this.$store.state.global.language;
+    },
     pageTitle() {
-      return this.$route.meta.title;
+      return this.language == "zh"
+        ? this.$route.meta.title
+        : this.$route.meta.enTitle;
     },
     navigation() {
       console.log(this.pagePath);
@@ -165,6 +196,10 @@ export default {
     }
   },
   methods: {
+    setSuffixMenu(arr) {
+      console.log("设置后缀", arr);
+      this.suffixMenu = [...arr];
+    },
     menuAnimate(element, hide) {
       element.style.height = "auto";
       let targetHeight = window.getComputedStyle(element).height;
@@ -174,6 +209,7 @@ export default {
       }, 0);
     },
     selectItem(items, path) {
+      this.suffixMenu = [];
       // console.log(items);
       if (items[0].children && items.length == 1) {
         this.pagePath = items;
@@ -237,7 +273,7 @@ export default {
             p {
               margin-left: 8px;
               font-size: 14px;
-              color: #fff;
+              color: #cccccc;
               line-height: 20px;
             }
           }
@@ -247,11 +283,11 @@ export default {
           }
           .cmenuIcon--open {
             // 调转箭头动画
-            transform: rotate(180deg);
+            transform: rotate(0deg);
           }
           .cmenuIcon--close {
             // 调转箭头动画
-            transform: rotate(0deg);
+            transform: rotate(180deg);
           }
         }
         .button:hover {
@@ -260,6 +296,11 @@ export default {
         .button--selected,
         .button--selected:hover {
           background-color: #4b78f6;
+          .button-title {
+            p {
+              color: #fff;
+            }
+          }
         }
         .children {
           height: 0;
@@ -286,10 +327,29 @@ export default {
       box-shadow: 0px 2px 6px 0px rgba(224, 224, 224, 0.5);
       padding: 18px 24px;
       box-sizing: border-box;
-      .title {
-        font-size: 18px;
-        line-height: 25px;
-        color: #333333;
+      .titleBox {
+        display: flex;
+        flex-direction: row;
+        .title {
+          font-size: 18px;
+          line-height: 25px;
+          color: #333333;
+        }
+        .suffixMenu {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-left: 8px;
+          img {
+            width: 5px;
+          }
+          p {
+            font-size: 18px;
+            line-height: 25px;
+            color: #333333;
+            margin-left: 8px;
+          }
+        }
       }
       .toolsBar {
         display: flex;
@@ -394,8 +454,19 @@ export default {
         }
       }
     }
+    .slide-fade-enter-active {
+      transition: all 0.08s ease;
+    }
+    .slide-fade-leave-active {
+      transition: all 0.08s cubic-bezier(1, 0.5, 0.8, 1);
+    }
+    .slide-fade-enter,
+    .slide-fade-leave-to {
+      opacity: 0;
+    }
     .content {
       margin-top: 24px;
+      margin-right: 24px;
     }
   }
 }

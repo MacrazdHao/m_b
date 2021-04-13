@@ -88,9 +88,20 @@ export default {
       });
     });
   },
-  emailVerify: ({ commit }, data) => {
+  studentEmailVerify: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       request.post("/user/register/email/code", data).then(res => {
+        console.log('发送验证码成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('发送验证码失败', err);
+        reject(err);
+      });
+    });
+  },
+  adminEmailVerify: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post("/admin/email/code", data).then(res => {
         console.log('发送验证码成功', res);
         resolve(res);
       }).catch(err => {
@@ -113,7 +124,7 @@ export default {
   },
   adminRegister: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      request.post("/admin/register/account", data).then(res => {
+      request.post("/admin/register/email", data).then(res => {
         console.log('注册成功', res);
         setToken(res.data.token);
         resolve(res);

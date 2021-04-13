@@ -1,3 +1,4 @@
+import i18n from './language';
 /*
 {
   '远程路由': {
@@ -24,8 +25,20 @@ export default {
     name: "dashboard",
     component: "Dashboard",
     meta: {
-      title: "工作台",
+      title: '工作台',
+      enTitle: 'Workbench',
       icon: "icon_workbench"
+    }
+  },
+  // 子级
+  '/counseling': {
+    path: "counseling",
+    name: "counseling",
+    component: "Counseling",
+    meta: {
+      title: '生涯辅导',
+      enTitle: 'Life Coach',
+      icon: "icon_counseling"
     }
   },
   // 子级
@@ -36,6 +49,7 @@ export default {
     redirect: 'testing1',
     meta: {
       title: "测试主页",
+      enTitle: 'Test Index',
       icon: "icon_workbench",
     }
   },
@@ -46,6 +60,7 @@ export default {
     component: "pages/testing1",
     meta: {
       title: "测试子页1",
+      enTitle: "Test Page1",
     }
   },
   // 子子级
@@ -55,6 +70,7 @@ export default {
     component: "pages/testing2",
     meta: {
       title: "测试子页2",
+      enTitle: "Test Page2",
     }
   },
   // 顶级

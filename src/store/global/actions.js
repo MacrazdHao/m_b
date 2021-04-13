@@ -18,6 +18,8 @@ export default {
           path: '/index',
           children: [{
             path: '/dashboard'
+          },{
+            path: '/counseling'
           }, {
             path: "/testing",
             children: [{
@@ -34,5 +36,8 @@ export default {
   },
   setMenu: ({ commit, state }, data) => {
     commit(types.SET_MENU, data);
-  }
+  },
+  setLanguage: ({ commit, state }, language) => {
+    commit('SET_LANGUAGE', language);
+  },
 }
