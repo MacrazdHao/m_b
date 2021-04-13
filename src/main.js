@@ -8,6 +8,7 @@ import store from './store/index';
 import ElementUI from 'element-ui';
 // import "./assets/font.css";
 import "./assets/animate.css";
+import "./assets/transition.css";
 import 'element-ui/lib/theme-chalk/index.css'
 import './utils/permission'
 import Dialog from './components/Dialog/dialog.js';

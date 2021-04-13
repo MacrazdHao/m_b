@@ -4,7 +4,7 @@ import i18n from '@/utils/language';
 const getDefaultState = () => {
   return {
     language: i18n.locale,
-    menu: []
+    menu: null
   }
 }
 

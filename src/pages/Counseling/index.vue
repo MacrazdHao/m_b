@@ -14,7 +14,6 @@
               step == 1 ? '_selected' : ''
             }.png`) +
             ') no-repeat',
-          'background-size': '100% 100%',
         }"
       >
         <p>1. {{ $t("counseling.step1.title") }}</p>
@@ -32,7 +31,6 @@
               step == 2 ? '_selected' : ''
             }.png`) +
             ') no-repeat',
-          'background-size': '100% 100%',
         }"
       >
         <p>2. {{ $t("counseling.step2.title") }}</p>
@@ -50,7 +48,6 @@
               step == 3 ? '_selected' : ''
             }.png`) +
             ') no-repeat',
-          'background-size': '100% 100%',
         }"
       >
         <p>3. {{ $t("counseling.step3.title") }}</p>
@@ -68,7 +65,6 @@
               step == 4 ? '_selected' : ''
             }.png`) +
             ') no-repeat',
-          'background-size': '100% 100%',
         }"
       >
         <p>4. {{ $t("counseling.step4.title") }}</p>
@@ -86,7 +82,6 @@
               step == 5 ? '_selected' : ''
             }.png`) +
             ') no-repeat',
-          'background-size': '100% 100%',
         }"
       >
         <p>5. {{ $t("counseling.step5.title") }}</p>
@@ -104,21 +99,33 @@
               step == 6 ? '_selected' : ''
             }.png`) +
             ') no-repeat',
-          'background-size': '100% 100%',
         }"
       >
         <p>6. {{ $t("counseling.step6.title") }}</p>
       </div>
     </div>
-    <base-info v-if="step == 1" @setSuffixMenu="setSuffixMenu" />
+    <transition name="slide-fade">
+      <BaseInfo
+        v-if="step == 1"
+        @setSuffixMenu="setSuffixMenu"
+        @nextStep="nextStep"
+      />
+      <OnlineTest
+        v-if="step == 2"
+        @setSuffixMenu="setSuffixMenu"
+        @nextStep="nextStep"
+      />
+    </transition>
   </div>
 </template>
 
 <script>
 import BaseInfo from "./steps/baseInfo.vue";
+import OnlineTest from "./steps/test.vue";
 export default {
   components: {
     BaseInfo,
+    OnlineTest,
   },
   data() {
     return {
@@ -127,6 +134,9 @@ export default {
   },
   mounted() {},
   methods: {
+    nextStep() {
+      this.step++;
+    },
     setSuffixMenu(arr) {
       this.$emit("setSuffixMenu", arr);
     },
@@ -162,7 +172,7 @@ export default {
       min-width: calc(100% / 6);
       min-height: 50px;
       box-sizing: border-box;
-      background-size: 100% 100%;
+      background-size: 100% 100% !important;
     }
     p {
       // margin-left: 21.19%;

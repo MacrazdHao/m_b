@@ -39,9 +39,10 @@ let res = test.filter((val, index) => {
 let systemRouter;
 
 export async function createDynamicRouter(to, next, aim) {
+  const hasRouter = store.state.global.menu
   // 用store请求得到路由表单
   // 根据路由表单生成路由对象，并放入缓存 / Vuex
-  if (systemRouter) {
+  if (systemRouter || hasRouter) {
     if (aim) next({ path: aim });
     else next();
   } else {

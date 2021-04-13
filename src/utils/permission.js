@@ -12,6 +12,7 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 const whiteList = ['/', '/register', '/register2', '/forget', '/reset', '/contact', '/parents'] // no redirect whitelist
 
 let getMessages = () => {
+  if (!window.msgTimeout) return;
   // 获取系统消息列表
   store.dispatch('user/getMessages', { pageIndex: 1, pageSize: 10, queryTime: (new Date()).getTime() })
   // 设置系统消息定时任务
@@ -32,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
   if (hasToken) {
     // 已登录
     // 当前页面是否为后台入口相关页面
-    if (to.path === '/' || to.path === '/register' || to.path === '/forget') {
+    if (whiteList.indexOf(to.path) !== -1) {
       // 当前页面是后台入口相关页面时
       // 生成动态路由
       // 获取系统消息
@@ -40,8 +41,9 @@ router.beforeEach(async (to, from, next) => {
       createDynamicRouter(to, next, '/index')
       NProgress.done()
     } else {
+      // console.log(store.state.user.userinfo)
       // 当前页面不是后台入口相关页面时
-      const hasGetUserInfo = store.getters.name
+      const hasGetUserInfo = store.state.user.userinfo
       // 是否以获取用户信息
       if (hasGetUserInfo) {
         // 已获取用户信息

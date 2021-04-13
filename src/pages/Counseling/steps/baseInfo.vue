@@ -184,13 +184,15 @@ export default {
       this.sport = val;
     },
     submit() {
+      this.$emit("nextStep");
+    },
+    cancel() {
       this.$dialog.message(
         this.$t("counseling.step1.leaveTips"),
         () => {},
         () => {}
       );
     },
-    cancel() {},
   },
 };
 </script>

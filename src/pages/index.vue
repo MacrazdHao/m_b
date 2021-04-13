@@ -392,16 +392,6 @@ export default {
             color: #333333;
             line-height: 20px;
           }
-          .slide-fade-enter-active {
-            transition: all 0.08s ease;
-          }
-          .slide-fade-leave-active {
-            transition: all 0.08s cubic-bezier(1, 0.5, 0.8, 1);
-          }
-          .slide-fade-enter,
-          .slide-fade-leave-to {
-            opacity: 0;
-          }
           .drawerBox {
             position: absolute;
             left: -78px;
@@ -453,16 +443,6 @@ export default {
           cursor: pointer;
         }
       }
-    }
-    .slide-fade-enter-active {
-      transition: all 0.08s ease;
-    }
-    .slide-fade-leave-active {
-      transition: all 0.08s cubic-bezier(1, 0.5, 0.8, 1);
-    }
-    .slide-fade-enter,
-    .slide-fade-leave-to {
-      opacity: 0;
     }
     .content {
       margin-top: 24px;

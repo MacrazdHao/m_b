@@ -4,7 +4,7 @@ import actions from './actions';
 import i18n from '@/utils/language';
 
 const state = {
-  menu: [],
+  menu: null,
   language: i18n.locale
 }
 
