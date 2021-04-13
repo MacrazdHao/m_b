@@ -148,7 +148,9 @@
 </template>
 
 <script>
+// import redirectMixin from "@/mixins/redirect";
 export default {
+  // mixins: [redirectMixin],
   data() {
     return {
       initial: true,
@@ -178,6 +180,12 @@ export default {
     },
   },
   watch: {
+    $route: {
+      handler: function (route) {
+        this.routeChanged()
+      },
+      immediate: true,
+    },
     pChildrenIsShow(val, oldVal) {
       console.log(val);
       this.menuAnimate(
@@ -187,17 +195,23 @@ export default {
     },
   },
   mounted() {
-    this.pageName = this.$route.name;
-    if (this.$route.matched.length > 2) {
-      this.pagePath = this.$route.matched.slice(1, this.$route.matched.length);
-      this.pChildrenIsShow = this.$route.matched[
-        this.$route.matched.length - 1
-      ].parent.name;
-    }
+    this.routeChanged();
   },
   methods: {
+    routeChanged() {
+      this.pageName = this.$route.name;
+      if (this.$route.matched.length > 2) {
+        this.pagePath = this.$route.matched.slice(
+          1,
+          this.$route.matched.length
+        );
+        this.pChildrenIsShow = this.$route.matched[
+          this.$route.matched.length - 1
+        ].parent.name;
+      }
+    },
     setSuffixMenu(arr) {
-      console.log("设置后缀", arr);
+      // console.log("设置后缀", arr);
       this.suffixMenu = [...arr];
     },
     menuAnimate(element, hide) {
