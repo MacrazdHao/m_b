@@ -139,7 +139,7 @@
         </div>
       </div>
       <div class="content">
-        <transition name="slide-fade">
+        <transition name="slide-fade2">
           <router-view @setSuffixMenu="setSuffixMenu" />
         </transition>
       </div>
@@ -173,7 +173,7 @@ export default {
         : this.$route.meta.enTitle;
     },
     navigation() {
-      console.log(this.pagePath);
+      // console.log(this.pagePath);
       return this.pagePath.length == 0
         ? ""
         : this.pagePath[this.pagePath.length - 1].name;
@@ -187,7 +187,7 @@ export default {
       immediate: true,
     },
     pChildrenIsShow(val, oldVal) {
-      console.log(val);
+      // console.log(val);
       this.menuAnimate(
         document.getElementById(`/index/${this.pagePath[0].name}`),
         oldVal == this.pagePath[0].name

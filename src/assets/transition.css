@@ -9,3 +9,15 @@
 .slide-fade-enter, .slide-fade-leave-to {
   opacity: 0;
 }
+
+.slide-fade2-enter-active {
+  transition: all 0.1s ease;
+}
+
+.slide-fade2-leave-active {
+  /* transition: all 0s ease; */
+}
+
+.slide-fade2-enter, .slide-fade2-leave-to {
+  opacity: 0;
+}
