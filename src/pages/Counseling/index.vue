@@ -115,6 +115,28 @@
         @setSuffixMenu="setSuffixMenu"
         @nextStep="nextStep"
       />
+      <MatchConsultant
+        v-if="step == 3"
+        :step="step"
+        @setSuffixMenu="setSuffixMenu"
+        @nextStep="nextStep"
+      />
+      <MatchConsultant
+        v-if="step == 4"
+        :step="step"
+        @setSuffixMenu="setSuffixMenu"
+        @nextStep="nextStep"
+      />
+      <MatchConsultant
+        v-if="step == 5"
+        :step="step"
+        @setSuffixMenu="setSuffixMenu"
+        @nextStep="nextStep"
+      />
+      <OutputReport
+        v-if="step == 6"
+        @setSuffixMenu="setSuffixMenu"
+      />
     </transition>
   </div>
 </template>
@@ -122,14 +144,18 @@
 <script>
 import BaseInfo from "./steps/baseInfo.vue";
 import OnlineTest from "./steps/test.vue";
+import MatchConsultant from "./steps/match.vue";
+import OutputReport from "./steps/report.vue";
 export default {
   components: {
     BaseInfo,
     OnlineTest,
+    MatchConsultant,
+    OutputReport
   },
   data() {
     return {
-      step: 2,
+      step: 6,
     };
   },
   mounted() {},
@@ -149,6 +175,7 @@ export default {
   background: #fff;
   box-shadow: 0px 2px 6px 0px rgba(224, 224, 224, 0.5);
   width: 100%;
+  margin-bottom: 24px;
   p {
     margin: 0;
   }

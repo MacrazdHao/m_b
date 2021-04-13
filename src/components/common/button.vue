@@ -1,5 +1,9 @@
 <template>
-  <div :class="['Button', theme]" :style="{ width, height }" @click="btnClick">
+  <div
+    :class="['Button', disable ? 'disable' : theme]"
+    :style="{ width, height }"
+    @click="btnClick"
+  >
     <p>{{ text }}</p>
   </div>
 </template>
@@ -22,6 +26,10 @@ export default {
     theme: {
       default: "white",
       type: String,
+    },
+    disable: {
+      default: false,
+      type: Boolean,
     },
   },
   methods: {
@@ -47,7 +55,13 @@ export default {
     padding: 0;
     font-size: 14px;
     line-height: 20px;
+    user-select: none;
   }
+}
+.disable {
+  border: 1px solid #999999;
+  background-color: #999999;
+  color: #fff;
 }
 .white {
   border: 1px solid #d9d9d9;

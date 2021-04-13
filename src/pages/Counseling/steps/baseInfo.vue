@@ -109,7 +109,7 @@
       />
       <CButton
         class="button"
-        :text="$t('counseling.step1.submitButton')"
+        :text="$t('counseling.step1.saveButton')"
         theme="blue"
         @btnClick="submit"
       />
