@@ -25,7 +25,7 @@ export default {
             children: [{
               path: "/testing1",
             }, {
-              path: "/testing2",
+              path: "/counseling",
             }]
           }]
         }]

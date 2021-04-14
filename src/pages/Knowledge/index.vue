@@ -1,17 +1,15 @@
 <template>
-  <div class="Testing">
-    <router-view />
-  </div>
+  <div class="Knowledge">知识中心</div>
 </template>
 
 <script>
 export default {
-  
+
 }
 </script>
 
 <style lang="scss" scoped>
-.Testing {
+.Knowledge {
 
 }
 </style>

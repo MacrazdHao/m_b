@@ -71,7 +71,7 @@ export function resetSystemRouter() {
 
 function routerNext(to, next) {
   const realRouter = routerFilter(systemRouter);
-  // console.log('组建完成', realRouter)
+  console.log('组建完成', realRouter)
   store.dispatch('global/setMenu', realRouter[1]);
   realRouter.forEach((e) => {
     router.addRoute(e);
@@ -83,6 +83,7 @@ function routerNext(to, next) {
   });
 }
 
+var idNum = 0;
 // 组件动态路由对象
 function routerFilter(routerMap, isChild = false, parents = []) {
   const accessRouters = routerMap.filter(route => {
@@ -90,8 +91,13 @@ function routerFilter(routerMap, isChild = false, parents = []) {
     // console.log(parents);
     for (let key in routerMapping[route.path]) {
       if (key == 'path') continue;
+      if (key == 'meta') {
+        route[key] = { id: idNum++, ...routerMapping[route.path][key] };
+        continue;
+      }
       route[key] = routerMapping[route.path][key];
     }
+    // console.log(route);
     route.path = routerMapping[route.path].path;
     if (typeof (route.component) == 'string') {
       // console.log(route)
@@ -112,8 +118,21 @@ function routerFilter(routerMap, isChild = false, parents = []) {
               // console.log(import(`@/pages${path}`))
             } else {
               let path = `/${parents.join('/')}/${route.component}`;
-              route.component = () => import(`@/pages${path}`);
-              // console.log(import(`@/pages${path}`))
+              let path2 = `/${route.component}`;
+              route.component = () => {
+                return new Promise((resolve, reject) => {
+                  import(`@/pages${path}`).then((res) => {
+                    resolve(res)
+                  }).catch(() => {
+                    // 子目录中不存在，则从根目录寻找
+                    import(`@/pages${path2}`).then((res2) => {
+                      resolve(res2)
+                    }).catch(() => {
+                      reject(-1);
+                    })
+                  })
+                });
+              }
             }
             if (isChild) _parents.push(componentName);
             break;

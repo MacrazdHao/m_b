@@ -9,7 +9,10 @@
           :key="index"
         >
           <div
-            :class="['button', pageName == item.name ? 'button--selected' : '']"
+            :class="[
+              'button',
+              pageName == item.meta.id ? 'button--selected' : '',
+            ]"
             v-if="index > 0"
             @click="selectItem([item], `/index/${item.path}`)"
           >
@@ -17,7 +20,7 @@
               <img
                 :src="
                   require(`@/assets/index/${item.meta.icon}${
-                    pageName == item.name ? '_selected' : ''
+                    pageName == item.meta.id ? '_selected' : ''
                   }.svg`)
                 "
               />
@@ -28,7 +31,7 @@
             <img
               :class="[
                 'cmenuIcon',
-                pChildrenIsShow == item.name
+                pChildrenIsShow == item.meta.id
                   ? 'cmenuIcon--open'
                   : 'cmenuIcon--close',
               ]"
@@ -40,7 +43,7 @@
             :class="[
               'children',
               item.children &&
-              (pChildrenIsShow == item.name || pageName == item.name)
+              (pChildrenIsShow == item.meta.id || pageName == item.meta.id)
                 ? 'hide'
                 : '',
             ]"
@@ -50,7 +53,7 @@
               <div
                 :class="[
                   'button',
-                  pageName == item2.name ? 'button--selected' : '',
+                  pageName == item2.meta.id ? 'button--selected' : '',
                 ]"
                 v-if="index2 > 0"
                 @click="
@@ -156,7 +159,6 @@ export default {
       initial: true,
       pageName: "Dashboard",
       pChildrenIsShow: "",
-      pIndex: -1,
       pagePath: [],
       userMenuShow: false,
       userMenuHover: "",
@@ -182,16 +184,29 @@ export default {
   watch: {
     $route: {
       handler: function (route) {
-        this.routeChanged()
+        this.routeChanged();
       },
       immediate: true,
     },
-    pChildrenIsShow(val, oldVal) {
-      // console.log(val);
-      this.menuAnimate(
-        document.getElementById(`/index/${this.pagePath[0].name}`),
-        oldVal == this.pagePath[0].name
-      );
+    pChildrenIsShow: {
+      handler(val, oldVal) {
+        // mounted阶段内无法获取dom节点，因此需要异步
+        if (this.initial) {
+          setTimeout(() => {
+            this.menuAnimate(
+              document.getElementById(`/index/${this.pagePath[0].name}`),
+              oldVal ? oldVal == this.pagePath[0].meta.id : false
+            );
+            this.initial = false;
+          }, 300);
+        } else {
+          this.menuAnimate(
+            document.getElementById(`/index/${this.pagePath[0].name}`),
+            oldVal == this.pagePath[0].meta.id
+          );
+        }
+      },
+      immediate: true,
     },
   },
   mounted() {
@@ -199,7 +214,7 @@ export default {
   },
   methods: {
     routeChanged() {
-      this.pageName = this.$route.name;
+      this.pageName = this.$route.meta.id;
       if (this.$route.matched.length > 2) {
         this.pagePath = this.$route.matched.slice(
           1,
@@ -207,7 +222,7 @@ export default {
         );
         this.pChildrenIsShow = this.$route.matched[
           this.$route.matched.length - 1
-        ].parent.name;
+        ].parent.meta.id;
       }
     },
     setSuffixMenu(arr) {
@@ -224,14 +239,12 @@ export default {
     },
     selectItem(items, path) {
       this.suffixMenu = [];
-      // console.log(items);
       if (items[0].children && items.length == 1) {
         this.pagePath = items;
         this.pChildrenIsShow =
-          this.pChildrenIsShow == items[0].name ? "" : items[0].name;
+          this.pChildrenIsShow == items[0].meta.id ? "" : items[0].meta.id;
       } else {
-        // console.log(path);
-        this.pageName = items[items.length - 1].name;
+        this.pageName = items[items.length - 1].meta.id;
         this.$router.push({ path });
       }
     },
