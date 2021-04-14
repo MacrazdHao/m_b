@@ -167,6 +167,9 @@ export default {
       return this.$store.state.global.language;
     },
     pageTitle() {
+      if (this.$route.matched[1].name == "personal") {
+        return "个人中心";
+      }
       return this.language == "zh"
         ? this.$route.meta.title
         : this.$route.meta.enTitle;
@@ -227,6 +230,7 @@ export default {
     },
     routeChanged() {
       this.pageName = this.$route.meta.id;
+      this.suffixMenu = [];
       if (
         this.$route.matched.length > 2 &&
         this.menuFilter(this.$route.matched[1].name)
