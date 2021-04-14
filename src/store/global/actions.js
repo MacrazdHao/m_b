@@ -25,6 +25,15 @@ export default {
           }, {
             path: '/messages'
           }, {
+            path: "/personal",
+            children: [{
+              path: "/base",
+            }, {
+              path: "/account",
+            }, {
+              path: "/safe",
+            }]
+          }, {
             path: "/testing",
             children: [{
               path: "/testing1",

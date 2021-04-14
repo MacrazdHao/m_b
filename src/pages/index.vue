@@ -101,6 +101,7 @@
                 <div class="drawer">
                   <div
                     class="drawer-item"
+                    @click="goPersonal"
                     @mouseenter="userMenuHover = 'center'"
                     @mouseleave="userMenuHover = ''"
                   >
@@ -189,6 +190,7 @@ export default {
         // mounted阶段内无法获取dom节点，因此需要异步
         if (this.initial) {
           setTimeout(() => {
+            console.log(this.pagePath[0].name);
             if (this.pagePath[0]) {
               this.menuAnimate(
                 document.getElementById(`/index/${this.pagePath[0].name}`),
@@ -198,10 +200,12 @@ export default {
             this.initial = false;
           }, 300);
         } else {
-          this.menuAnimate(
-            document.getElementById(`/index/${this.pagePath[0].name}`),
-            oldVal == this.pagePath[0].meta.id
-          );
+          if (this.pagePath[0]) {
+            this.menuAnimate(
+              document.getElementById(`/index/${this.pagePath[0].name}`),
+              oldVal == this.pagePath[0].meta.id
+            );
+          }
         }
       },
       immediate: true,
@@ -223,7 +227,10 @@ export default {
     },
     routeChanged() {
       this.pageName = this.$route.meta.id;
-      if (this.$route.matched.length > 2) {
+      if (
+        this.$route.matched.length > 2 &&
+        this.menuFilter(this.$route.matched[1].name)
+      ) {
         this.pagePath = this.$route.matched.slice(
           1,
           this.$route.matched.length
@@ -262,7 +269,10 @@ export default {
       });
     },
     goMessages() {
-      this.$router.push("messages");
+      this.$router.push({ path: "/index/messages" });
+    },
+    goPersonal() {
+      this.$router.push({ path: "/index/personal/base" });
     },
   },
 };

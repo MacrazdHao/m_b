@@ -64,6 +64,48 @@ export default {
     }
   },
   // 子级
+  '/personal': {
+    path: "personal",
+    name: "personal",
+    component: "Personal",
+    redirect: 'base',
+    meta: {
+      title: '个人中心',
+      enTitle: 'Personal Center',
+      icon: "icon_knowledge"
+    }
+  },
+  // 子子级
+  '/base': {
+    path: "base",
+    name: "base",
+    component: "pages/base",
+    meta: {
+      title: "基本设置",
+      enTitle: "Base Setting",
+    }
+  },
+  // 子子级
+  '/account': {
+    path: "account",
+    name: "account",
+    component: "pages/account",
+    meta: {
+      title: "账号设置",
+      enTitle: "Account Setting",
+    }
+  },
+  // 子子级
+  '/safe': {
+    path: "safe",
+    name: "safe",
+    component: "pages/safe",
+    meta: {
+      title: "基本设置",
+      enTitle: "Safe Setting",
+    }
+  },
+  // 子级
   '/testing': {
     path: "testing",
     name: "testing",
