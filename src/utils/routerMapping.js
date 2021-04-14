@@ -42,6 +42,28 @@ export default {
     }
   },
   // 子级
+  '/knowledge': {
+    path: "knowledge",
+    name: "knowledge",
+    component: "Knowledge",
+    meta: {
+      title: '知识中心',
+      enTitle: 'Knowledge Center',
+      icon: "icon_knowledge"
+    }
+  },
+  // 子级
+  '/messages': {
+    path: "messages",
+    name: "messages",
+    component: "Messages",
+    meta: {
+      title: '系统通知',
+      enTitle: 'System Messages',
+      icon: "icon_knowledge"
+    }
+  },
+  // 子级
   '/testing': {
     path: "testing",
     name: "testing",

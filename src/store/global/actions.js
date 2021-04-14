@@ -18,8 +18,12 @@ export default {
           path: '/index',
           children: [{
             path: '/dashboard'
-          },{
+          }, {
             path: '/counseling'
+          }, {
+            path: '/knowledge'
+          }, {
+            path: '/messages'
           }, {
             path: "/testing",
             children: [{

@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['Button', disable ? 'disable' : theme]"
-    :style="{ width, height }"
+    :style="{ width, height, fontSize, lineHeight }"
     @click="btnClick"
   >
     <p>{{ text }}</p>
@@ -22,6 +22,14 @@ export default {
     height: {
       default: "fit-content",
       type: String,
+    },
+    fontSize: {
+      default: "14px",
+      type: String
+    },
+    lineHeight: {
+      default: "20px",
+      type: String
     },
     theme: {
       default: "white",
@@ -53,8 +61,8 @@ export default {
   p {
     margin: 0;
     padding: 0;
-    font-size: 14px;
-    line-height: 20px;
+    // font-size: 14px;
+    // line-height: 20px;
     user-select: none;
   }
 }

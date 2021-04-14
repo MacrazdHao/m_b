@@ -4,69 +4,65 @@
       <img class="logo" src="@/assets/index/logo.svg" />
       <div class="route">
         <div
-          :class="['menu-item']"
+          class="menu-item"
           v-for="(item, index) in $store.state.global.menu.children"
           :key="index"
         >
-          <div
-            :class="[
-              'button',
-              pageName == item.meta.id ? 'button--selected' : '',
-            ]"
-            v-if="index > 0"
-            @click="selectItem([item], `/index/${item.path}`)"
-          >
-            <div class="button-title">
-              <img
-                :src="
-                  require(`@/assets/index/${item.meta.icon}${
-                    pageName == item.meta.id ? '_selected' : ''
-                  }.svg`)
-                "
-              />
-              <p>
-                {{ language == "zh" ? item.meta.title : item.meta.enTitle }}
-              </p>
-            </div>
-            <img
+          <div class="menu-item-inbox" v-if="menuFilter(item.name)">
+            <div
               :class="[
-                'cmenuIcon',
-                pChildrenIsShow == item.meta.id
-                  ? 'cmenuIcon--open'
-                  : 'cmenuIcon--close',
+                'button',
+                pageName == item.meta.id ? 'button--selected' : '',
               ]"
-              v-if="item.children"
-              :src="require(`@/assets/index/icon_pull.svg`)"
-            />
-          </div>
-          <div
-            :class="[
-              'children',
-              item.children &&
-              (pChildrenIsShow == item.meta.id || pageName == item.meta.id)
-                ? 'hide'
-                : '',
-            ]"
-            :id="`/index/${item.path}`"
-          >
-            <div v-for="(item2, index2) in item.children" :key="index2">
-              <div
+              v-if="index > 0"
+              @click="selectItem([item], `/index/${item.path}`)"
+            >
+              <div class="button-title">
+                <img
+                  :src="
+                    require(`@/assets/index/${item.meta.icon}${
+                      pageName == item.meta.id ? '_selected' : ''
+                    }.svg`)
+                  "
+                />
+                <p>
+                  {{ language == "zh" ? item.meta.title : item.meta.enTitle }}
+                </p>
+              </div>
+              <img
                 :class="[
-                  'button',
-                  pageName == item2.meta.id ? 'button--selected' : '',
+                  'cmenuIcon',
+                  pChildrenIsShow == item.meta.id
+                    ? 'cmenuIcon--open'
+                    : 'cmenuIcon--close',
                 ]"
-                v-if="index2 > 0"
-                @click="
-                  selectItem([item, item2], `/index/${item.path}/${item2.path}`)
-                "
-              >
-                <div class="button-title">
-                  <img />
-                  <p>
-                    {{
-                      language == "zh" ? item2.meta.title : item2.meta.enTitle
-                    }}
-                  </p>
+                v-if="item.children"
+                :src="require(`@/assets/index/icon_pull.svg`)"
+              />
+            </div>
+            <div class="children" :id="`/index/${item.path}`">
+              <div v-for="(item2, index2) in item.children" :key="index2">
+                <div
+                  :class="[
+                    'button',
+                    pageName == item2.meta.id ? 'button--selected' : '',
+                  ]"
+                  v-if="index2 > 0"
+                  @click="
+                    selectItem(
+                      [item, item2],
+                      `/index/${item.path}/${item2.path}`
+                    )
+                  "
+                >
+                  <div class="button-title">
+                    <img />
+                    <p>
+                      {{
+                        language == "zh" ? item2.meta.title : item2.meta.enTitle
+                      }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -89,7 +85,7 @@
         </div>
         <div class="toolsBar">
           <!-- <p @click="logout">登出</p> -->
-          <div class="messageIconBox">
+          <div class="messageIconBox" @click="goMessages">
             <img class="messages" src="@/assets/index/icon_news.svg" />
             <p class="num">999</p>
           </div>
@@ -193,10 +189,12 @@ export default {
         // mounted阶段内无法获取dom节点，因此需要异步
         if (this.initial) {
           setTimeout(() => {
-            this.menuAnimate(
-              document.getElementById(`/index/${this.pagePath[0].name}`),
-              oldVal ? oldVal == this.pagePath[0].meta.id : false
-            );
+            if (this.pagePath[0]) {
+              this.menuAnimate(
+                document.getElementById(`/index/${this.pagePath[0].name}`),
+                oldVal ? oldVal == this.pagePath[0].meta.id : false
+              );
+            }
             this.initial = false;
           }, 300);
         } else {
@@ -213,6 +211,16 @@ export default {
     this.routeChanged();
   },
   methods: {
+    menuFilter(pageName) {
+      switch (pageName) {
+        case "messages":
+          return false;
+        case "personal":
+          return false;
+        default:
+          return true;
+      }
+    },
     routeChanged() {
       this.pageName = this.$route.meta.id;
       if (this.$route.matched.length > 2) {
@@ -253,6 +261,9 @@ export default {
         this.$router.push({ path: "/" });
       });
     },
+    goMessages() {
+      this.$router.push("messages");
+    },
   },
 };
 </script>
@@ -281,61 +292,63 @@ export default {
     .route {
       height: 100%;
       .menu-item {
-        display: flex;
-        flex-direction: column;
-        .button {
-          // max-height: 100px;
-          width: 100%;
-          box-sizing: border-box;
+        .menu-item-inbox {
           display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-          padding: 11px 20px;
-          cursor: pointer;
-          transition: all 0.3s;
-          .button-title {
+          flex-direction: column;
+          .button {
+            // max-height: 100px;
+            width: 100%;
+            box-sizing: border-box;
             display: flex;
             flex-direction: row;
-            p {
-              margin-left: 8px;
-              font-size: 14px;
-              color: #cccccc;
-              line-height: 20px;
-            }
-          }
-          .cmenuIcon {
-            width: 14px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 11px 20px;
+            cursor: pointer;
             transition: all 0.3s;
-          }
-          .cmenuIcon--open {
-            // 调转箭头动画
-            transform: rotate(0deg);
-          }
-          .cmenuIcon--close {
-            // 调转箭头动画
-            transform: rotate(180deg);
-          }
-        }
-        .button:hover {
-          background-color: #242531;
-        }
-        .button--selected,
-        .button--selected:hover {
-          background-color: #4b78f6;
-          .button-title {
-            p {
-              color: #fff;
+            .button-title {
+              display: flex;
+              flex-direction: row;
+              p {
+                margin-left: 8px;
+                font-size: 14px;
+                color: #cccccc;
+                line-height: 20px;
+              }
+            }
+            .cmenuIcon {
+              width: 14px;
+              transition: all 0.3s;
+            }
+            .cmenuIcon--open {
+              // 调转箭头动画
+              transform: rotate(0deg);
+            }
+            .cmenuIcon--close {
+              // 调转箭头动画
+              transform: rotate(180deg);
             }
           }
-        }
-        .children {
-          height: 0;
-          transition: 0.3s height ease-in-out;
-          overflow: hidden;
-          background: #1f212c;
-        }
-        .hide {
+          .button:hover {
+            background-color: #242531;
+          }
+          .button--selected,
+          .button--selected:hover {
+            background-color: #4b78f6;
+            .button-title {
+              p {
+                color: #fff;
+              }
+            }
+          }
+          .children {
+            height: 0;
+            transition: 0.3s height ease-in-out;
+            overflow: hidden;
+            background: #1f212c;
+          }
+          .hide {
+          }
         }
       }
     }
