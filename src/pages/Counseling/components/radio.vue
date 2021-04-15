@@ -83,6 +83,7 @@ export default {
     margin: 0;
     color: #333333;
     font-size: 14px;
+    
     line-height: 20px;
     white-space: nowrap;
   }

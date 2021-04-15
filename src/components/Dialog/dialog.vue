@@ -118,12 +118,14 @@ export default {
       .title {
         margin-top: 12px;
         font-size: 16px;
+        
         color: #333333;
         line-height: 22px;
       }
       .msg {
         margin-top: 16px;
         font-size: 14px;
+        
         color: #666666;
         line-height: 20px;
       }

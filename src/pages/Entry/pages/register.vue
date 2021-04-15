@@ -51,10 +51,13 @@ export default {
       }
 
       this.$store
-        .dispatch(`user/${this.identity==1?'student':'admin'}EmailVerify`, {
-          email: this.username,
-          operateType: 1,
-        })
+        .dispatch(
+          `user/${this.identity == 1 ? "student" : "admin"}EmailVerify`,
+          {
+            email: this.username,
+            operateType: 1,
+          }
+        )
         .then((res) => {
           console.log(res);
           this.$router.push({
@@ -96,6 +99,7 @@ export default {
     margin-top: 5.833vw;
     .title {
       font-size: 1.5625vw;
+      font-family: AlibabaPuHuiTiM;
       color: #013047;
     }
     img,

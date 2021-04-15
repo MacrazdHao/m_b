@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'AlibabaPuHuiTiR';
+  src: url(./font/Alibaba-PuHuiTi-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'AlibabaPuHuiTiM';
+  src: url(./font/Alibaba-PuHuiTi-Medium.ttf);
+}
+
+@font-face {
+  font-family: 'MyriadSetPro-Semibold';
+  src: url(./font/MyriadSetPro-Semibold.ttf);
+}
+
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: url(./font/Roboto-Regular.ttf);
+}
+
+* {
+  font-family: AlibabaPuHuiTiR;
+}

@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['Button', disable ? 'disable' : theme]"
-    :style="{ width, height, fontSize, lineHeight }"
+    :style="{ width, height, fontFamily, fontSize, lineHeight }"
     @click="btnClick"
   >
     <img v-if="icon" :src="icon" />
@@ -26,6 +26,10 @@ export default {
     },
     fontSize: {
       default: "14px",
+      type: String,
+    },
+    fontFamily: {
+      default: "AlibabaPuHuiTiR",
       type: String,
     },
     lineHeight: {

@@ -188,6 +188,7 @@ export default {
     margin-top: 3.646vw;
     .title {
       font-size: 1.5625vw;
+      font-family: AlibabaPuHuiTiM;
       color: #013047;
     }
     img,

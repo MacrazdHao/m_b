@@ -33,6 +33,7 @@ export default {
     margin: 0;
     color: #333333;
     font-size: 14px;
+    
     line-height: 20px;
     white-space: nowrap;
   }
@@ -47,6 +48,7 @@ export default {
     box-sizing: border-box;
     // background: #000;
     font-size: 14px;
+    
     line-height: 20px;
     margin-left: 29px;
     border-radius: 2px;

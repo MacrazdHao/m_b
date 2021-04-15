@@ -218,15 +218,18 @@ export default {
         }
         .title {
           font-size: 2.083vw;
+          font-family: AiDeep-Bold;
           color: #ffb706;
         }
         .welcome {
           font-size: 1.979vw;
+          font-family: MyriadSetPro-Semibold;
           margin-top: 5.3125vw;
           color: #fff;
         }
         .login {
           font-size: 1.042vw;
+          font-family: Roboto-Regular;
           margin-top: 1.042vw;
           color: #fff;
         }

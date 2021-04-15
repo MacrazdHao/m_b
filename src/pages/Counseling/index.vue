@@ -183,6 +183,7 @@ export default {
     box-sizing: border-box;
     .stepsItem {
       font-size: 14px;
+      
       color: #666666;
       line-height: 20px;
       display: flex;

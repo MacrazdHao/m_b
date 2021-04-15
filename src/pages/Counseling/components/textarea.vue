@@ -54,6 +54,7 @@ export default {
     margin: 0;
     color: #333333;
     font-size: 14px;
+    
     line-height: 20px;
     white-space: nowrap;
   }
@@ -72,6 +73,7 @@ export default {
     p {
       text-align: right;
       font-size: 14px;
+      
       color: #999999;
       line-height: 20px;
     }
@@ -86,6 +88,7 @@ export default {
       flex: 1;
       // background: #000;
       font-size: 14px;
+      
       line-height: 20px;
       font-family: Arial;
     }

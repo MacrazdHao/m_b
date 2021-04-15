@@ -89,9 +89,7 @@ export default {
     submit() {
       this.errorType = 0;
       if (this.form.code == "") {
-        this.$message.warning(
-          this.$t("entry.reset.alertTips.codeEmptyTips")
-        );
+        this.$message.warning(this.$t("entry.reset.alertTips.codeEmptyTips"));
         return;
       } else if (this.form.password == "") {
         this.$message.warning(
@@ -139,6 +137,7 @@ export default {
     margin-top: 5.833vw;
     .title {
       font-size: 1.5625vw;
+      font-family: AlibabaPuHuiTiM;
       color: #013047;
     }
     img,

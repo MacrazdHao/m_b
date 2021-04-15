@@ -95,7 +95,9 @@
             @mouseleave="userMenuShow = false"
           >
             <img class="avatar" src="@/assets/index/anna.jpg" />
-            <p class="nickname">纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞</p>
+            <p class="nickname">
+              纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞
+            </p>
             <transition name="slide-fade">
               <div class="drawerBox" v-show="userMenuShow">
                 <div class="drawer">
@@ -427,7 +429,7 @@ export default {
           .num {
             position: absolute;
             background-color: #ff4d4f;
-            border-radius: 10px;
+            border-radius: 100px;
             padding: 1px 6px;
             font-size: 16px;
             color: #ffffff;
@@ -452,6 +454,7 @@ export default {
           .nickname {
             margin-left: 8px;
             font-size: 14px;
+
             color: #333333;
             line-height: 20px;
             max-width: 20vw;
@@ -465,6 +468,7 @@ export default {
             left: -78px;
             bottom: 0;
             padding-top: 24px;
+            padding-right: 100%;
             transform: translate(0, 100%);
             cursor: default;
             .drawer {
@@ -490,6 +494,7 @@ export default {
                   color: #666666;
                   line-height: 20px;
                   font-size: 14px;
+
                   margin-left: 12px;
                 }
               }
