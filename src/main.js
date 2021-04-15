@@ -12,6 +12,7 @@ import "./assets/transition.css";
 import 'element-ui/lib/theme-chalk/index.css'
 import './utils/permission'
 import Dialog from './components/Dialog/dialog.js';
+import LogoutDialog from './components/LogoutDialog/logoutDialog.js';
 import Message from './components/Message/message.js';
 // import '@/assets/icons' // icon
 
@@ -23,6 +24,7 @@ Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 
+Vue.use(LogoutDialog)
 Vue.use(Dialog)
 Vue.use(Message)
 

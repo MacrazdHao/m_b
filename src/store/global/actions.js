@@ -50,6 +50,9 @@ export default {
   setMenu: ({ commit, state }, data) => {
     commit(types.SET_MENU, data);
   },
+  resetMenu: ({ commit, state }) => {
+    commit(types.RESET_MENU);
+  },
   setLanguage: ({ commit, state }, language) => {
     commit('SET_LANGUAGE', language);
   },

@@ -14,5 +14,8 @@ export default {
   },
   [types.SET_MENU](state, menu) {
     state.menu = menu;
+  },
+  [types.RESET_MENU](state) {
+    state.menu = null;
   }
 }

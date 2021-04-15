@@ -267,8 +267,10 @@ export default {
       }
     },
     logout() {
-      this.$store.dispatch("user/logout").then((res) => {
-        this.$router.push({ path: "/" });
+      this.$logoutDialog(() => {
+        this.$store.dispatch("user/logout").then((res) => {
+          this.$router.push({ path: "/" });
+        });
       });
     },
     goMessages() {

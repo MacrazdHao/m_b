@@ -65,8 +65,9 @@ export async function createDynamicRouter(to, next, aim) {
   }
 }
 
-export function resetSystemRouter() {
+export async function resetSystemRouter() {
   systemRouter = undefined;
+  await store.dispatch('global/resetMenu');
 }
 
 function routerNext(to, next) {
