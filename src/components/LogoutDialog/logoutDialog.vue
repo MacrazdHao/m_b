@@ -127,7 +127,7 @@ export default {
       display: flex;
       flex-direction: row;
       .button {
-        padding: 6px 22px;
+        padding: 5px 21px;
       }
       .button+.button {
         margin-left: 40px;

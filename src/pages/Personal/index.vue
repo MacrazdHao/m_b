@@ -104,6 +104,7 @@ export default {
   }
   .content {
     padding: 24px 40px;
+    flex: 1;
   }
 }
 </style>

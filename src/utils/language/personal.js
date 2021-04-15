@@ -11,6 +11,19 @@ export default {
       emailPlaceholder: '请输入您的邮箱',
       saveButton: '保存',
       saveTips: '信息已保存',
+    },
+    account: {
+      title: '账号设置',
+      parentsUserLabel: '家长账号',
+      parentsUserPlaceholder: '请输入账号',
+      passwordLabel: '密码',
+      passwordPlaceholder: '请输入密码',
+      passwordTips: '密码长度8-20位，包含大小写字母，并且至少包含数字和符号中的一种',
+      createUserLabel: '生成账号',
+      createUserPlaceholder: '',
+      createUserTips: '家长账号只能创建一个',
+      deleteButton: '删除',
+      createButton: '生成账号',
     }
   },
   en: {
