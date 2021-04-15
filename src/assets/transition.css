@@ -21,3 +21,18 @@
 .slide-fade2-enter, .slide-fade2-leave-to {
   opacity: 0;
 }
+
+/* .upToDown-enter-active {
+  transition: all 0.3s ease;
+}
+
+.upToDown-leave-active {
+}
+
+.upToDown-enter-to {
+  transform: translateY(100px);
+}
+
+.upToDown-enter, .upToDown-leave-to {
+  transform: translateY(0px);
+} */

@@ -101,7 +101,7 @@ export default {
     name: "safe",
     component: "pages/safe",
     meta: {
-      title: "基本设置",
+      title: "安全设置",
       enTitle: "Safe Setting",
     }
   },

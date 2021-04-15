@@ -1,5 +1,5 @@
 <template>
-  <div class="Safe"></div>
+  <div class="Safe">安全设置</div>
 </template>
 
 <script>

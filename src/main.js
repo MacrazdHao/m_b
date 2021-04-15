@@ -12,6 +12,7 @@ import "./assets/transition.css";
 import 'element-ui/lib/theme-chalk/index.css'
 import './utils/permission'
 import Dialog from './components/Dialog/dialog.js';
+import Message from './components/Message/message.js';
 // import '@/assets/icons' // icon
 
 Vue.config.productionTip = false
@@ -23,6 +24,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 
 Vue.use(Dialog)
+Vue.use(Message)
 
 /* eslint-disable no-new */
 new Vue({

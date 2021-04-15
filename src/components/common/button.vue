@@ -4,6 +4,7 @@
     :style="{ width, height, fontSize, lineHeight }"
     @click="btnClick"
   >
+    <img v-if="icon" :src="icon" />
     <p>{{ text }}</p>
   </div>
 </template>
@@ -25,11 +26,11 @@ export default {
     },
     fontSize: {
       default: "14px",
-      type: String
+      type: String,
     },
     lineHeight: {
       default: "20px",
-      type: String
+      type: String,
     },
     theme: {
       default: "white",
@@ -38,6 +39,10 @@ export default {
     disable: {
       default: false,
       type: Boolean,
+    },
+    icon: {
+      default: null,
+      type: String,
     },
   },
   methods: {
@@ -58,6 +63,10 @@ export default {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  img {
+    margin-right: 4px;
+    width: 12px;
+  }
   p {
     margin: 0;
     padding: 0;

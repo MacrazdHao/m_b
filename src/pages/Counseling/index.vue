@@ -155,7 +155,7 @@ export default {
   },
   data() {
     return {
-      step: 6,
+      step: 1,
     };
   },
   mounted() {},

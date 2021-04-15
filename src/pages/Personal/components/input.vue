@@ -1,13 +1,12 @@
 <template>
   <div class="Input">
-    <p>{{ label }}：</p>
     <input v-model="valueTmp" :placeholder="placeholder" :disabled="disabled" />
   </div>
 </template>
 
 <script>
 export default {
-  props: ["label", "value", "placeholder", "disabled"],
+  props: ["value", "placeholder", "disabled"],
   data() {
     return {
       valueTmp: "",
@@ -48,7 +47,7 @@ export default {
     // background: #000;
     font-size: 14px;
     line-height: 20px;
-    margin-left: 29px;
+    // margin-left: 29px;
     border-radius: 2px;
     border: 1px solid #d9d9d9;
     transition: all 0.1s;

@@ -1,5 +1,5 @@
 <template>
-  <div class="Account"></div>
+  <div class="Account">账号设置</div>
 </template>
 
 <script>

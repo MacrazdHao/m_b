@@ -193,7 +193,6 @@ export default {
         // mounted阶段内无法获取dom节点，因此需要异步
         if (this.initial) {
           setTimeout(() => {
-            console.log(this.pagePath[0].name);
             if (this.pagePath[0]) {
               this.menuAnimate(
                 document.getElementById(`/index/${this.pagePath[0].name}`),
