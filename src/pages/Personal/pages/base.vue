@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     saveInfo() {
-      this.$message.message("123123");
+      this.$message.message(this.$t("personal.base.saveTips"));
     },
   },
 };

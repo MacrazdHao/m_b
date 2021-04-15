@@ -45,7 +45,7 @@ export default {
           el.style.transform = `translate(-50%, ${this.baseTop + 30}px)`;
           el.style.opacity = "1";
           callback();
-        }, 300);
+        }, 200);
       }, 100);
     },
     hide() {
@@ -56,7 +56,7 @@ export default {
         setTimeout(() => {
           this.callback();
           this.visible = false;
-        }, 300);
+        }, 200);
       }, this.duration);
     },
   },
@@ -84,7 +84,12 @@ export default {
   background-color: #4b77f6;
   box-shadow: 0px 4px 16px 0px rgba(56, 100, 225, 0.4);
 }
+.yellow {
+  background: #ffbe3d;
+  box-shadow: 0px 4px 16px 0px rgba(225, 161, 36, 0.4);
+}
 .red {
-  background-color: #db4c40;
+  background-color: #ff4d4f;
+  box-shadow: 0px 4px 16px 0px rgba(228, 52, 54, 0.4);
 }
 </style>

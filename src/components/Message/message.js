@@ -31,6 +31,9 @@ _Message.install = (Vue) => {
       this.showMessage(text, 'blue');
     },
     warning(text) {
+      this.showMessage(text, 'yellow');
+    },
+    error(text) {
       this.showMessage(text, 'red');
     }
   };

@@ -9,7 +9,8 @@ export default {
       namePlaceholder: '请输入您的姓名',
       emailLabel: '邮箱',
       emailPlaceholder: '请输入您的邮箱',
-      saveButton: '保存'
+      saveButton: '保存',
+      saveTips: '信息已保存',
     }
   },
   en: {
