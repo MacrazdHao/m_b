@@ -3,14 +3,19 @@ import Dialog from './dialog.vue';
 const _Dialog = {};
 
 _Dialog.install = (Vue) => {
-  const vue = Vue;
-  const DialogClass = vue.extend(Dialog);
-  const instance = new DialogClass();
-  instance.$mount(document.createElement('div'));
-  document.body.appendChild(instance.$el);
+
+  let createDialog = () => {
+    const vue = Vue;
+    const DialogClass = vue.extend(Dialog);
+    const instance = new DialogClass();
+    instance.$mount(document.createElement('div'));
+    document.body.appendChild(instance.$el);
+    return instance;
+  }
 
   const DialogMain = {
     showDialog(text, theme, confirm, cancel) {
+      let instance = createDialog();
       instance.text = text;
       instance.theme = theme;
       instance.confirm = confirm;

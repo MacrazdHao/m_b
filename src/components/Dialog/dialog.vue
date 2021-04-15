@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-fade">
-    <div class="Dialog" v-show="visible">
+    <div class="Dialog" v-if="visible">
       <div class="messageBox">
         <div class="header"><img src="@/assets/index/icon_close.svg" /></div>
         <div class="content">
@@ -18,7 +18,7 @@
           <CButton
             class="button"
             :text="_i18n.t('global.dialog.confirm')"
-            theme="blue"
+            :theme="theme"
             @btnClick="confirmBtn"
           />
         </div>
