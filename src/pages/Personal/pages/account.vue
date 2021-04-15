@@ -118,6 +118,7 @@ export default {
         font-size: 14px;
         color: #db4c40;
         line-height: 20px;
+        cursor: pointer;
       }
     }
     .tips {

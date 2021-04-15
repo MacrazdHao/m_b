@@ -140,7 +140,7 @@
       </div>
       <div class="content">
         <transition name="slide-fade2">
-          <router-view @setSuffixMenu="setSuffixMenu" />
+          <router-view test="test" @setSuffixMenu="setSuffixMenu" />
         </transition>
       </div>
     </div>
@@ -244,8 +244,9 @@ export default {
       }
     },
     setSuffixMenu(arr) {
-      // console.log("设置后缀", arr);
+      console.log("设置后缀", arr);
       this.suffixMenu = [...arr];
+      this.$forceUpdate();
     },
     menuAnimate(element, hide) {
       element.style.height = "auto";
@@ -256,8 +257,9 @@ export default {
       }, 0);
     },
     selectItem(items, path) {
-      this.suffixMenu = [];
+      // console.log(this.pageName, items)
       if (items[0].children && items.length == 1) {
+      this.suffixMenu = [];
         this.pagePath = items;
         this.pChildrenIsShow =
           this.pChildrenIsShow == items[0].meta.id ? "" : items[0].meta.id;

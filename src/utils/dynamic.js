@@ -91,12 +91,16 @@ function routerFilter(routerMap, isChild = false, parents = []) {
     let _parents = [...parents];
     // console.log(parents);
     for (let key in routerMapping[route.path]) {
-      if (key == 'path') continue;
+      if (key == 'path' || key == 'redirect') continue;
       if (key == 'meta') {
         route[key] = { id: idNum++, ...routerMapping[route.path][key] };
         continue;
       }
       route[key] = routerMapping[route.path][key];
+    }
+    if (route.children) {
+      // 如果有子页面，则指定重定向到第一个子页面
+      route['redirect'] = routerMapping[route.children[0].path].name;
     }
     // console.log(route);
     route.path = routerMapping[route.path].path;

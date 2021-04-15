@@ -133,10 +133,7 @@
         @setSuffixMenu="setSuffixMenu"
         @nextStep="nextStep"
       />
-      <OutputReport
-        v-if="step == 6"
-        @setSuffixMenu="setSuffixMenu"
-      />
+      <OutputReport v-if="step == 6" @setSuffixMenu="setSuffixMenu" />
     </transition>
   </div>
 </template>
@@ -147,23 +144,27 @@ import OnlineTest from "./steps/test.vue";
 import MatchConsultant from "./steps/match.vue";
 import OutputReport from "./steps/report.vue";
 export default {
+  props: ["test"],
   components: {
     BaseInfo,
     OnlineTest,
     MatchConsultant,
-    OutputReport
+    OutputReport,
   },
   data() {
     return {
       step: 1,
     };
   },
-  mounted() {},
+  mounted() {
+    console.log(this.test);
+  },
   methods: {
     nextStep() {
       this.step++;
     },
     setSuffixMenu(arr) {
+      console.log("设置后缀2", arr);
       this.$emit("setSuffixMenu", arr);
     },
   },

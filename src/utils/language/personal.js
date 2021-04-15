@@ -24,6 +24,13 @@ export default {
       createUserTips: '家长账号只能创建一个',
       deleteButton: '删除',
       createButton: '生成账号',
+    },
+    safe: {
+      title: '安全设置',
+      userTitle: '账户密码',
+      strengthTips: '当前密码强度：{strength}',
+      strength: '强 | 中 | 弱',
+      editButton: '修改'
     }
   },
   en: {

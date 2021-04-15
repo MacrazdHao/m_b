@@ -6,7 +6,10 @@
 
 <script>
 export default {
-  
+  props: ['test'],
+  mounted() {
+    console.log(this.test)
+  }
 }
 </script>
 
