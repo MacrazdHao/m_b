@@ -95,7 +95,7 @@
             @mouseleave="userMenuShow = false"
           >
             <img class="avatar" src="@/assets/index/anna.jpg" />
-            <p class="nickname">梁湛霞</p>
+            <p class="nickname">纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞</p>
             <transition name="slide-fade">
               <div class="drawerBox" v-show="userMenuShow">
                 <div class="drawer">
@@ -140,7 +140,7 @@
       </div>
       <div class="content">
         <transition name="slide-fade2">
-          <router-view test="test" @setSuffixMenu="setSuffixMenu" />
+          <router-view @setSuffixMenu="setSuffixMenu" />
         </transition>
       </div>
     </div>
@@ -184,6 +184,7 @@ export default {
   watch: {
     $route: {
       handler: function (route) {
+        this.suffixMenu = [];
         this.routeChanged();
       },
       immediate: true,
@@ -229,7 +230,6 @@ export default {
     },
     routeChanged() {
       this.pageName = this.$route.meta.id;
-      this.suffixMenu = [];
       if (
         this.$route.matched.length > 2 &&
         this.menuFilter(this.$route.matched[1].name)
@@ -244,7 +244,6 @@ export default {
       }
     },
     setSuffixMenu(arr) {
-      console.log("设置后缀", arr);
       this.suffixMenu = [...arr];
       this.$forceUpdate();
     },
@@ -259,13 +258,15 @@ export default {
     selectItem(items, path) {
       // console.log(this.pageName, items)
       if (items[0].children && items.length == 1) {
-      this.suffixMenu = [];
         this.pagePath = items;
         this.pChildrenIsShow =
           this.pChildrenIsShow == items[0].meta.id ? "" : items[0].meta.id;
       } else {
         this.pageName = items[items.length - 1].meta.id;
         this.$router.push({ path });
+        if (this.pageName != items[items.length - 1].meta.id) {
+          this.suffixMenu = [];
+        }
       }
     },
     logout() {
@@ -391,12 +392,14 @@ export default {
           font-size: 18px;
           line-height: 25px;
           color: #333333;
+          white-space: nowrap;
         }
         .suffixMenu {
           display: flex;
           flex-direction: row;
           align-items: center;
           margin-left: 8px;
+          white-space: nowrap;
           img {
             width: 5px;
           }
@@ -411,6 +414,9 @@ export default {
       .toolsBar {
         display: flex;
         flex-direction: row;
+        justify-content: flex-end;
+        flex: 1;
+        margin-left: 20px;
         .messageIconBox {
           position: relative;
           display: flex;
@@ -448,6 +454,11 @@ export default {
             font-size: 14px;
             color: #333333;
             line-height: 20px;
+            max-width: 20vw;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            // flex: 1;
           }
           .drawerBox {
             position: absolute;

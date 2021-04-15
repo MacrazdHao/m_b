@@ -30,7 +30,20 @@ export default {
       userTitle: '账户密码',
       strengthTips: '当前密码强度：{strength}',
       strength: '强 | 中 | 弱',
-      editButton: '修改'
+      editButton: '修改',
+      reset: {
+        title: '修改登陆密码',
+        oldLabel: '原密码',
+        oldPlaceholder: '输入原密码',
+        oldErrorTips: '原密码输入错误',
+        newLabel: '新密码',
+        newPlaceholder: '输入密码，长度8-20位',
+        confirmLabel: '确认密码',
+        confirmPlaceholder: '请再次输入密码',
+        confirmErrorTips: '两次输入密码不同，请重新输入',
+        sameErrorTips: '新密码不能与原密码统一',
+        saveButton: '保存'
+      }
     }
   },
   en: {

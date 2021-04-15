@@ -144,7 +144,6 @@ import OnlineTest from "./steps/test.vue";
 import MatchConsultant from "./steps/match.vue";
 import OutputReport from "./steps/report.vue";
 export default {
-  props: ["test"],
   components: {
     BaseInfo,
     OnlineTest,
@@ -153,18 +152,14 @@ export default {
   },
   data() {
     return {
-      step: 1,
+      step: 2,
     };
-  },
-  mounted() {
-    console.log(this.test);
   },
   methods: {
     nextStep() {
       this.step++;
     },
     setSuffixMenu(arr) {
-      console.log("设置后缀2", arr);
       this.$emit("setSuffixMenu", arr);
     },
   },

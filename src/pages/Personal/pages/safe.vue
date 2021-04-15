@@ -11,17 +11,23 @@
             })
           }}
         </p>
-        <p class="edit">修改</p>
+        <p class="edit" @click="showResetBox = true">修改</p>
       </div>
     </div>
+    <ResetBox :visible="showResetBox" @closeBtn="showResetBox = false" />
   </div>
 </template>
 
 <script>
+import ResetBox from "../components/resetBox";
 export default {
+  components: {
+    ResetBox,
+  },
   data() {
     return {
       strengthLevel: 1,
+      showResetBox: false,
     };
   },
 };
