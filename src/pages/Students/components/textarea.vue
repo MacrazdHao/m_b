@@ -5,17 +5,18 @@
       <textarea
         v-model="valueTmp"
         :placeholder="placeholder"
+        :disabled="disabled"
         @focus="tFocus"
         @blur="tBlur"
       />
-      <p>{{ valueTmp.length }}/{{ maxLength }}</p>
+      <!-- <p>{{ valueTmp.length }}/{{ maxLength }}</p> -->
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["label", "value", "placeholder", "maxLength"],
+  props: ["label", "value", "placeholder", "maxLength", "disabled"],
   data() {
     return {
       valueTmp: "",
@@ -54,7 +55,7 @@ export default {
     margin: 0;
     color: #333333;
     font-size: 14px;
-    
+
     line-height: 20px;
     white-space: nowrap;
   }
@@ -73,7 +74,7 @@ export default {
     p {
       text-align: right;
       font-size: 14px;
-      
+
       color: #999999;
       line-height: 20px;
     }
@@ -88,7 +89,7 @@ export default {
       flex: 1;
       // background: #000;
       font-size: 14px;
-      
+
       line-height: 20px;
       font-family: Arial;
     }
@@ -111,9 +112,14 @@ export default {
       /* Internet Explorer 10-11 */
       color: #c7c7c7;
     }
+    textarea:disabled {
+      font-size: 14px;
+      color: #333333;
+      line-height: 20px;
+    }
   }
   .textareaBox--focus {
-    border: 1px solid #4B78F6;
+    border: 1px solid #4b78f6;
   }
 }
 </style>

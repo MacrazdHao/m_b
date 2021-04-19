@@ -1,49 +1,51 @@
 <template>
-  <div class="Account">
-    <p class="title">{{ $t("personal.account.title") }}</p>
+  <div class="Teacher">
+    <p class="title">{{ $t("accounts.teacher.title") }}</p>
     <div class="inputBox">
-      <p class="title">{{ $t("personal.account.parentsUserLabel") }}</p>
+      <p class="title">{{ $t("accounts.teacher.parentsUserLabel") }}</p>
       <div>
         <PInput
           class="input"
           v-model="username"
-          :placeholder="$t('personal.account.parentsUserPlaceholder')"
+          :placeholder="$t('accounts.teacher.parentsUserPlaceholder')"
         />
-        <p>@qlsfanglong.com</p>
       </div>
     </div>
     <div class="inputBox">
-      <p class="title">{{ $t("personal.account.passwordLabel") }}</p>
+      <p class="title">{{ $t("accounts.teacher.passwordLabel") }}</p>
       <div>
         <PInput
           class="input"
           v-model="password"
-          :placeholder="$t('personal.account.passwordPlaceholder')"
+          :placeholder="$t('accounts.teacher.passwordPlaceholder')"
         />
       </div>
-      <p class="tips">{{ $t("personal.account.passwordTips") }}</p>
+      <p class="tips">{{ $t("accounts.teacher.passwordTips") }}</p>
     </div>
     <div class="inputBox createUserBox">
-      <p class="title">{{ $t("personal.account.createUserLabel") }}</p>
+      <p class="title">{{ $t("accounts.teacher.createUserLabel") }}</p>
       <div>
         <PInput
           class="input"
           v-model="result"
-          :placeholder="$t('personal.account.createUserPlaceholder')"
+          :placeholder="$t('accounts.teacher.createUserPlaceholder')"
           :disabled="true"
+          :copy="result != ''"
+          :copyTips="$t('accounts.copyAccountSuccess')"
+          :copyErrTips="$t('accounts.copyAccountFail')"
         />
-        <p class="delete" v-if="result != ''">
-          {{ $t("personal.account.deleteButton") }}
-        </p>
       </div>
-      <p class="tips" v-show="result != ''">
-        {{ $t("personal.account.createUserTips") }}
-      </p>
+    </div>
+    <div class="inputBox permissionBox">
+      <p class="title">{{ $t("accounts.teacher.parentsUserLabel") }}</p>
+      <div class="permission">
+        <PCheckbox :data="permissions" />
+      </div>
     </div>
     <PButton
       theme="blue"
       class="create"
-      :text="$t('personal.account.createButton')"
+      :text="$t('accounts.teacher.createButton')"
       @btnClick="createParentsUser"
     />
   </div>
@@ -52,28 +54,42 @@
 <script>
 import PButton from "@/components/common/button";
 import PInput from "../components/input";
+import PCheckbox from "../components/checkbox";
 export default {
   components: {
     PButton,
     PInput,
+    PCheckbox,
   },
   data() {
     return {
       username: "",
       password: "",
-      result: "",
+      result: "123123",
+      permissions: [
+        {
+          name: this.$t("accounts.admin.permission.student"),
+          value: 0,
+        },
+        {
+          name: this.$t("accounts.admin.permission.archives"),
+          value: 1,
+        },
+        {
+          name: this.$t("accounts.admin.permission.account"),
+          value: 2,
+        },
+      ],
     };
   },
   methods: {
-    createParentsUser() {
-
-    }
-  }
+    createParentsUser() {},
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.Account {
+.Teacher {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -134,9 +150,14 @@ export default {
   .createUserBox {
     margin-top: 60px;
   }
+  .permissionBox {
+    margin-top: 60px;
+    .permission {
+    }
+  }
   .create {
     padding: 7px 16px;
-    margin-top: 119px;
+    margin-top: 178px;
   }
 }
 </style>

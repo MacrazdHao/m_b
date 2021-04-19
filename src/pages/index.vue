@@ -5,7 +5,7 @@
       <div class="route">
         <div
           class="menu-item"
-          v-for="(item, index) in $store.state.global.menu.children"
+          v-for="(item, index) in $store.state.global.menu.children.slice(1)"
           :key="index"
         >
           <div class="menu-item-inbox" v-if="menuFilter(item.name)">
@@ -14,7 +14,6 @@
                 'button',
                 pageName == item.meta.id ? 'button--selected' : '',
               ]"
-              v-if="index > 0"
               @click="selectItem([item], `/index/${item.path}`)"
             >
               <div class="button-title">
@@ -36,11 +35,15 @@
                     ? 'cmenuIcon--open'
                     : 'cmenuIcon--close',
                 ]"
-                v-if="item.children"
+                v-if="item.children && !item.meta.notShowChildren"
                 :src="require(`@/assets/index/icon_pull.svg`)"
               />
             </div>
-            <div class="children" :id="`/index/${item.path}`">
+            <div
+              class="children"
+              :id="`/index/${item.path}`"
+              v-if="!item.meta.notShowChildren"
+            >
               <div v-for="(item2, index2) in item.children" :key="index2">
                 <div
                   :class="[
@@ -169,15 +172,18 @@ export default {
       return this.$store.state.global.language;
     },
     pageTitle() {
-      if (this.$route.matched[1].name == "personal") {
-        return "个人中心";
+      switch (this.$route.matched[1].name) {
+        case "personal":
+          return "个人中心";
+        case "accounts":
+          return "账号管理";
+        default:
+          return this.language == "zh"
+            ? this.$route.meta.title
+            : this.$route.meta.enTitle;
       }
-      return this.language == "zh"
-        ? this.$route.meta.title
-        : this.$route.meta.enTitle;
     },
     navigation() {
-      // console.log(this.pagePath);
       return this.pagePath.length == 0
         ? ""
         : this.pagePath[this.pagePath.length - 1].name;
@@ -231,18 +237,27 @@ export default {
       }
     },
     routeChanged() {
-      this.pageName = this.$route.meta.id;
       if (
-        this.$route.matched.length > 2 &&
-        this.menuFilter(this.$route.matched[1].name)
+        !this.$route.matched[this.$route.matched.length - 2].meta
+          .notShowChildren
       ) {
-        this.pagePath = this.$route.matched.slice(
-          1,
-          this.$route.matched.length
-        );
-        this.pChildrenIsShow = this.$route.matched[
-          this.$route.matched.length - 1
-        ].parent.meta.id;
+        this.pageName = this.$route.meta.id;
+        if (
+          this.$route.matched.length > 2 &&
+          this.menuFilter(this.$route.matched[1].name)
+        ) {
+          this.pagePath = this.$route.matched.slice(
+            1,
+            this.$route.matched.length
+          );
+          this.pChildrenIsShow = this.$route.matched[
+            this.$route.matched.length - 1
+          ].parent.meta.id;
+        }
+      } else {
+        this.pageName = this.$route.matched[
+          this.$route.matched.length - 2
+        ].meta.id;
       }
     },
     setSuffixMenu(arr) {
@@ -258,11 +273,18 @@ export default {
       }, 0);
     },
     selectItem(items, path) {
-      // console.log(this.pageName, items)
-      if (items[0].children && items.length == 1) {
-        this.pagePath = items;
-        this.pChildrenIsShow =
-          this.pChildrenIsShow == items[0].meta.id ? "" : items[0].meta.id;
+      if (!items[0].meta.notShowChildren) {
+        if (items[0].children && items.length == 1) {
+          this.pagePath = items;
+          this.pChildrenIsShow =
+            this.pChildrenIsShow == items[0].meta.id ? "" : items[0].meta.id;
+        } else {
+          this.pageName = items[items.length - 1].meta.id;
+          this.$router.push({ path });
+          if (this.pageName != items[items.length - 1].meta.id) {
+            this.suffixMenu = [];
+          }
+        }
       } else {
         this.pageName = items[items.length - 1].meta.id;
         this.$router.push({ path });
@@ -282,7 +304,7 @@ export default {
       this.$router.push({ path: "/index/messages" });
     },
     goPersonal() {
-      this.$router.push({ path: "/index/personal/base" });
+      this.$router.push({ path: "/index/personal/" });
     },
   },
 };
@@ -471,6 +493,7 @@ export default {
             padding-right: 100%;
             transform: translate(0, 100%);
             cursor: default;
+            z-index: 900;
             .drawer {
               display: flex;
               flex-direction: column;

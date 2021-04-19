@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_checkbox</title>
+    <g id="学校端-账号管理" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="账号管理-管理员设置" transform="translate(-669.000000, -555.000000)" fill="#D9D9D9">
+            <g id="permission-settings" transform="translate(529.000000, 515.000000)">
+                <g id="icon_checkbox-" transform="translate(140.000000, 40.000000)">
+                    <path d="M2.1,1.4 C1.71395,1.4 1.4,1.71395 1.4,2.1 L1.4,11.9 C1.4,12.28605 1.71395,12.6 2.1,12.6 L11.9,12.6 C12.28605,12.6 12.6,12.28605 12.6,11.9 L12.6,2.1 C12.6,1.71395 12.28605,1.4 11.9,1.4 L2.1,1.4 Z M11.9,14 L2.1,14 C0.94185,14 0,13.05815 0,11.9 L0,2.1 C0,0.94185 0.94185,0 2.1,0 L11.9,0 C13.05815,0 14,0.94185 14,2.1 L14,11.9 C14,13.05815 13.05815,14 11.9,14 L11.9,14 Z" id="icon_checkbox"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

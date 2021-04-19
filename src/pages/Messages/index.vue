@@ -85,7 +85,7 @@ export default {
     this.opening = Array.apply(null, Array(this.messages.length)).map(
       () => false
     );
-    console.log(this.opening);
+    // console.log(this.opening);
   },
   methods: {
     showFiles(index) {
@@ -316,7 +316,7 @@ export default {
         text-align: center;
       }
       input:focus {
-        border: 1px solid #537cf7;
+        border: 1px solid #4B78F6;
       }
       input::-webkit-outer-spin-button,
       input::-webkit-inner-spin-button {

@@ -1,6 +1,7 @@
 <template>
-  <div class="PasswordInput">
+  <div class="Input">
     <div :class="['inputBox', focus ? 'inputBox--focus' : '']">
+      <img class="icon" :src="icon" v-if="icon" @click="hide = !hide" />
       <input
         v-model="valueTmp"
         :placeholder="placeholder"
@@ -21,7 +22,7 @@
 
 <script>
 export default {
-  props: ["value", "placeholder", "disabled", "passwordMode", "viewer"],
+  props: ["value", "placeholder", "disabled", "passwordMode", "viewer", "icon"],
   data() {
     return {
       valueTmp: "",
@@ -41,7 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.PasswordInput {
+.Input {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -60,8 +61,11 @@ export default {
     flex-direction: row;
     border-radius: 2px;
     border: 1px solid #d9d9d9;
-    padding: 8px 13px;
+    padding: 7px 12px;
     transition: all 0.1s;
+    .icon {
+      margin-right: 8px;
+    }
     input {
       background: none;
       outline: none;
@@ -69,7 +73,8 @@ export default {
       margin: 0;
       width: 100%;
       font-size: 14px;
-      line-height: 20px;
+      color: #333333;
+      line-height: 18px;
     }
     ::-webkit-input-placeholder {
       /* WebKit, Blink, Edge */
@@ -89,7 +94,7 @@ export default {
     }
   }
   .inputBox--focus {
-    border: 1px solid #4B78F6;
+    border: 1px solid #4b78f6;
   }
 }
 </style>

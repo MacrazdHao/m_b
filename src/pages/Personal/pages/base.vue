@@ -12,18 +12,24 @@
     </div>
     <div class="inputBox">
       <p class="title">{{ $t("personal.base.nameLabel") }}</p>
-      <PInput
-        v-model="name"
-        :placeholder="$t('personal.base.namePlaceholder')"
-      />
+      <div>
+        <PInput
+          class="input"
+          v-model="name"
+          :placeholder="$t('personal.base.namePlaceholder')"
+        />
+      </div>
     </div>
     <div class="inputBox">
       <p class="title">{{ $t("personal.base.emailLabel") }}</p>
-      <PInput
-        v-model="email"
-        :placeholder="$t('personal.base.emailPlaceholder')"
-        :disabled="email !== ''"
-      />
+      <div>
+        <PInput
+          class="input"
+          v-model="email"
+          :placeholder="$t('personal.base.emailPlaceholder')"
+          :disabled="email !== ''"
+        />
+      </div>
     </div>
     <PButton
       theme="blue"
@@ -97,11 +103,23 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     margin-top: 30px;
+      width: 100%;
     .title {
       font-size: 14px;
       color: #333333;
       line-height: 20px;
       margin-bottom: 10px;
+    }
+    div {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .input {
+        // width: 27.5%;
+        max-width: 308px;
+        flex: 1;
+      }
     }
   }
   .save {

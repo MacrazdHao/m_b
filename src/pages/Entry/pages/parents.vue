@@ -112,9 +112,9 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          this.$message.warning(
-            this.$t("entry.login.alertTips.loginErrorTips")
-          );
+          // this.$message.warning(
+          //   this.$t("entry.login.alertTips.loginErrorTips")
+          // );
           return;
         });
     },

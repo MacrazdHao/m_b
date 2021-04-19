@@ -56,7 +56,7 @@ export default {
     transition: all 0.1s;
   }
   input:focus {
-    border: 1px solid #537cf7;
+    border: 1px solid #4B78F6;
   }
   ::-webkit-input-placeholder {
     /* WebKit, Blink, Edge */

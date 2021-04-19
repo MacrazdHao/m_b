@@ -69,9 +69,10 @@ export default {
   top: 0px;
   opacity: 0;
   left: 50%;
-  width: 380px;
-  padding: 10px 0;
+  min-width: 380px;
+  padding: 10px 24px;
   transition: all 0.2s ease;
+  z-index: 2000;
   p {
     margin: 0;
     font-size: 14px;

@@ -17,7 +17,10 @@ export default {
     path: '/index',
     name: 'index',
     component: 'index',
-    redirect: 'dashboard',
+    meta: {
+      
+    }
+    // redirect: 'dashboard',
   },
   // 子级
   '/dashboard': {
@@ -27,7 +30,8 @@ export default {
     meta: {
       title: '工作台',
       enTitle: 'Workbench',
-      icon: "icon_workbench"
+      icon: "icon_workbench",
+      
     }
   },
   // 子级
@@ -38,7 +42,8 @@ export default {
     meta: {
       title: '生涯辅导',
       enTitle: 'Life Coach',
-      icon: "icon_counseling"
+      icon: "icon_counseling",
+      
     }
   },
   // 子级
@@ -49,7 +54,32 @@ export default {
     meta: {
       title: '知识中心',
       enTitle: 'Knowledge Center',
-      icon: "icon_knowledge"
+      icon: "icon_knowledge",
+      
+    }
+  },
+  // 子级
+  '/students': {
+    path: "students",
+    name: "students",
+    component: "Students",
+    meta: {
+      title: '学生管理',
+      enTitle: 'Student Manage',
+      icon: "icon_student",
+      
+    }
+  },
+  // 子级
+  '/archives': {
+    path: "archives",
+    name: "archives",
+    component: "Archives",
+    meta: {
+      title: '生涯档案',
+      enTitle: 'Student Manage',
+      icon: "icon_archives",
+      
     }
   },
   // 子级
@@ -60,7 +90,8 @@ export default {
     meta: {
       title: '系统通知',
       enTitle: 'System Messages',
-      icon: "icon_knowledge"
+      icon: "icon_knowledge",
+      
     }
   },
   // 子级
@@ -68,11 +99,12 @@ export default {
     path: "personal",
     name: "personal",
     component: "Personal",
-    redirect: 'base',
+    // redirect: 'base',
     meta: {
       title: '个人中心',
       enTitle: 'Personal Center',
-      icon: "icon_knowledge"
+      icon: "icon_knowledge",
+      
     }
   },
   // 子子级
@@ -106,15 +138,49 @@ export default {
     }
   },
   // 子级
+  '/accounts': {
+    path: "accounts",
+    name: "accounts",
+    component: "Accounts",
+    // redirect: 'base',
+    meta: {
+      title: '账号管理',
+      enTitle: 'Accounts Manage',
+      icon: "icon_accounts",
+      notShowChildren: true
+    }
+  },
+  // 子子级
+  '/admin': {
+    path: "admin",
+    name: "admin",
+    component: "pages/admin",
+    meta: {
+      title: "管理员设置",
+      enTitle: "Admin Setting",
+    }
+  },
+  // 子子级
+  '/teacher': {
+    path: "teacher",
+    name: "teacher",
+    component: "pages/teacher",
+    meta: {
+      title: "老师账号",
+      enTitle: "Teacher Account",
+    }
+  },
+  // 子级
   '/testing': {
     path: "testing",
     name: "testing",
     component: "Testing",
-    redirect: 'testing1',
+    // redirect: 'testing1',
     meta: {
       title: "测试主页",
       enTitle: 'Test Index',
       icon: "icon_workbench",
+      
     }
   },
   // 子子级

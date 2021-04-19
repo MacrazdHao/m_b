@@ -93,7 +93,7 @@ function routerFilter(routerMap, isChild = false, parents = []) {
     for (let key in routerMapping[route.path]) {
       if (key == 'path' || key == 'redirect') continue;
       if (key == 'meta') {
-        route[key] = { id: idNum++, ...routerMapping[route.path][key] };
+        route[key] = { id: idNum++, notShowChildren: false, ...routerMapping[route.path][key] };
         continue;
       }
       route[key] = routerMapping[route.path][key];

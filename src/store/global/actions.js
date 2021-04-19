@@ -23,6 +23,10 @@ export default {
           }, {
             path: '/knowledge'
           }, {
+            path: '/students'
+          }, {
+            path: '/archives'
+          }, {
             path: '/messages'
           }, {
             path: "/personal",
@@ -33,6 +37,13 @@ export default {
             }, {
               path: "/safe",
             }]
+          }, {
+            path: "/accounts",
+            children: [{
+              path: "/admin",
+            }, {
+              path: "/teacher",
+            },]
           }, {
             path: "/testing",
             children: [{

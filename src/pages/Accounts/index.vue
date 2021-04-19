@@ -36,7 +36,7 @@ export default {
   },
   mounted() {
     this.$store.state.global.menu.children.forEach((item) => {
-      if (item.name == "personal") {
+      if (item.name == "accounts") {
         item.children.forEach((item2, index2) => {
           if (index2 == 0) return;
           this.menu.push(item2);
@@ -48,7 +48,7 @@ export default {
   methods: {
     toOtherSetting(route) {
       this.pageId = route.meta.id;
-      this.$router.push({ path: `/index/personal/${route.path}` });
+      this.$router.push({ path: `/index/accounts/${route.path}` });
     },
   },
 };
