@@ -284,6 +284,7 @@ export default {
       color: #666666;
       line-height: 20px;
       margin-right: 18px;
+      white-space: nowrap;
     }
     .jumper {
       display: flex;
@@ -294,6 +295,7 @@ export default {
         font-size: 14px;
         color: #666666;
         line-height: 20px;
+        white-space: nowrap;
       }
       input {
         padding: 0;
@@ -316,7 +318,7 @@ export default {
         text-align: center;
       }
       input:focus {
-        border: 1px solid #4B78F6;
+        border: 1px solid #4b78f6;
       }
       input::-webkit-outer-spin-button,
       input::-webkit-inner-spin-button {

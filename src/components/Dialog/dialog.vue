@@ -2,11 +2,15 @@
   <transition name="slide-fade">
     <div class="Dialog" v-if="visible">
       <div class="messageBox">
-        <div class="header"><img src="@/assets/index/icon_close.svg" /></div>
+        <div class="header">
+          <img src="@/assets/index/icon_close.svg" @click="cancelBtn" />
+        </div>
         <div class="content">
           <img :src="require(`@/assets/index/icon_msg_${theme}.svg`)" />
-          <p class="title">{{ _i18n.t("global.dialog.tipsTitle") }}</p>
-          <p class="msg">{{ text }}</p>
+          <p class="title" v-html="_i18n.t('global.dialog.tipsTitle')"></p>
+          <div class="msg">
+            <p v-for="(item, index) in text" :key="index">{{ item }}</p>
+          </div>
         </div>
         <div class="buttonBox">
           <CButton
@@ -37,7 +41,7 @@ export default {
   },
   data() {
     return {
-      text: "",
+      text: [""],
       theme: "blue",
       confirm: () => {},
       cancel: () => {},
@@ -90,7 +94,7 @@ export default {
     background-color: #fff;
     border-radius: 4px;
     width: 600px;
-    height: 280px;
+    min-height: 280px;
     padding: 20px 20px 30px 20px;
     box-sizing: border-box;
     // margin-top: calc(100vh / 3);
@@ -119,16 +123,20 @@ export default {
       .title {
         margin-top: 12px;
         font-size: 16px;
-        
+
         color: #333333;
         line-height: 22px;
       }
       .msg {
         margin-top: 16px;
-        font-size: 14px;
-        
-        color: #666666;
-        line-height: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        p {
+          font-size: 14px;
+          color: #666666;
+          line-height: 20px;
+        }
       }
     }
     .buttonBox {

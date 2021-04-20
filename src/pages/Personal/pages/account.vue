@@ -6,7 +6,7 @@
       <div>
         <PInput
           class="input"
-          v-model="username"
+          :value="username"
           :placeholder="$t('personal.account.parentsUserPlaceholder')"
         />
         <p>@qlsfanglong.com</p>
@@ -17,7 +17,7 @@
       <div>
         <PInput
           class="input"
-          v-model="password"
+          :value="password"
           :placeholder="$t('personal.account.passwordPlaceholder')"
         />
       </div>
@@ -28,7 +28,7 @@
       <div>
         <PInput
           class="input"
-          v-model="result"
+          :value="result"
           :placeholder="$t('personal.account.createUserPlaceholder')"
           :disabled="true"
         />

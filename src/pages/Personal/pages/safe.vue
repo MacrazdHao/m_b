@@ -14,7 +14,7 @@
         <p class="edit" @click="showResetBox = true">修改</p>
       </div>
     </div>
-    <ResetBox :visible="showResetBox" @closeBtn="showResetBox = false" />
+    <ResetBox :visible.sync="showResetBox" @closeBtn="showResetBox = false" />
   </div>
 </template>
 

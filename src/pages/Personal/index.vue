@@ -69,7 +69,7 @@ export default {
   .menu {
     display: flex;
     flex-direction: column;
-    width: 224px;
+    min-width: 224px;
     padding-top: 12px;
     border-right: 1px solid #d3d3d3;
     .menu-item {
@@ -106,6 +106,8 @@ export default {
   .content {
     padding: 24px 40px;
     flex: 1;
+    max-width: calc(100% - 225px);
+    box-sizing: border-box;
   }
 }
 </style>

@@ -43,7 +43,11 @@ export default {
               path: "/admin",
             }, {
               path: "/teacher",
-            },]
+            }, {
+              path: "/acountlist",
+            }, {
+              path: "/invitation",
+            }]
           }, {
             path: "/testing",
             children: [{

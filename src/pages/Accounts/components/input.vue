@@ -1,6 +1,7 @@
 <template>
   <div :class="['Input', focus ? 'Input--focus' : '']">
     <input
+      :style="customStyle || {}"
       :id="`input${time}`"
       v-model="valueTmp"
       :placeholder="placeholder"
@@ -21,6 +22,7 @@ export default {
     "copy",
     "copyTips",
     "copyErrTips",
+    "customStyle",
   ],
   data() {
     return {
@@ -30,6 +32,16 @@ export default {
     };
   },
   watch: {
+    value(val) {
+      this.valueTmp = val;
+    },
+    disabled(val) {
+      if (!val) {
+        setTimeout(() => {
+          document.getElementById(`input${this.time}`).focus();
+        });
+      }
+    },
     valueTmp(val) {
       this.$emit("input", val);
     },

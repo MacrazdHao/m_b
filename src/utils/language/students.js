@@ -20,6 +20,7 @@ export default {
         sports: "运动爱好",
         status: "状态",
         options: "操作",
+        watchButton: '查看'
       }
     },
     detail: {

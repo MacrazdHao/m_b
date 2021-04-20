@@ -2,13 +2,13 @@ import axios from 'axios'
 import { MessageBox, Message, Loading } from 'element-ui'
 import store from '@/store'
 import { getToken, removeToken } from '@/utils/auth'
-import { baseURL, mockURL, wenjieURL } from './config';
+import { baseURL, mockURL, testURL, wenjieURL } from './config';
 import i18n from './language';
 import Vue from 'vue';
 
 const service = axios.create({
   // baseURL: mockURL, // url = base url + request url
-  baseURL: wenjieURL,
+  baseURL: testURL,
   timeout: 5000 // request timeout
 })
 

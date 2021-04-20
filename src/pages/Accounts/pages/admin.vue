@@ -6,7 +6,7 @@
       <div>
         <PInput
           class="input"
-          v-model="username"
+          :value="username"
           :placeholder="$t('accounts.admin.parentsUserPlaceholder')"
         />
       </div>
@@ -16,7 +16,7 @@
       <div>
         <PInput
           class="input"
-          v-model="password"
+          :value="password"
           :placeholder="$t('accounts.admin.passwordPlaceholder')"
         />
       </div>
@@ -27,7 +27,7 @@
       <div>
         <PInput
           class="input"
-          v-model="result"
+          :value="result"
           :placeholder="$t('accounts.admin.createUserPlaceholder')"
           :disabled="true"
           :copy="result != ''"
@@ -68,15 +68,15 @@ export default {
       result: "123123",
       permissions: [
         {
-          name: this.$t('accounts.admin.permission.student'),
+          name: this.$t("accounts.admin.permission.student"),
           value: 0,
         },
         {
-          name: this.$t('accounts.admin.permission.archives'),
+          name: this.$t("accounts.admin.permission.archives"),
           value: 1,
         },
         {
-          name: this.$t('accounts.admin.permission.account'),
+          name: this.$t("accounts.admin.permission.account"),
           value: 2,
         },
       ],

@@ -14,18 +14,18 @@ _Dialog.install = (Vue) => {
   }
 
   const DialogMain = {
-    showDialog(text, theme, confirm, cancel) {
+    showDialog(text, theme, confirm = () => { }, cancel = () => { }) {
       let instance = createDialog();
-      instance.text = text;
+      instance.text = (typeof text) == 'string' ? [text] : text;
       instance.theme = theme;
       instance.confirm = confirm;
       instance.cancel = cancel;
       instance.visible = true;
     },
-    message(text, confirm, cancel) {
+    message(text, confirm = () => { }, cancel = () => { }) {
       this.showDialog(text, 'blue', confirm, cancel);
     },
-    warning(text, confirm, cancel) {
+    warning(text, confirm = () => { }, cancel = () => { }) {
       this.showDialog(text, 'red', confirm, cancel);
     }
   };

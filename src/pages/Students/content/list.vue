@@ -151,8 +151,11 @@
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text tableRow-button" @click="toDetail(scope.row)">
-                查看
+              <p
+                class="tableRow-text tableRow-button"
+                @click="toDetail(scope.row)"
+              >
+                {{ $t("students.list.table.watchButton") }}
               </p>
             </template>
           </el-table-column>
@@ -540,6 +543,7 @@ export default {
       .tableRow-button {
         color: #4b77f6;
         cursor: pointer;
+        white-space: nowrap;
       }
     }
   }

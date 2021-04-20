@@ -5,7 +5,13 @@ import i18n from './language';
     path: "本地路由",
     name: "路由名称",
     component: "页面路径",
-    meta: {附加信息}
+    meta: {
+      // 附加信息
+      title: "标题",
+      enTitle: "英文标题",
+      icon: "index目录下的icon",
+      notShowChildren: 是否在菜单下显示子菜单
+    }
   }
 }
 */
@@ -168,6 +174,26 @@ export default {
     meta: {
       title: "老师账号",
       enTitle: "Teacher Account",
+    }
+  },
+  // 子子级
+  '/acountlist': {
+    path: "acountlist",
+    name: "acountlist",
+    component: "pages/acountlist",
+    meta: {
+      title: "账号管理",
+      enTitle: "Accounts Manage",
+    }
+  },
+  // 子子级
+  '/invitation': {
+    path: "invitation",
+    name: "invitation",
+    component: "pages/invitation",
+    meta: {
+      title: "邀请码",
+      enTitle: "Invitation Code",
     }
   },
   // 子级

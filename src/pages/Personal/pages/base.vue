@@ -15,7 +15,7 @@
       <div>
         <PInput
           class="input"
-          v-model="name"
+          :value="name"
           :placeholder="$t('personal.base.namePlaceholder')"
         />
       </div>
@@ -25,7 +25,7 @@
       <div>
         <PInput
           class="input"
-          v-model="email"
+          :value="email"
           :placeholder="$t('personal.base.emailPlaceholder')"
           :disabled="email !== ''"
         />

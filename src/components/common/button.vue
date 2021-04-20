@@ -117,4 +117,15 @@ export default {
 .gray:active {
   background-color: rgb(235, 236, 237);
 }
+.red {
+  border: 1px solid rgb(255, 77, 79);
+  background-color: rgb(255, 77, 79);
+  color: #ffffff;
+}
+.red:hover {
+  background-color: rgb(245, 72, 74);
+}
+.red:active {
+  background-color: rgb(235, 62, 64);
+}
 </style>

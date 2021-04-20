@@ -64,7 +64,7 @@
                 class="tableRow-text tableRow-button"
                 @click="toDetail(scope.row)"
               >
-                查看
+                {{ $t("students.list.table.watchButton") }}
               </p>
             </template>
           </el-table-column>
@@ -372,6 +372,7 @@ export default {
       .tableRow-button {
         color: #4b77f6;
         cursor: pointer;
+        white-space: nowrap;
       }
     }
   }
@@ -385,6 +386,7 @@ export default {
       color: #666666;
       line-height: 20px;
       margin-right: 18px;
+      white-space: nowrap;
     }
     .jumper {
       display: flex;
@@ -395,6 +397,7 @@ export default {
         font-size: 14px;
         color: #666666;
         line-height: 20px;
+        white-space: nowrap;
       }
       input {
         padding: 0;
