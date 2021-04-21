@@ -174,11 +174,23 @@ export default {
       return this.$store.state.global.language;
     },
     pageTitle() {
+      // 定制header标题
       switch (this.$route.matched[1].name) {
         case "personal":
-          return "个人中心";
+          return this.language == "zh"
+            ? this.$route.matched[1].meta.title
+            : this.$route.matched[1].meta.enTitle;
         case "accounts":
-          return "账号管理";
+          return this.language == "zh"
+            ? this.$route.matched[1].meta.title
+            : this.$route.matched[1].meta.enTitle;
+        case "management":
+          this.suffixMenu = [
+            this.language == "zh" ? this.$route.meta.title : this.$route.meta.enTitle,
+          ];
+          return this.language == "zh"
+            ? this.$route.matched[1].meta.title
+            : this.$route.matched[1].meta.enTitle;
         default:
           return this.language == "zh"
             ? this.$route.meta.title
