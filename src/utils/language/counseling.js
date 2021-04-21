@@ -9,6 +9,10 @@ export default {
       leaveTips: "信息还没保存，退出将不会保存信息",
       baseInfo: {
         title: "基本信息",
+        school: {
+          label: "学校名称",
+          placeholder: "请输入学校"
+        },
         name: {
           label: "学生姓名",
           placeholder: "请输入姓名"

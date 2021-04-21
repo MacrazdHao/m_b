@@ -6,6 +6,7 @@ export default {
       searchPlaceholder: '请输入搜索的内容',
       searchButton: '搜索',
       table: {
+        school: "学校",
         name: "姓名",
         grade: "班级",
         sex: "性别",

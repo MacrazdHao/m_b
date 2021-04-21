@@ -19,12 +19,22 @@ import i18n from './language';
 // 路由映射表(一级结构，单元化，预留可自定义菜单功能——即可编辑子菜单的父级关系)
 export default {
   // 顶级
+  '/living': {
+    path: '/living',
+    name: 'living',
+    component: 'Living',
+    meta: {
+
+    }
+    // redirect: 'dashboard',
+  },
+  // 顶级
   '/index': {
     path: '/index',
     name: 'index',
     component: 'index',
     meta: {
-      
+
     }
     // redirect: 'dashboard',
   },
@@ -37,7 +47,7 @@ export default {
       title: '工作台',
       enTitle: 'Workbench',
       icon: "icon_workbench",
-      
+
     }
   },
   // 子级
@@ -49,7 +59,7 @@ export default {
       title: '生涯辅导',
       enTitle: 'Life Coach',
       icon: "icon_counseling",
-      
+
     }
   },
   // 子级
@@ -61,7 +71,7 @@ export default {
       title: '知识中心',
       enTitle: 'Knowledge Center',
       icon: "icon_knowledge",
-      
+
     }
   },
   // 子级
@@ -73,7 +83,7 @@ export default {
       title: '学生管理',
       enTitle: 'Student Manage',
       icon: "icon_student",
-      
+
     }
   },
   // 子级
@@ -85,7 +95,7 @@ export default {
       title: '生涯档案',
       enTitle: 'Student Manage',
       icon: "icon_archives",
-      
+
     }
   },
   // 子级
@@ -97,7 +107,7 @@ export default {
       title: '系统通知',
       enTitle: 'System Messages',
       icon: "icon_knowledge",
-      
+
     }
   },
   // 子级
@@ -110,7 +120,7 @@ export default {
       title: '个人中心',
       enTitle: 'Personal Center',
       icon: "icon_knowledge",
-      
+
     }
   },
   // 子子级
@@ -197,6 +207,32 @@ export default {
     }
   },
   // 子级
+  '/live': {
+    path: "live",
+    name: "live",
+    component: "Live",
+    // redirect: 'testing1',
+    meta: {
+      title: "直播咨询",
+      enTitle: 'Live Consult',
+      icon: "icon_live",
+
+    }
+  },
+  // 子级
+  '/files': {
+    path: "files",
+    name: "files",
+    component: "Files",
+    // redirect: 'testing1',
+    meta: {
+      title: "学生档案",
+      enTitle: 'Student Files',
+      icon: "icon_files",
+
+    }
+  },
+  // 子级
   '/testing': {
     path: "testing",
     name: "testing",
@@ -206,7 +242,7 @@ export default {
       title: "测试主页",
       enTitle: 'Test Index',
       icon: "icon_workbench",
-      
+
     }
   },
   // 子子级

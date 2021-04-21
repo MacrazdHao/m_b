@@ -49,13 +49,19 @@ export default {
               path: "/invitation",
             }]
           }, {
+            path: '/live'
+          }, {
+            path: '/files'
+          }, {
             path: "/testing",
             children: [{
               path: "/testing1",
             }, {
               path: "/counseling",
             }]
-          }]
+          },]
+        }, {
+          path: '/living'
         }]
       };
       commit(types.SET_MENU, res);
