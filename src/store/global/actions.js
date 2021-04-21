@@ -33,6 +33,10 @@ export default {
             children: [{
               path: "/base",
             }, {
+              path: "/sbase",
+            }, {
+              path: "/cbase",
+            }, {
               path: "/account",
             }, {
               path: "/safe",
@@ -52,6 +56,17 @@ export default {
             path: '/live'
           }, {
             path: '/files'
+          }, {
+            path: "/management",
+            children: [{
+              path: "/counselinglist",
+            }, {
+              path: "/careerlist",
+            }, {
+              path: "/courselist",
+            }, {
+              path: "/adviselist",
+            }]
           }, {
             path: "/testing",
             children: [{

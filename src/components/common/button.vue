@@ -77,6 +77,7 @@ export default {
     // font-size: 14px;
     // line-height: 20px;
     user-select: none;
+    white-space: nowrap;
   }
 }
 .disable {

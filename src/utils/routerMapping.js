@@ -134,6 +134,26 @@ export default {
     }
   },
   // 子子级
+  '/sbase': {
+    path: "sbase",
+    name: "sbase",
+    component: "pages/sbase",
+    meta: {
+      title: "基本设置",
+      enTitle: "Base Setting",
+    }
+  },
+  // 子子级
+  '/cbase': {
+    path: "cbase",
+    name: "cbase",
+    component: "pages/cbase",
+    meta: {
+      title: "基本设置",
+      enTitle: "Base Setting",
+    }
+  },
+  // 子子级
   '/account': {
     path: "account",
     name: "account",
@@ -230,6 +250,59 @@ export default {
       enTitle: 'Student Files',
       icon: "icon_files",
 
+    }
+  },
+  // 子级
+  '/management': {
+    path: "management",
+    name: "management",
+    component: "Management",
+    // redirect: 'testing1',
+    meta: {
+      title: "档案管理",
+      enTitle: 'File Management',
+      icon: "icon_management",
+
+    }
+  },
+  // 子子级
+  '/counselinglist': {
+    path: "counselinglist",
+    name: "counselinglist",
+    component: "pages/counselingList",
+    meta: {
+      title: "生涯档案",
+      enTitle: "Counseling Files",
+    }
+  },
+  // 子子级
+  '/careerlist': {
+    path: "careerlist",
+    name: "careerlist",
+    component: "pages/careerList",
+    meta: {
+      title: "职业发展咨询",
+      enTitle: "Career Consult",
+    }
+  },
+  // 子子级
+  '/courselist': {
+    path: "courselist",
+    name: "courselist",
+    component: "pages/courseList",
+    meta: {
+      title: "大学课程和学科咨询",
+      enTitle: "Course&Subject Consult",
+    }
+  },
+  // 子子级
+  '/adviselist': {
+    path: "adviselist",
+    name: "adviselist",
+    component: "pages/adviseList",
+    meta: {
+      title: "大学建议和偏好咨询",
+      enTitle: "Advise&Hobby Consult",
     }
   },
   // 子级

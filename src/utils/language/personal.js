@@ -12,6 +12,20 @@ export default {
       saveButton: '保存',
       saveTips: '信息已保存',
     },
+    sbase: {
+      nameLabel: '名称',
+      namePlaceholder: '请输入学校名称',
+      accountLabel: '账号',
+    },
+    cbase: {
+      nameLabel: '名称',
+      namePlaceholder: '请输入学校名称',
+      countryLabel: '国籍',
+      countryPlaceholder: '请输入国家',
+      educationLabel: '学历',
+      educationPlaceholder: '请输入您的学历',
+      accountLabel: '账号',
+    },
     account: {
       title: '账号设置',
       parentsUserLabel: '家长账号',

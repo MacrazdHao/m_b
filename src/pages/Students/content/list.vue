@@ -487,6 +487,7 @@ export default {
       display: flex;
       flex-direction: row;
       width: 100%;
+      align-items: center;
       .searchInput {
         width: 300px;
         margin-left: 12px;

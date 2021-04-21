@@ -31,7 +31,7 @@
               <img
                 :class="[
                   'cmenuIcon',
-                  pChildrenIsShow == item.meta.id
+                  childrenMenu[item.meta.id]
                     ? 'cmenuIcon--open'
                     : 'cmenuIcon--close',
                 ]"
@@ -41,6 +41,7 @@
             </div>
             <div
               class="children"
+              :data-routeid="item.meta.id"
               :id="`/index/${item.path}`"
               v-if="!item.meta.notShowChildren"
             >
@@ -160,7 +161,8 @@ export default {
     return {
       initial: true,
       pageName: "Dashboard",
-      pChildrenIsShow: "",
+      // pChildrenIsShow: "",
+      childrenMenu: {},
       pagePath: [],
       userMenuShow: false,
       userMenuHover: "",
@@ -197,33 +199,15 @@ export default {
       },
       immediate: true,
     },
-    pChildrenIsShow: {
-      handler(val, oldVal) {
-        // mounted阶段内无法获取dom节点，因此需要异步
-        if (this.initial) {
-          setTimeout(() => {
-            if (this.pagePath[0]) {
-              this.menuAnimate(
-                document.getElementById(`/index/${this.pagePath[0].name}`),
-                oldVal ? oldVal == this.pagePath[0].meta.id : false
-              );
-            }
-            this.initial = false;
-          }, 300);
-        } else {
-          if (this.pagePath[0]) {
-            this.menuAnimate(
-              document.getElementById(`/index/${this.pagePath[0].name}`),
-              oldVal == this.pagePath[0].meta.id
-            );
-          }
-        }
-      },
-      immediate: true,
-    },
   },
   mounted() {
-    this.routeChanged();
+    for (let i = 0; i < this.$store.state.global.menu.children.length; i++) {
+      let item = this.$store.state.global.menu.children[i];
+      if (item.children) {
+        this.childrenMenu[item.meta.id] = false;
+      }
+    }
+    this.routeChanged(true);
   },
   methods: {
     menuFilter(pageName) {
@@ -236,7 +220,7 @@ export default {
           return true;
       }
     },
-    routeChanged() {
+    routeChanged(initial = false) {
       if (
         !this.$route.matched[this.$route.matched.length - 2].meta
           .notShowChildren
@@ -250,9 +234,19 @@ export default {
             1,
             this.$route.matched.length
           );
-          this.pChildrenIsShow = this.$route.matched[
-            this.$route.matched.length - 1
-          ].parent.meta.id;
+          if (initial) {
+            setTimeout(() => {
+              if (this.pagePath[0]) {
+                this.childrenMenu[this.pagePath[0].meta.id] = !this
+                  .childrenMenu[this.pagePath[0].meta.id];
+                this.$forceUpdate();
+                this.menuAnimate(
+                  document.getElementById(`/index/${this.pagePath[0].name}`),
+                  !this.childrenMenu[this.pagePath[0].meta.id]
+                );
+              }
+            });
+          }
         }
       } else {
         this.pageName = this.$route.matched[
@@ -275,10 +269,20 @@ export default {
     selectItem(items, path) {
       if (!items[0].meta.notShowChildren) {
         if (items[0].children && items.length == 1) {
+          // 打开子菜单
           this.pagePath = items;
-          this.pChildrenIsShow =
-            this.pChildrenIsShow == items[0].meta.id ? "" : items[0].meta.id;
+          if (this.pagePath[0]) {
+            this.childrenMenu[this.pagePath[0].meta.id] = !this.childrenMenu[
+              this.pagePath[0].meta.id
+            ];
+            this.$forceUpdate();
+            this.menuAnimate(
+              document.getElementById(`/index/${this.pagePath[0].name}`),
+              !this.childrenMenu[this.pagePath[0].meta.id]
+            );
+          }
         } else {
+          // 进入页面
           this.pageName = items[items.length - 1].meta.id;
           this.$router.push({ path });
           if (this.pageName != items[items.length - 1].meta.id) {

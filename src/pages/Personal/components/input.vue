@@ -102,6 +102,9 @@ export default {
     line-height: 20px;
     // margin-left: 29px;
   }
+  input:disabled {
+    color: #999999;
+  }
   ::-webkit-input-placeholder {
     /* WebKit, Blink, Edge */
     color: #c7c7c7;
