@@ -175,26 +175,17 @@ export default {
     },
     pageTitle() {
       // 定制header标题
+      let title = this.language == "zh" ? "title" : "enTitle";
       switch (this.$route.matched[1].name) {
         case "personal":
-          return this.language == "zh"
-            ? this.$route.matched[1].meta.title
-            : this.$route.matched[1].meta.enTitle;
+          return this.$route.matched[1].meta[title];
         case "accounts":
-          return this.language == "zh"
-            ? this.$route.matched[1].meta.title
-            : this.$route.matched[1].meta.enTitle;
+          return this.$route.matched[1].meta[title];
         case "management":
-          this.suffixMenu = [
-            this.language == "zh" ? this.$route.meta.title : this.$route.meta.enTitle,
-          ];
-          return this.language == "zh"
-            ? this.$route.matched[1].meta.title
-            : this.$route.matched[1].meta.enTitle;
+          this.suffixMenu = [this.$route.meta[title]];
+          return this.$route.matched[1].meta[title];
         default:
-          return this.language == "zh"
-            ? this.$route.meta.title
-            : this.$route.meta.enTitle;
+          return this.$route.meta[title];
       }
     },
     navigation() {
