@@ -50,13 +50,15 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  min-height: 134px;
   p {
     margin: 0;
     color: #333333;
     font-size: 14px;
-    
+    min-width: 69px;
     line-height: 20px;
     white-space: nowrap;
+    text-align: left;
   }
   .textareaBox {
     border: 1px solid #d9d9d9;
@@ -64,8 +66,8 @@ export default {
     border-radius: 2px;
     padding: 6px 12px;
     max-width: 620px;
-    min-height: 134px;
     width: 100%;
+    height: 100%;
     margin-left: 29px;
     box-sizing: border-box;
     display: flex;
@@ -73,7 +75,7 @@ export default {
     p {
       text-align: right;
       font-size: 14px;
-      
+
       color: #999999;
       line-height: 20px;
     }
@@ -85,10 +87,11 @@ export default {
       margin: 0;
       padding: 0;
       width: 100%;
+      height: 100%;
       flex: 1;
       // background: #000;
       font-size: 14px;
-      
+
       line-height: 20px;
       font-family: Arial;
     }
@@ -113,7 +116,7 @@ export default {
     }
   }
   .textareaBox--focus {
-    border: 1px solid #4B78F6;
+    border: 1px solid #4b78f6;
   }
 }
 </style>

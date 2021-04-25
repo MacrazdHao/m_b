@@ -55,9 +55,10 @@ export default {
     margin: 0;
     color: #333333;
     font-size: 14px;
-
+    min-width: 69px;
     line-height: 20px;
     white-space: nowrap;
+    text-align: left;
   }
   .textareaBox {
     border: 1px solid #d9d9d9;

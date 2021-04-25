@@ -1,5 +1,5 @@
 <template>
-  <div class="Management">
+  <div class="School">
     <router-view @setSuffixMenu="setSuffixMenu" />
   </div>
 </template>
@@ -15,6 +15,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.Management {
+.School {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  // height: 792px;
+  box-shadow: 0px 2px 6px 0px rgba(224, 224, 224, 0.5);
+  background: #fff;
+  margin-bottom: 24px;
+  p {
+    margin: 0;
+  }
 }
 </style>

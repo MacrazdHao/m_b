@@ -1,6 +1,5 @@
 <template>
   <div class="Error">
-    错误
     <router-view />
   </div>
 </template>

@@ -20,8 +20,14 @@ export default {
           "看书类目",
         sports: "运动爱好",
         status: "状态",
+        consultStatusText0: '未开始',
+        consultStatusText1: '职业发展咨询',
+        consultStatusText2: '大学课程和学科咨询',
+        consultStatusText3: '大学建议和偏好咨询',
+        consultStatusText4: '完成生涯档案',
         options: "操作",
-        watchButton: '查看'
+        watchButton: '查看',
+        editButton: '编辑'
       }
     },
     detail: {

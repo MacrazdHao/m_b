@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  props: ["label", "value", "placeholder", "maxLength", "disabled"],
+  props: ["label", "value", "placeholder", "maxLength", "disabled", "height"],
   data() {
     return {
       valueTmp: "",
@@ -56,9 +56,9 @@ export default {
     margin: 0;
     color: #333333;
     font-size: 14px;
-    min-width: 69px;
     line-height: 20px;
     white-space: nowrap;
+    min-width: 69px;
     text-align: left;
   }
   .textareaBox {
@@ -76,7 +76,6 @@ export default {
     p {
       text-align: right;
       font-size: 14px;
-
       color: #999999;
       line-height: 20px;
     }

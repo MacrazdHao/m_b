@@ -51,13 +51,15 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  min-height: 300px;
   p {
     margin: 0;
     color: #333333;
     font-size: 14px;
-
+    min-width: 69px;
     line-height: 20px;
     white-space: nowrap;
+    text-align: left;
   }
   .textareaBox {
     border: 1px solid #d9d9d9;
@@ -65,8 +67,8 @@ export default {
     border-radius: 2px;
     padding: 6px 12px;
     max-width: 620px;
-    min-height: 300px;
     width: 100%;
+    height: 100%;
     margin-left: 29px;
     box-sizing: border-box;
     display: flex;
@@ -86,6 +88,7 @@ export default {
       margin: 0;
       padding: 0;
       width: 100%;
+      height: 100%;
       flex: 1;
       // background: #000;
       font-size: 14px;

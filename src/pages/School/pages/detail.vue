@@ -1,6 +1,6 @@
 <template>
   <div class="Detail">
-    <div class="content">
+    <div class="content" v-if="page == 1">
       <div class="content-item baseInfoBox">
         <div class="title-box">
           <div class="leftline"></div>
@@ -99,13 +99,107 @@
           />
         </div>
       </div>
+      <div class="content-item baseInfoBox">
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ $t("management.testTitle") }}</p>
+        </div>
+        <div class="form">
+          <FormTextarea
+            class="formInput"
+            :label="$t('management.testReportLabel')"
+            :placeholder="$t('management.testReportPlaceholder')"
+            :value="info.testReport"
+            :maxLength="500"
+            :disabled="true"
+          />
+        </div>
+      </div>
+      <div class="content-item baseInfoBox">
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ $t("management.consultTitle") }}</p>
+        </div>
+        <div class="consultSetting">
+          <p class="label">{{ $t("management.consultTitle") }}：</p>
+          <div class="consult-item">
+            <div
+              class="timeBox"
+              v-for="(item, index) in consultCheckbox"
+              :key="index"
+            >
+              <p class="label">{{ $t(`management.consultLabel${index}`) }}</p>
+              <FormInput
+                class="input"
+                :value="item.time || $t('school.detail.notime')"
+                :disabled="true"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content" v-if="page == 2">
+      <div class="content-item baseInfoBox">
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ $t("management.careerTitle") }}</p>
+        </div>
+        <div class="form">
+          <FormTextarea
+            class="formInput"
+            :label="$t('management.careerIntroduceLabel')"
+            :placeholder="$t('management.careerIntroducePlaceholder')"
+            :value="info.career.introduce"
+            :maxLength="500"
+            :disabled="true"
+          />
+          <FormTextarea
+            class="formInput longInput"
+            :label="$t('management.careerDiscussLabel')"
+            :placeholder="$t('management.careerDiscussPlaceholder')"
+            :value="info.career.discuss"
+            :height="500"
+            :maxLength="500"
+            :disabled="true"
+          />
+          <FormTextarea
+            class="formInput longInput"
+            :label="$t('management.careerSummaryLabel')"
+            :placeholder="$t('management.careerSummaryPlaceholder')"
+            :value="info.career.summary"
+            :height="500"
+            :maxLength="500"
+            :disabled="true"
+          />
+          <FormTextarea
+            class="formInput longInput"
+            :label="$t('management.careerAdviseLabel')"
+            :placeholder="$t('management.careerAdvisePlaceholder')"
+            :value="info.career.advise"
+            :height="500"
+            :maxLength="500"
+            :disabled="true"
+          />
+          <div class="form-item" style="margin-top: 24px">
+            <p class="item-label">{{ $t("school.detail.teacherLabel") }}：</p>
+            <p class="item-content">{{ info.teacher }}</p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="buttonBox">
       <CButton
         class="button"
-        :text="$t('students.detail.backButton')"
-        theme="blue"
+        :text="$t(`school.detail.${page == 1 ? 'cancelButton' : 'prevButton'}`)"
         @btnClick="goBack"
+      />
+      <CButton
+        class="button nextButton"
+        v-if="page == 1"
+        :text="$t('school.detail.nextButton')"
+        theme="blue"
+        @btnClick="nextPage"
       />
     </div>
   </div>
@@ -117,7 +211,6 @@ import FormInput from "../components/input.vue";
 // import FormRadio from "../components/radio.vue";
 import FormTextarea from "../components/textarea.vue";
 export default {
-  props: ["info"],
   components: {
     // Dialog,
     FormInput,
@@ -125,12 +218,59 @@ export default {
     FormTextarea,
     CButton,
   },
+  data() {
+    return {
+      consultCheckbox: [],
+      page: 1,
+    };
+  },
+  computed: {
+    info() {
+      console.log(this.$route);
+      return this.$route.params.info;
+    },
+  },
   mounted() {
-    this.$emit("setSuffixMenu", [this.info.name]);
+    if (!this.$route.params.school || !this.$route.params.info) {
+      this.$router.push({
+        path: "/index/school/schoollist",
+      });
+      return;
+    }
+    let consultCheckbox = [];
+    this.info.consult.forEach((item, index) => {
+      consultCheckbox.push({
+        selected: item.time != null,
+        ...item,
+      });
+    });
+    this.consultCheckbox = consultCheckbox;
+    this.$emit("setSuffixMenu", [
+      this.$route.params.school.school,
+      this.info.name,
+    ]);
   },
   methods: {
+    selectItem(index) {
+      this.consultCheckbox[index].selected = !this.consultCheckbox[index]
+        .selected;
+      this.$forceUpdate();
+    },
     goBack() {
-      this.$emit("closeDetail");
+      switch (this.page) {
+        case 1:
+          return this.$route.go(-1);
+        case 2:
+          return this.page--;
+      }
+    },
+    nextPage() {
+      switch (this.page) {
+        case 1:
+          return this.page++;
+        case 2:
+          return null;
+      }
     },
   },
 };
@@ -219,6 +359,68 @@ export default {
         .formInput + .formInput {
           margin-top: 24px;
         }
+        .longInput {
+          height: 500px;
+        }
+      }
+      .consultSetting {
+        display: flex;
+        flex-direction: row;
+        margin-left: 10px;
+        margin-top: 22px;
+        .label {
+          font-size: 14px;
+          color: #333333;
+          line-height: 32px;
+          white-space: nowrap;
+        }
+        .consult-item {
+          margin-left: 29px;
+          width: 100%;
+          max-width: 588px;
+          .timeBox + .timeBox {
+            margin-top: 24px;
+          }
+          .timeBox {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            white-space: nowrap;
+            .checkbox {
+              width: 14px;
+              flex-shrink: 0;
+            }
+            img {
+              cursor: pointer;
+            }
+            .label {
+              min-width: 164px;
+              text-align: left;
+              // margin-left: 10px;
+            }
+            .input {
+              padding: 5px 11px;
+              max-width: 298px;
+              // margin-left: 38px;
+            }
+            .statusBox {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              margin-left: 30px;
+              p {
+                font-size: 14px;
+                color: #666666;
+                line-height: 20px;
+                margin-left: 10px;
+              }
+              img {
+                width: 20px;
+                cursor: default;
+              }
+            }
+          }
+        }
       }
     }
     .content-item + .content-item {
@@ -232,6 +434,9 @@ export default {
     padding: 12px 0;
     .button + .button {
       margin-left: 80px;
+    }
+    .nextButton {
+      padding: 7px 23px;
     }
   }
 }

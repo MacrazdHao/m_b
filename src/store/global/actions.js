@@ -68,6 +68,15 @@ export default {
               path: "/adviselist",
             }]
           }, {
+            path: "/school",
+            children: [{
+              path: "/schoollist",
+            }, {
+              path: "/student",
+            }, {
+              path: "/sdetail",
+            }]
+          }, {
             path: "/testing",
             children: [{
               path: "/testing1",

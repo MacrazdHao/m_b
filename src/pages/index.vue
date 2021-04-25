@@ -257,8 +257,8 @@ export default {
         ].meta.id;
       }
     },
-    setSuffixMenu(arr) {
-      this.suffixMenu = [...arr];
+    setSuffixMenu(arr, merge = false) {
+      this.suffixMenu = merge ? [...this.suffixMenu, ...arr] : [...arr];
       this.$forceUpdate();
     },
     menuAnimate(element, hide) {

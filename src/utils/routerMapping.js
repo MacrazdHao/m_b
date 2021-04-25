@@ -306,6 +306,50 @@ export default {
     }
   },
   // 子级
+  '/school': {
+    path: "school",
+    name: "school",
+    component: "School",
+    // redirect: 'testing1',
+    meta: {
+      title: "学校管理",
+      enTitle: 'School Management',
+      icon: "icon_school",
+      notShowChildren: true
+
+    }
+  },
+  // 子子级
+  '/schoollist': {
+    path: "schoollist",
+    name: "schoollist",
+    component: "pages/school",
+    meta: {
+      title: "学校管理",
+      enTitle: 'School Management',
+    }
+  },
+  // 子子级
+  '/student': {
+    path: "student",
+    name: "student",
+    component: "pages/students",
+    meta: {
+      title: "学校管理",
+      enTitle: "School Management",
+    }
+  },
+  // 子子级
+  '/sdetail': {
+    path: "sdetail",
+    name: "sdetail",
+    component: "pages/detail",
+    meta: {
+      title: "学校管理",
+      enTitle: "School Management",
+    }
+  },
+  // 子级
   '/testing': {
     path: "testing",
     name: "testing",

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>icon_file</title>
-    <g id="咨询师-学生档案" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="学生档案-查看详情" transform="translate(-20.000000, -200.000000)" fill="#CCCCCC">
-            <g id="cecp-file" transform="translate(0.000000, 186.000000)">
+    <g id="咨询师-生涯档案" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="档案管理-生涯档案" transform="translate(-20.000000, -200.000000)" fill="#FFFFFF">
+            <g id="file-management" transform="translate(0.000000, 186.000000)">
                 <g id="icon_file" transform="translate(20.000000, 14.000000)">
                     <g>
                         <path d="M4.45454545,3.81818182 L9.54545455,3.81818182 C9.89672727,3.81818182 10.1818182,3.53309091 10.1818182,3.18181818 C10.1818182,2.83054545 9.89672727,2.54545455 9.54545455,2.54545455 L4.45454545,2.54545455 C4.10327273,2.54545455 3.81818182,2.83054545 3.81818182,3.18181818 C3.81818182,3.53309091 4.10327273,3.81818182 4.45454545,3.81818182" id="Fill-1"></path>

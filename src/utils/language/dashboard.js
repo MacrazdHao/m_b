@@ -54,6 +54,27 @@ export default {
         newTeacher: '新增老师',
         peopleUnit: '个'
       }
+    },
+    admin: {
+      moreButton: '查看更多',
+      cooperateManage: {
+        title: 'CECP 合作学校',
+        schoolTitle: '国际学校',
+        newSchool: '当月新增',
+        schoolUnit: '所'
+      },
+      consultantManage: {
+        title: 'CECP 咨询师',
+        consultantTitle: '生涯咨询师',
+        newConsultant: '当月新增',
+        peopleUnit: '位'
+      },
+      accountManage: {
+        title: '账号管理',
+        adminTitle: '管理员账号',
+        newAdmin: '新增管理员',
+        peopleUnit: '个'
+      },
     }
   },
   en: {

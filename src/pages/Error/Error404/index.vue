@@ -1,17 +1,18 @@
 <template>
   <div class="Error404">
-    404
+    <img class="errorImg" src="@/assets/404.svg" />
   </div>
 </template>
 
 <script>
-export default {
-  
-}
+export default {};
 </script>
 
 <style lang="scss" scoped>
 .Error404 {
-
+  .errorImg {
+    width: 30%;
+    margin-top: 100px;
+  }
 }
 </style>

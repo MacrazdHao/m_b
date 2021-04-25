@@ -219,6 +219,14 @@ export default {
           margin-left: 10px;
           .item-label {
             margin-right: 29px;
+            font-size: 14px;
+            color: #333333;
+            line-height: 20px;
+          }
+          .item-content {
+            font-size: 14px;
+            color: #333333;
+            line-height: 20px;
           }
         }
         .formInput {
