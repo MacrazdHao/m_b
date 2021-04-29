@@ -3,6 +3,7 @@
     <router-view
       @setSuffixMenu="setSuffixMenu"
       @toDetail="toDetail"
+      @closeDetail="closeDetail"
       :info="detailInfo"
     />
   </div>

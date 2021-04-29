@@ -1,4 +1,4 @@
-import i18n from './language';
+
 /*
 {
   '远程路由': {
@@ -12,10 +12,13 @@ import i18n from './language';
       icon: "index目录下的icon",
       notShowChildren: 是否在菜单下显示子菜单,
       notShowThisChildren: 作为子子级是否显示在父级的子菜单中
-      group: （其他自定义）特殊分组标识
+      group: （其他自定义）子子级特殊分组标识，和notShowThisChildren配合使用（B作为A子级，但路由级别又与A同级的情况下使用）
+      groupParent: （其他自定义）同一分组下的主路由（入口）
     }
   }
 }
+
+注：请尽量避免使用group参数，含有group结构的一系列页面将互相绑定，不可以将之随意拆分来组建路由，会影响全局动态路由的耦合度
 */
 
 // 路由映射表(一级结构，单元化，预留可自定义菜单功能——即可编辑子菜单的父级关系)
@@ -458,7 +461,8 @@ export default {
     meta: {
       title: "生涯档案",
       enTitle: "Counseling Files",
-      group: "counseling"
+      group: "counseling",
+      groupParent: true
     }
   },
   // 子子级
@@ -470,7 +474,8 @@ export default {
       title: "生涯档案",
       enTitle: "Counseling Files",
       notShowThisChildren: true,
-      group: "counseling"
+      group: "counseling",
+      groupParent: false
     }
   },
   // 子子级
@@ -481,7 +486,8 @@ export default {
     meta: {
       title: "职业发展咨询",
       enTitle: "Career Consult",
-      group: "career"
+      group: "career",
+      groupParent: true
     }
   },
   // 子子级
@@ -493,7 +499,8 @@ export default {
       title: "职业发展咨询",
       enTitle: "Career Consult",
       notShowThisChildren: true,
-      group: "career"
+      group: "career",
+      groupParent: false
     }
   },
   // 子子级

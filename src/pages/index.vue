@@ -51,7 +51,7 @@
                     'button',
                     pageName == item2.meta.id ? 'button--selected' : '',
                   ]"
-                  v-if="index2 > 0&&!item2.meta.notShowThisChildren"
+                  v-if="index2 > 0 && !item2.meta.notShowThisChildren"
                   @click="
                     selectItem(
                       [item, item2],
@@ -230,11 +230,11 @@ export default {
       }
     },
     routeChanged(initial = false) {
+      // console.log(this.$route);
       if (
         !this.$route.matched[this.$route.matched.length - 2].meta
           .notShowChildren
       ) {
-        this.pageName = this.$route.meta.id;
         if (
           this.$route.matched.length > 2 &&
           this.menuFilter(this.$route.matched[1].name)
@@ -257,6 +257,31 @@ export default {
             });
           }
         }
+        if (this.$route.meta.notShowThisChildren) {
+          let group = this.$route.meta.group;
+          let route = this.$route.matched;
+          let menu = this.$store.state.global.menu;
+          if (!this.$route.meta.groupParent) {
+            // console.log("寻找groupParent", route, menu);
+            for (let i = 1; i < route.length; i++) {
+              for (let j = 0; j < menu.children.length; j++) {
+                if (!menu.children[j].children) continue;
+                if (route[i].meta.id == menu.children[j].meta.id) {
+                  for (let k = 1; k < menu.children[j].children.length; k++) {
+                    if (
+                      menu.children[j].children[k].meta.groupParent &&
+                      menu.children[j].children[k].meta.group == group
+                    ) {
+                      this.pageName = menu.children[j].children[k].meta.id;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          return;
+        }
+        this.pageName = this.$route.meta.id;
       } else {
         this.pageName = this.$route.matched[
           this.$route.matched.length - 2
