@@ -15,6 +15,7 @@ import './utils/permission'
 import Dialog from './components/Dialog/dialog.js';
 import LogoutDialog from './components/LogoutDialog/logoutDialog.js';
 import Message from './components/Message/message.js';
+import html2pdf from './utils/html2pdf';
 // import '@/assets/icons' // icon
 
 Vue.config.productionTip = false
@@ -28,6 +29,7 @@ Vue.use(ElementUI)
 Vue.use(LogoutDialog)
 Vue.use(Dialog)
 Vue.use(Message)
+Vue.use(html2pdf)
 
 /* eslint-disable no-new */
 new Vue({

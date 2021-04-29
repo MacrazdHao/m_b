@@ -240,6 +240,7 @@ export default {
       this.$t("counseling.step1.title"),
       this.$t("counseling.step2.title"),
     ]);
+    this.$emit("setStep", 2);
     this.answers = Array.apply(null, Array(this.questions.length)).map(() => {
       return { text: "", value: -1 };
     });
@@ -335,13 +336,13 @@ export default {
       padding: 22px 24px 22px 24px;
       .title {
         font-size: 14px;
-        
+
         color: #333333;
         line-height: 20px;
       }
       .num {
         font-size: 14px;
-        
+
         color: #999999;
         line-height: 20px;
         border-radius: 2px;
@@ -354,7 +355,7 @@ export default {
       }
       .unit {
         font-size: 14px;
-        
+
         color: #333333;
         line-height: 20px;
         margin-left: 20px;

@@ -105,51 +105,13 @@
       </div>
     </div>
     <transition name="slide-fade">
-      <BaseInfo
-        v-if="step == 1"
-        @setSuffixMenu="setSuffixMenu"
-        @nextStep="nextStep"
-      />
-      <OnlineTest
-        v-if="step == 2"
-        @setSuffixMenu="setSuffixMenu"
-        @nextStep="nextStep"
-      />
-      <MatchConsultant
-        v-if="step == 3"
-        :step="step"
-        @setSuffixMenu="setSuffixMenu"
-        @nextStep="nextStep"
-      />
-      <MatchConsultant
-        v-if="step == 4"
-        :step="step"
-        @setSuffixMenu="setSuffixMenu"
-        @nextStep="nextStep"
-      />
-      <MatchConsultant
-        v-if="step == 5"
-        :step="step"
-        @setSuffixMenu="setSuffixMenu"
-        @nextStep="nextStep"
-      />
-      <OutputReport v-if="step == 6" @setSuffixMenu="setSuffixMenu" />
+      <router-view  @setStep="setStep" @setSuffixMenu="setSuffixMenu" />
     </transition>
   </div>
 </template>
 
 <script>
-import BaseInfo from "./steps/baseInfo.vue";
-import OnlineTest from "./steps/test.vue";
-import MatchConsultant from "./steps/match.vue";
-import OutputReport from "./steps/report.vue";
 export default {
-  components: {
-    BaseInfo,
-    OnlineTest,
-    MatchConsultant,
-    OutputReport,
-  },
   data() {
     return {
       step: 1,
@@ -158,6 +120,9 @@ export default {
   methods: {
     nextStep() {
       this.step++;
+    },
+    setStep(step) {
+      this.step = step;
     },
     setSuffixMenu(arr) {
       this.$emit("setSuffixMenu", arr);
@@ -183,7 +148,7 @@ export default {
     box-sizing: border-box;
     .stepsItem {
       font-size: 14px;
-      
+
       color: #666666;
       line-height: 20px;
       display: flex;

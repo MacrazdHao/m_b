@@ -47,7 +47,7 @@
         </div>
         <div class="form">
           <FormTextarea
-            class="formInput"
+            class="formInput longInput"
             :label="$t('counseling.step1.academic.score.label')"
             :placeholder="$t('counseling.step1.academic.score.placeholder')"
             :value="score"
@@ -55,7 +55,7 @@
             @input="setScore"
           />
           <FormTextarea
-            class="formInput"
+            class="formInput longInput"
             :label="$t('counseling.step1.academic.evaluation.label')"
             :placeholder="
               $t('counseling.step1.academic.evaluation.placeholder')
@@ -65,7 +65,7 @@
             @input="setEvaluation"
           />
           <FormTextarea
-            class="formInput"
+            class="formInput longInput"
             :label="$t('counseling.step1.academic.extracurricular.label')"
             :placeholder="
               $t('counseling.step1.academic.extracurricular.placeholder')
@@ -83,7 +83,7 @@
         </div>
         <div class="form">
           <FormTextarea
-            class="formInput"
+            class="formInput longInput"
             :label="$t('counseling.step1.hobby.book.label')"
             :placeholder="$t('counseling.step1.hobby.book.placeholder')"
             :value="book"
@@ -91,7 +91,7 @@
             @input="setBook"
           />
           <FormTextarea
-            class="formInput"
+            class="formInput longInput"
             :label="$t('counseling.step1.hobby.sport.label')"
             :placeholder="$t('counseling.step1.hobby.sport.placeholder')"
             :value="sport"
@@ -154,6 +154,7 @@ export default {
   },
   mounted() {
     this.$emit("setSuffixMenu", [this.$t("counseling.step1.title")]);
+    this.$emit("setStep", 1);
   },
   methods: {
     setName(val) {
@@ -210,7 +211,7 @@ export default {
     padding: 22px 24px 0 24px;
     .lawTips {
       font-size: 14px;
-      
+
       color: #666666;
       line-height: 20px;
       background: #f1f4ff;
@@ -246,7 +247,7 @@ export default {
           width: fit-content;
           padding-left: 8px;
           font-size: 16px;
-          
+
           color: #333333;
           line-height: 22px;
         }
@@ -260,6 +261,9 @@ export default {
         }
         .formInput + .formInput {
           margin-top: 24px;
+        }
+        .longInput {
+          height: 134px;
         }
       }
     }

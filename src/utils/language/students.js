@@ -26,12 +26,26 @@ export default {
         consultStatusText3: '大学建议和偏好咨询',
         consultStatusText4: '完成生涯档案',
         options: "操作",
+        moreButton: "更多",
         watchButton: '查看',
-        editButton: '编辑'
+        editButton: '编辑',
+        optionsMenu: {
+          watchButton: '查看信息',
+          processButton: '阶段分配'
+        }
       }
     },
     detail: {
       backButton: '返回'
+    },
+    process: {
+      processTitle: '阶段分配',
+      processLabel: '阶段设置',
+      step1: '职业发展咨询',
+      step2: '大学课程和学科咨询',
+      step3: '大学建议和偏好咨询',
+      cancelButton: '取消',
+      saveButton: '保存'
     }
   },
   en: {

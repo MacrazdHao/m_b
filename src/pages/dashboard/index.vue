@@ -1,25 +1,15 @@
 <template>
   <div class="Dashboard">
-    <StudentBoard v-if="userType == 0" />
-    <SchoolBoard v-if="userType == 1" />
-    <AdminBoard v-if="userType == 2" />
+    <router-view @setSuffixMenu="setSuffixMenu" />
   </div>
 </template>
 
 <script>
-import StudentBoard from "./board/student";
-import SchoolBoard from "./board/school";
-import AdminBoard from "./board/admin";
 export default {
-  components: {
-    StudentBoard,
-    SchoolBoard,
-    AdminBoard
-  },
-  data() {
-    return {
-      userType: 2,
-    };
+  methods: {
+    setSuffixMenu(arr) {
+      this.$emit("setSuffixMenu", arr, true);
+    },
   },
 };
 </script>

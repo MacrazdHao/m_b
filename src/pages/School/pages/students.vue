@@ -95,12 +95,18 @@
               </p>
             </template>
             <template slot-scope="scope">
-              <p
-                class="tableRow-text tableRow-button"
-                @click="toDetail(scope.row)"
-              >
-                {{ $t("students.list.table.watchButton") }}
-              </p>
+              <!-- <p
+                  class="tableRow-text tableRow-button"
+                  @click="toDetail(scope.row)"
+                >
+                  {{ $t("students.list.table.watchButton") }}
+                </p> -->
+              <FixedMenu
+                :menuId="`schoolS${scope.$index}${new Date().getTime()}`"
+                :text="$t('school.students.moreButton')"
+                :menu="optionsMenu"
+                :extra="scope.row"
+              />
             </template>
           </el-table-column>
         </el-table>
@@ -137,13 +143,17 @@
 <script>
 import SInput from "../components/input";
 import SButton from "@/components/common/button.vue";
+import FixedMenu from "@/components/common/fixedMenu.vue";
+import Bus from "../utils/bus";
 export default {
   components: {
     SInput,
     SButton,
+    FixedMenu,
   },
   data() {
     return {
+      school: null,
       options: [
         {
           value: "选项1",
@@ -189,10 +199,10 @@ export default {
               "很高兴见到Alina，她在学校宿舍进行此次测评。Alina很放松，易于交谈。",
             discuss:
               "在我们的会面中，Alina描述了她在学校学习的所有科目。她最爱的科目有经济学、计算机科学和数学，并认为可能最擅长语文和数学，因为中文是她的母语，所以觉得最简单。Alina认为化学是最难的科目，同时也很喜欢这门课。她说:“化学很有趣，但也很困难。”我们谈到了面对挑战带来的好处，她提出了一些明智的观点。谈到家庭，Alina认为父母慈爱善良，让她自己解决问题，在她有需要的时候给予支持。她描述了每周与父母和妹妹弟弟通两次电话的情况，还描述了往返学校和家的路途。我问Alina当iGCSE考试结束后，她对A level科目的选择有什么想法。她说她可能会选修数学、高等数学、经济学、物理和计算机科学。我从学校网站上了解到通常是第一年修数学，第二年再修高等数学，所以这样的选择是可行的。 当被问及在考虑什么职业时，Alina的回答是:商学、计算机工作或“设计师”。为了更准确地了解她的想法，我问了许多问题。她谈了更多关于她对建筑设计的兴趣，这引发了一场活跃的对话，Alina对这个领域展现出了真正的兴趣。当被问及建筑师需要哪些知识和技能时，Alina正确回答出数学和物理，然后补充了计算机科学，并问艺术是否也有帮助。我告诉Alina，英国的大学现在需要艺术、设计或建筑研究的作品集作为入学要求的一部分。Alina认为一名优秀的建筑师能还需要想象力。我让她说出一些她喜欢的建筑，她首先说的是比萨斜塔。当被问到为什么喜欢它时，她的回答比较肤浅：因为它倾斜着却没有倒塌，这太神奇了。我迫使她用逻辑思考，如果比萨斜塔倒塌了，或者并不是倾斜的，它是否仍能举世瞩目! 她知道这会变得非常不同，但她说她仍然喜欢这座塔的风格和年代，所以即使塔不是倾斜的她也仍会喜欢这座建筑。她表示紫禁城是她另一座欣赏的建筑。我们讨论了这座建筑的优点，然后我问她将如何利用她对这两座建筑的欣赏来帮助她设计现代建筑。虽然Alina的推论并不成熟，但她提出了一些很好的观点。",
-            summary: '总结',
-            advise: '建议',
+            summary: "总结",
+            advise: "建议",
           },
-          teacher: 'Dr Steve Bailey',
+          teacher: "Dr Steve Bailey",
           consult: [
             {
               time: 1618992995,
@@ -217,27 +227,44 @@ export default {
         size: 10,
         current: 1,
       },
+      optionsMenu: [
+        {
+          text: this.$t('school.students.watchButton'),
+          callback: (info) => {
+            this.toDetail(info);
+          },
+        },
+        {
+          text: this.$t('school.students.deleteButton'),
+          callback: (info) => {
+            this.deleteInfo(info);
+          },
+        },
+      ],
     };
   },
   mounted() {
-    console.log(this.$route);
-    if (!this.$route.params.school) {
-      this.$router.push({
-        path: "/index/school/schoollist",
-      });
+    // 后期修改如果能够通过请求获取到学校详情，则传query到这个页面即可，不再需要使用Bus
+    this.school = Bus.getSchoolInfo();
+    if (!this.school) {
+      this.$router.go(-1);
       return;
     }
-    this.$emit("setSuffixMenu", [this.$route.params.school.school]);
+    this.$emit("setSuffixMenu", [this.school.school]);
   },
   methods: {
     toDetail(info) {
+      Bus.setStudentInfo(info);
       this.$router.push({
         name: "sdetail",
-        params: {
-          info,
-          school: this.$route.params.school,
-        },
       });
+    },
+    deleteInfo(info) {
+      console.log("删除", info);
+      this.$dialog.warning([
+        this.$t(`school.students.deleteTips1`),
+        this.$t(`school.students.deleteTips2`),
+      ]);
     },
     toStatusText(code) {
       switch (code) {
@@ -303,6 +330,9 @@ export default {
     }
     .el-table th {
       background-color: #f6f8fa;
+    }
+    .el-table .cell {
+      overflow: initial;
     }
   }
 }

@@ -1,37 +1,25 @@
 <template>
-  <div class="Match">
-    <div class="matching" v-if="!finished">
-      <img src="@/assets/counseling/matching.svg" />
-      <p class="title">{{ $t(`counseling.step${step}.matchTitle`) }}</p>
-      <p class="tips" v-if="!matchFinish">
-        {{ $t(`counseling.step${step}.matchingTips`) }}
-      </p>
-      <p class="tips" v-else>
-        {{ $t(`counseling.step${step}.matchedTips`, { time }) }}
+  <div class="Report">
+    <div class="outputing" v-if="!finished">
+      <img src="@/assets/counseling/report.svg" />
+      <p class="title">{{ $t(`counseling.step6.outputingTitle`) }}</p>
+      <p class="tips">
+        {{ $t(`counseling.step6.outputingTips`, { time }) }}
       </p>
       <CButton
         :class="['button', 'backButton']"
-        v-if="!matchFinish"
-        :text="$t(`counseling.step${step}.backButton`)"
+        :text="$t(`counseling.step6.backButton`)"
         theme="blue"
         @btnClick="backToDashboard"
-      />
-      <CButton
-        :class="['button', 'liveButton']"
-        v-else
-        :text="$t(`counseling.step${step}.liveButton`)"
-        :disable="!liveStarting"
-        theme="blue"
-        @btnClick="goLive"
       />
     </div>
     <div class="finish" v-if="finished">
       <img src="@/assets/counseling/success.svg" />
-      <p class="title">{{ $t(`counseling.step${step}.finishTitle`) }}</p>
-      <p class="tips">{{ $t(`counseling.step${step}.finishTips`) }}</p>
+      <p class="title">{{ $t(`counseling.step6.finishTitle`) }}</p>
+      <p class="tips">{{ $t(`counseling.step6.finishTips`) }}</p>
       <CButton
         class="button"
-        :text="$t(`counseling.step${step}.reportButton`)"
+        :text="$t(`counseling.step6.reportButton`)"
         theme="blue"
         @btnClick="getReport"
       />
@@ -49,37 +37,34 @@ export default {
   data() {
     return {
       finished: true,
-      liveStarting: false,
-      time: "2021-03-21 20:00",
-      matchFinish: false,
     };
   },
   mounted() {
-    this.$emit("setSuffixMenu", [this.$t(`counseling.step${this.step}.title`)]);
+    this.$emit("setSuffixMenu", [this.$t(`counseling.step6.title`)]);
+    this.$emit("setStep", 6);
   },
   methods: {
     backToDashboard() {
       this.$router.push({ path: "/" });
     },
     getReport() {},
-    goLive() {},
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.Match {
+.Report {
   p {
     margin: 0;
   }
-  .matching {
+  .outputing {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 130px;
+    padding-top: 120px;
     padding-bottom: 280px;
     img {
-      width: 177px;
+      width: 181px;
     }
     .title {
       margin-top: 12px;

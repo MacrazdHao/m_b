@@ -17,6 +17,7 @@
         <PInput
           class="input"
           :value="password"
+          type="password"
           :placeholder="$t('accounts.teacher.passwordPlaceholder')"
         />
       </div>

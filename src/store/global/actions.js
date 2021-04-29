@@ -17,15 +17,42 @@ export default {
         way1: [{
           path: '/index',
           children: [{
-            path: '/dashboard'
+            path: '/dashboard',
+            children: [{
+              path: '/schoolDashboard'
+            }, {
+              path: '/schedules'
+            }]
           }, {
-            path: '/counseling'
+            path: '/counseling',
+            children: [{
+              path: '/baseInfo',
+            }, {
+              path: '/onlineTest',
+            }, {
+              path: '/consultLive',
+              meta: { step: 4 }
+            }, {
+              path: '/getReport',
+            }]
           }, {
             path: '/knowledge'
           }, {
-            path: '/students'
+            path: '/students',
+            children: [{
+              path: '/studentsList'
+            }, {
+              path: '/studentsDetail'
+            }, {
+              path: '/studentsProcess'
+            }]
           }, {
-            path: '/archives'
+            path: '/archives',
+            children: [{
+              path: '/archivesList'
+            }, {
+              path: '/archivesDetail'
+            }]
           }, {
             path: '/messages'
           }, {
@@ -37,6 +64,8 @@ export default {
             }, {
               path: "/cbase",
             }, {
+              path: "/abase",
+            }, {
               path: "/account",
             }, {
               path: "/safe",
@@ -45,6 +74,8 @@ export default {
             path: "/accounts",
             children: [{
               path: "/admin",
+            }, {
+              path: "/schoolaccount",
             }, {
               path: "/teacher",
             }, {
@@ -55,7 +86,12 @@ export default {
           }, {
             path: '/live'
           }, {
-            path: '/files'
+            path: '/files',
+            children: [{
+              path: '/filesList'
+            }, {
+              path: '/filesDetail'
+            }]
           }, {
             path: "/management",
             children: [{
@@ -76,6 +112,10 @@ export default {
             }, {
               path: "/sdetail",
             }]
+          }, {
+            path: '/consultant'
+          }, {
+            path: '/playback'
           }, {
             path: "/testing",
             children: [{

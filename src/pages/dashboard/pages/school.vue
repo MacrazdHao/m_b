@@ -91,11 +91,74 @@
         </div>
       </div>
     </div>
+    <div class="info-itemBox info-itemBox-1">
+      <div class="info-item">
+        <div class="calendarBox">
+          <div class="header">
+            <p class="date">{{ `${currentYear}年${calendarMonth}月` }}</p>
+            <ToggleGroup
+              :value="calendarMonth - (currentMonth - 1)"
+              :items="calendarToggles"
+            />
+          </div>
+          <div class="weekday">
+            <p>一</p>
+            <p>二</p>
+            <p>三</p>
+            <p>四</p>
+            <p>五</p>
+            <p>六</p>
+            <p>日</p>
+          </div>
+          <div class="calendar">
+            <div
+              :class="[
+                'day',
+                (item > 25 && index < 7) || (item < 13 && index > 28)
+                  ? ''
+                  : 'thismonthday',
+                currentMonth + '-' + currentDay ==
+                (item > 25 && index < 6
+                  ? calendarMonth - 1
+                  : item < 13 && index > 27
+                  ? calendarMonth + 1
+                  : calendarMonth) +
+                  '-' +
+                  item
+                  ? 'today'
+                  : '',
+              ]"
+              v-for="(item, index) in getMonthCalendar(
+                `2021-${calendarMonth}-1`
+              )"
+              :key="index"
+              @click="toCalendar(item, index)"
+            >
+              <p
+                :class="[
+                  'daytext',
+                  (item > 25 && index < 7) || (item < 13 && index > 28)
+                    ? 'othermonth'
+                    : 'thismonth',
+                ]"
+              >
+                {{ item }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import ToggleGroup from "../components/toggleGroup";
+import DateUtils from "@/utils/date";
 export default {
+  components: {
+    ToggleGroup,
+  },
   data() {
     return {
       studentNum: {
@@ -113,6 +176,24 @@ export default {
         newAdmin: 3,
         newTeacher: 0,
       },
+      currentYear: new Date().getFullYear(),
+      calendarMonth: new Date().getMonth() + 1,
+      currentMonth: new Date().getMonth() + 1,
+      currentDay: new Date().getDate(),
+      calendarToggles: [
+        {
+          text: "上个月",
+          callback: this.lastMonth,
+        },
+        {
+          text: "今天",
+          callback: this.thisMonth,
+        },
+        {
+          text: "下个月",
+          callback: this.nextMonth,
+        },
+      ],
     };
   },
   computed: {
@@ -120,11 +201,28 @@ export default {
       return Math.max(...this.studentNum.chart);
     },
   },
+  methods: {
+    ...DateUtils,
+    nextMonth() {
+      this.calendarMonth = this.currentMonth + 1;
+    },
+    thisMonth() {
+      this.calendarMonth = this.currentMonth;
+    },
+    lastMonth() {
+      this.calendarMonth = this.currentMonth - 1;
+    },
+    toCalendar(item, index) {
+      if ((item > 25 && index < 7) || (item < 13 && index > 28)) return;
+      this.$router.push({ path: "/index/dashboard/schedules" });
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .School {
+  margin-bottom: 24px;
   p {
     margin: 0;
   }
@@ -151,7 +249,7 @@ export default {
         width: 100%;
         .title {
           font-size: 14px;
-          
+
           white-space: nowrap;
           color: #999999;
           line-height: 20px;
@@ -163,7 +261,7 @@ export default {
           cursor: pointer;
           p {
             font-size: 14px;
-            
+
             white-space: nowrap;
             color: #666666;
             line-height: 20px;
@@ -205,7 +303,7 @@ export default {
         margin-top: 26px;
         font-size: 14px;
         white-space: nowrap;
-        
+
         color: #666666;
         line-height: 20px;
         padding-bottom: 12px;
@@ -237,7 +335,7 @@ export default {
             margin-top: 26px;
             font-size: 14px;
             white-space: nowrap;
-            
+
             color: #666666;
             line-height: 20px;
           }
@@ -258,7 +356,7 @@ export default {
           width: 40.185%;
           .enterTitle {
             font-size: 14px;
-            
+
             white-space: nowrap;
             color: #666666;
             line-height: 20px;
@@ -266,10 +364,78 @@ export default {
           .enterNum {
             margin-left: 10px;
             font-size: 14px;
-            
+
             white-space: nowrap;
             color: #333333;
             line-height: 20px;
+          }
+        }
+      }
+      .calendarBox {
+        .header {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          padding-bottom: 14px;
+          border-bottom: 1px solid #d3d3d3;
+          .date {
+            font-size: 14px;
+            color: #333333;
+            line-height: 20px;
+            white-space: nowrap;
+          }
+        }
+        .weekday {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          padding-top: 12px;
+          padding-bottom: 8px;
+          p {
+            flex: 1;
+            font-size: 12px;
+            color: #666666;
+            line-height: 17px;
+          }
+        }
+        .calendar {
+          width: 100%;
+          border-left: 1px solid #eceef5;
+          border-top: 1px solid #eceef5;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          .thismonthday {
+            cursor: pointer;
+            transition: all 0.2s;
+          }
+          .day {
+            border-right: 1px solid #eceef5;
+            border-bottom: 1px solid #eceef5;
+            width: calc(100% / 7);
+            height: 55px;
+            box-sizing: border-box;
+            padding: 4px;
+            .daytext {
+              font-size: 12px;
+              line-height: 17px;
+              text-align: left;
+            }
+            .thismonth {
+              color: #333333;
+            }
+            .othermonth {
+              color: #c0c4cc;
+            }
+          }
+          .thismonthday:hover,
+          .today {
+            background-color: #f1f4ff;
+            .daytext {
+              color: #4b77f6;
+            }
           }
         }
       }

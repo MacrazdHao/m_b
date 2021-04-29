@@ -6,6 +6,7 @@ import register2 from '@/pages/Entry/pages/register2'
 import forget from '@/pages/Entry/pages/forget'
 import reset from '@/pages/Entry/pages/reset'
 import contact from '@/pages/Entry/pages/contact'
+import AdminEntry from '@/pages/AdminEntry'
 
 const staticRouter = [
   {
@@ -41,7 +42,11 @@ const staticRouter = [
       name: 'contact',
       component: contact,
     }]
-  }
+  }, {
+    path: '/adminEntry',
+    name: 'adminEntry',
+    component: AdminEntry,
+  },
 ];
 
 export default staticRouter;

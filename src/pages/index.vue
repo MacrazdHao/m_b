@@ -1,5 +1,5 @@
 <template>
-  <div class="Index">
+  <div class="Index" id="index">
     <div class="menu">
       <img class="logo" src="@/assets/index/logo.svg" />
       <div class="route">
@@ -91,7 +91,9 @@
           <!-- <p @click="logout">登出</p> -->
           <div class="messageIconBox" @click="goMessages">
             <img class="messages" src="@/assets/index/icon_news.svg" />
-            <p class="num">999</p>
+            <div class="num">
+              <p>96</p>
+            </div>
           </div>
           <div
             class="userMenu"
@@ -141,7 +143,11 @@
               </div>
             </transition>
           </div>
-          <img class="language" src="@/assets/index/icon_language.svg" />
+          <img
+            class="language"
+            src="@/assets/index/icon_language.svg"
+            @click="changeLanguage"
+          />
         </div>
       </div>
       <div class="content">
@@ -313,6 +319,9 @@ export default {
     goPersonal() {
       this.$router.push({ path: "/index/personal/" });
     },
+    changeLanguage() {
+      this.$getPdf(document.getElementById("index"), "test");
+    },
   },
 };
 </script>
@@ -358,6 +367,11 @@ export default {
             .button-title {
               display: flex;
               flex-direction: row;
+              align-items: center;
+              img {
+                width: 14px;
+                // height: 14px;
+              }
               p {
                 margin-left: 8px;
                 font-size: 14px;
@@ -459,12 +473,20 @@ export default {
             position: absolute;
             background-color: #ff4d4f;
             border-radius: 100px;
-            padding: 1px 6px;
-            font-size: 16px;
-            color: #ffffff;
-            // line-height: 22px;
+            padding: 0 6px;
             top: -11px;
             left: 11px;
+            box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+            // align-items: center;
+            height: 22px;
+            p {
+              font-size: 16px;
+              color: #ffffff;
+              line-height: 20px;
+            }
           }
         }
         .userMenu {
@@ -504,7 +526,7 @@ export default {
             .drawer {
               display: flex;
               flex-direction: column;
-              padding: 4px 0;
+              padding: 6px 0;
               background-color: #fff;
               box-shadow: 0px 4px 8px 0px #e0e0e0;
               border-radius: 2px;

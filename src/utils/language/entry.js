@@ -4,6 +4,7 @@ export default {
     student: '学生',
     consultant: '咨询师',
     login: {
+      adminLoginTitle: '管理员登陆',
       loginTitle: '登录账号',
       registerButton: '注册',
       parentsButton: '家长账号登陆',

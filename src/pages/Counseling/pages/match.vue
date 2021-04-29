@@ -1,25 +1,37 @@
 <template>
-  <div class="Report">
-    <div class="outputing" v-if="!finished">
-      <img src="@/assets/counseling/report.svg" />
-      <p class="title">{{ $t(`counseling.step6.outputingTitle`) }}</p>
-      <p class="tips">
-        {{ $t(`counseling.step6.outputingTips`, { time }) }}
+  <div class="Match">
+    <div class="matching" v-if="!finished">
+      <img src="@/assets/counseling/matching.svg" />
+      <p class="title">{{ $t(`counseling.step${step}.matchTitle`) }}</p>
+      <p class="tips" v-if="!matchFinish">
+        {{ $t(`counseling.step${step}.matchingTips`) }}
+      </p>
+      <p class="tips" v-else>
+        {{ $t(`counseling.step${step}.matchedTips`, { time }) }}
       </p>
       <CButton
         :class="['button', 'backButton']"
-        :text="$t(`counseling.step6.backButton`)"
+        v-if="!matchFinish"
+        :text="$t(`counseling.step${step}.backButton`)"
         theme="blue"
         @btnClick="backToDashboard"
+      />
+      <CButton
+        :class="['button', 'liveButton']"
+        v-else
+        :text="$t(`counseling.step${step}.liveButton`)"
+        :disable="!liveStarting"
+        theme="blue"
+        @btnClick="goLive"
       />
     </div>
     <div class="finish" v-if="finished">
       <img src="@/assets/counseling/success.svg" />
-      <p class="title">{{ $t(`counseling.step6.finishTitle`) }}</p>
-      <p class="tips">{{ $t(`counseling.step6.finishTips`) }}</p>
+      <p class="title">{{ $t(`counseling.step${step}.finishTitle`) }}</p>
+      <p class="tips">{{ $t(`counseling.step${step}.finishTips`) }}</p>
       <CButton
         class="button"
-        :text="$t(`counseling.step6.reportButton`)"
+        :text="$t(`counseling.step${step}.reportButton`)"
         theme="blue"
         @btnClick="getReport"
       />
@@ -30,40 +42,49 @@
 <script>
 import CButton from "@/components/common/button.vue";
 export default {
-  props: ["step"],
   components: {
     CButton,
   },
   data() {
     return {
       finished: true,
+      liveStarting: false,
+      time: "2021-03-21 20:00",
+      matchFinish: false,
     };
   },
+  computed: {
+    step() {
+      return this.$route.meta.step;
+    },
+  },
   mounted() {
-    this.$emit("setSuffixMenu", [this.$t(`counseling.step6.title`)]);
+    this.$emit("setSuffixMenu", [this.$t(`counseling.step${this.step}.title`)]);
+    this.$emit("setStep", this.step);
   },
   methods: {
     backToDashboard() {
       this.$router.push({ path: "/" });
     },
     getReport() {},
+    goLive() {},
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.Report {
+.Match {
   p {
     margin: 0;
   }
-  .outputing {
+  .matching {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 120px;
+    padding-top: 130px;
     padding-bottom: 280px;
     img {
-      width: 181px;
+      width: 177px;
     }
     .title {
       margin-top: 12px;

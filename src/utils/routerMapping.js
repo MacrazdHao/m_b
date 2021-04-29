@@ -47,7 +47,51 @@ export default {
       title: '工作台',
       enTitle: 'Workbench',
       icon: "icon_workbench",
-
+      notShowChildren: true
+    }
+  },
+  // 子子级
+  '/studentDashboard': {
+    path: "studentDashboard",
+    name: "studentDashboard",
+    component: "pages/student",
+    meta: {
+      title: '工作台',
+      enTitle: 'Workbench',
+      icon: "icon_workbench",
+    }
+  },
+  // 子子级
+  '/schoolDashboard': {
+    path: "schoolDashboard",
+    name: "schoolDashboard",
+    component: "pages/school",
+    meta: {
+      title: '工作台',
+      enTitle: 'Workbench',
+      icon: "icon_workbench",
+    }
+  },
+  // 子子级
+  '/adminDashboard': {
+    path: "adminDashboard",
+    name: "adminDashboard",
+    component: "pages/admin",
+    meta: {
+      title: '工作台',
+      enTitle: 'Workbench',
+      icon: "icon_workbench",
+    }
+  },
+  // 子子级
+  '/schedules': {
+    path: "schedules",
+    name: "schedules",
+    component: "pages/schedules",
+    meta: {
+      title: '工作台',
+      enTitle: 'Workbench',
+      icon: "icon_workbench",
     }
   },
   // 子级
@@ -59,7 +103,51 @@ export default {
       title: '生涯辅导',
       enTitle: 'Life Coach',
       icon: "icon_counseling",
-
+      notShowChildren: true
+    }
+  },
+  // 子子级
+  '/baseInfo': {
+    path: "baseInfo",
+    name: "baseInfo",
+    component: "pages/baseInfo",
+    meta: {
+      title: '生涯辅导',
+      enTitle: 'Life Coach',
+      icon: "icon_counseling",
+    }
+  },
+  // 子子级
+  '/onlineTest': {
+    path: "onlineTest",
+    name: "onlineTest",
+    component: "pages/test",
+    meta: {
+      title: '生涯辅导',
+      enTitle: 'Life Coach',
+      icon: "icon_counseling",
+    }
+  },
+  // 子子级
+  '/consultLive': {
+    path: "consultLive",
+    name: "consultLive",
+    component: "pages/match",
+    meta: {
+      title: '生涯辅导',
+      enTitle: 'Life Coach',
+      icon: "icon_counseling",
+    }
+  },
+  // 子子级
+  '/getReport': {
+    path: "getReport",
+    name: "getReport",
+    component: "pages/report",
+    meta: {
+      title: '生涯辅导',
+      enTitle: 'Life Coach',
+      icon: "icon_counseling",
     }
   },
   // 子级
@@ -83,7 +171,40 @@ export default {
       title: '学生管理',
       enTitle: 'Student Manage',
       icon: "icon_student",
-
+      notShowChildren: true
+    }
+  },
+  // 子子级
+  '/studentsList': {
+    path: "studentsList",
+    name: "studentsList",
+    component: "pages/list",
+    meta: {
+      title: '学生管理',
+      enTitle: 'Student Manage',
+      icon: "icon_student",
+    }
+  },
+  // 子子级
+  '/studentsDetail': {
+    path: "studentsDetail",
+    name: "studentsDetail",
+    component: "pages/detail",
+    meta: {
+      title: '学生管理',
+      enTitle: 'Student Manage',
+      icon: "icon_student",
+    }
+  },
+  // 子子级
+  '/studentsProcess': {
+    path: "studentsProcess",
+    name: "studentsProcess",
+    component: "pages/process",
+    meta: {
+      title: '学生管理',
+      enTitle: 'Student Manage',
+      icon: "icon_student",
     }
   },
   // 子级
@@ -95,7 +216,29 @@ export default {
       title: '生涯档案',
       enTitle: 'Student Manage',
       icon: "icon_archives",
-
+      notShowChildren: true
+    }
+  },
+  // 子子级
+  '/archivesList': {
+    path: "archivesList",
+    name: "archivesList",
+    component: "pages/list",
+    meta: {
+      title: '生涯档案',
+      enTitle: 'Student Manage',
+      icon: "icon_archives",
+    }
+  },
+  // 子子级
+  '/archivesDetail': {
+    path: "archivesDetail",
+    name: "archivesDetail",
+    component: "pages/detail",
+    meta: {
+      title: '生涯档案',
+      enTitle: 'Student Manage',
+      icon: "icon_archives",
     }
   },
   // 子级
@@ -154,6 +297,16 @@ export default {
     }
   },
   // 子子级
+  '/abase': {
+    path: "abase",
+    name: "abase",
+    component: "pages/abase",
+    meta: {
+      title: "基本设置",
+      enTitle: "Base Setting",
+    }
+  },
+  // 子子级
   '/account': {
     path: "account",
     name: "account",
@@ -184,6 +337,16 @@ export default {
       enTitle: 'Accounts Manage',
       icon: "icon_accounts",
       notShowChildren: true
+    }
+  },
+  // 子子级
+  '/schoolaccount': {
+    path: "schoolaccount",
+    name: "schoolaccount",
+    component: "pages/school",
+    meta: {
+      title: "学校设置",
+      enTitle: "School Setting",
     }
   },
   // 子子级
@@ -236,7 +399,6 @@ export default {
       title: "直播咨询",
       enTitle: 'Live Consult',
       icon: "icon_live",
-
     }
   },
   // 子级
@@ -249,7 +411,29 @@ export default {
       title: "学生档案",
       enTitle: 'Student Files',
       icon: "icon_files",
-
+      notShowChildren: true
+    }
+  },
+  // 子子级
+  '/filesList': {
+    path: "filesList",
+    name: "filesList",
+    component: "pages/list",
+    meta: {
+      title: "学生档案",
+      enTitle: 'Student Files',
+      icon: "icon_files",
+    }
+  },
+  // 子子级
+  '/filesDetail': {
+    path: "filesDetail",
+    name: "filesDetail",
+    component: "pages/detail",
+    meta: {
+      title: "学生档案",
+      enTitle: 'Student Files',
+      icon: "icon_files",
     }
   },
   // 子级
@@ -347,6 +531,28 @@ export default {
     meta: {
       title: "学校管理",
       enTitle: "School Management",
+    }
+  },
+  // 子级
+  '/consultant': {
+    path: "consultant",
+    name: "consultant",
+    component: "Consultant",
+    meta: {
+      title: "咨询师管理",
+      enTitle: 'Consultant Management',
+      icon: "icon_consultant",
+    }
+  },
+  // 子级
+  '/playback': {
+    path: "playback",
+    name: "playback",
+    component: "Playback",
+    meta: {
+      title: "咨询回看",
+      enTitle: 'Consult Playback',
+      icon: "icon_playback",
     }
   },
   // 子级

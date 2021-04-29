@@ -1,5 +1,5 @@
 <template>
-  <div class="Detail">
+  <div class="Detail" v-if="info">
     <div class="content">
       <div class="content-item baseInfoBox">
         <div class="title-box">
@@ -112,12 +112,21 @@ export default {
       step3: "",
     };
   },
+  watch: {
+    info(val) {
+      if (!val) return;
+      this.$emit("setSuffixMenu", [this.info.name]);
+      this.step1 = this.info.step1;
+      this.step2 = this.info.step2;
+      this.step3 = this.info.step3;
+    },
+  },
   mounted() {
+    if (!this.info) return;
     this.$emit("setSuffixMenu", [this.info.name]);
     this.step1 = this.info.step1;
     this.step2 = this.info.step2;
     this.step3 = this.info.step3;
-    console.log(this.info);
   },
   methods: {
     setStep1(val) {

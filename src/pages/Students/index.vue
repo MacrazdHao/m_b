@@ -1,36 +1,45 @@
 <template>
-  <div class="Student">
-    <List v-if="!detail" @toDetail="toDetail" />
-    <Detail v-else @closeDetail="closeDetail" @setSuffixMenu="setSuffixMenu" :info="detailInfo" />
+  <div class="Student" v-if="detailInfo">
+    <router-view
+      @setSuffixMenu="setSuffixMenu"
+      @toProcess="toProcess"
+      @toDetail="toDetail"
+      @closeDetail="backToList"
+      :info="detailInfo"
+    />
   </div>
 </template>
 
 <script>
-import List from "./content/list";
-import Detail from "./content/detail";
+import Bus from "./utils/bus";
 export default {
-  components: {
-    List,
-    Detail,
-  },
   data() {
     return {
       detailInfo: null,
       detail: false,
+      process: false,
     };
+  },
+  mounted() {
+    this.detailInfo = Bus.getStudentInfo() || null;
   },
   methods: {
     setSuffixMenu(arr) {
       this.$emit("setSuffixMenu", arr);
     },
     toDetail(info) {
-      this.detail = true;
       this.detailInfo = info;
+      Bus.setStudentInfo(info);
+      this.$router.push({ path: "/index/students/studentsDetail" });
     },
-    closeDetail() {
-      this.detail = false;
-      this.detailInfo = null;
+    toProcess(info) {
+      this.detailInfo = info;
+      Bus.setStudentInfo(info);
+      this.$router.push({ path: "/index/students/studentsProcess" });
     },
+    backToList() {
+      this.$router.push({ path: "/index/students/studentsList" });
+    }
   },
 };
 </script>

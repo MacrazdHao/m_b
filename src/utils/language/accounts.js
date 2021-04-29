@@ -18,6 +18,19 @@ export default {
       },
       createButton: '生成账号'
     },
+    school: {
+      title: '学校设置',
+      parentsUserLabel: '学校账号',
+      parentsUserPlaceholder: '请输入账号，账号可以由英文或数字组成',
+      passwordLabel: '密码',
+      passwordPlaceholder: '请输入密码',
+      passwordTips: '密码长度8-20位，包含大小写字母，并且至少包含数字和符号中的一种',
+      nameLabel: '学校名称',
+      namePlaceholder: '请输入学校名称',
+      createUserLabel: '生成账号',
+      createUserPlaceholder: '',
+      createButton: '生成账号'
+    },
     teacher: {
       title: '账号设置',
       parentsUserLabel: '老师账号',

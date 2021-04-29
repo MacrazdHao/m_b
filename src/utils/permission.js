@@ -9,7 +9,7 @@ import { getToken } from '@/utils/auth' // get token from cookie
 // console.log(process.env)
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/', '/register', '/register2', '/forget', '/reset', '/contact', '/parents'] // no redirect whitelist
+const whiteList = ['/', '/register', '/register2', '/forget', '/reset', '/contact', '/parents', '/adminEntry'] // no redirect whitelist
 
 let getMessages = () => {
   if (!window.msgTimeout) return;

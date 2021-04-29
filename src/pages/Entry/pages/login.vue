@@ -108,12 +108,12 @@ export default {
     },
     login() {
       if (this.username == "") {
-        this.$message.warning(
+        this.$messagege.warning(
           this.$t("entry.login.alertTips.usernameErrorTips")
         );
         return;
       } else if (this.password == "") {
-        this.$message.warning(
+      this.$messagesage.warning(
           this.$t("entry.login.alertTips.passwordErrorTips")
         );
         return;
@@ -150,9 +150,9 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          // this.$message.warning(
-          //   this.$t("entry.login.alertTips.loginErrorTips")
-          // );
+      this.$messageessage.warning(
+            this.$t("entry.login.alertTips.loginErrorTips")
+          );
           return;
         });
     },

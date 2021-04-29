@@ -96,6 +96,7 @@
 <script>
 import SInput from "../components/input";
 import SButton from "@/components/common/button.vue";
+import Bus from "../utils/bus";
 export default {
   components: {
     SInput,
@@ -152,14 +153,16 @@ export default {
       },
     };
   },
+  mounted() {
+    // Bus.clearSchoolInfo();
+    // Bus.clearStudentInfo();
+  },
   methods: {
     toDetail(info) {
       this.$router.push({
-        name: 'student',
-        params: {
-          school: info,
-        },
+        name: "student",
       });
+      Bus.setSchoolInfo(info);
     },
     overline(text = "") {
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");

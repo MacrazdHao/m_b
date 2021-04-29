@@ -210,6 +210,7 @@ import CButton from "@/components/common/button.vue";
 import FormInput from "../components/input.vue";
 // import FormRadio from "../components/radio.vue";
 import FormTextarea from "../components/textarea.vue";
+import Bus from "../utils/bus";
 export default {
   components: {
     // Dialog,
@@ -226,15 +227,13 @@ export default {
   },
   computed: {
     info() {
-      console.log(this.$route);
-      return this.$route.params.info;
+      return Bus.getStudentInfo();
     },
   },
   mounted() {
-    if (!this.$route.params.school || !this.$route.params.info) {
-      this.$router.push({
-        path: "/index/school/schoollist",
-      });
+    // 后期修改如果能够通过请求获取到学生详情，则传query到这个页面即可，不再需要使用Bus
+    if (!this.info) {
+      this.$router.go(-1);
       return;
     }
     let consultCheckbox = [];
@@ -245,10 +244,7 @@ export default {
       });
     });
     this.consultCheckbox = consultCheckbox;
-    this.$emit("setSuffixMenu", [
-      this.$route.params.school.school,
-      this.info.name,
-    ]);
+    this.$emit("setSuffixMenu", [Bus.getSchoolInfo().school, this.info.name]);
   },
   methods: {
     selectItem(index) {
@@ -259,7 +255,7 @@ export default {
     goBack() {
       switch (this.page) {
         case 1:
-          return this.$route.go(-1);
+          return this.$router.go(-1);
         case 2:
           return this.page--;
       }

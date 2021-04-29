@@ -151,12 +151,18 @@
               </p>
             </template>
             <template slot-scope="scope">
-              <p
+              <!-- <p
                 class="tableRow-text tableRow-button"
                 @click="toDetail(scope.row)"
               >
-                {{ $t("students.list.table.watchButton") }}
-              </p>
+                {{ $t("students.list.table.moreButton") }}
+              </p> -->
+              <FixedMenu
+                :menuId="`schoolS${scope.$index}${new Date().getTime()}`"
+                :text="$t('students.list.table.moreButton')"
+                :menu="optionsMenu"
+                :extra="scope.row"
+              />
             </template>
           </el-table-column>
         </el-table>
@@ -193,10 +199,12 @@
 <script>
 import SInput from "../components/input";
 import SButton from "@/components/common/button.vue";
+import FixedMenu from "@/components/common/fixedMenu.vue";
 export default {
   components: {
     SInput,
     SButton,
+    FixedMenu,
   },
   data() {
     return {
@@ -392,9 +400,26 @@ export default {
         size: 10,
         current: 1,
       },
+      optionsMenu: [
+        {
+          text: this.$t("students.list.table.optionsMenu.processButton"),
+          callback: (info) => {
+            this.toProcess(info);
+          },
+        },
+        {
+          text: this.$t("students.list.table.optionsMenu.watchButton"),
+          callback: (info) => {
+            this.toDetail(info);
+          },
+        },
+      ],
     };
   },
   methods: {
+    toProcess(info) {
+      this.$emit("toProcess", info);
+    },
     toDetail(info) {
       this.$emit("toDetail", info);
     },
@@ -462,6 +487,9 @@ export default {
     }
     .el-table th {
       background-color: #f6f8fa;
+    }
+    .el-table .cell {
+      overflow: initial;
     }
   }
 }

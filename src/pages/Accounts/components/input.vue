@@ -6,6 +6,7 @@
       v-model="valueTmp"
       :placeholder="placeholder"
       :disabled="disabled"
+      :type="type"
       @focus="focus = true"
       @blur="focus = false"
     />
@@ -23,6 +24,7 @@ export default {
     "copyTips",
     "copyErrTips",
     "customStyle",
+    "type"
   ],
   data() {
     return {
