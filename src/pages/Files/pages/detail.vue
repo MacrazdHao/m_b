@@ -1,5 +1,5 @@
 <template>
-  <div class="Detail">
+  <div class="Detail" v-if="info">
     <div class="content">
       <div class="content-item baseInfoBox">
         <div class="title-box">
@@ -125,7 +125,14 @@ export default {
     FormTextarea,
     CButton,
   },
+  watch: {
+    info(val) {
+      if (!val) return;
+      this.$emit("setSuffixMenu", [this.info.name]);
+    },
+  },
   mounted() {
+    if (!this.info) return;
     this.$emit("setSuffixMenu", [this.info.name]);
   },
   methods: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="Student" v-if="detailInfo">
+  <div class="Student">
     <router-view
       @setSuffixMenu="setSuffixMenu"
       @toProcess="toProcess"
@@ -16,8 +16,6 @@ export default {
   data() {
     return {
       detailInfo: null,
-      detail: false,
-      process: false,
     };
   },
   mounted() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="Process">
+  <div class="Process" v-if="info">
     <div class="content">
       <div class="content-item baseInfoBox">
         <div class="title-box">
@@ -100,12 +100,18 @@ export default {
       ],
     };
   },
+  watch: {
+    info(val) {
+      if (!val) return;
+      this.$emit("setSuffixMenu", [this.info.name]);
+    },
+  },
   mounted() {
+    if (!this.info) return;
     this.$emit("setSuffixMenu", [this.info.name]);
   },
   methods: {
-    saveInfo() {
-    },
+    saveInfo() {},
     goback() {
       this.$emit("closeDetail");
     },

@@ -51,7 +51,7 @@
                     'button',
                     pageName == item2.meta.id ? 'button--selected' : '',
                   ]"
-                  v-if="index2 > 0"
+                  v-if="index2 > 0&&!item2.meta.notShowThisChildren"
                   @click="
                     selectItem(
                       [item, item2],

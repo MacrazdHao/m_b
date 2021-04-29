@@ -1,14 +1,14 @@
-let studentInfo = JSON.parse(localStorage.getItem('studentsInfo'));
+let studentInfo = JSON.parse(localStorage.getItem('studentsInfo-files'));
 export default {
   setStudentInfo: (info) => {
-    localStorage.setItem('studentsInfo', JSON.stringify(info));
+    localStorage.setItem('studentsInfo-files', JSON.stringify(info));
     studentInfo = info;
   },
   getStudentInfo: () => {
     return studentInfo;
   },
   clearStudentInfo: () => {
-    localStorage.removeItem('studentsInfo');
+    localStorage.removeItem('studentsInfo-files');
     studentInfo = null;
   }
 }

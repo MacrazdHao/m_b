@@ -1,5 +1,5 @@
 <template>
-  <div class="Detail">
+  <div class="Detail" v-if="info">
     <div class="content">
       <div class="content-item baseInfoBox">
         <div class="title-box">
@@ -99,13 +99,97 @@
           />
         </div>
       </div>
+      <div class="content-item baseInfoBox">
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ $t("management.testTitle") }}</p>
+        </div>
+        <div class="form">
+          <FormTextarea
+            class="formInput"
+            :label="$t('management.testReportLabel')"
+            :placeholder="$t('management.testReportPlaceholder')"
+            :value="info.testReport"
+            :maxLength="500"
+          />
+        </div>
+      </div>
+      <div class="content-item baseInfoBox">
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ $t("management.consultTitle") }}</p>
+        </div>
+        <div class="consultSetting">
+          <p class="label">{{ $t("management.consultTitle") }}：</p>
+          <div class="consult-item">
+            <div class="timeBox">
+              <p class="label">{{ $t(`management.consultLabel${0}`) }}</p>
+              <FormInput
+                class="input"
+                :placeholder="$t('management.timePlaceholder')"
+                :value="consultCheckbox[0].time"
+                :disabled="
+                  !(
+                    consultCheckbox[0].selected &&
+                    consultCheckbox[0].status != 1
+                  )
+                "
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-item baseInfoBox">
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ $t("management.careerTitle") }}</p>
+        </div>
+        <div class="form">
+          <FormTextarea
+            class="formInput"
+            :label="$t('management.careerIntroduceLabel')"
+            :placeholder="$t('management.careerIntroducePlaceholder')"
+            :value="introduce"
+            :maxLength="500"
+          />
+          <FormTextarea
+            class="formInput longInput"
+            :label="$t('management.careerDiscussLabel')"
+            :placeholder="$t('management.careerDiscussPlaceholder')"
+            :value="discuss"
+            :height="500"
+            :maxLength="500"
+          />
+          <FormTextarea
+            class="formInput longInput"
+            :label="$t('management.careerSummaryLabel')"
+            :placeholder="$t('management.careerSummaryPlaceholder')"
+            :value="summary"
+            :height="500"
+            :maxLength="500"
+          />
+          <FormTextarea
+            class="formInput longInput"
+            :label="$t('management.careerAdviseLabel')"
+            :placeholder="$t('management.careerAdvisePlaceholder')"
+            :value="advise"
+            :height="500"
+            :maxLength="500"
+          />
+        </div>
+      </div>
     </div>
     <div class="buttonBox">
       <CButton
         class="button"
-        :text="$t('students.detail.backButton')"
-        theme="blue"
+        :text="$t('management.cancelButton')"
         @btnClick="goBack"
+      />
+      <CButton
+        class="button"
+        :text="$t('management.saveButton')"
+        theme="blue"
+        @btnClick="saveInfo"
       />
     </div>
   </div>
@@ -125,13 +209,51 @@ export default {
     FormTextarea,
     CButton,
   },
+  data() {
+    return {
+      consultCheckbox: [],
+      introduce: "",
+      discuss: "",
+      summary: "",
+      advise: "",
+    };
+  },
+  watch: {
+    info(val) {
+      if (!val) return;
+      let consultCheckbox = [];
+      this.info.consult.forEach((item, index) => {
+        consultCheckbox.push({
+          selected: item.time != null,
+          ...item,
+        });
+      });
+      this.consultCheckbox = consultCheckbox;
+      this.$emit("setSuffixMenu", [this.info.name]);
+    },
+  },
   mounted() {
+    if (!this.info) return;
+    let consultCheckbox = [];
+    this.info.consult.forEach((item, index) => {
+      consultCheckbox.push({
+        selected: item.time != null,
+        ...item,
+      });
+    });
+    this.consultCheckbox = consultCheckbox;
     this.$emit("setSuffixMenu", [this.info.name]);
   },
   methods: {
+    selectItem(index) {
+      this.consultCheckbox[index].selected = !this.consultCheckbox[index]
+        .selected;
+      this.$forceUpdate();
+    },
     goBack() {
       this.$emit("closeDetail");
     },
+    saveInfo() {},
   },
 };
 </script>
@@ -218,6 +340,68 @@ export default {
         }
         .formInput + .formInput {
           margin-top: 24px;
+        }
+        .longInput {
+          height: 500px;
+        }
+      }
+      .consultSetting {
+        display: flex;
+        flex-direction: row;
+        margin-left: 10px;
+        margin-top: 22px;
+        .label {
+          font-size: 14px;
+          color: #333333;
+          line-height: 32px;
+          white-space: nowrap;
+        }
+        .consult-item {
+          margin-left: 29px;
+          width: 100%;
+          max-width: 588px;
+          .timeBox + .timeBox {
+            margin-top: 24px;
+          }
+          .timeBox {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            white-space: nowrap;
+            .checkbox {
+              width: 14px;
+              flex-shrink: 0;
+            }
+            img {
+              cursor: pointer;
+            }
+            .label {
+              min-width: 164px;
+              text-align: left;
+              margin-left: 10px;
+            }
+            .input {
+              padding: 5px 11px;
+              max-width: 298px;
+              // margin-left: 38px;
+            }
+            .statusBox {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              margin-left: 30px;
+              p {
+                font-size: 14px;
+                color: #666666;
+                line-height: 20px;
+                margin-left: 10px;
+              }
+              img {
+                width: 20px;
+                cursor: default;
+              }
+            }
+          }
         }
       }
     }

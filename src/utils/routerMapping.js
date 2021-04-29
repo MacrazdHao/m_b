@@ -10,7 +10,9 @@ import i18n from './language';
       title: "标题",
       enTitle: "英文标题",
       icon: "index目录下的icon",
-      notShowChildren: 是否在菜单下显示子菜单
+      notShowChildren: 是否在菜单下显示子菜单,
+      notShowThisChildren: 作为子子级是否显示在父级的子菜单中
+      group: （其他自定义）特殊分组标识
     }
   }
 }
@@ -446,7 +448,6 @@ export default {
       title: "档案管理",
       enTitle: 'File Management',
       icon: "icon_management",
-
     }
   },
   // 子子级
@@ -457,6 +458,19 @@ export default {
     meta: {
       title: "生涯档案",
       enTitle: "Counseling Files",
+      group: "counseling"
+    }
+  },
+  // 子子级
+  '/counselingDetail': {
+    path: "counselingDetail",
+    name: "counselingDetail",
+    component: "pages/counselingDetail",
+    meta: {
+      title: "生涯档案",
+      enTitle: "Counseling Files",
+      notShowThisChildren: true,
+      group: "counseling"
     }
   },
   // 子子级
@@ -467,6 +481,19 @@ export default {
     meta: {
       title: "职业发展咨询",
       enTitle: "Career Consult",
+      group: "career"
+    }
+  },
+  // 子子级
+  '/careerDetail': {
+    path: "careerDetail",
+    name: "careerDetail",
+    component: "pages/careerDetail",
+    meta: {
+      title: "职业发展咨询",
+      enTitle: "Career Consult",
+      notShowThisChildren: true,
+      group: "career"
     }
   },
   // 子子级
@@ -477,6 +504,7 @@ export default {
     meta: {
       title: "大学课程和学科咨询",
       enTitle: "Course&Subject Consult",
+      notShowThisChildren: true
     }
   },
   // 子子级
@@ -487,6 +515,7 @@ export default {
     meta: {
       title: "大学建议和偏好咨询",
       enTitle: "Advise&Hobby Consult",
+      notShowThisChildren: true
     }
   },
   // 子级

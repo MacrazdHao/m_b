@@ -1,7 +1,8 @@
 <template>
-  <div class="Student">
-    <router-view
-      @toDetail="toDetail"
+  <div class="CounselingList">
+    <List v-if="!detail" @toDetail="toDetail" />
+    <Detail
+      v-else
       @closeDetail="closeDetail"
       @setSuffixMenu="setSuffixMenu"
       :info="detailInfo"
@@ -10,35 +11,37 @@
 </template>
 
 <script>
-import Bus from "./utils/bus";
+// import List from "../content/counselingList";
+// import Detail from "../content/counselingDetail";
 export default {
+  // components: {
+  //   List,
+  //   Detail,
+  // },
   data() {
     return {
       detailInfo: null,
       detail: false,
     };
   },
-  mounted() {
-    this.detailInfo = Bus.getStudentInfo() || null;
-  },
   methods: {
     setSuffixMenu(arr) {
       this.$emit("setSuffixMenu", arr);
     },
     toDetail(info) {
+      this.detail = true;
       this.detailInfo = info;
-      Bus.setStudentInfo(info);
-      this.$router.push({ path: "/index/files/filesDetail" });
     },
     closeDetail() {
-      this.$router.push({ path: "/index/files/filesList" });
+      this.detail = false;
+      this.detailInfo = null;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.Student {
+.CounselingList {
   display: flex;
   flex-direction: row;
   width: 100%;

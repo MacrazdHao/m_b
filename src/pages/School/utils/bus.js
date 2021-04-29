@@ -1,12 +1,12 @@
-let schoolInfo = JSON.parse(localStorage.getItem('schoolInfo'));
-let studentInfo = JSON.parse(localStorage.getItem('studentInfo'));
+let schoolInfo = JSON.parse(localStorage.getItem('schoolInfo-school'));
+let studentInfo = JSON.parse(localStorage.getItem('studentInfo-school'));
 export default {
   setSchoolInfo: (info) => {
-    localStorage.setItem('schoolInfo', JSON.stringify(info));
+    localStorage.setItem('schoolInfo-school', JSON.stringify(info));
     schoolInfo = info;
   },
   setStudentInfo: (info) => {
-    localStorage.setItem('studentInfo', JSON.stringify(info));
+    localStorage.setItem('studentInfo-school', JSON.stringify(info));
     studentInfo = info;
   },
   getSchoolInfo: () => {
@@ -16,11 +16,11 @@ export default {
     return studentInfo;
   },
   clearSchoolInfo: () => {
-    localStorage.removeItem('schoolInfo');
+    localStorage.removeItem('schoolInfo-school');
     schoolInfo = null;
   },
   clearStudentInfo: () => {
-    localStorage.removeItem('studentInfo');
+    localStorage.removeItem('studentInfo-school');
     studentInfo = null;
   }
 }

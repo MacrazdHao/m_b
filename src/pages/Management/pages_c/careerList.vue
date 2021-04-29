@@ -1,17 +1,22 @@
 <template>
-  <div class="Student">
+  <div class="CounselingList">
     <List v-if="!detail" @toDetail="toDetail" />
-    <Detail v-else @closeDetail="closeDetail" @setSuffixMenu="setSuffixMenu" :info="detailInfo" />
+    <Detail
+      v-else
+      @closeDetail="closeDetail"
+      @setSuffixMenu="setSuffixMenu"
+      :info="detailInfo"
+    />
   </div>
 </template>
 
 <script>
-import List from "./content/list";
-import Detail from "./content/detail";
+// import List from "../content/careerList";
+// import Detail from "../content/careerDetail";
 export default {
   components: {
-    List,
-    Detail,
+    // List,
+    // Detail,
   },
   data() {
     return {
@@ -36,7 +41,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.Student {
+.CounselingList {
   display: flex;
   flex-direction: row;
   width: 100%;

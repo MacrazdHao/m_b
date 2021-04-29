@@ -1,5 +1,5 @@
 <template>
-  <div class="Detail">
+  <div class="Detail" v-if="info">
     <div class="content">
       <div class="content-item baseInfoBox">
         <div class="title-box">
@@ -122,60 +122,36 @@
         <div class="consultSetting">
           <p class="label">{{ $t("management.consultTitle") }}：</p>
           <div class="consult-item">
-            <div class="timeBox">
-              <p class="label">{{ $t(`management.consultLabel${0}`) }}</p>
+            <div
+              class="timeBox"
+              v-for="(item, index) in consultCheckbox"
+              :key="index"
+            >
+              <img
+                class="checkbox"
+                :src="
+                  require(`@/assets/archives/icon_checkbox${
+                    item.selected ? '_selected' : ''
+                  }.svg`)
+                "
+                v-if="item.status != 1"
+                @click="selectItem(index)"
+              />
+              <div class="checkbox" v-else>&nbsp;</div>
+              <p class="label">{{ $t(`management.consultLabel${index}`) }}</p>
               <FormInput
                 class="input"
                 :placeholder="$t('management.timePlaceholder')"
-                :value="consultCheckbox[0].time"
-                :disabled="
-                  !(
-                    consultCheckbox[0].selected &&
-                    consultCheckbox[0].status != 1
-                  )
-                "
+                :value="item.time"
+                :disabled="!(item.selected && item.status != 1)"
+                :timer="true"
               />
+              <div class="statusBox" v-if="item.status == 1">
+                <img src="@/assets/counseling/report.svg" />
+                <p>{{ $t("management.finishTips") }}</p>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="content-item baseInfoBox">
-        <div class="title-box">
-          <div class="leftline"></div>
-          <p class="title">{{ $t("management.careerTitle") }}</p>
-        </div>
-        <div class="form">
-          <FormTextarea
-            class="formInput"
-            :label="$t('management.careerIntroduceLabel')"
-            :placeholder="$t('management.careerIntroducePlaceholder')"
-            :value="introduce"
-            :maxLength="500"
-          />
-          <FormTextarea
-            class="formInput longInput"
-            :label="$t('management.careerDiscussLabel')"
-            :placeholder="$t('management.careerDiscussPlaceholder')"
-            :value="discuss"
-            :height="500"
-            :maxLength="500"
-          />
-          <FormTextarea
-            class="formInput longInput"
-            :label="$t('management.careerSummaryLabel')"
-            :placeholder="$t('management.careerSummaryPlaceholder')"
-            :value="summary"
-            :height="500"
-            :maxLength="500"
-          />
-          <FormTextarea
-            class="formInput longInput"
-            :label="$t('management.careerAdviseLabel')"
-            :placeholder="$t('management.careerAdvisePlaceholder')"
-            :value="advise"
-            :height="500"
-            :maxLength="500"
-          />
         </div>
       </div>
     </div>
@@ -212,13 +188,24 @@ export default {
   data() {
     return {
       consultCheckbox: [],
-      introduce: "",
-      discuss: "",
-      summary: "",
-      advise: "",
     };
   },
+  watch: {
+    info(val) {
+      if (!val) return;
+      let consultCheckbox = [];
+      this.info.consult.forEach((item, index) => {
+        consultCheckbox.push({
+          selected: item.time != null,
+          ...item,
+        });
+      });
+      this.consultCheckbox = consultCheckbox;
+      this.$emit("setSuffixMenu", [this.info.name]);
+    },
+  },
   mounted() {
+    if (!this.info) return;
     let consultCheckbox = [];
     this.info.consult.forEach((item, index) => {
       consultCheckbox.push({
@@ -325,9 +312,6 @@ export default {
         }
         .formInput + .formInput {
           margin-top: 24px;
-        }
-        .longInput {
-          height: 500px;
         }
       }
       .consultSetting {

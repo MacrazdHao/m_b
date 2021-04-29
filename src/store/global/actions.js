@@ -16,114 +16,119 @@ export default {
       let res = {
         way1: [{
           path: '/index',
-          children: [{
-            path: '/dashboard',
-            children: [{
-              path: '/schoolDashboard'
+          children: [
+            {
+              path: '/dashboard',
+              children: [{
+                path: '/schoolDashboard'
+              }, {
+                path: '/schedules'
+              }]
             }, {
-              path: '/schedules'
-            }]
-          }, {
-            path: '/counseling',
-            children: [{
-              path: '/baseInfo',
+              path: '/counseling',
+              children: [{
+                path: '/baseInfo',
+              }, {
+                path: '/onlineTest',
+              }, {
+                path: '/consultLive',
+                meta: { step: 4 }
+              }, {
+                path: '/getReport',
+              }]
             }, {
-              path: '/onlineTest',
+              path: '/knowledge'
             }, {
-              path: '/consultLive',
-              meta: { step: 4 }
+              path: '/students',
+              children: [{
+                path: '/studentsList'
+              }, {
+                path: '/studentsDetail'
+              }, {
+                path: '/studentsProcess'
+              }]
             }, {
-              path: '/getReport',
-            }]
-          }, {
-            path: '/knowledge'
-          }, {
-            path: '/students',
-            children: [{
-              path: '/studentsList'
+              path: '/archives',
+              children: [{
+                path: '/archivesList'
+              }, {
+                path: '/archivesDetail'
+              }]
             }, {
-              path: '/studentsDetail'
+              path: '/messages'
             }, {
-              path: '/studentsProcess'
-            }]
-          }, {
-            path: '/archives',
-            children: [{
-              path: '/archivesList'
+              path: "/personal",
+              children: [{
+                path: "/base",
+              }, {
+                path: "/sbase",
+              }, {
+                path: "/cbase",
+              }, {
+                path: "/abase",
+              }, {
+                path: "/account",
+              }, {
+                path: "/safe",
+              }]
             }, {
-              path: '/archivesDetail'
-            }]
-          }, {
-            path: '/messages'
-          }, {
-            path: "/personal",
-            children: [{
-              path: "/base",
+              path: "/accounts",
+              children: [{
+                path: "/admin",
+              }, {
+                path: "/schoolaccount",
+              }, {
+                path: "/teacher",
+              }, {
+                path: "/acountlist",
+              }, {
+                path: "/invitation",
+              }]
             }, {
-              path: "/sbase",
+              path: '/live'
             }, {
-              path: "/cbase",
+              path: '/files',
+              children: [{
+                path: '/filesList'
+              }, {
+                path: '/filesDetail'
+              }]
+            },
+            {
+              path: "/management",
+              children: [{
+                path: "/counselinglist",
+              }, {
+                path: "/counselingDetail",
+              }, {
+                path: "/careerlist",
+              }, {
+                path: "/careerDetail",
+              }, {
+                path: "/courselist",
+              }, {
+                path: "/adviselist",
+              }]
+            },
+            {
+              path: "/school",
+              children: [{
+                path: "/schoollist",
+              }, {
+                path: "/student",
+              }, {
+                path: "/sdetail",
+              }]
             }, {
-              path: "/abase",
+              path: '/consultant'
             }, {
-              path: "/account",
+              path: '/playback'
             }, {
-              path: "/safe",
-            }]
-          }, {
-            path: "/accounts",
-            children: [{
-              path: "/admin",
-            }, {
-              path: "/schoolaccount",
-            }, {
-              path: "/teacher",
-            }, {
-              path: "/acountlist",
-            }, {
-              path: "/invitation",
-            }]
-          }, {
-            path: '/live'
-          }, {
-            path: '/files',
-            children: [{
-              path: '/filesList'
-            }, {
-              path: '/filesDetail'
-            }]
-          }, {
-            path: "/management",
-            children: [{
-              path: "/counselinglist",
-            }, {
-              path: "/careerlist",
-            }, {
-              path: "/courselist",
-            }, {
-              path: "/adviselist",
-            }]
-          }, {
-            path: "/school",
-            children: [{
-              path: "/schoollist",
-            }, {
-              path: "/student",
-            }, {
-              path: "/sdetail",
-            }]
-          }, {
-            path: '/consultant'
-          }, {
-            path: '/playback'
-          }, {
-            path: "/testing",
-            children: [{
-              path: "/testing1",
-            }, {
-              path: "/counseling",
-            }]
-          },]
+              path: "/testing",
+              children: [{
+                path: "/testing1",
+              }]
+            },]
         }, {
           path: '/living'
         }]
