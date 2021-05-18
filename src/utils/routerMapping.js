@@ -12,7 +12,7 @@
       icon: "index目录下的icon",
       notShowChildren: 是否在菜单下显示子菜单,
       notShowThisChildren: 作为子子级是否显示在父级的子菜单中
-      group: （其他自定义）子子级特殊分组标识，和notShowThisChildren配合使用（B作为A子级，但路由级别又与A同级的情况下使用）
+      group: （其他自定义）子子级特殊分组标识，和notShowThisChildren配合使用（B作为A子级，但实际路由级别又与A同级的情况下使用）
       groupParent: （其他自定义）同一分组下的主路由（入口）
     }
   }

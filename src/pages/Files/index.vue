@@ -1,11 +1,13 @@
 <template>
   <div class="Student">
-    <router-view
-      @toDetail="toDetail"
-      @closeDetail="closeDetail"
-      @setSuffixMenu="setSuffixMenu"
-      :info="detailInfo"
-    />
+    <transition name="slide-fade2">
+      <router-view
+        @toDetail="toDetail"
+        @closeDetail="closeDetail"
+        @setSuffixMenu="setSuffixMenu"
+        :info="detailInfo"
+      />
+    </transition>
   </div>
 </template>
 

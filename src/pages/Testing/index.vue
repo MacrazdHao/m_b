@@ -1,6 +1,8 @@
 <template>
   <div class="Testing">
-    <router-view @setSuffixMenu="setSuffixMenu" />
+    <transition name="slide-fade2">
+      <router-view @setSuffixMenu="setSuffixMenu" />
+    </transition>
   </div>
 </template>
 

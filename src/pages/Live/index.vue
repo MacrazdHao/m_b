@@ -220,7 +220,7 @@ export default {
         this.$message.warning("直播暂未开始，请留意直播时间");
         return;
       }
-      this.$router.push({ name: "living" });
+      this.$router.push({ name: "living", query: { roomId: "999" } });
     },
     toStatusText(code) {
       switch (code) {

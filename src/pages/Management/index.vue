@@ -1,11 +1,13 @@
 <template>
   <div class="Management">
-    <router-view
-      @setSuffixMenu="setSuffixMenu"
-      @toDetail="toDetail"
-      @closeDetail="closeDetail"
-      :info="detailInfo"
-    />
+    <transition name="slide-fade2">
+      <router-view
+        @setSuffixMenu="setSuffixMenu"
+        @toDetail="toDetail"
+        @closeDetail="closeDetail"
+        :info="detailInfo"
+      />
+    </transition>
   </div>
 </template>
 

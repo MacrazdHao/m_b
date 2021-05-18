@@ -1,17 +1,16 @@
 <template>
   <div class="Error">
-    <router-view />
+    <transition name="slide-fade2">
+      <router-view />
+    </transition>
   </div>
 </template>
 
 <script>
-export default {
-  
-}
+export default {};
 </script>
 
 <style lang="scss" scoped>
 .Error {
-
 }
 </style>

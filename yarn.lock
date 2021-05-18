@@ -55,6 +55,11 @@ acorn@^5.0.0, acorn@^5.3.0:
   resolved "https://registry.npm.taobao.org/acorn/download/acorn-5.7.4.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Facorn%2Fdownload%2Facorn-5.7.4.tgz#3e8d8a9947d0599a1796d10225d7432f4a4acf5e"
   integrity sha1-Po2KmUfQWZoXltECJddDL0pKz14=
 
+agora-rtc-sdk@^3.3.1:
+  version "3.5.2"
+  resolved "https://registry.nlark.com/agora-rtc-sdk/download/agora-rtc-sdk-3.5.2.tgz#b52e3d33532b83d55fd716ced034a0777d291685"
+  integrity sha1-tS49M1Mrg9Vf1xbO0DSgd30pFoU=
+
 ajv-keywords@^3.1.0, ajv-keywords@^3.5.2:
   version "3.5.2"
   resolved "https://registry.npm.taobao.org/ajv-keywords/download/ajv-keywords-3.5.2.tgz?cache=0&sync_timestamp=1615647424956&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fajv-keywords%2Fdownload%2Fajv-keywords-3.5.2.tgz#31f29da5ab6e00d1c2d329acf7b5929614d5014d"

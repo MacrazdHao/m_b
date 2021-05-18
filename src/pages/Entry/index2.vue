@@ -90,7 +90,9 @@
         </div>
         <div class="white"></div>
         <div class="right">
-          <router-view style="min-height: 280px" :identity="identity" />
+          <transition name="slide-fade2">
+            <router-view style="min-height: 280px" :identity="identity" />
+          </transition>
           <p class="license">MyFellas @ 2020.all rights reserved</p>
         </div>
       </div>

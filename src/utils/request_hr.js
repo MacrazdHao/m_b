@@ -12,8 +12,6 @@ const service = axios.create({
   timeout: 5000 // request timeout
 })
 
-service.defaults.withCredentials=true;
-
 service.interceptors.request.use(
   config => {
     const token = getToken();

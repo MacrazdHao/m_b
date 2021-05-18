@@ -1,12 +1,14 @@
 <template>
   <div class="Student">
-    <router-view
-      @setSuffixMenu="setSuffixMenu"
-      @toProcess="toProcess"
-      @toDetail="toDetail"
-      @closeDetail="backToList"
-      :info="detailInfo"
-    />
+    <transition name="slide-fade2">
+      <router-view
+        @setSuffixMenu="setSuffixMenu"
+        @toProcess="toProcess"
+        @toDetail="toDetail"
+        @closeDetail="backToList"
+        :info="detailInfo"
+      />
+    </transition>
   </div>
 </template>
 
@@ -37,7 +39,7 @@ export default {
     },
     backToList() {
       this.$router.push({ path: "/index/students/studentsList" });
-    }
+    },
   },
 };
 </script>

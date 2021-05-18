@@ -84,6 +84,7 @@ function routerNext(to, next) {
   });
 }
 
+// 路由id
 var idNum = 0;
 // 组件动态路由对象
 function routerFilter(routerMap, isChild = false, parents = []) {

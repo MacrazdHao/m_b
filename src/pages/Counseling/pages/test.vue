@@ -231,8 +231,8 @@ export default {
         },
       ],
       answers: [],
-      finished: true,
-      hasReport: true,
+      finished: false,
+      hasReport: false,
     };
   },
   mounted() {

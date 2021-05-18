@@ -254,7 +254,7 @@ export default {
                   !this.childrenMenu[this.pagePath[0].meta.id]
                 );
               }
-            });
+            }, 0);
           }
         }
         if (this.$route.meta.notShowThisChildren) {
