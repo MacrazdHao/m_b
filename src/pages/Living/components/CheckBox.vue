@@ -15,7 +15,7 @@
                 <img src="@/assets/living/icon_camera2.svg" />
                 <div
                   class="checkBox-steps-item-icon-finished-icon"
-                  v-if="checkStep >= 1"
+                  v-if="checkStep > 1"
                 >
                   <img src="@/assets/living/icon_success.svg" />
                 </div>

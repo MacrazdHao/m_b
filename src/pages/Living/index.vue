@@ -6,7 +6,7 @@
           class="statusButton"
           theme="blue"
           :text="$tc('living.statusButton', status + 1)"
-          @btnClick="startLive"
+          @btnClick="toggleLive"
         />
         <div :class="['status', status == 1 ? 'status--start' : '']">
           <div class="dot"></div>
@@ -17,7 +17,7 @@
       <div class="userBox">
         <div class="userNum">
           <img src="@/assets/living/icon_user.svg" />
-          <p>1</p>
+          <p>{{ userNum }}</p>
         </div>
         <div class="user">
           <img src="@/assets/index/anna.jpg" />
@@ -28,10 +28,10 @@
       </div>
     </div>
     <div class="content">
-      <div class="menuBox">
+      <div class="menuBox" v-if="hostId == username">
         <div
           :class="['menuItem', mode == 1 ? 'menuItem--selected' : '']"
-          @click="changeMode(1)"
+          @click="changeMode(1, true)"
         >
           <img
             :src="
@@ -44,7 +44,7 @@
         </div>
         <div
           :class="['menuItem', mode == 2 ? 'menuItem--selected' : '']"
-          @click="changeMode(2)"
+          @click="changeMode(2, true)"
         >
           <img
             :src="
@@ -62,32 +62,170 @@
       </div>
       <div class="teacherLive">
         <div class="liveBox">
-          <div class="openBox" v-show="!rtc.published">
+          <div
+            class="openBox"
+            v-show="
+              (username == hostId && !rtc.published) ||
+              (!useCamera && username == hostId && rtc.published)
+            "
+          >
             <p>{{ $t("living.cameraClosing") }}</p>
             <LButton
               class="cameraButton"
               theme="blue"
               :text="$t('living.cameraButton')"
+              @btnClick="openCamera"
             />
+          </div>
+          <div
+            class="openBox"
+            v-show="rtc.remoteStreams.length == 0 && username != hostId"
+          >
+            <p>稍等片刻，导师正在赶来...</p>
+          </div>
+          <div
+            class="openBox"
+            v-show="
+              rtc.remoteStreams.length > 0 &&
+              username != hostId &&
+              remoteMuteVideo
+            "
+          >
+            <p>导师已关闭视频画面</p>
           </div>
           <div
             class="teacherVideo"
             id="teacherVideo"
-            v-show="rtc.published"
+            v-show="
+              ((localVideoFinished && username == hostId) ||
+                (remoteVideoFinished && username != hostId)) &&
+              ((rtc.published && username == hostId && useCamera) ||
+                (rtc.remoteStreams.length > 0 &&
+                  username != hostId &&
+                  !remoteMuteVideo))
+            "
           ></div>
         </div>
         <div class="voiceBox">
-          <img src="@/assets/living/icon_volume.svg" />
-          <div class="volume"></div>
+          <img
+            v-if="
+              (hostId != username && !remoteMuteAudio) ||
+              (hostId == username && !localMuteAudio)
+            "
+            src="@/assets/living/icon_volume.svg"
+            @click="toggleAudio(0)"
+          />
+          <img
+            v-else-if="
+              (hostId != username && remoteMuteAudio) ||
+              (hostId == username && localMuteAudio)
+            "
+            src="@/assets/living/icon_volume_closed.svg"
+            @click="toggleAudio(0)"
+          />
+          <div
+            class="volume"
+            v-show="
+              (hostId != username && rtc.remoteStreams.length > 0) ||
+              (hostId == username && rtc.published)
+            "
+          >
+            <div
+              :class="[
+                'volume-item',
+                (hostId == username ? localVolume : remoteVolume) >= item
+                  ? 'volume-item--green'
+                  : '',
+              ]"
+              v-for="item in 10"
+              :key="item"
+            ></div>
+          </div>
         </div>
       </div>
       <div class="studentLive">
         <div class="liveBox">
-          <div class="studentVideo" id="studentVideo"></div>
+          <div
+            class="openBox"
+            v-show="
+              (username != hostId && !rtc.published) ||
+              (!useCamera && username != hostId && rtc.published)
+            "
+          >
+            <p>{{ $t("living.cameraClosing") }}</p>
+            <LButton
+              class="cameraButton"
+              theme="blue"
+              :text="$t('living.cameraButton')"
+              @btnClick="openCamera"
+            />
+          </div>
+          <div
+            class="openBox"
+            v-show="rtc.remoteStreams.length == 0 && username == hostId"
+          >
+            <p>稍等片刻，学生马上到...</p>
+          </div>
+          <div
+            class="openBox"
+            v-show="
+              rtc.remoteStreams.length > 0 &&
+              username == hostId &&
+              remoteMuteVideo
+            "
+          >
+            <p>学生已关闭视频画面</p>
+          </div>
+          <div
+            class="studentVideo"
+            id="studentVideo"
+            v-show="
+              (((localVideoFinished && username != hostId) ||
+                (remoteVideoFinished && username == hostId)) &&
+                rtc.published &&
+                username != hostId &&
+                useCamera) ||
+              (rtc.remoteStreams.length > 0 &&
+                username == hostId &&
+                !remoteMuteVideo)
+            "
+          ></div>
         </div>
         <div class="voiceBox">
-          <img src="@/assets/living/icon_volume.svg" />
-          <div class="volume"></div>
+          <img
+            v-if="
+              (hostId != username && !localMuteAudio) ||
+              (hostId == username && !remoteMuteAudio)
+            "
+            src="@/assets/living/icon_volume.svg"
+            @click="toggleAudio(1)"
+          />
+          <img
+            v-else-if="
+              (hostId != username && localMuteAudio) ||
+              (hostId == username && remoteMuteAudio)
+            "
+            src="@/assets/living/icon_volume_closed.svg"
+            @click="toggleAudio(1)"
+          />
+          <div
+            class="volume"
+            v-show="
+              (hostId == username && rtc.remoteStreams.length > 0) ||
+              (hostId != username && rtc.published)
+            "
+          >
+            <div
+              :class="[
+                'volume-item',
+                (hostId != username ? localVolume : remoteVolume) >= item
+                  ? 'volume-item--green'
+                  : '',
+              ]"
+              v-for="item in 10"
+              :key="item"
+            ></div>
+          </div>
         </div>
       </div>
     </div>
@@ -120,6 +258,7 @@ export default {
 
       roomId: "",
       status: 0,
+      userNum: 0,
       mode: 1,
       members: [],
       loading: null,
@@ -138,6 +277,14 @@ export default {
         uid: null,
         token: "",
       },
+      remoteVideoFinished: false,
+      localVideoFinished: false,
+      remoteMuteVideo: false,
+      remoteMuteAudioActively: false,
+      remoteMuteAudio: false,
+      localMuteAudio: false,
+      localVolume: 0,
+      remoteVolume: 0,
       // 直播参数
       rtc: {
         client: null,
@@ -150,11 +297,22 @@ export default {
       rtcCharacter: "host",
     };
   },
+  watch: {
+    useAudio(val) {
+      // 与画面的音频状态同步
+      this.localMuteAudio = !val;
+    },
+    localMuteAudio(val) {
+      // 与设置的音频状态同步
+      this.useAudio = !val;
+    },
+  },
   mounted() {
     this.roomId = this.$route.query.roomId;
     this.username = this.$store.state.user.userinfo.id;
     this.option.uid = this.$store.state.user.userinfo.id;
-    console.log("本用户", this.username);
+    console.log("本用户", typeof this.option.uid);
+    this.getInitInfo(() => {});
   },
   methods: {
     setting() {
@@ -165,56 +323,93 @@ export default {
       this.loading = this.$loading({
         text: "数据加载中...",
       });
+      this.userNum = 1;
       this.checkBoxShow = false;
-      console.log("摄像头id", cameraId);
       this.cameraId = cameraId;
-      this.getInitInfo(() => {
-        if (this.status) {
-          this.joinRTC();
-        } else {
-          this.loading.close();
-        }
-      });
+      if (
+        this.username != this.hostId ||
+        (this.username == this.hostId && this.status)
+      ) {
+        // 未开始直播时，学生会先进入RTC房间，但老师不会，作用是利用stream-added事件实时监听何时开始直播
+        this.joinRTC();
+      } else {
+        this.loading.close();
+      }
     },
     async settingFinish(useCamera, useAudio, cameraId) {
-      // this.loading = this.$loading({
-      //   text: "数据加载中...",
-      // });
+      this.loading = this.$loading({
+        text: "数据加载中...",
+      });
       this.settingBoxShow = false;
       this.useCamera = useCamera;
       this.useAudio = useAudio;
       this.cameraId = cameraId;
-      // if (this.detailInfo.userId == this.hostId) {
-      //   if (this.rtc.published) {
-      //     if (useAudio) this.rtc.localStream.enableAudio();
-      //     else this.rtc.localStream.disableAudio();
-      //     if (useCamera) this.rtc.localStream.enableVideo();
-      //     else this.rtc.localStream.disableVideo();
-      //   }
-      //   // if (useCamera || useAudio) this.changeMode();
-      // }
-      // this.loading.close();
+      if (this.rtc.published) {
+        if (useAudio) {
+          this.rtc.localStream.enableAudio();
+          this.localMuteAudio = false;
+        } else {
+          this.rtc.localStream.disableAudio();
+          this.localMuteAudio = true;
+        }
+        if (useCamera) {
+          this.rtc.localStream.enableVideo();
+        } else this.rtc.localStream.disableVideo();
+      }
+      this.loading.close();
+    },
+    openCamera() {
+      if (!this.status) {
+        this.$message.error("还未开始直播，请在直播开始后再试");
+        return;
+      }
+      this.setting();
     },
 
-    startLive() {
+    toggleLive() {
       if (this.username != this.hostId) {
         this.$message.warning("您不是老师，无法进行操作");
         return;
       }
       this.$store
-        .dispatch("living/startLive", this.roomId)
+        .dispatch(
+          `living/${this.status ? "stopLive" : "startLive"}`,
+          this.roomId
+        )
         .then((res) => {
-          console.log("开启成功", res);
-          this.$message.message("开启成功");
+          console.log(this.status ? "" : "开启成功", res);
+          this.$message.message(this.status ? "直播已结束" : "直播已开始");
+          this.status = !this.status;
+          if (this.status && this.username == this.hostId) this.joinRTC();
+          else if (!this.status && this.username == this.hostId) {
+            this.rtc.remoteStreams[0].stop();
+            this.rtc.remoteStreams[0].close();
+            this.rtc.remoteStreams = [];
+            this.rtc.localStream.stop();
+            this.rtc.localStream.close();
+            this.rtc.client.unpublish(this.rtc.localStream, (err) => {
+              console.log("unpublish失败", err);
+            });
+            this.rtc.published = false;
+            this.rtc.client.leave(
+              () => {
+                console.log("退出房间成功");
+              },
+              (err) => {
+                console.log("退出房间失败", err);
+              }
+            );
+          }
         })
         .catch((err) => {
-          console.log("开启失败", err);
+          console.log(this.status ? "关闭失败" : "开启失败", err);
         });
     },
 
     getInitInfo(callback = () => {}) {
-      let errCallback = () => {
+      let errCallback = (err) => {
         this.loading.close();
+        console.log("获取直播间信息失败", err);
         this.$dialog.message("获取直播间信息失败，点击确定刷新重试", () => {
           history.go(0);
         });
@@ -225,51 +420,81 @@ export default {
           console.log("获取直播间信息成功", res);
           this.status = res.liveStatus ? 1 : 0;
           this.members = res.memberList;
-          this.mode = res.mode;
+          // this.mode = res.mode;
+          let matchUser = false;
           for (let i = 0; i < res.memberList.length; i++) {
+            if (res.memberList[i].userId == this.username) {
+              matchUser = true;
+            }
             if (res.memberList[i].hostFlag) {
               this.hostId = res.memberList[i].userId;
-              break;
             }
+          }
+          if (!matchUser) {
+            this.$message.error("您不是该直播的成员，若有疑问请联系管理员");
+            this.$router.push({ path: "index" });
+            return;
           }
           callback();
         })
         .catch((err) => {
-          errCallback();
+          errCallback(err);
         });
     },
 
-    // 移除远程RTC窗口
-    removeView(id) {
-      let player = document.getElementById("player_" + id);
-      if (player) {
-        player.remove();
-      }
-    },
-
+    // 初始化直播
     initRTC(callback = () => {}) {
-      // 初始化直播
       console.log("初始化直播中", AgoraRTC);
       this.rtc.client = AgoraRTC.createClient({ mode: "live", codec: "h264" });
       this.rtc.client.init(
         this.option.appID,
         () => {
           console.log("初始化成功");
+          this.rtc.params = this.option;
           // 房间有人退出
           this.rtc.client.on("peer-leave", (evt) => {
             console.log("peer-leave", evt);
             const id = evt.uid;
-            if (id != this.rtc.params.uid) {
-              this.removeView(id);
+            if (id != this.username) {
+              // this.removeView(id);
+              this.userNum = 1;
+              // 用户退出，检测直播间状态并更新信息
+              this.getInitInfo(() => {
+                if (!this.status) {
+                  this.$message.message("直播已结束");
+                  this.rtc.remoteStreams[0].stop();
+                  this.rtc.remoteStreams[0].close();
+                  this.rtc.remoteStreams = [];
+                  this.rtc.localStream.stop();
+                  this.rtc.localStream.close();
+                  this.rtc.client.unpublish(this.rtc.localStream, (err) => {
+                    console.log("unpublish失败", err);
+                  });
+                  this.rtc.published = false;
+                } else {
+                  if (this.rtc.remoteStreams.length > 0) {
+                    // 仍在直播，但对方退出直播间，则清空远程流
+                    this.rtc.remoteStreams[0].stop();
+                    this.rtc.remoteStreams[0].close();
+                    this.rtc.remoteStreams = [];
+                  }
+                }
+              });
             }
           });
-          this.rtc.params = this.option;
           // 获取房间的他人窗口（多人直播窗口，或获取主播窗口）
           // 订阅远程流事件回调（加入房间）
           this.rtc.client.on("stream-added", (evt) => {
-            console.log("流增加");
+            // 流增加，则表示对方进入房间
+            this.userNum = 2;
             let remoteStream = evt.stream;
             let id = remoteStream.getId();
+            if (id == this.hostId && !this.status) {
+              // 当前状态为未开始直播，而新增的远程流是老师端，则意味着老师点击了开始直播按钮（对应checkFinish中的joinRTC判断）
+              this.$message.message("直播已开始");
+              this.status = true;
+              this.changeMode(this.mode);
+            }
             if (id !== this.rtc.params.uid) {
               this.rtc.client.subscribe(remoteStream, (err) => {
                 console.log("订阅流失败", err);
@@ -277,15 +502,35 @@ export default {
             }
             console.log("加入房间的用户uid: ", id);
           });
+          this.rtc.client.on("first-video-frame-decode", (evt) => {
+            // 对齐视频窗口
+            this.remoteMuteVideo = false;
+            let remoteStream = evt.stream;
+            let id = remoteStream.getId();
+            let videoBox = document.getElementById(
+              id == this.hostId ? "teacherVideo" : "studentVideo"
+            ).children[0];
+            console.log("videoBox的内容", videoBox);
+            videoBox.style.background = "#333333";
+            let video = document.getElementById(
+              id == this.hostId ? "teacherVideo" : "studentVideo"
+            ).children[0].children[0];
+            console.log("video的内容", video);
+            video.style.left = "0";
+            this.remoteVideoFinished = true;
+          });
           // 获取远程流事件回调（获取他人视口）
           this.rtc.client.on("stream-subscribed", (evt) => {
             // 待修改
             let remoteStream = evt.stream;
             let id = remoteStream.getId();
             this.rtc.remoteStreams.push(remoteStream);
-            if (this.username == this.hostId)
-              remoteStream.play("teacherVideo", { fit: "contain" });
-            else remoteStream.play("studentVideo", { fit: "contain" });
+            this.remoteVideoFinished = false;
+            remoteStream.play(
+              id == this.hostId ? "teacherVideo" : "studentVideo",
+              { fit: "contain" },
+              (err) => {}
+            );
             console.log("订阅远程端口uid: ", id);
           });
           // 移除远程流事件回调（退出房间）
@@ -298,7 +543,6 @@ export default {
             this.rtc.remoteStreams = this.rtc.remoteStreams.filter((stream) => {
               return stream.getId() !== id;
             });
-            this.removeView(id);
             console.log("离开房间的用户uid: ", id);
           });
           // 该回调报告本地用户的上下行网络质量
@@ -307,21 +551,59 @@ export default {
           //   this.uplinkNetworkQuality = evt.uplinkNetworkQuality;
           // });
           this.rtc.client.on("stream-published", (evt) => {
-            // this.rtc.localStream.setVideoEncoderConfiguration({
-            //   resolution: {
-            //     width: 480,
-            //     height: 360,
-            //   },
-            //   frameRate: {
-            //     min: 15,
-            //     max: 30,
-            //   },
-            //   bitrate: {
-            //     min: 1000,
-            //     max: 5000,
-            //   },
-            // });
+            if (this.useAudio) this.rtc.localStream.enableAudio();
+            else this.rtc.localStream.disableAudio();
+            if (this.useCamera) this.rtc.localStream.enableVideo();
+            else this.rtc.localStream.disableVideo();
+            // 本地流推送，检测本地音频屏蔽状态
+            if (this.localMuteAudio) {
+              this.rtc.localStream.muteAudio();
+            }
+            this.rtc.published = true;
+            if (this.desktopMode) {
+              // this.rtc.localStream.setScreenProfile("1080p_2");
+              // this.rtc.localStream.setVideoProfile("1080p_2");
+            }
           });
+          this.rtc.client.on("mute-video", (evt) => {
+            console.log("对方关闭了摄像头", evt);
+            this.$message.message("对方关闭了视频画面");
+            this.remoteMuteVideo = true;
+          });
+          this.rtc.client.on("unmute-video", (evt) => {
+            console.log("对方开启了摄像头", evt);
+            this.remoteMuteVideo = false;
+          });
+          this.rtc.client.on("mute-audio", (evt) => {
+            console.log("对方关闭了麦克风", evt);
+            this.$message.message("对方关闭了视频声音");
+            // 同步远端流的屏蔽状态
+            this.rtc.remoteStreams[0].muteAudio();
+            // 远端流主动屏蔽音频
+            // 若本地对远端流的音频屏蔽状态为true，则不视为远端主动屏蔽（如果对方主动解开屏蔽，本地要保持本地用户的屏蔽操作）
+            this.remoteMuteAudioActively = !this.remoteMuteAudio;
+            this.remoteMuteAudio = true;
+          });
+          this.rtc.client.on("unmute-audio", (evt) => {
+            console.log("对方开启了麦克风", evt);
+            // 若为远端主动屏蔽的音频，则自动解开远端音频屏蔽
+            if (this.remoteMuteAudioActively) {
+              this.remoteMuteAudio = false;
+              this.remoteMuteAudioActively = false;
+            }
+            if (this.remoteMuteAudio) this.rtc.remoteStreams[0].muteAudio();
+            else this.rtc.remoteStreams[0].unmuteAudio();
+          });
+          this.rtc.client.enableAudioVolumeIndicator();
+          this.rtc.client.on("volume-indicator", (evt) => {
+            this.remoteVolume =
+              evt.attr.length > 0 ? Math.ceil(evt.attr[0].level / 10) : 0;
+          });
+          setInterval(() => {
+            if (this.rtc.localStream)
+              this.localVolume =
+                Math.ceil(this.rtc.localStream.getAudioLevel() * 10) || 0;
+          }, 1000);
           callback();
         },
         (err) => {
@@ -337,6 +619,7 @@ export default {
         this.rtc.client.setClientRole(
           this.rtcCharacter,
           (res) => {
+            console.log("加载直播client", res);
             this.$store
               .dispatch("living/getAgoraToken", this.roomId)
               .then((res) => {
@@ -356,11 +639,12 @@ export default {
                     this.rtc.joined = true;
                     this.rtc.params.uid = uid;
                     console.log("远程数量:", this.rtc.remoteStreams.length);
+                    this.userNum += this.rtc.remoteStreams.length;
                     this.loading.close();
-                    this.changeMode(this.mode);
+                    if (this.status) this.changeMode(this.mode);
                   },
                   (err) => {
-                    console.error("加入频道失败", err);
+                    console.error("加入频道失败", err, this.option);
                   }
                 );
               })
@@ -381,11 +665,11 @@ export default {
       });
     },
     changeMode(mode, fromWindow = false) {
+      // fromWindow表示从界面按钮直接操作调用，而非函数内调用
       if (fromWindow) {
-        if (this.username != this.hostId) {
-          this.$message.message("您不是讲师，无权进行操作");
-          return;
-        }
+        // 避免多次按摄像头按钮而导致直播模式和真实模式不匹配
+        if (this.mode == mode && mode == 1) return;
+        // 从关闭摄像头的状态下，从其他模式切换到摄像头，认为用户同意打开摄像头，将自动打开摄像头
         if (!this.useCamera) {
           this.useCamera = true;
         }
@@ -394,14 +678,11 @@ export default {
         this.$message.message("请先开始直播");
         return;
       }
-      this.mode = mode;
-      // this.loadingCamera = true;
-      // this.loadingCameraError = false;
-      if (this.rtc.published && this.username == this.hostId) {
-        this.desktopMode = !this.desktopMode;
-        // Stop playing the local stream
+      if (this.rtc.published) {
+        // 切换模式操作，则对desktopMode反转
+        if (mode != this.mode) this.desktopMode = !this.desktopMode;
+        // 关闭本地流，后续重新初始化并推送
         this.rtc.localStream.stop();
-        // Close the local stream
         this.rtc.localStream.close();
         this.rtc.published = false;
         this.rtc.client.unpublish(this.rtc.localStream, (err) => {
@@ -418,53 +699,110 @@ export default {
         screen: this.desktopMode,
         screenAudio: false,
       });
+      this.mode = mode;
       // 初始化本地流
       this.rtc.localStream.init(
         () => {
           console.log("初始化本流成功");
+          // 加载本地流
+          this.localVideoFinished = false;
           this.rtc.localStream.play(
             this.username == this.hostId ? "teacherVideo" : "studentVideo",
-            { fit: "contain" }
+            { fit: "contain" },
+            (err) => {
+              if (err) {
+                this.$message.error("直播流启动失败，原因：", err.reason);
+                return;
+              }
+              // 对齐视频窗口
+              let videoBox = document.getElementById(
+                this.username == this.hostId ? "teacherVideo" : "studentVideo"
+              ).children[0];
+              videoBox.style.background = "#333333";
+              let video = document.getElementById(
+                this.username == this.hostId ? "teacherVideo" : "studentVideo"
+              ).children[0].children[0];
+              video.style.transform = "scaleX(1)";
+              video.style.left = "0";
+              this.localVideoFinished = true;
+            }
           );
           this.rtc.client.publish(this.rtc.localStream, (err) => {
-            console.log("publish failed");
+            // 本地流推送失败
             console.error(err);
-            // this.loadingCamera = false;
-            // this.loadingCameraError = true;
-            // this.$message.error(
-            //   "推送直播画面失败，请尝试进入设置重新开启摄像头"
-            // );
+            // ???待补充???
             this.settingFinish(this.useCamera, this.useAudio, this.cameraId);
-            // this.loadingLive = false;
           });
-          if (this.useAudio) this.rtc.localStream.enableAudio();
-          else this.rtc.localStream.disableAudio();
-          if (this.useCamera) this.rtc.localStream.enableVideo();
-          else this.rtc.localStream.disableVideo();
-          this.rtc.published = true;
-          // this.loadingCamera = false;
-          // this.loadingLive = false;
-          if (this.desktopMode) {
-            // this.rtc.localStream.setScreenProfile("1080p_2");
-            // this.rtc.localStream.setVideoProfile("1080p_2");
-          }
           this.loading.close();
         },
         (err) => {
           console.error("初始化本地流失败 ", err);
-          // alert("打开直播失败");
-          // this.loadingCameraError = true;
-          // this.loadingCamera = false;
           this.rtc.published = true;
           this.loading.close();
-
-          this.$message({
-            message: "推送直播画面失败，请尝试进入设置重新开启摄像头或切换模式",
-            iconClass: "none",
-            customClass: "live-message-view live-message-view--error",
-          });
+          this.$message.error(
+            "推送直播画面失败，请尝试进入设置重新开启摄像头或切换模式"
+          );
         }
       );
+    },
+
+    toggleAudio(identity) {
+      let stream = null;
+      let flagStr = "";
+      if (identity == 0) {
+        if (
+          (!this.rtc.localStream && this.username == this.hostId) ||
+          (this.rtc.remoteStreams.length == 0 && this.username != this.hostId)
+        ) {
+          this.$message.message("对方未进入直播间或暂未开启直播");
+          return;
+        }
+        stream =
+          this.username == this.hostId
+            ? this.rtc.localStream
+            : this.rtc.remoteStreams[0];
+        flagStr =
+          this.username == this.hostId ? "localMuteAudio" : "remoteMuteAudio";
+      } else {
+        if (
+          (!this.rtc.localStream && this.username != this.hostId) ||
+          (this.rtc.remoteStreams.length == 0 && this.username == this.hostId)
+        ) {
+          this.$message.error("对方未进入直播间或暂未开启直播");
+          return;
+        }
+        stream =
+          this.username != this.hostId
+            ? this.rtc.localStream
+            : this.rtc.remoteStreams[0];
+        flagStr =
+          this.username != this.hostId ? "localMuteAudio" : "remoteMuteAudio";
+      }
+      if (!this[flagStr]) {
+        let success = stream.muteAudio();
+        if (success) {
+          this[flagStr] = true;
+          this.$message.message("静音成功");
+        } else {
+          this.$message.error(
+            flagStr == "remoteMuteAudio"
+              ? "静音失败，对方可能未开启麦克风"
+              : "静音失败，请重试"
+          );
+        }
+      } else {
+        let success = stream.unmuteAudio();
+        if (success) {
+          this[flagStr] = false;
+          this.$message.message("关闭静音成功");
+        } else {
+          this.$message.error(
+            flagStr == "remoteMuteAudio"
+              ? "关闭静音失败，对方可能未开启麦克风"
+              : "关闭静音失败，请重试"
+          );
+        }
+      }
     },
   },
 };
@@ -622,6 +960,7 @@ export default {
       padding: 0 56px;
       box-sizing: border-box;
       .liveBox {
+        min-height: 57.778vh;
         .openBox {
           display: flex;
           flex-direction: column;
@@ -643,12 +982,7 @@ export default {
         }
         .teacherVideo {
           height: 100%;
-          min-height: 57.778vh;
-          div {
-            video {
-              position: inherit;
-            }
-          }
+          background-color: #333333;
         }
       }
       .voiceBox {
@@ -657,6 +991,25 @@ export default {
         margin-top: 30px;
         img {
           width: 24px;
+          cursor: pointer;
+        }
+        .volume {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-left: 20px;
+          .volume-item + .volume-item {
+            margin-left: 10px;
+          }
+          .volume-item {
+            width: 4px;
+            height: 22px;
+            border-radius: 2px;
+            background: #fff;
+          }
+          .volume-item--green {
+            background: #53c41b;
+          }
         }
       }
     }
@@ -666,6 +1019,29 @@ export default {
         width: 100%;
         height: 20vh;
         background-color: #333333;
+        .openBox {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          background-color: #333333;
+          p {
+            font-size: 14px;
+            color: #ffffff;
+            line-height: 20px;
+          }
+          .cameraButton {
+            margin-top: 20px;
+            padding: 6px 11px;
+            border-radius: 100px;
+          }
+        }
+        .studentVideo {
+          height: 100%;
+          background-color: #333333;
+        }
       }
       .voiceBox {
         display: flex;
@@ -673,6 +1049,25 @@ export default {
         margin-top: 30px;
         img {
           width: 24px;
+          cursor: pointer;
+        }
+        .volume {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-left: 20px;
+          .volume-item + .volume-item {
+            margin-left: 10px;
+          }
+          .volume-item {
+            width: 4px;
+            height: 22px;
+            border-radius: 2px;
+            background: #fff;
+          }
+          .volume-item--green {
+            background: #53c41b;
+          }
         }
       }
     }

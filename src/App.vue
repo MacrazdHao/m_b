@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition name="fade-transform" mode="out-in">
+    <transition name="slide-fade2">
       <router-view style="flex: 1 0 auto" :language="language" />
     </transition>
   </div>

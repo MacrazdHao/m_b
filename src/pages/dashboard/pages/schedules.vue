@@ -65,6 +65,7 @@
         </div>
       </div>
     </div>
+    <!-- <transition name="slide-fade2"> -->
     <div class="schedule" v-if="activities.length > 0">
       <p class="title">今日进程</p>
       <div class="timeline">
@@ -79,6 +80,7 @@
         </el-timeline>
       </div>
     </div>
+    <!-- </transition> -->
   </div>
 </template>
 
@@ -217,7 +219,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    // transition: all .2s;
+    transition: all 0.2s;
     // height: 181px;
     .calendarBox {
       width: 100%;
