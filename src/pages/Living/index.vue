@@ -270,6 +270,8 @@ export default {
 
       changingStatus: false,
 
+      waitingPublish: false,
+      loadingVideo: false,
       desktopMode: false,
       option: {
         appID: "f8cbf7d6086f44d8a7b68b988b02c12c",
@@ -378,27 +380,31 @@ export default {
         )
         .then((res) => {
           console.log(this.status ? "" : "开启成功", res);
-          this.$message.message(this.status ? "直播已结束" : "直播已开始");
           this.status = !this.status;
-          if (this.status && this.username == this.hostId) this.joinRTC();
-          else if (!this.status && this.username == this.hostId) {
-            this.rtc.remoteStreams[0].stop();
-            this.rtc.remoteStreams[0].close();
-            this.rtc.remoteStreams = [];
-            this.rtc.localStream.stop();
-            this.rtc.localStream.close();
-            this.rtc.client.unpublish(this.rtc.localStream, (err) => {
-              console.log("unpublish失败", err);
+          if (this.status && this.username == this.hostId) {
+            this.joinRTC();
+            this.$message.message("直播已开始");
+          } else if (!this.status && this.username == this.hostId) {
+            this.$dialog.warning("当前正在直播，确定结束直播？", () => {
+              this.rtc.remoteStreams[0].stop();
+              this.rtc.remoteStreams[0].close();
+              this.rtc.remoteStreams = [];
+              this.rtc.localStream.stop();
+              this.rtc.localStream.close();
+              this.rtc.client.unpublish(this.rtc.localStream, (err) => {
+                console.log("unpublish失败", err);
+              });
+              this.rtc.published = false;
+              this.rtc.client.leave(
+                () => {
+                  console.log("退出房间成功");
+                },
+                (err) => {
+                  console.log("退出房间失败", err);
+                }
+              );
             });
-            this.rtc.published = false;
-            this.rtc.client.leave(
-              () => {
-                console.log("退出房间成功");
-              },
-              (err) => {
-                console.log("退出房间失败", err);
-              }
-            );
+            this.$message.message("直播已结束");
           }
         })
         .catch((err) => {
@@ -564,6 +570,10 @@ export default {
               // this.rtc.localStream.setScreenProfile("1080p_2");
               // this.rtc.localStream.setVideoProfile("1080p_2");
             }
+            if (this.waitingPublish) {
+              this.waitingPublish = false;
+              this.loadingVideo = false;
+            }
           });
           this.rtc.client.on("mute-video", (evt) => {
             console.log("对方关闭了摄像头", evt);
@@ -664,11 +674,16 @@ export default {
         );
       });
     },
-    changeMode(mode, fromWindow = false) {
+    async changeMode(mode, fromWindow = false) {
+      if (this.loadingVideo) return;
+      this.loadingVideo = true;
       // fromWindow表示从界面按钮直接操作调用，而非函数内调用
       if (fromWindow) {
         // 避免多次按摄像头按钮而导致直播模式和真实模式不匹配
-        if (this.mode == mode && mode == 1) return;
+        if (this.mode == mode && mode == 1) {
+          this.loadingVideo = false;
+          return;
+        }
         // 从关闭摄像头的状态下，从其他模式切换到摄像头，认为用户同意打开摄像头，将自动打开摄像头
         if (!this.useCamera) {
           this.useCamera = true;
@@ -676,11 +691,52 @@ export default {
       }
       if (!this.status) {
         this.$message.message("请先开始直播");
+        this.loadingVideo = false;
         return;
       }
       if (this.rtc.published) {
         // 切换模式操作，则对desktopMode反转
-        if (mode != this.mode) this.desktopMode = !this.desktopMode;
+        if (mode != this.mode) {
+          let goon = true;
+          if (mode == 2) {
+            await this.$dialog.message(
+              "切换成屏幕共享模式后，将关闭摄像头，是否继续？",
+              () => {
+                goon = true;
+              },
+              () => {
+                goon = false;
+              }
+            );
+          }
+          if (!goon) {
+            this.loadingVideo = false;
+            return;
+          }
+          this.desktopMode = !this.desktopMode;
+        } else {
+          let toCamera = false;
+          if (mode == 2) {
+            await this.$dialog.message(
+              "屏幕共享已暂停，请重新选择共享窗口或者切换为摄像头模式",
+              () => {
+                toCamera = false;
+              },
+              () => {
+                toCamera = true;
+              },
+              "切换共享窗口",
+              "切换摄像头模式"
+            );
+          }
+          if (toCamera) {
+            console.log("切换视频2");
+            this.loadingVideo = false;
+            this.changeMode(1, true);
+            // this.desktopMode = !this.desktopMode;
+            return;
+          }
+        }
         // 关闭本地流，后续重新初始化并推送
         this.rtc.localStream.stop();
         this.rtc.localStream.close();
@@ -711,8 +767,11 @@ export default {
             { fit: "contain" },
             (err) => {
               if (err) {
-                this.$message.error("直播流启动失败，原因：", err.reason);
-                return;
+                if (err.reason) {
+                  this.$message.error("直播流启动失败，原因：", err.reason);
+                  this.loadingVideo = false;
+                  return;
+                }
               }
               // 对齐视频窗口
               let videoBox = document.getElementById(
@@ -725,15 +784,21 @@ export default {
               video.style.transform = "scaleX(1)";
               video.style.left = "0";
               this.localVideoFinished = true;
+              this.rtc.client.publish(this.rtc.localStream, (err) => {
+                // 本地流推送失败
+                console.error(err);
+                // ???待补充???
+                this.settingFinish(
+                  this.useCamera,
+                  this.useAudio,
+                  this.cameraId
+                );
+                this.loadingVideo = false;
+              });
+              this.loading.close();
+              this.waitingPublish = true;
             }
           );
-          this.rtc.client.publish(this.rtc.localStream, (err) => {
-            // 本地流推送失败
-            console.error(err);
-            // ???待补充???
-            this.settingFinish(this.useCamera, this.useAudio, this.cameraId);
-          });
-          this.loading.close();
         },
         (err) => {
           console.error("初始化本地流失败 ", err);
@@ -742,6 +807,7 @@ export default {
           this.$message.error(
             "推送直播画面失败，请尝试进入设置重新开启摄像头或切换模式"
           );
+          this.loadingVideo = false;
         }
       );
     },

@@ -14,14 +14,14 @@
         </div>
         <div class="buttonBox">
           <CButton
-            class="button"
-            :text="_i18n.t('global.dialog.cancel')"
+            :class="['button', cancelText.length > 2 ? 'shortPadding' : '']"
+            :text="cancelText"
             theme="gray"
             @btnClick="cancelBtn"
           />
           <CButton
-            class="button"
-            :text="_i18n.t('global.dialog.confirm')"
+            :class="['button', confirmText.length > 2 ? 'shortPadding' : '']"
+            :text="confirmText"
             :theme="theme"
             @btnClick="confirmBtn"
           />
@@ -46,6 +46,8 @@ export default {
       confirm: () => {},
       cancel: () => {},
       visible: false,
+      confirmText: "",
+      cancelText: "",
     };
   },
   computed: {
@@ -57,6 +59,10 @@ export default {
     visible(val) {
       if (val) {
         document.body.style.overflow = "hidden";
+        this.cancelText =
+          this.cancelText || this._i18n.t("global.dialog.cancel");
+        this.confirmText =
+          this.confirmText || this._i18n.t("global.dialog.confirm");
       } else {
         document.body.style.overflow = "auto";
       }
@@ -144,6 +150,9 @@ export default {
       flex-direction: row;
       margin-top: 34px;
       justify-content: center;
+      .shortPadding {
+        padding: 7px 13px;
+      }
       .button + .button {
         margin-left: 24px;
       }
