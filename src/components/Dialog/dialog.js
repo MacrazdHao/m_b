@@ -23,9 +23,6 @@ _Dialog.install = (Vue) => {
         let instance = createDialog();
         instance.text = (typeof text) == 'string' ? [text] : text;
         instance.theme = theme;
-        // instance.confirm = () => { confirm(resolve); resolve(); };
-        // instance.cancel = () => { cancel(resolve); resolve(); };
-        // instance.close = () => { (close ? close : cancel)(); resolve(); };
         instance.confirm = () => {
           (confirm ? (() => { console.log(confirm); confirm(); resolve(); }) : resolve)();
         }
@@ -33,11 +30,9 @@ _Dialog.install = (Vue) => {
           (cancel ? (() => { console.log(cancel); cancel(); resolve(); }) : goCatch)();
         }
         instance.close = () => {
-          // console.log('close', close, 'cancel', cancel, 'or', close ? close : cancel ? cancel : goCatch);
           (close ? close : cancel ? cancel : goCatch)();
           if (close || cancel) resolve();
         }
-
         instance.confirmText = confirmText;
         instance.cancelText = cancelText;
         instance.visible = true;
