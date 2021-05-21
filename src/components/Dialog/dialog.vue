@@ -3,7 +3,7 @@
     <div class="Dialog" v-if="visible">
       <div class="messageBox">
         <div class="header">
-          <img src="@/assets/index/icon_close.svg" @click="cancelBtn" />
+          <img src="@/assets/index/icon_close.svg" @click="closeBtn" />
         </div>
         <div class="content">
           <img :src="require(`@/assets/index/icon_msg_${theme}.svg`)" />
@@ -45,6 +45,7 @@ export default {
       theme: "blue",
       confirm: () => {},
       cancel: () => {},
+      close: () => {},
       visible: false,
       confirmText: "",
       cancelText: "",
@@ -69,6 +70,10 @@ export default {
     },
   },
   methods: {
+    closeBtn() {
+      this.close();
+      this.visible = false;
+    },
     confirmBtn() {
       this.confirm();
       this.visible = false;

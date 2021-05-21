@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="content">
-      <div class="menuBox" v-if="hostId == username">
+      <div class="menuBox">
         <div
           :class="['menuItem', mode == 1 ? 'menuItem--selected' : '']"
           @click="changeMode(1, true)"
@@ -675,7 +675,10 @@ export default {
       });
     },
     async changeMode(mode, fromWindow = false) {
-      if (this.loadingVideo) return;
+      if (this.loadingVideo) {
+        this.$message.message("模式切换中或直播加载中，请稍后再试");
+        return;
+      }
       this.loadingVideo = true;
       // fromWindow表示从界面按钮直接操作调用，而非函数内调用
       if (fromWindow) {
@@ -708,6 +711,16 @@ export default {
                 goon = false;
               }
             );
+          } else if (mode == 1) {
+            await this.$dialog.message(
+              "切换成摄像头后，将关闭屏幕共享模式，是否继续？",
+              () => {
+                goon = true;
+              },
+              () => {
+                goon = false;
+              }
+            );
           }
           if (!goon) {
             this.loadingVideo = false;
@@ -716,6 +729,7 @@ export default {
           this.desktopMode = !this.desktopMode;
         } else {
           let toCamera = false;
+          let closeDialog = false;
           if (mode == 2) {
             await this.$dialog.message(
               "屏幕共享已暂停，请重新选择共享窗口或者切换为摄像头模式",
@@ -726,8 +740,15 @@ export default {
                 toCamera = true;
               },
               "切换共享窗口",
-              "切换摄像头模式"
+              "切换摄像头模式",
+              () => {
+                closeDialog = true;
+              }
             );
+          }
+          if (closeDialog) {
+            this.loadingVideo = false;
+            return;
           }
           if (toCamera) {
             console.log("切换视频2");
