@@ -205,13 +205,13 @@ export default {
       this.$dialog.warning([
         this.$t(`accounts.accountlist.deleteTips`),
         this.$t(`accounts.accountlist.deleteTips2`),
-      ]);
+      ]).catch(()=>{});
     },
     batchDelete() {
       this.$dialog.warning([
         this.$t(`accounts.accountlist.deleteTips`),
         this.$t(`accounts.accountlist.deleteTips2`),
-      ]);
+      ]).catch(()=>{});
     },
   },
 };

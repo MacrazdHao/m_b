@@ -15,10 +15,10 @@ _Dialog.install = (Vue) => {
 
   const DialogMain = {
     showDialog(text, theme, confirm = false, cancel = false, confirmText = "", cancelText = "", close = false) {
-      // 可以使用.then和.catch调用链，也可以使用回调函数（二者不兼容，两个方案取其一）
+      // 可以使用.then和.catch调用链，也可以使用回调函数（二者不兼容，两个方案取其一），不填写cancel函数则必须使用catch捕获事件
       return new Promise((resolve, reject) => {
         let goCatch = () => {
-          throw "cancel";
+          throw "cancel"
         }
         let instance = createDialog();
         instance.text = (typeof text) == 'string' ? [text] : text;

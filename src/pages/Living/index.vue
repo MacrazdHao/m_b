@@ -270,8 +270,11 @@ export default {
 
       changingStatus: false,
 
+      initingRTC: false,
       waitingPublish: false,
       loadingVideo: false,
+      loadingLocalAudio: false,
+      loadingRemoteAudio: false,
       desktopMode: false,
       option: {
         appID: "f8cbf7d6086f44d8a7b68b988b02c12c",
@@ -285,6 +288,7 @@ export default {
       remoteMuteAudioActively: false,
       remoteMuteAudio: false,
       localMuteAudio: false,
+      localAudioInterval: null,
       localVolume: 0,
       remoteVolume: 0,
       // 直播参数
@@ -318,6 +322,15 @@ export default {
   },
   methods: {
     setting() {
+      if (
+        this.changingStatus ||
+        this.initingRTC ||
+        this.loadingVideo ||
+        this.waitingPublish
+      ) {
+        this.$message.message("模式切换中或直播加载中，无法打开设置");
+        return;
+      }
       this.settingBoxShow = true;
     },
     // 设备(摄像头、麦克风)检测完成
@@ -373,42 +386,74 @@ export default {
         this.$message.warning("您不是老师，无法进行操作");
         return;
       }
+      if (
+        this.changingStatus ||
+        this.initingRTC ||
+        this.loadingVideo ||
+        this.waitingPublish
+      ) {
+        this.$message.warning("直播状态变更中，请稍后再试");
+        return;
+      }
+      this.changingStatus = true;
+      if (this.status) {
+        this.$dialog.warning(
+          "当前正在直播，确定结束直播？",
+          () => {
+            this.$store
+              .dispatch(`living/stopLive`, this.roomId)
+              .then((res) => {
+                console.log(res);
+                this.status = !this.status;
+                if (!this.status && this.username == this.hostId) {
+                  if (this.rtc.remoteStreams.length > 0) {
+                    this.rtc.remoteStreams[0].stop();
+                    this.rtc.remoteStreams[0].close();
+                    this.rtc.remoteStreams = [];
+                  }
+                  this.rtc.localStream.stop();
+                  this.rtc.localStream.close();
+                  this.rtc.client.unpublish(this.rtc.localStream, (err) => {
+                    console.log("unpublish失败", err);
+                  });
+                  this.rtc.published = false;
+                  this.rtc.client.leave(
+                    () => {
+                      console.log("退出房间成功");
+                    },
+                    (err) => {
+                      console.log("退出房间失败", err);
+                    }
+                  );
+                  this.$message.message("直播已结束");
+                  this.changingStatus = false;
+                }
+              })
+              .catch((err) => {
+                this.changingStatus = false;
+                console.log("关闭失败", err);
+              });
+          },
+          () => {
+            this.changingStatus = false;
+          }
+        );
+        return;
+      }
       this.$store
-        .dispatch(
-          `living/${this.status ? "stopLive" : "startLive"}`,
-          this.roomId
-        )
+        .dispatch(`living/startLive`, this.roomId)
         .then((res) => {
-          console.log(this.status ? "" : "开启成功", res);
+          console.log("开启成功", res);
           this.status = !this.status;
           if (this.status && this.username == this.hostId) {
             this.joinRTC();
             this.$message.message("直播已开始");
-          } else if (!this.status && this.username == this.hostId) {
-            this.$dialog.warning("当前正在直播，确定结束直播？", () => {
-              this.rtc.remoteStreams[0].stop();
-              this.rtc.remoteStreams[0].close();
-              this.rtc.remoteStreams = [];
-              this.rtc.localStream.stop();
-              this.rtc.localStream.close();
-              this.rtc.client.unpublish(this.rtc.localStream, (err) => {
-                console.log("unpublish失败", err);
-              });
-              this.rtc.published = false;
-              this.rtc.client.leave(
-                () => {
-                  console.log("退出房间成功");
-                },
-                (err) => {
-                  console.log("退出房间失败", err);
-                }
-              );
-            });
-            this.$message.message("直播已结束");
+            this.changingStatus = false;
           }
         })
         .catch((err) => {
-          console.log(this.status ? "关闭失败" : "开启失败", err);
+          this.changingStatus = false;
+          console.log("开启失败", err);
         });
     },
 
@@ -416,9 +461,11 @@ export default {
       let errCallback = (err) => {
         this.loading.close();
         console.log("获取直播间信息失败", err);
-        this.$dialog.message("获取直播间信息失败，点击确定刷新重试", () => {
-          history.go(0);
-        });
+        this.$dialog
+          .message("获取直播间信息失败，点击确定刷新重试", () => {
+            history.go(0);
+          })
+          .catch(() => {});
       };
       this.$store
         .dispatch("living/getLiveInfo", this.roomId)
@@ -609,11 +656,16 @@ export default {
             this.remoteVolume =
               evt.attr.length > 0 ? Math.ceil(evt.attr[0].level / 10) : 0;
           });
-          setInterval(() => {
-            if (this.rtc.localStream)
+          this.localAudioInterval = setInterval(() => {
+            if (!this.status) {
+              clearInterval(this.localAudioInterval);
+            }
+            if (this.rtc.localStream) {
               this.localVolume =
                 Math.ceil(this.rtc.localStream.getAudioLevel() * 10) || 0;
+            }
           }, 1000);
+          this.initingRTC = false;
           callback();
         },
         (err) => {
@@ -623,6 +675,11 @@ export default {
     },
     // 接入RTC流（房间）
     joinRTC() {
+      if (this.initingRTC) {
+        this.$message.warning("初始化直播中，请稍后再试");
+        return;
+      }
+      this.initingRTC = true;
       this.option.channel = this.roomId;
       this.initRTC(() => {
         // 加载直播
@@ -660,16 +717,20 @@ export default {
               })
               .catch((err) => {
                 console.log(err);
-                this.$dialog.message("进入直播间失败，点击确定刷新重试", () => {
-                  history.go(0);
-                });
+                this.$dialog
+                  .message("进入直播间失败，点击确定刷新重试", () => {
+                    history.go(0);
+                  })
+                  .catch(() => {});
               });
           },
           (err) => {
             console.log(err);
-            this.$dialog.message("进入直播间失败，点击确定刷新重试", () => {
-              history.go(0);
-            });
+            this.$dialog
+              .message("进入直播间失败，点击确定刷新重试", () => {
+                history.go(0);
+              })
+              .catch(() => {});
           }
         );
       });
@@ -841,7 +902,11 @@ export default {
           (!this.rtc.localStream && this.username == this.hostId) ||
           (this.rtc.remoteStreams.length == 0 && this.username != this.hostId)
         ) {
-          this.$message.message("对方未进入直播间或暂未开启直播");
+          this.$message.message(
+            `${
+              this.username == this.hostId ? "" : "对方未进入直播间或"
+            }暂未开启直播`
+          );
           return;
         }
         stream =
@@ -855,7 +920,11 @@ export default {
           (!this.rtc.localStream && this.username != this.hostId) ||
           (this.rtc.remoteStreams.length == 0 && this.username == this.hostId)
         ) {
-          this.$message.error("对方未进入直播间或暂未开启直播");
+          this.$message.error(
+            `${
+              this.username != this.hostId ? "" : "对方未进入直播间或"
+            }暂未开启直播`
+          );
           return;
         }
         stream =
@@ -864,6 +933,19 @@ export default {
             : this.rtc.remoteStreams[0];
         flagStr =
           this.username != this.hostId ? "localMuteAudio" : "remoteMuteAudio";
+      }
+      if (flagStr == "remoteMuteAudio") {
+        if (this.loadingRemoteAudio) {
+          this.$message.warning("正在处理对方音频，请勿频繁操作");
+          return;
+        }
+        this.loadingRemoteAudio = true;
+      } else {
+        if (this.loadingLocalAudio) {
+          this.$message.warning("正在处理您的音频，请勿频繁操作");
+          return;
+        }
+        this.loadingLocalAudio = true;
       }
       if (!this[flagStr]) {
         let success = stream.muteAudio();
@@ -874,7 +956,9 @@ export default {
           this.$message.error(
             flagStr == "remoteMuteAudio"
               ? "静音失败，对方可能未开启麦克风"
-              : "静音失败，请重试"
+              : this.status
+              ? "静音失败，请重试"
+              : "暂未开启直播"
           );
         }
       } else {
@@ -886,9 +970,16 @@ export default {
           this.$message.error(
             flagStr == "remoteMuteAudio"
               ? "关闭静音失败，对方可能未开启麦克风"
-              : "关闭静音失败，请重试"
+              : this.status
+              ? "关闭静音失败，请重试"
+              : "暂未开启直播"
           );
         }
+      }
+      if (flagStr == "remoteMuteAudio") {
+        this.loadingRemoteAudio = false;
+      } else {
+        this.loadingLocalAudio = false;
       }
     },
   },

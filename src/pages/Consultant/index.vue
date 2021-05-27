@@ -171,7 +171,7 @@ export default {
       this.$dialog.warning([
         this.$t(`consultant.list.table.deleteTips1`),
         this.$t(`consultant.list.table.deleteTips2`),
-      ]);
+      ]).catch(()=>{});
     },
     overline(text = "") {
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");

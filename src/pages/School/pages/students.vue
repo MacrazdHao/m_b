@@ -264,7 +264,7 @@ export default {
       this.$dialog.warning([
         this.$t(`school.students.deleteTips1`),
         this.$t(`school.students.deleteTips2`),
-      ]);
+      ]).catch(()=>{});
     },
     toStatusText(code) {
       switch (code) {

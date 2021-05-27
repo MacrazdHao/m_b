@@ -192,7 +192,7 @@ export default {
         this.$t("counseling.step1.leaveTips"),
         () => {},
         () => {}
-      );
+      ).catch(()=>{});
     },
   },
 };

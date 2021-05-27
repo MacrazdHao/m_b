@@ -79,6 +79,7 @@ export default {
       this.visible = false;
     },
     cancelBtn() {
+      // console.log(this.cancel);
       this.cancel();
       this.visible = false;
     },

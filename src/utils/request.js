@@ -8,7 +8,7 @@ import Vue from 'vue';
 
 const service = axios.create({
   // baseURL: mockURL, // url = base url + request url
-  baseURL: haoranURL,
+  baseURL: testURL,
   timeout: 5000 // request timeout
 })
 

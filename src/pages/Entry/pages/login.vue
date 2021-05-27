@@ -113,7 +113,7 @@ export default {
         );
         return;
       } else if (this.password == "") {
-      this.$messagesage.warning(
+        this.$messagesage.warning(
           this.$t("entry.login.alertTips.passwordErrorTips")
         );
         return;
@@ -150,9 +150,6 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-      this.$messageessage.warning(
-            this.$t("entry.login.alertTips.loginErrorTips")
-          );
           return;
         });
     },

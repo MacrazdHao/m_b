@@ -53,8 +53,8 @@ export async function createDynamicRouter(to, next, aim) {
       }]
     }];
     await store.dispatch('global/getMenu').then(res => {
-      // console.log('获取路由成功');
-      res.way1.forEach(e => {
+      console.log('获取路由成功');
+      res.forEach(e => {
         systemRouterStr2.push(e);
       });
       systemRouter = systemRouterStr2;

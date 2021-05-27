@@ -133,8 +133,13 @@ export default {
           path: '/living'
         }]
       };
-      commit(types.SET_MENU, res);
-      resolve(res);
+      request.get(urls.getMenu).then(res2 => {
+        console.log('获取路由', res2)
+        commit(types.SET_MENU, res2.data);
+        resolve(res2.data);
+      });
+      // commit(types.SET_MENU, res);
+      // resolve(res);
     });
   },
   setMenu: ({ commit, state }, data) => {
