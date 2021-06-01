@@ -91,6 +91,7 @@ function routerFilter(routerMap, isChild = false, parents = []) {
   const accessRouters = routerMap.filter(route => {
     let _parents = [...parents];
     // console.log(parents);
+    // 构建Vue-Router路由对象
     for (let key in routerMapping[route.path]) {
       if (key == 'path' || key == 'redirect') continue;
       if (key == 'meta') {
@@ -105,6 +106,7 @@ function routerFilter(routerMap, isChild = false, parents = []) {
       route['redirect'] = routerMapping[route.children[0].path].name;
     }
     // console.log(route);
+    // 从路由映射表获取出本地页面(组件)对象路径
     route.path = routerMapping[route.path].path;
     if (typeof (route.component) == 'string') {
       // console.log(route)
@@ -127,6 +129,7 @@ function routerFilter(routerMap, isChild = false, parents = []) {
               let path = `/${parents.join('/')}/${route.component}`;
               let path2 = `/${route.component}`;
               route.component = () => {
+                // 载入相应页面的index.vue
                 return new Promise((resolve, reject) => {
                   import(`@/pages${path}`).then((res) => {
                     resolve(res)
@@ -141,6 +144,7 @@ function routerFilter(routerMap, isChild = false, parents = []) {
                 });
               }
             }
+            // 叠加父级路由路径
             if (isChild) _parents.push(componentName);
             break;
         }
@@ -151,6 +155,7 @@ function routerFilter(routerMap, isChild = false, parents = []) {
         let _children = routerFilter(route.children, true, [..._parents]);
         route.children = [{ path: "", redirect: _children[0].path }, ..._children];
       } else {
+        // 递归深度遍历
         route.children = routerFilter(route.children, true, [..._parents]);
       }
     }

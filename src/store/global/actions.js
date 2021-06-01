@@ -13,133 +13,131 @@ export default {
   getMenu: ({ commit, state }, data) => {
     return new Promise(resolve => {
       console.log('获取菜单路由')
-      let res = {
-        way1: [{
-          path: '/index',
-          children: [
-            {
-              path: '/dashboard',
-              children: [{
-                path: '/schoolDashboard'
-              }, {
-                path: '/schedules'
-              }]
+      let res = [{
+        path: '/index',
+        children: [
+          {
+            path: '/dashboard',
+            children: [{
+              path: '/schoolDashboard'
             }, {
-              path: '/counseling',
-              children: [{
-                path: '/baseInfo',
-              }, {
-                path: '/onlineTest',
-              }, {
-                path: '/consultLive',
-                meta: { step: 4 }
-              }, {
-                path: '/getReport',
-              }]
+              path: '/schedules'
+            }]
+          }, {
+            path: '/counseling',
+            children: [{
+              path: '/baseInfo',
             }, {
-              path: '/knowledge'
+              path: '/onlineTest',
             }, {
-              path: '/students',
-              children: [{
-                path: '/studentsList'
-              }, {
-                path: '/studentsDetail'
-              }, {
-                path: '/studentsProcess'
-              }]
+              path: '/consultLive',
+              meta: { step: 4 }
             }, {
-              path: '/archives',
-              children: [{
-                path: '/archivesList'
-              }, {
-                path: '/archivesDetail'
-              }]
+              path: '/getReport',
+            }]
+          }, {
+            path: '/knowledge'
+          }, {
+            path: '/students',
+            children: [{
+              path: '/studentsList'
             }, {
-              path: '/messages'
+              path: '/studentsDetail'
             }, {
-              path: "/personal",
-              children: [{
-                path: "/base",
-              }, {
-                path: "/sbase",
-              }, {
-                path: "/cbase",
-              }, {
-                path: "/abase",
-              }, {
-                path: "/account",
-              }, {
-                path: "/safe",
-              }]
+              path: '/studentsProcess'
+            }]
+          }, {
+            path: '/archives',
+            children: [{
+              path: '/archivesList'
             }, {
-              path: "/accounts",
-              children: [{
-                path: "/admin",
-              }, {
-                path: "/schoolaccount",
-              }, {
-                path: "/teacher",
-              }, {
-                path: "/acountlist",
-              }, {
-                path: "/invitation",
-              }]
+              path: '/archivesDetail'
+            }]
+          }, {
+            path: '/messages'
+          }, {
+            path: "/personal",
+            children: [{
+              path: "/studentBase",
             }, {
-              path: '/live'
+              path: "/schoolBase",
             }, {
-              path: '/files',
-              children: [{
-                path: '/filesList'
-              }, {
-                path: '/filesDetail'
-              }]
-            },
-            {
-              path: "/management",
-              children: [{
-                path: "/counselinglist",
-              }, {
-                path: "/counselingDetail",
-              }, {
-                path: "/careerlist",
-              }, {
-                path: "/careerDetail",
-              }, {
-                path: "/courselist",
-              }, {
-                path: "/adviselist",
-              }]
-            },
-            {
-              path: "/school",
-              children: [{
-                path: "/schoollist",
-              }, {
-                path: "/student",
-              }, {
-                path: "/sdetail",
-              }]
+              path: "/consultantBase",
             }, {
-              path: '/consultant'
+              path: "/adminBase",
             }, {
-              path: '/playback'
+              path: "/account",
             }, {
-              path: "/testing",
-              children: [{
-                path: "/testing1",
-              }]
-            },]
-        }, {
-          path: '/living'
-        }]
-      };
-      request.get(urls.getMenu).then(res2 => {
-        console.log('获取路由', res2)
-        commit(types.SET_MENU, res2.data);
-        resolve(res2.data);
-      });
-      // commit(types.SET_MENU, res);
-      // resolve(res);
+              path: "/safe",
+            }]
+          }, {
+            path: "/accounts",
+            children: [{
+              path: "/admin",
+            }, {
+              path: "/schoolaccount",
+            }, {
+              path: "/teacher",
+            }, {
+              path: "/acountlist",
+            }, {
+              path: "/invitation",
+            }]
+          }, {
+            path: '/live'
+          }, {
+            path: '/files',
+            children: [{
+              path: '/filesList'
+            }, {
+              path: '/filesDetail'
+            }]
+          },
+          {
+            path: "/management",
+            children: [{
+              path: "/counselinglist",
+            }, {
+              path: "/counselingDetail",
+            }, {
+              path: "/careerlist",
+            }, {
+              path: "/careerDetail",
+            }, {
+              path: "/courselist",
+            }, {
+              path: "/adviselist",
+            }]
+          },
+          {
+            path: "/school",
+            children: [{
+              path: "/schoollist",
+            }, {
+              path: "/student",
+            }, {
+              path: "/sdetail",
+            }]
+          }, {
+            path: '/consultant'
+          }, {
+            path: '/playback'
+          }, {
+            path: "/testing",
+            children: [{
+              path: "/testing1",
+            }]
+          },]
+      }, {
+        path: '/living'
+      }]
+      // request.get(urls.getMenu).then(res2 => {
+      //   console.log('获取路由', res2)
+      //   commit(types.SET_MENU, res2.data);
+      //   resolve(res2.data);
+      // });
+      commit(types.SET_MENU, res);
+      resolve(res);
     });
   },
   setMenu: ({ commit, state }, data) => {

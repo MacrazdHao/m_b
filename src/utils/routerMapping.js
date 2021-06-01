@@ -272,7 +272,7 @@ export default {
     }
   },
   // 子子级
-  '/base': {
+  '/studentBase': {
     path: "base",
     name: "base",
     component: "pages/base",
@@ -282,7 +282,7 @@ export default {
     }
   },
   // 子子级
-  '/sbase': {
+  '/schoolBase': {
     path: "sbase",
     name: "sbase",
     component: "pages/sbase",
@@ -292,7 +292,7 @@ export default {
     }
   },
   // 子子级
-  '/cbase': {
+  '/consultantBase': {
     path: "cbase",
     name: "cbase",
     component: "pages/cbase",
@@ -302,7 +302,7 @@ export default {
     }
   },
   // 子子级
-  '/abase': {
+  '/adminBase': {
     path: "abase",
     name: "abase",
     component: "pages/abase",
