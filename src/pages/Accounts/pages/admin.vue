@@ -8,6 +8,11 @@
           class="input"
           :value="username"
           :placeholder="$t('accounts.admin.parentsUserPlaceholder')"
+          @input="
+            (text) => {
+              username = text;
+            }
+          "
         />
       </div>
     </div>
@@ -19,6 +24,11 @@
           :value="password"
           type="password"
           :placeholder="$t('accounts.admin.passwordPlaceholder')"
+          @input="
+            (text) => {
+              password = text;
+            }
+          "
         />
       </div>
       <p class="tips">{{ $t("accounts.admin.passwordTips") }}</p>
@@ -40,7 +50,14 @@
     <div class="inputBox permissionBox">
       <p class="title">{{ $t("accounts.admin.parentsUserLabel") }}</p>
       <div class="permission">
-        <PCheckbox :data="permissions" />
+        <PCheckbox
+          :data="permissions"
+          @setValue="
+            (res) => {
+              permissionList = res;
+            }
+          "
+        />
       </div>
     </div>
     <PButton
@@ -66,25 +83,45 @@ export default {
     return {
       username: "",
       password: "",
-      result: "123123",
+      result: "",
       permissions: [
         {
           name: this.$t("accounts.admin.permission.student"),
-          value: 0,
+          value: "platform_school_manager_admin",
         },
         {
           name: this.$t("accounts.admin.permission.archives"),
-          value: 1,
+          value: "platform_school_account_admin",
         },
         {
           name: this.$t("accounts.admin.permission.account"),
-          value: 2,
+          value: "platform_consultor_admin",
         },
       ],
+      permissionList: [],
     };
   },
   methods: {
-    createParentsUser() {},
+    createParentsUser() {
+      this.$store
+        .dispatch("accounts/createAdminAccount", {
+          account: this.username,
+          password: this.password,
+          role: this.permissionList,
+        })
+        .then((res) => {
+          this.$message.message(
+            this.$t("accounts.admin.successTips.createSuccess")
+          );
+          this.result = this.username;
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.error(
+            err || this.$t("accounts.admin.errorTips.createFail")
+          );
+        });
+    },
   },
 };
 </script>

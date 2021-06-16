@@ -1,6 +1,6 @@
 import types from './types';
 import urls from './urls';
-import request from '@/utils/request';
+import request from '@/utils/request_hr';
 
 export default {
   test: ({ commit, state }, data) => {
@@ -79,7 +79,11 @@ export default {
             }, {
               path: "/teacher",
             }, {
-              path: "/acountlist",
+              path: "/accountlist",
+            }, {
+              path: "/adminaccountlist",
+            }, {
+              path: "/schoolaccountlist",
             }, {
               path: "/invitation",
             }]
@@ -149,4 +153,17 @@ export default {
   setLanguage: ({ commit, state }, language) => {
     commit('SET_LANGUAGE', language);
   },
+  uploadAvatar: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.uploadAvatar, data, { "Content-Type": "multipart/form-data" }).then(res => {
+        if (res.data.url) {
+          res.data.url = request.custom.img + res.data.url;
+        }
+        console.log(request.custom)
+        resolve(res);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
 }

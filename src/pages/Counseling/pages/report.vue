@@ -39,6 +39,11 @@ export default {
       finished: true,
     };
   },
+  computed: {
+    stateInfo() {
+      return this.$store.state.counseling.stateInfo;
+    },
+  },
   mounted() {
     this.$emit("setSuffixMenu", [this.$t(`counseling.step6.title`)]);
     this.$emit("setStep", 6);

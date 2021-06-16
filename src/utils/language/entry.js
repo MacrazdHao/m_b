@@ -24,6 +24,10 @@ export default {
         usernamePlaceholder: '请输入邮箱账号',
         passwordPlaceholder: '请输入密码',
       },
+      admin: {
+        usernamePlaceholder: '请输入账号',
+        passwordPlaceholder: '请输入密码',
+      },
       rememberTips: '保持登录状态7天',
       forgetTips: '忘记密码？',
       forgetButton: '找回密码',

@@ -8,6 +8,11 @@
           class="input"
           :value="username"
           :placeholder="$t('accounts.school.parentsUserPlaceholder')"
+          @input="
+            (text) => {
+              username = text;
+            }
+          "
         />
       </div>
     </div>
@@ -19,6 +24,11 @@
           :value="password"
           type="password"
           :placeholder="$t('accounts.school.passwordPlaceholder')"
+          @input="
+            (text) => {
+              password = text;
+            }
+          "
         />
       </div>
       <p class="tips">{{ $t("accounts.school.passwordTips") }}</p>
@@ -30,6 +40,11 @@
           class="input"
           :value="schoolName"
           :placeholder="$t('accounts.school.namePlaceholder')"
+          @input="
+            (text) => {
+              schoolName = text;
+            }
+          "
         />
       </div>
     </div>
@@ -71,11 +86,30 @@ export default {
       username: "",
       password: "",
       schoolName: "",
-      result: "123123",
+      result: "",
     };
   },
   methods: {
-    createParentsUser() {},
+    createParentsUser() {
+      this.$store
+        .dispatch("accounts/createSchoolAccount", {
+          account: this.username,
+          password: this.password,
+          name: this.schoolName,
+        })
+        .then((res) => {
+          this.$message.message(
+            this.$t("accounts.school.successTips.createSuccess")
+          );
+          this.result = this.username;
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.error(
+            err || this.$t("accounts.school.errorTips.createFail")
+          );
+        });
+    },
   },
 };
 </script>

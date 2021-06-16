@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      avatar: require("@/assets/index/anna.jpg"),
+      avatar: this.$_default.avatar,
       name: "华南师范大学附属中学国际部",
       account: "hnsfdxgjb_2021xm",
     };

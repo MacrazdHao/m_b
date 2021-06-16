@@ -13,7 +13,8 @@
       notShowChildren: 是否在菜单下显示子菜单,
       notShowThisChildren: 作为子子级是否显示在父级的子菜单中
       group: （其他自定义）子子级特殊分组标识，和notShowThisChildren配合使用（B作为A子级，但实际路由级别又与A同级的情况下使用）
-      groupParent: （其他自定义）同一分组下的主路由（入口）
+      groupParent: （其他自定义）同一分组下的主路由（入口）,
+      type: 一模多用时，用于区分使用该模板的不同页面的特殊标识
     }
   }
 }
@@ -375,13 +376,36 @@ export default {
     }
   },
   // 子子级
-  '/acountlist': {
-    path: "acountlist",
-    name: "acountlist",
-    component: "pages/acountlist",
+  '/accountlist': {
+    path: "accountlist",
+    name: "accountlist",
+    component: "pages/accountlist",
     meta: {
       title: "账号管理",
       enTitle: "Accounts Manage",
+      type: "teacher"
+    }
+  },
+  // 子子级
+  '/adminaccountlist': {
+    path: "adminaccountlist",
+    name: "adminaccountlist",
+    component: "pages/accountlist",
+    meta: {
+      title: "管理员账号管理",
+      enTitle: "Accounts Manage",
+      type: "admin"
+    }
+  },
+  // 子子级
+  '/schoolaccountlist': {
+    path: "schoolaccountlist",
+    name: "schoolaccountlist",
+    component: "pages/accountlist",
+    meta: {
+      title: "学校账号管理",
+      enTitle: "Accounts Manage",
+      type: "school"
     }
   },
   // 子子级

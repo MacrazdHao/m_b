@@ -1,15 +1,16 @@
 import types from './types';
 import urls from './urls';
-import request from '@/utils/request';
-import { setToken, removeToken } from '@/utils/auth';
+import request from '@/utils/request_hr';
+import { setToken, removeToken, setUsertype, getUsertype, removeUsertype } from '@/utils/auth';
 import { resetRouter } from '@/router/resetRouter';
 
 export default {
   schoolLogin: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
-      request.post("/user/login/account/school", data).then(res => {
+      request.post(urls.schoolLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
+        setUsertype(res.data.userType);
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
@@ -19,9 +20,10 @@ export default {
   },
   studentLogin: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
-      request.post("/user/login/email", data).then(res => {
+      request.post(urls.studentLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
+        setUsertype(res.data.userType);
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
@@ -29,11 +31,12 @@ export default {
       });
     });
   },
-  adminLogin: ({ commit }) => {
+  adminLogin: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      request.post("/admin/login/account", data).then(res => {
+      request.post(urls.adminLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
+        setUsertype(res.data.userType);
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
@@ -42,8 +45,10 @@ export default {
     });
   },
   getUserinfo: ({ commit, state }, data) => {
+    console.log("用户类型", getUsertype());
+    let iUrl = getUsertype() < 10 ? urls.userinfo : urls.admininfo;
     return new Promise((resolve, reject) => {
-      request.get("/user/info", data).then(res => {
+      request.get(iUrl, data).then(res => {
         console.log('获取用户信息成功', res);
         commit(types.SET_USERINFO, res.data);
         resolve(res);
@@ -62,10 +67,11 @@ export default {
   },
   logout: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
-      request.post("/user/logout", data).then(res => {
+      request.post(urls.logout, data).then(res => {
         console.log('登出成功', res);
         resetRouter();
         removeToken();
+        removeUsertype();
         commit(types.RESET_STATE);
         resolve(res);
       }).catch(err => {
@@ -76,10 +82,11 @@ export default {
   },
   adminLogout: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
-      request.post("/admin/logout", data).then(res => {
+      request.post(urls.adminLogout, data).then(res => {
         console.log('登出成功', res);
         resetRouter();
         removeToken();
+        removeUsertype();
         commit(types.RESET_STATE);
         resolve(res);
       }).catch(err => {
@@ -90,7 +97,7 @@ export default {
   },
   studentEmailVerify: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      request.post("/user/register/email/code", data).then(res => {
+      request.post(urls.studentEmailVerify, data).then(res => {
         console.log('发送验证码成功', res);
         resolve(res);
       }).catch(err => {
@@ -101,7 +108,7 @@ export default {
   },
   adminEmailVerify: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      request.post("/admin/email/code", data).then(res => {
+      request.post(urls.adminEmailVerify, data).then(res => {
         console.log('发送验证码成功', res);
         resolve(res);
       }).catch(err => {
@@ -112,9 +119,10 @@ export default {
   },
   studentRegister: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      request.post("/user/register/email", data).then(res => {
+      request.post(urls.studentRegister, data).then(res => {
         console.log('注册成功', res);
         setToken(res.data.token);
+        setUsertype(res.data.userType);
         resolve(res);
       }).catch(err => {
         console.log('注册失败', err);
@@ -124,9 +132,10 @@ export default {
   },
   adminRegister: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      request.post("/admin/register/email", data).then(res => {
+      request.post(urls.adminRegister, data).then(res => {
         console.log('注册成功', res);
         setToken(res.data.token);
+        setUsertype(res.data.userType);
         resolve(res);
       }).catch(err => {
         console.log('注册失败', err);
@@ -137,8 +146,22 @@ export default {
   resetToken: ({ commit }) => {
     return new Promise(resolve => {
       removeToken();
+      removeUsertype();
       commit(types.RESET_STATE);
       resolve();
+    });
+  },
+
+  editAdminPersonalBase: ({commit,state}, data)=>{
+    return new Promise((resolve, reject) => {
+      request.put(urls.editAdminPersonalBase, data).then(res => {
+        console.log('修改管理员信息成功', res);
+        commit(types.SET_USERINFO, res.data);
+        resolve(res);
+      }).catch(err => {
+        console.log('修改管理员信息失败', err);
+        reject(err);
+      });
     });
   }
 }

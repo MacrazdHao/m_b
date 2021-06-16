@@ -244,7 +244,7 @@ export default {
       });
     });
     this.consultCheckbox = consultCheckbox;
-    this.$emit("setSuffixMenu", [Bus.getSchoolInfo().school, this.info.name]);
+    this.$emit("setSuffixMenu", [Bus.getSchoolInfo().orgName, this.info.name]);
   },
   methods: {
     selectItem(index) {

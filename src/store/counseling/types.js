@@ -1,0 +1,4 @@
+export default {
+  RESET_STATE: 'RESET_STATE',
+  SET_STATEINFO: 'SET_STATEINFO',
+}

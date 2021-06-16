@@ -18,8 +18,8 @@ export default {
           placeholder: "请输入姓名"
         },
         class: {
-          label: "学生班级",
-          placeholder: "请输入班级"
+          label: "学生年级",
+          placeholder: "请输入年级"
         },
         sex: {
           label: "学生性别",
@@ -57,6 +57,9 @@ export default {
           label: "运动爱好",
           placeholder: "请输入喜欢的运动或者爱好"
         },
+      },
+      tips: {
+        submitError: "提交失败，请重试"
       }
     },
     step2: {

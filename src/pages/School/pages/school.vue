@@ -2,27 +2,29 @@
   <div class="List">
     <div class="list-content">
       <div class="toolsBar">
-        <!-- <el-select
-          v-model="value"
-          :placeholder="$t('students.list.statusPlaceholder')"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select> -->
         <SInput
           class="searchInput"
           :placeholder="$t('students.list.searchPlaceholder')"
           :icon="require('@/assets/student/icon_seach.svg')"
+          @input="
+            (text) => {
+              keyword = text;
+            }
+          "
         />
         <SButton class="button" :text="$t('students.list.searchButton')" />
       </div>
       <div class="table">
-        <el-table :data="tableData" height="642" style="width: 100%">
+        <el-table
+          :data="tableData"
+          height="642"
+          style="width: 100%"
+          :empty-text="
+            loading
+              ? $t('school.list.emptyTips.loadingList')
+              : $t('school.list.emptyTips.emptyList')
+          "
+        >
           <el-table-column min-width="100px" fixed>
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
@@ -31,7 +33,7 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.school) }}
+                {{ overline(scope.row.orgName) }}
               </p>
             </template>
           </el-table-column>
@@ -43,7 +45,7 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ scope.row.num }}
+                {{ scope.row.count }}
               </p>
             </template>
           </el-table-column>
@@ -75,6 +77,9 @@
         :pager-count="5"
         :page-count="page.total"
         :current-page="page.current"
+        @prev-click="prevPage"
+        @next-click="nextPage"
+        @current-change="currentChange"
       >
       </el-pagination>
       <div class="jumper">
@@ -104,46 +109,9 @@ export default {
   },
   data() {
     return {
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-      ],
-      value: "",
-      tableData: [
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          num: 456,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          num: 456,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          num: 456,
-        },
-      ],
+      loading: false,
+      keyword: "",
+      tableData: [],
       pageNum: 1,
       page: {
         dataNum: 1000,
@@ -153,11 +121,46 @@ export default {
       },
     };
   },
+  watch: {
+    keyword(val) {
+      this.page = {
+        dataNum: 0,
+        total: 10,
+        size: 10,
+        current: 1,
+      };
+      this.initList();
+    },
+  },
   mounted() {
-    // Bus.clearSchoolInfo();
-    // Bus.clearStudentInfo();
+    this.page = {
+      dataNum: 0,
+      total: 10,
+      size: 10,
+      current: 1,
+    };
+    // this.keyword = "";
+    this.initList();
   },
   methods: {
+    initList() {
+      this.loading = true;
+      this.$store
+        .dispatch("school/getSchoolList", {
+          pageIndex: this.page.current,
+          pageSize: this.page.size,
+          keyword: this.keyword,
+        })
+        .then((res) => {
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+          this.$message.error(this.$t("school.list.errorTips.nolist"));
+        });
+    },
     toDetail(info) {
       this.$router.push({
         name: "student",
@@ -168,10 +171,92 @@ export default {
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
     goPage() {
-      this.page = {
-        ...this.page,
-        current: parseInt(this.pageNum),
-      };
+      this.loading = true;
+      this.$store
+        .dispatch("school/getSchoolList", {
+          pageIndex: parseInt(this.pageNum),
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(this.pageNum),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message.error(this.$t("school.list.errorTips.nolist"));
+        });
+    },
+    currentChange(num) {
+      this.loading = true;
+      this.$store
+        .dispatch("school/getSchoolList", {
+          pageIndex: parseInt(num),
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(num),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message.error(this.$t("school.list.errorTips.nolist"));
+        });
+    },
+    prevPage() {
+      this.loading = true;
+      this.$store
+        .dispatch("school/getSchoolList", {
+          pageIndex: this.page.current - 1,
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current - 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message.error(this.$t("school.list.errorTips.nolist"));
+        });
+    },
+    nextPage() {
+      this.loading = true;
+      this.$store
+        .dispatch("school/getSchoolList", {
+          pageIndex: this.page.current + 1,
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current + 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message.error(this.$t("school.list.errorTips.nolist"));
+        });
     },
     enterEvent() {
       document.onkeydown = (event) => {

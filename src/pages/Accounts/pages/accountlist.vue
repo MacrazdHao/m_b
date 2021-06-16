@@ -1,11 +1,16 @@
 <template>
-  <div class="AcountList">
+  <div class="AccountList">
     <div class="list-content">
       <div class="table">
         <el-table
           :data="tableData"
           height="642"
           style="width: 100%"
+          :empty-text="
+            loading
+              ? $t('accounts.accountlist.emptyTips.loadingList')
+              : $t('accounts.accountlist.emptyTips.emptyList')
+          "
           @selection-change="handleSelectionChange"
           ><el-table-column type="selection" width="55"> </el-table-column>
           <el-table-column fixed>
@@ -16,7 +21,7 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.name) }}
+                {{ overline(scope.row.account || "unknow") }}
               </p>
             </template>
           </el-table-column>
@@ -30,7 +35,7 @@
               <p class="tableRow-text">
                 {{
                   overline(
-                    $tc("accounts.accountlist.accountType", scope.row.type)
+                    $tc(`accounts.accountlist.accountType.${$route.meta.type}`)
                   )
                 }}
               </p>
@@ -89,6 +94,9 @@
           :pager-count="5"
           :page-count="page.total"
           :current-page="page.current"
+          @prev-click="prevPage"
+          @next-click="nextPage"
+          @current-change="currentChange"
         >
         </el-pagination>
         <div class="jumper">
@@ -122,30 +130,12 @@ export default {
   },
   data() {
     return {
+      loading: false,
       value: "",
-      tableData: [
-        {
-          id: 888,
-          name: "SuperAnna",
-          type: 0,
-          password: "123456",
-        },
-        {
-          id: 123,
-          name: "AdminAnna",
-          type: 1,
-          password: "123456",
-        },
-        {
-          id: 999,
-          name: "TeacherAnna",
-          type: 2,
-          password: "123456",
-        },
-      ],
+      tableData: [],
       pageNum: 1,
       page: {
-        dataNum: 100,
+        dataNum: 0,
         total: 10,
         size: 10,
         current: 1,
@@ -153,6 +143,9 @@ export default {
       selected: [],
       showEditBox: false,
       editingAccount: -1,
+      listUrl: "",
+      deleteUrl: "",
+      batchDeleteUrl: "",
     };
   },
   computed: {
@@ -160,7 +153,66 @@ export default {
       return "********";
     },
   },
+  watch: {
+    $route(next) {
+      this.page = {
+        dataNum: 0,
+        total: 10,
+        size: 10,
+        current: 1,
+      };
+      this.tableData = [];
+      this.initList();
+    },
+  },
+  mounted() {
+    this.page = {
+      dataNum: 0,
+      total: 10,
+      size: 10,
+      current: 1,
+    };
+    this.tableData = [];
+    this.initList();
+  },
   methods: {
+    initList() {
+      this.loading = true;
+      switch (this.$route.meta.type) {
+        case "admin":
+          this.listUrl = "accounts/getAdminList";
+          this.deleteUrl = "accounts/deleteAdminAccount";
+          this.batchDeleteUrl = "accounts/deleteAdminAccounts";
+          break;
+        case "school":
+          this.listUrl = "accounts/getSchoolList";
+          this.deleteUrl = "accounts/deleteSchoolAccount";
+          this.batchDeleteUrl = "accounts/deleteSchoolAccounts";
+          break;
+        default:
+          this.listUrl = "accounts/getSchoolList";
+          break;
+      }
+      this.$store
+        .dispatch(this.listUrl, {
+          pageIndex: this.page.current,
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+        });
+    },
     editAccount(index) {
       console.log(index);
       this.editingAccount = index;
@@ -180,10 +232,92 @@ export default {
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
     goPage() {
-      this.page = {
-        ...this.page,
-        current: parseInt(this.pageNum),
-      };
+      this.loading = true;
+      this.$store
+        .dispatch(this.listUrl, {
+          pageIndex: parseInt(this.pageNum),
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(this.pageNum),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+        });
+    },
+    currentChange(num) {
+      this.loading = true;
+      this.$store
+        .dispatch(this.listUrl, {
+          pageIndex: parseInt(num),
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(num),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+        });
+    },
+    prevPage() {
+      this.loading = true;
+      this.$store
+        .dispatch(this.listUrl, {
+          pageIndex: this.page.current - 1,
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current - 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+        });
+    },
+    nextPage() {
+      this.loading = true;
+      this.$store
+        .dispatch(this.listUrl, {
+          pageIndex: this.page.current + 1,
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current + 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+        });
     },
     enterEvent() {
       document.onkeydown = (event) => {
@@ -200,24 +334,67 @@ export default {
     },
     handleSelectionChange(val) {
       this.selected = [...val];
+      console.log(this.selected);
     },
     deleteAccount(index) {
-      this.$dialog.warning([
-        this.$t(`accounts.accountlist.deleteTips`),
-        this.$t(`accounts.accountlist.deleteTips2`),
-      ]).catch(()=>{});
+      this.$dialog
+        .warning(
+          [
+            this.$t(`accounts.accountlist.deleteTips`),
+            this.$t(`accounts.accountlist.deleteTips2`),
+          ],
+          () => {
+            this.$store
+              .dispatch(this.deleteUrl, this.tableData[index].userId)
+              .then((res) => {
+                this.initList();
+                this.$message.message(
+                  this.$t("accounts.accountlist.successTips.deleteSuccess")
+                );
+              })
+              .catch((err) => {
+                this.$message.error(
+                  this.$t("accounts.accountlist.errorTips.deleteFail")
+                );
+              });
+          }
+        )
+        .catch(() => {});
     },
     batchDelete() {
-      this.$dialog.warning([
-        this.$t(`accounts.accountlist.deleteTips`),
-        this.$t(`accounts.accountlist.deleteTips2`),
-      ]).catch(()=>{});
+      this.$dialog
+        .warning(
+          [
+            this.$t(`accounts.accountlist.deleteTips`),
+            this.$t(`accounts.accountlist.deleteTips2`),
+          ],
+          () => {
+            let uids = [];
+            for (let i = 0; i < this.selected.length; i++) {
+              uids.push(this.selected[i].userId);
+            }
+            this.$store
+              .dispatch(this.batchDeleteUrl, uids)
+              .then((res) => {
+                this.initList();
+                this.$message.message(
+                  this.$t("accounts.accountlist.successTips.deleteSuccess")
+                );
+              })
+              .catch((err) => {
+                this.$message.error(
+                  this.$t("accounts.accountlist.errorTips.deleteFail")
+                );
+              });
+          }
+        )
+        .catch(() => {});
     },
   },
 };
 </script>
 <style lang="scss">
-.AcountList {
+.AccountList {
   .toolsBar {
     .el-select .el-input.is-focus .el-input__inner {
       border-color: #4b78f6;
@@ -268,7 +445,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.AcountList {
+.AccountList {
   width: 100%;
   // padding: 22px 24px 14px 24px;
   box-sizing: border-box;

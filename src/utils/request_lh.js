@@ -2,17 +2,15 @@ import axios from 'axios'
 import { MessageBox, Message, Loading } from 'element-ui'
 import store from '@/store'
 import { getToken, removeToken } from '@/utils/auth'
-import { baseURL, mockURL, testURL, wenjieURL, haoranURL, imgURL } from './config';
+import { baseURL, mockURL, testURL, wenjieURL, haoranURL, luohuanURL, imgURL } from './config';
 import i18n from './language';
 import Vue from 'vue';
 
 const service = axios.create({
   // baseURL: mockURL, // url = base url + request url
-  baseURL: testURL,
+  baseURL: luohuanURL,
   timeout: 5000 // request timeout
 })
-
-service.defaults.withCredentials = true;
 
 service.interceptors.request.use(
   config => {
@@ -69,6 +67,6 @@ service.interceptors.response.use(
   }
 )
 
-service.custom = { url: testURL, img: imgURL };
+service.custom = { url: luohuanURL, img: imgURL };
 
 export default service

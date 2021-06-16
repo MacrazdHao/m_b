@@ -10,8 +10,9 @@ import ElementUI from 'element-ui';
 import "./assets/animate.css";
 import "./assets/transition.css";
 import "./assets/font.css";
-import 'element-ui/lib/theme-chalk/index.css'
-import './utils/permission'
+import 'element-ui/lib/theme-chalk/index.css';
+import './utils/permission';
+import _default from './utils/default.js';
 import Dialog from './components/Dialog/dialog.js';
 import LogoutDialog from './components/LogoutDialog/logoutDialog.js';
 import Message from './components/Message/message.js';
@@ -29,6 +30,7 @@ Vue.use(ElementUI)
 Vue.use(LogoutDialog)
 Vue.use(Dialog)
 Vue.use(Message)
+Vue.use(_default)
 Vue.use(html2pdf)
 
 /* eslint-disable no-new */

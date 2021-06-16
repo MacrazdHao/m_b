@@ -5,13 +5,13 @@
         :class="[
           'stepsItem',
           'stepsItem-1',
-          step == 1 ? 'stepsItem--selected' : '',
+          stateInfo.nodeType == 11 ? 'stepsItem--selected' : '',
         ]"
         :style="{
           background:
             'url(' +
             require(`@/assets/counseling/step_first${
-              step == 1 ? '_selected' : ''
+              stateInfo.nodeType == 11 ? '_selected' : ''
             }.png`) +
             ') no-repeat',
         }"
@@ -22,13 +22,13 @@
         :class="[
           'stepsItem',
           'stepsItem-2',
-          step == 2 ? 'stepsItem--selected' : '',
+          stateInfo.nodeType == 12 ? 'stepsItem--selected' : '',
         ]"
         :style="{
           background:
             'url(' +
             require(`@/assets/counseling/step${
-              step == 2 ? '_selected' : ''
+              stateInfo.nodeType == 12 ? '_selected' : ''
             }.png`) +
             ') no-repeat',
         }"
@@ -39,13 +39,13 @@
         :class="[
           'stepsItem',
           'stepsItem-3',
-          step == 3 ? 'stepsItem--selected' : '',
+          stateInfo.nodeType == 13 ? 'stepsItem--selected' : '',
         ]"
         :style="{
           background:
             'url(' +
             require(`@/assets/counseling/step${
-              step == 3 ? '_selected' : ''
+              stateInfo.nodeType == 13 ? '_selected' : ''
             }.png`) +
             ') no-repeat',
         }"
@@ -56,13 +56,13 @@
         :class="[
           'stepsItem',
           'stepsItem-4',
-          step == 4 ? 'stepsItem--selected' : '',
+          stateInfo.nodeType == 21 ? 'stepsItem--selected' : '',
         ]"
         :style="{
           background:
             'url(' +
             require(`@/assets/counseling/step${
-              step == 4 ? '_selected' : ''
+              stateInfo.nodeType == 21 ? '_selected' : ''
             }.png`) +
             ') no-repeat',
         }"
@@ -105,7 +105,7 @@
       </div>
     </div>
     <transition name="slide-fade">
-      <router-view  @setStep="setStep" @setSuffixMenu="setSuffixMenu" />
+      <router-view @setStep="setStep" @setSuffixMenu="setSuffixMenu" />
     </transition>
   </div>
 </template>
@@ -116,6 +116,33 @@ export default {
     return {
       step: 1,
     };
+  },
+  computed: {
+    stateInfo() {
+      return this.$store.state.counseling.stateInfo;
+    },
+  },
+  watch: {
+    stateInfo(val) {
+      console.log("状态信息更新了");
+      switch (val.nodeType) {
+        case 11:
+          this.$router.push({ path: "/index/counseling/baseInfo" });
+          break;
+        case 12:
+          this.$router.push({ path: "/index/counseling/onlineTest" });
+          break;
+        case 13:
+          this.$router.push({ path: "/index/counseling/consultLive" });
+          break;
+        case 21:
+          this.$router.push({ path: "/index/counseling/consultLive" });
+          break;
+      }
+    },
+  },
+  mounted() {
+    this.$store.dispatch("counseling/getStateinfo");
   },
   methods: {
     nextStep() {

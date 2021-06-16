@@ -235,6 +235,11 @@ export default {
       hasReport: false,
     };
   },
+  computed: {
+    stateInfo() {
+      return this.$store.state.counseling.stateInfo;
+    },
+  },
   mounted() {
     this.$emit("setSuffixMenu", [
       this.$t("counseling.step1.title"),

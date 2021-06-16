@@ -57,6 +57,9 @@ export default {
     step() {
       return this.$route.meta.step;
     },
+    stateInfo() {
+      return this.$store.state.counseling.stateInfo;
+    },
   },
   mounted() {
     this.$emit("setSuffixMenu", [this.$t(`counseling.step${this.step}.title`)]);

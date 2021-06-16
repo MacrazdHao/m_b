@@ -18,9 +18,13 @@ _Message.install = (Vue) => {
     showMessage(text, theme, duration = 2000, callback = () => { }) {
       let instance = createMessage();
       instance.messageNum = messageNum;
-      instance.callback = () => {
+      instance.callback = (num) => {
         callback();
-        messageNum--;
+        console.log(num);
+        if (num == messageNum) {
+          messageNum = 0;
+        }
+        // messageNum--;
       }
       instance.text = text;
       instance.theme = theme;

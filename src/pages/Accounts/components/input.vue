@@ -4,6 +4,7 @@
       :style="customStyle || {}"
       :id="`input${time}`"
       v-model="valueTmp"
+      autocomplete="new-password"
       :placeholder="placeholder"
       :disabled="disabled"
       :type="type"
@@ -24,7 +25,7 @@ export default {
     "copyTips",
     "copyErrTips",
     "customStyle",
-    "type"
+    "type",
   ],
   data() {
     return {
@@ -49,7 +50,8 @@ export default {
     },
   },
   mounted() {
-    this.valueTmp = this.value;
+    console.log(this.value)
+    this.valueTmp = this.value || "";
   },
   methods: {
     copy_info() {

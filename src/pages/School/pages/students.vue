@@ -250,7 +250,7 @@ export default {
       this.$router.go(-1);
       return;
     }
-    this.$emit("setSuffixMenu", [this.school.school]);
+    this.$emit("setSuffixMenu", [this.school.orgName]);
   },
   methods: {
     toDetail(info) {

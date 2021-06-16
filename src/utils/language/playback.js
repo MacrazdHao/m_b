@@ -7,7 +7,7 @@ export default {
       table: {
         school: '学校',
         name: "姓名",
-        grade: "班级",
+        grade: "年级",
         process: "阶段",
         options: "操作",
         watchButton: '查看',

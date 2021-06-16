@@ -54,7 +54,7 @@ export default {
         el.style.transform = `translate(-50%, ${this.baseTop - 30}px)`;
         el.style.opacity = "0";
         setTimeout(() => {
-          this.callback();
+          this.callback(this.messageNum);
           this.visible = false;
         }, 200);
       }, this.duration);

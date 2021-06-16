@@ -7,7 +7,7 @@ export default {
       searchButton: '搜索',
       table: {
         name: "姓名",
-        grade: "班级",
+        grade: "年级",
         process: "阶段",
         time: '直播时间',
         status: "直播状态",

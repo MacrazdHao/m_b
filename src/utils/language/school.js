@@ -6,6 +6,18 @@ export default {
         num: '学生人数',
         options: '操作',
         watchButton: '查看'
+      },
+      emptyTips: {
+        loadingList: '加载数据中...',
+        emptyList: '暂无数据',
+      },
+      successTips: {
+        editSuccess: '修改成功',
+        deleteSuccess: '删除成功',
+      },
+      errorTips: {
+        nolist: '获取列表失败，请刷新再试',
+        deleteFail: '删除失败',
       }
     },
     students: {

@@ -16,7 +16,13 @@ export default {
         archives: '生涯档案',
         account: '账号设置',
       },
-      createButton: '生成账号'
+      createButton: '生成账号',
+      successTips: {
+        createSuccess: '账号创建成功',
+      },
+      errorTips: {
+        createFail: '账号创建失败',
+      }
     },
     school: {
       title: '学校设置',
@@ -29,7 +35,13 @@ export default {
       namePlaceholder: '请输入学校名称',
       createUserLabel: '生成账号',
       createUserPlaceholder: '',
-      createButton: '生成账号'
+      createButton: '生成账号',
+      successTips: {
+        createSuccess: '账号创建成功',
+      },
+      errorTips: {
+        createFail: '账号创建失败',
+      }
     },
     teacher: {
       title: '账号设置',
@@ -52,7 +64,11 @@ export default {
       type: '账号类型',
       password: '密码',
       options: '操作',
-      accountType: '超级管理员 | 管理员账号 | 老师账号',
+      accountType: {
+        admin: '管理员账号',
+        school: '学校账号',
+        teacher: '老师账号'
+      },
       editButton: '编辑',
       deleteButton: '删除',
       deleteAllButton: '批量删除',
@@ -68,7 +84,19 @@ export default {
         cancelButton: '取消'
       },
       deleteTips: '删除后，账号个人信息也将删除',
-      deleteTips2: '请谨慎确认是否要删除账号？'
+      deleteTips2: '请谨慎确认是否要删除账号？',
+      emptyTips: {
+        loadingList: '加载数据中...',
+        emptyList: '暂无数据',
+      },
+      successTips: {
+        editSuccess: '修改成功',
+        deleteSuccess: '删除成功',
+      },
+      errorTips: {
+        nolist: '获取列表失败，请刷新再试',
+        deleteFail: '删除失败',
+      }
     },
     invitation: {
       title: '邀请码',

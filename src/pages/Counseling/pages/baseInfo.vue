@@ -130,15 +130,20 @@ export default {
     FormTextarea,
     CButton,
   },
+  computed: {
+    stateInfo() {
+      return this.$store.state.counseling.stateInfo;
+    },
+  },
   data() {
     return {
       sexData: [
-        { name: "男生", value: 1 },
-        { name: "女生", value: 2 },
+        { name: "男生", value: 0 },
+        { name: "女生", value: 1 },
       ],
       countryData: [
-        { name: "中国籍", value: 1 },
-        { name: "外国籍", value: 2 },
+        { name: "中国籍", value: 0 },
+        { name: "外国籍", value: 1 },
       ],
       name: "",
       gradeclass: "",
@@ -185,14 +190,39 @@ export default {
       this.sport = val;
     },
     submit() {
-      this.$emit("nextStep");
+      this.$store
+        .dispatch("counseling/submitBaseInfo", {
+          extracurricularStudy: this.extracurricular,
+          gender: this.sex.value,
+          gradeName: this.gradeclass,
+          nation: this.country.value,
+          readingCategory: this.book,
+          realName: this.name,
+          selfEvaluation: this.evaluation,
+          sportHobby: this.sport,
+          subjectAchievement: this.score,
+
+          nodeType: this.stateInfo.nodeType,
+          instanceId: this.stateInfo.instanceId,
+          nodeId: this.stateInfo.nodeId,
+          nodeName: this.stateInfo.nodeName,
+          tenantId: this.stateInfo.tenantId,
+        })
+        .then((res) => {
+          this.$store.dispatch("counseling/getStateinfo");
+        })
+        .catch((err) => {
+          // this.$message.error(this.$t("counseling.step1.tips.submitError"));
+        });
     },
     cancel() {
-      this.$dialog.message(
-        this.$t("counseling.step1.leaveTips"),
-        () => {},
-        () => {}
-      ).catch(()=>{});
+      this.$dialog
+        .message(
+          this.$t("counseling.step1.leaveTips"),
+          () => {},
+          () => {}
+        )
+        .catch(() => {});
     },
   },
 };

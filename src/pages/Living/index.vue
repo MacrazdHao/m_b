@@ -20,9 +20,9 @@
           <p>{{ userNum }}</p>
         </div>
         <div class="user">
-          <img src="@/assets/index/anna.jpg" />
+          <img :src="$_default.avatar" />
           <p>
-            纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞
+            {{ $store.state.user.userinfo.nickName }}
           </p>
         </div>
       </div>

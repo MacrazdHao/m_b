@@ -100,9 +100,12 @@
             @mouseenter="userMenuShow = true"
             @mouseleave="userMenuShow = false"
           >
-            <img class="avatar" src="@/assets/index/anna.jpg" />
+            <img
+              class="avatar"
+              :src="$store.state.user.userinfo.avatar || $_default.avatar"
+            />
             <p class="nickname">
-              纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞纬英科技一手遮天一人之下万人之上财政大臣梁湛霞
+              {{ $store.state.user.userinfo.nickName }}
             </p>
             <transition name="slide-fade">
               <div class="drawerBox" v-show="userMenuShow">
@@ -210,6 +213,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.$_default);
     for (let i = 0; i < this.$store.state.global.menu.children.length; i++) {
       let item = this.$store.state.global.menu.children[i];
       if (item.children) {

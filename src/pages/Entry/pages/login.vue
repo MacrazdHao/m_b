@@ -216,6 +216,7 @@ export default {
           margin-left: 0.417vw;
           font-size: 0.625vw;
           color: #999999;
+          user-select: none;
         }
       }
       .forget {

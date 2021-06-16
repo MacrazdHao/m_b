@@ -17,23 +17,13 @@
           <div class="loginForm">
             <entry-input
               class="loginForm-item"
-              :iconName="identity == 0 ? 'icon_account' : 'icon_email'"
+              iconName="icon_account"
               @input="
                 (val) => {
                   username = val;
                 }
               "
-              :placeholder="
-                $t(
-                  `entry.login.${
-                    identity == 0
-                      ? 'school'
-                      : identity == 1
-                      ? 'student'
-                      : 'consultant'
-                  }.usernamePlaceholder`
-                )
-              "
+              :placeholder="$t(`entry.login.admin.usernamePlaceholder`)"
             />
             <entry-input
               class="loginForm-item"
@@ -44,17 +34,7 @@
                   password = val;
                 }
               "
-              :placeholder="
-                $t(
-                  `entry.login.${
-                    identity == 0
-                      ? 'school'
-                      : identity == 1
-                      ? 'student'
-                      : 'consultant'
-                  }.passwordPlaceholder`
-                )
-              "
+              :placeholder="$t(`entry.login.admin.passwordPlaceholder`)"
             />
             <div class="toolsBar">
               <div class="remember" @click="remember = !remember">
@@ -103,6 +83,9 @@ export default {
     };
   },
   watch: {},
+  mounted() {
+    console.log("身份", this.identity);
+  },
   methods: {
     toRegister() {
       this.$router.push({ path: "/register" });
@@ -129,21 +112,12 @@ export default {
         // Cookies.set(`user${this.username}`, this.password, { expires: 15 });
       }
       this.$store
-        .dispatch(
-          `user/${
-            this.identity == 0
-              ? "school"
-              : this.identity == 1
-              ? "student"
-              : "admin"
-          }Login`,
-          {
-            email: this.username,
-            account: this.username,
-            password: this.password,
-            rememberMe: this.remember,
-          }
-        )
+        .dispatch(`user/adminLogin`, {
+          email: this.username,
+          account: this.username,
+          password: this.password,
+          rememberMe: this.remember,
+        })
         .then((res) => {
           console.log(res);
           if (this.redirect) {
@@ -180,8 +154,10 @@ export default {
     display: flex;
     flex-direction: row;
     width: 56.25vw;
-    height: 31.25vw;
+    min-height: 31.25vw;
+    height: fit-content;
     box-shadow: 0 0.8333vw 1.35417vw 0.52083vw rgba(209, 212, 221, 0.8);
+    background-color: #013047;
     .left {
       width: 50%;
       display: flex;
@@ -216,8 +192,8 @@ export default {
     .right {
       width: 50%;
       background-color: #fff;
-      min-height: 100%;
-      height: fit-content;
+      // height: 100%;
+      // height: fit-content;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -280,6 +256,7 @@ export default {
                 margin-left: 0.417vw;
                 font-size: 0.625vw;
                 color: #999999;
+                user-select: none;
               }
             }
             .forget {
@@ -311,6 +288,7 @@ export default {
         // justify-self: flex-end;
         font-size: 0.5208vw;
         color: #999999;
+        padding-top: 6px;
         margin-bottom: 1.042vw;
         // margin-top: 1.5625vw;
       }

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { MessageBox, Message, Loading } from 'element-ui'
 import store from '@/store'
 import { getToken, removeToken } from '@/utils/auth'
-import { baseURL, mockURL, testURL, wenjieURL, haoranURL } from './config';
+import { baseURL, mockURL, testURL, wenjieURL, haoranURL, imgURL } from './config';
 import i18n from './language';
 import Vue from 'vue';
 
@@ -48,7 +48,7 @@ service.interceptors.response.use(
       //   type: 'error',
       //   duration: 5 * 1000
       // })
-      Vue.prototype.$message.error(res[i18n.t('tips.msgKey')] || 'Error')
+      // Vue.prototype.$message.error(res[i18n.t('tips.msgKey')] || 'Error')
       return Promise.reject(new Error(res[i18n.t('tips.msgKey')] || 'Error'))
     } else {
       return res
@@ -66,5 +66,7 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+service.custom = { url: haoranURL, img: imgURL };
 
 export default service

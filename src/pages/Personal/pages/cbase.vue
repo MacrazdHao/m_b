@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      avatar: require("@/assets/index/anna.jpg"),
+      avatar: this.$_default.avatar,
       name: "Lucas Hines",
       country: "",
       education: "",

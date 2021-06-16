@@ -11,7 +11,7 @@
             <p class="label">
               {{ $t("accounts.accountlist.editBox.accountLabel") }}：
             </p>
-            <p class="username">{{ data.name }}</p>
+            <p class="username">{{ data.account || "unkown account" }}</p>
           </div>
           <div class="item password">
             <p class="label">
@@ -71,13 +71,49 @@ export default {
     return {
       editable: false,
       password: "********",
+      editUrl: "",
     };
   },
+  watch: {
+    $route(next) {
+      this.initEditUrl();
+    },
+  },
+  mounted() {
+    this.initEditUrl();
+  },
   methods: {
+    initEditUrl() {
+      switch (this.$route.meta.type) {
+        case "admin":
+          this.editUrl = "accounts/editAdminPassword";
+          break;
+        case "school":
+          this.editUrl = "accounts/editSchoolPassword";
+          break;
+        default:
+          this.editUrl = "accounts/editSchoolPassword";
+          break;
+      }
+    },
     closeBtn() {
       this.$emit("closeBtn");
     },
     saveInfo() {
+      this.$store
+        .dispatch(this.editUrl, {
+          userId: this.data.userId,
+          password: this.password,
+        })
+        .then((res) => {
+          this.$message.message(
+            this.$t("accounts.accountlist.successTips.editSuccess")
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+        });
       this.closeBtn();
     },
     editPassword() {

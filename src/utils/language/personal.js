@@ -10,7 +10,16 @@ export default {
       emailLabel: '邮箱',
       emailPlaceholder: '请输入您的邮箱',
       saveButton: '保存',
-      saveTips: '信息已保存',
+      successTips: {
+        uploadSuccess: "上传成功",
+        saveSuccess: '信息已保存',
+      },
+      failTips: {
+        uploadBig: "图片过大，请重新选择",
+        uploadType: "请选择png或jpg格式图片",
+        uploadFail: "上传失败，请重试",
+        saveFail: "保存失败，请重试"
+      }
     },
     sbase: {
       nameLabel: '名称',
