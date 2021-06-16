@@ -1,0 +1,49 @@
+# 缓存
+cache:
+  key: npm_cache
+  paths:
+    - /home/gitlab-runner/npm_cache
+
+# 构建步骤
+stages:
+  - package
+  - build
+  - release
+  - deploy
+
+# npm打包
+npm-package:
+  tags:
+    - dev
+    - test
+    - master
+  image: node:alpine
+  stage: package
+  only:
+    - dev
+    - test
+    - master
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - dist
+      - docker
+
+# 构建docker镜像
+docker-build:
+  tags:
+    - dev
+    - test
+  stage: build
+  dependencies:
+    - npm-package
+  only:
+    - dev
+    - test
+    - master
+  script:
+    - docker build -f docker/Dockerfile -t ngnix/app:v1.0.0 .
+    - if [ $(docker ps -aq --filter name=myfellas_admin_web) ]; then docker rm -f rhea-cms;fi
+    - docker run -p 8004:80 --name myfellas_admin_web -d ngnix/app:v1.0.0
