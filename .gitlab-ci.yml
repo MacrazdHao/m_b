@@ -11,7 +11,7 @@ stages:
   - release
   - deploy
 
-# npm打包
+# 使用npm打包
 npm-package:
   tags:
     - dev
