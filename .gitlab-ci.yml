@@ -2,7 +2,7 @@ image: docker
 
 # 缓存
 cache:
-  key: npm_cache
+  key: npm-cache
   paths:
     - /home/gitlab-runner/npm_cache
 
