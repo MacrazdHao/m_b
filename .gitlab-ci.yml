@@ -1,3 +1,5 @@
+image: docker
+
 # 缓存
 cache:
   key: npm_cache
@@ -37,7 +39,6 @@ docker-build:
   tags:
     - dev
     - test
-  images: docker
   stage: build
   dependencies:
     - npm-package
