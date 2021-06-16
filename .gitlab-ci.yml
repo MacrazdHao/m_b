@@ -19,7 +19,7 @@ npm-package:
     - dev
     - test
     - master
-  image: node:12
+  image: node:15.4.0
   stage: package
   only:
     - dev
