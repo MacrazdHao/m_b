@@ -25,8 +25,8 @@ npm-package:
     - master
   script:
     - pwd && ls
-    - yarn install
-    - yarn run build
+    - npm install --legacy-peer-deps
+    - npm run build
   artifacts:
     paths:
       - dist
