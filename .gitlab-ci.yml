@@ -4,7 +4,7 @@ image: docker
 cache:
   key: npm-cache
   paths:
-    - node_modules/
+    - /home/gitlab-runner/npm-cache
 
 # 构建步骤
 stages:
