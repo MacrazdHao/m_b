@@ -26,7 +26,6 @@ npm-package:
     - test
     - master
   script:
-    - pwd && ls
     - npm install --legacy-peer-deps
     - npm run build
   artifacts:
@@ -48,6 +47,7 @@ docker-build:
     - master
   script:
     - find / -name npm-cache
+    - ls /home/gitlab-runner/npm-cache
     - docker build -f docker/Dockerfile -t ngnix/app:v1.0.0 .
     - if [ $(docker ps -aq --filter name=myfellas_admin_web) ]; then docker rm -f myfellas_admin_web;fi
     - docker run -p 8004:80 --name myfellas_admin_web -d ngnix/app:v1.0.0
