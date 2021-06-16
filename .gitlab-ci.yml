@@ -17,7 +17,7 @@ npm-package:
     - dev
     - test
     - master
-  image: node:alpine
+  image: node:12
   stage: package
   only:
     - dev
