@@ -26,8 +26,8 @@ npm-package:
     - test
     - master
   script:
-    - npm install --legacy-peer-deps
-    - npm run build
+    - yarn install --legacy-peer-deps --cache-folder=/home/gitlab-runner/npm-cache
+    - yarn run build
   artifacts:
     paths:
       - dist
