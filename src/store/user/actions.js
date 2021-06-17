@@ -66,6 +66,7 @@ export default {
     });
   },
   logout: ({ commit, state }, data) => {
+    let type = getUsertype();
     return new Promise((resolve, reject) => {
       request.post(urls.logout, data).then(res => {
         console.log('登出成功', res);
@@ -73,7 +74,7 @@ export default {
         removeToken();
         removeUsertype();
         commit(types.RESET_STATE);
-        resolve(res);
+        resolve({ res, type });
       }).catch(err => {
         console.log('登出失败', err);
         reject(err);
@@ -152,7 +153,7 @@ export default {
     });
   },
 
-  editAdminPersonalBase: ({commit,state}, data)=>{
+  editAdminPersonalBase: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
       request.put(urls.editAdminPersonalBase, data).then(res => {
         console.log('修改管理员信息成功', res);
@@ -160,6 +161,28 @@ export default {
         resolve(res);
       }).catch(err => {
         console.log('修改管理员信息失败', err);
+        reject(err);
+      });
+    });
+  },
+  resetAdminPassword: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.put(urls.resetAdminPassword, data).then(res => {
+        console.log('修改管理员密码成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('修改管理员密码失败', err);
+        reject(err);
+      });
+    });
+  },
+  resetSchoolPassword: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.put(urls.resetSchoolPassword, data).then(res => {
+        console.log('修改学校密码成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('修改学校密码失败', err);
         reject(err);
       });
     });

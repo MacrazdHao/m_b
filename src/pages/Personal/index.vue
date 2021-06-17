@@ -35,6 +35,7 @@ export default {
     },
   },
   mounted() {
+    // console.log('变量测试',{ a: 1, b: 1, ...{ a: 2 } });
     this.$store.state.global.menu.children.forEach((item) => {
       if (item.name == "personal") {
         item.children.forEach((item2, index2) => {

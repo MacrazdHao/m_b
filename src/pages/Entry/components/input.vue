@@ -9,6 +9,7 @@
       v-model="valueTmp"
       :placeholder="placeholder"
       :type="hide && passwordMode ? 'password' : ''"
+      :autocomplete="autocomplete"
     />
     <img
       class="viewer"
@@ -21,7 +22,7 @@
 
 <script>
 export default {
-  props: ["iconName", "placeholder", "passwordMode", "viewer"],
+  props: ["iconName", "placeholder", "passwordMode", "viewer", "autocomplete"],
   data() {
     return {
       valueTmp: "",

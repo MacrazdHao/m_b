@@ -98,16 +98,16 @@ export default {
           name: this.schoolName,
         })
         .then((res) => {
-          this.$message.message(
-            this.$t("accounts.school.successTips.createSuccess")
-          );
+          this.$message.message({
+            text: this.$t("accounts.school.successTips.createSuccess"),
+          });
           this.result = this.username;
         })
         .catch((err) => {
           console.log(err);
-          this.$message.error(
-            err || this.$t("accounts.school.errorTips.createFail")
-          );
+          this.$message.error({
+            text: err || this.$t("accounts.school.errorTips.createFail"),
+          });
         });
     },
   },

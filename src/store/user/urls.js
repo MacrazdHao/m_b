@@ -10,8 +10,10 @@ export default {
   userinfo: "/user/info",
   admininfo: "/admin/info",
   studentEmailVerify: "/user/register/email/code",
-  adminEmailVerify:"/admin/email/code",
+  adminEmailVerify: "/admin/email/code",
   getMessages: '',
   avatarUpload: '/oss/minio/putObjectTest',
   editAdminPersonalBase: '/admin/adminUser/info',
+  resetAdminPassword: '/admin/adminUser/account/password',
+  resetSchoolPassword: '/admin/userAdmin/account/password',
 }

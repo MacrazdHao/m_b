@@ -106,13 +106,15 @@ export default {
           password: this.password,
         })
         .then((res) => {
-          this.$message.message(
-            this.$t("accounts.accountlist.successTips.editSuccess")
-          );
+          this.$message.message({
+            text: this.$t("accounts.accountlist.successTips.editSuccess"),
+          });
         })
         .catch((err) => {
           console.log(err);
-          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.nolist"),
+          });
         });
       this.closeBtn();
     },

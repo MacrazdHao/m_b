@@ -168,10 +168,14 @@ export default {
   methods: {
     deleteInfo(info) {
       console.log("删除", info);
-      this.$dialog.warning([
-        this.$t(`consultant.list.table.deleteTips1`),
-        this.$t(`consultant.list.table.deleteTips2`),
-      ]).catch((err)=>{});
+      this.$dialog
+        .warning({
+          text: [
+            this.$t(`consultant.list.table.deleteTips1`),
+            this.$t(`consultant.list.table.deleteTips2`),
+          ],
+        })
+        .catch((err) => {});
     },
     overline(text = "") {
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");

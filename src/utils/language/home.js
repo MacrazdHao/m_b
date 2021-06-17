@@ -7,7 +7,8 @@ export default {
     },
     header: {
       personal: '个人中心',
-      logout: '退出登录'
+      logout: '退出登录',
+      defaultName: '暂无名称'
     }
   },
   en: {

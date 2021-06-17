@@ -105,7 +105,7 @@
               :src="$store.state.user.userinfo.avatar || $_default.avatar"
             />
             <p class="nickname">
-              {{ $store.state.user.userinfo.nickName }}
+              {{ $store.state.user.userinfo.nickName || $t("home.header.defaultName") }}
             </p>
             <transition name="slide-fade">
               <div class="drawerBox" v-show="userMenuShow">
@@ -338,7 +338,8 @@ export default {
     logout() {
       this.$logoutDialog(() => {
         this.$store.dispatch("user/logout").then((res) => {
-          this.$router.push({ path: "/" });
+          console.log(res);
+          this.$router.push({ path: res.type == 10 ? "/adminEntry" : "/" });
         });
       });
     },

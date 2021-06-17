@@ -217,7 +217,7 @@ export default {
   methods: {
     toLiving(info) {
       if (info.status != 1) {
-        this.$message.warning("直播暂未开始，请留意直播时间");
+        this.$message.warning({ text: "直播暂未开始，请留意直播时间" });
         return;
       }
       this.$router.push({ name: "living", query: { roomId: "200638" } });

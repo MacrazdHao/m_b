@@ -1,5 +1,5 @@
 import urls from './urls';
-import request from '../../utils/request';
+import request from '../../utils/request_hr';
 
 export default {
   startLive: ({ commit, state }, liveId) => {

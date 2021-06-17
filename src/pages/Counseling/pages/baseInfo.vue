@@ -212,16 +212,16 @@ export default {
           this.$store.dispatch("counseling/getStateinfo");
         })
         .catch((err) => {
-          // this.$message.error(this.$t("counseling.step1.tips.submitError"));
+          // this.$message.error({text: this.$t("counseling.step1.tips.submitError")});
         });
     },
     cancel() {
       this.$dialog
-        .message(
-          this.$t("counseling.step1.leaveTips"),
-          () => {},
-          () => {}
-        )
+        .message({
+          text: this.$t("counseling.step1.leaveTips"),
+          confirm: () => {},
+          cancel: () => {},
+        })
         .catch(() => {});
     },
   },

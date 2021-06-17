@@ -79,14 +79,14 @@ export default {
     },
     login() {
       if (this.username == "") {
-        this.$message.warning(
-          this.$t("entry.login.alertTips.usernameErrorTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.login.alertTips.usernameErrorTips"),
+        });
         return;
       } else if (this.password == "") {
-        this.$message.warning(
-          this.$t("entry.login.alertTips.passwordErrorTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.login.alertTips.passwordErrorTips"),
+        });
         return;
       }
       if (this.remember) {
@@ -113,7 +113,7 @@ export default {
         .catch((err) => {
           console.log(err);
           // this.$message.warning(
-          //   this.$t("entry.login.alertTips.loginErrorTips")
+          //   {text: this.$t("entry.login.alertTips.loginErrorTips")}
           // );
           return;
         });

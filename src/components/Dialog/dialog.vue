@@ -3,7 +3,11 @@
     <div class="Dialog" v-if="visible">
       <div class="messageBox">
         <div class="header">
-          <img src="@/assets/index/icon_close.svg" @click="closeBtn" />
+          <img
+            src="@/assets/index/icon_close.svg"
+            @click="closeBtn"
+            v-if="showClose"
+          />
         </div>
         <div class="content">
           <img :src="require(`@/assets/index/icon_msg_${theme}.svg`)" />
@@ -18,12 +22,14 @@
             :text="cancelText"
             theme="gray"
             @btnClick="cancelBtn"
+            v-if="showCancel"
           />
           <CButton
             :class="['button', confirmText.length > 2 ? 'shortPadding' : '']"
             :text="confirmText"
             :theme="theme"
             @btnClick="confirmBtn"
+            v-if="showConfirm"
           />
         </div>
       </div>
@@ -49,6 +55,9 @@ export default {
       visible: false,
       confirmText: "",
       cancelText: "",
+      showCancel: true,
+      showConfirm: true,
+      showClose: true,
     };
   },
   computed: {
@@ -68,6 +77,11 @@ export default {
         document.body.style.overflow = "auto";
       }
     },
+  },
+  mounted() {
+    window.addEventListener("popstate", () => {
+      this.visible = false;
+    });
   },
   methods: {
     closeBtn() {

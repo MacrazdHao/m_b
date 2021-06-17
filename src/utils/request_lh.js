@@ -38,7 +38,7 @@ service.interceptors.response.use(
       //   type: 'error',
       //   duration: 5 * 1000
       // });
-      Vue.prototype.$message.error(i18n.t('tips.loginExpire'))
+      Vue.prototype.$message.error({text: i18n.t('tips.loginExpire')})
       removeToken();
     }
 
@@ -48,7 +48,7 @@ service.interceptors.response.use(
       //   type: 'error',
       //   duration: 5 * 1000
       // })
-      // Vue.prototype.$message.error(res[i18n.t('tips.msgKey')] || 'Error')
+      // Vue.prototype.$message.error({text: res[i18n.t('tips.msgKey')] || 'Error'})
       return Promise.reject(new Error(res[i18n.t('tips.msgKey')] || 'Error'))
     } else {
       return res
@@ -62,7 +62,7 @@ service.interceptors.response.use(
     //   type: 'error',
     //   duration: 5 * 1000
     // })
-    Vue.prototype.$message.error(error.msg || i18n.t('tips.requestTimeout'));
+    Vue.prototype.$message.error({text: error.msg || i18n.t('tips.requestTimeout')});
     return Promise.reject(error)
   }
 )

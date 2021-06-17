@@ -57,7 +57,9 @@ export default {
     },
     goNext() {
       if (this.username == "") {
-        this.$message.warning(this.$t("entry.forget.alertTips.emailEmptyTips"));
+        this.$message.warning({
+          text: this.$t("entry.forget.alertTips.emailEmptyTips"),
+        });
         return;
       }
       this.$router.push({

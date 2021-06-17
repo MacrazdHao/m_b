@@ -1,6 +1,14 @@
 import Message from './message.vue';
 
 const _Message = {};
+
+const defaultOptions = {
+  text: "",
+  theme: "blue",
+  duration: 2000,
+  callback: () => { }
+}
+
 let messageNum = 0;
 
 _Message.install = (Vue) => {
@@ -15,30 +23,35 @@ _Message.install = (Vue) => {
   }
 
   const MessageMain = {
-    showMessage(text, theme, duration = 2000, callback = () => { }) {
+    // showMessage(text, theme, duration = 2000, callback = () => { }) {
+    showMessage(options) {
+      let _options = { ...defaultOptions, ...options };
       let instance = createMessage();
       instance.messageNum = messageNum;
       instance.callback = (num) => {
-        callback();
+        _options.callback();
         console.log(num);
         if (num == messageNum) {
           messageNum = 0;
         }
         // messageNum--;
       }
-      instance.text = text;
-      instance.theme = theme;
+      instance.text = _options.text;
+      instance.theme = _options.theme;
       instance.visible = true;
-      instance.duration = duration;
+      instance.duration = _options.duration;
     },
-    message(text) {
-      this.showMessage(text, 'blue');
+    // message(text) {
+    message(options) {
+      this.showMessage({ ...options, theme: 'blue' });
     },
-    warning(text) {
-      this.showMessage(text, 'yellow');
+    // warning(text) {
+    warning(options) {
+      this.showMessage({ ...options, theme: 'yellow' });
     },
-    error(text) {
-      this.showMessage(text, 'red');
+    // error(text) {
+    error(options) {
+      this.showMessage({ ...options, theme: 'red' });
     }
   };
   Vue.prototype.$message = MessageMain;

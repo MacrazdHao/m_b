@@ -158,7 +158,9 @@ export default {
         .catch((err) => {
           this.loading = false;
           console.log(err);
-          this.$message.error(this.$t("school.list.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("school.list.errorTips.nolist"),
+          });
         });
     },
     toDetail(info) {
@@ -189,7 +191,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(this.$t("school.list.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("school.list.errorTips.nolist"),
+          });
         });
     },
     currentChange(num) {
@@ -211,7 +215,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(this.$t("school.list.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("school.list.errorTips.nolist"),
+          });
         });
     },
     prevPage() {
@@ -233,7 +239,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(this.$t("school.list.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("school.list.errorTips.nolist"),
+          });
         });
     },
     nextPage() {
@@ -255,7 +263,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(this.$t("school.list.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("school.list.errorTips.nolist"),
+          });
         });
     },
     enterEvent() {

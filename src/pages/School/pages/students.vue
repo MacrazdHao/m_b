@@ -229,13 +229,13 @@ export default {
       },
       optionsMenu: [
         {
-          text: this.$t('school.students.watchButton'),
+          text: this.$t("school.students.watchButton"),
           callback: (info) => {
             this.toDetail(info);
           },
         },
         {
-          text: this.$t('school.students.deleteButton'),
+          text: this.$t("school.students.deleteButton"),
           callback: (info) => {
             this.deleteInfo(info);
           },
@@ -261,10 +261,14 @@ export default {
     },
     deleteInfo(info) {
       console.log("删除", info);
-      this.$dialog.warning([
-        this.$t(`school.students.deleteTips1`),
-        this.$t(`school.students.deleteTips2`),
-      ]).catch(()=>{});
+      this.$dialog
+        .warning({
+          text: [
+            this.$t(`school.students.deleteTips1`),
+            this.$t(`school.students.deleteTips2`),
+          ],
+        })
+        .catch(() => {});
     },
     toStatusText(code) {
       switch (code) {

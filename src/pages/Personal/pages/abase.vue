@@ -82,7 +82,9 @@ export default {
         (file.files[0].size > 20 * 1024 * 1024 && this.uploadType == "file") ||
         (file.files[0].size > 5 * 1024 * 1024 && this.uploadType == "picture")
       ) {
-        this.$message.warning(this.$t("personal.base.failTips.uploadBig"));
+        this.$message.warning({
+          text: this.$t("personal.base.failTips.uploadBig"),
+        });
         return;
       }
       this.uploading = true;
@@ -95,7 +97,9 @@ export default {
         fileName.length
       );
       if (fileType != "png" && fileType != "jpg") {
-        this.$message.warning(this.$t("personal.base.failTips.uploadType"));
+        this.$message.warning({
+          text: this.$t("personal.base.failTips.uploadType"),
+        });
         return;
       }
       if (!file.files || !file.files[0]) {
@@ -108,12 +112,14 @@ export default {
         .then((res) => {
           console.log(res);
           this.avatar = res.data.url;
-          this.$message.message(
-            this.$t("personal.base.successTips.uploadSuccess")
-          );
+          this.$message.message({
+            text: this.$t("personal.base.successTips.uploadSuccess"),
+          });
         })
         .catch((err) => {
-          this.$message.error(this.$t("personal.base.failTips.uploadFail"));
+          this.$message.error({
+            text: this.$t("personal.base.failTips.uploadFail"),
+          });
         });
     },
     saveInfo() {
@@ -126,12 +132,14 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          this.$message.message(
-            this.$t("personal.base.successTips.saveSuccess")
-          );
+          this.$message.message({
+            text: this.$t("personal.base.successTips.saveSuccess"),
+          });
         })
         .catch((err) => {
-          this.$message.error(this.$t("personal.base.failTips.saveFail"));
+          this.$message.error({
+            text: this.$t("personal.base.failTips.saveFail"),
+          });
         });
     },
   },

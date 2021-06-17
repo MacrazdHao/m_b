@@ -44,9 +44,9 @@ export default {
     },
     goNext() {
       if (this.username == "") {
-        this.$message.warning(
-          this.$t("entry.register.alertTips.emailEmptyTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.register.alertTips.emailEmptyTips"),
+        });
         return;
       }
 
@@ -69,7 +69,7 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          this.$message.warning(this.$t("tips.sendEmailError"));
+          this.$message.warning({ text: this.$t("tips.sendEmailError") });
           return;
         });
     },

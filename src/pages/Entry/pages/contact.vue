@@ -48,9 +48,9 @@ export default {
     },
     submit() {
       if (this.username == "") {
-        this.$message.warning(
-          this.$t("entry.reset.alertTips.usernameEmptyTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.reset.alertTips.usernameEmptyTips"),
+        });
         return;
       }
     },

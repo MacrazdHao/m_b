@@ -109,24 +109,24 @@ export default {
     submit() {
       this.errorType = 0;
       if (this.form.emailCode == "") {
-        this.$message.warning(
-          this.$t("entry.register.alertTips.codeEmptyTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.register.alertTips.codeEmptyTips"),
+        });
         return;
       } else if (this.form.password == "") {
-        this.$message.warning(
-          this.$t("entry.register.alertTips.passwordEmptyTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.register.alertTips.passwordEmptyTips"),
+        });
         return;
       } else if (this.form.cPassword == "") {
-        this.$message.warning(
-          this.$t("entry.register.alertTips.cPasswordEmptyTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.register.alertTips.cPasswordEmptyTips"),
+        });
         return;
       } else if (this.form.schoolInviteCode == "") {
-        this.$message.warning(
-          this.$t("entry.register.alertTips.iCodeEmptyTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.register.alertTips.iCodeEmptyTips"),
+        });
         return;
       }
       if (!checkPassword(this.form.password)) {
@@ -157,7 +157,7 @@ export default {
         .catch((err) => {
           console.log(err);
           // this.$message.warning(
-          //   this.$t("entry.login.alertTips.loginErrorTips")
+          //   {text: this.$t("entry.login.alertTips.loginErrorTips")}
           // );
           return;
         });

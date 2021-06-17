@@ -23,11 +23,7 @@
     <div class="inputBox">
       <p class="title">{{ $t("personal.sbase.accountLabel") }}</p>
       <div>
-        <PInput
-          class="input"
-          :value="account"
-          :disabled="true"
-        />
+        <PInput class="input" :value="account" :disabled="true" />
       </div>
     </div>
     <PButton
@@ -56,7 +52,7 @@ export default {
   },
   methods: {
     saveInfo() {
-      this.$message.message(this.$t("personal.base.saveTips"));
+      this.$message.message({ text: this.$t("personal.base.saveTips") });
     },
   },
 };
@@ -102,7 +98,7 @@ export default {
     flex-direction: column;
     align-items: flex-start;
     margin-top: 30px;
-      width: 100%;
+    width: 100%;
     .title {
       font-size: 14px;
       color: #333333;

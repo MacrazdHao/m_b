@@ -1,11 +1,16 @@
 <template>
   <div class="PasswordInput">
     <div :class="['inputBox', focus ? 'inputBox--focus' : '']">
+      <input type="text" autocomplete="new-password" hidden />
       <input
         v-model="valueTmp"
         :placeholder="placeholder"
         :disabled="disabled"
-        :type="hide && passwordMode ? 'password' : ''"
+        autocomplete="new-password"
+        :style="{
+          '-webkit-text-security': hide && passwordMode ? 'disc' : '',
+          'text-security': hide && passwordMode ? 'disc' : '',
+        }"
         @focus="focus = true"
         @blur="focus = false"
       />
@@ -89,7 +94,7 @@ export default {
     }
   }
   .inputBox--focus {
-    border: 1px solid #4B78F6;
+    border: 1px solid #4b78f6;
   }
 }
 </style>

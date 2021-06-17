@@ -47,17 +47,17 @@ export default {
         range.selectNode(text);
         window.getSelection().addRange(range);
         if (document.execCommand("Copy")) {
-          this.$message.message(this.copyTips);
+          this.$message.message({ text: this.copyTips });
         } else {
-          this.$message.error(this.copyErrTips);
+          this.$message.error({ text: this.copyErrTips });
           this.showDownloadUrl = true;
         }
       } else {
         text.select();
         if (document.execCommand("Copy")) {
-          this.$message.message(this.copyTips);
+          this.$message.message({ text: this.copyTips });
         } else {
-          this.$message.error(this.copyErrTips);
+          this.$message.error({ text: this.copyErrTips });
           this.showDownloadUrl = true;
         }
         text.blur();

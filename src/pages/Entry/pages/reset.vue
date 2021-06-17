@@ -17,6 +17,7 @@
         }
       "
       :placeholder="$t(`entry.reset.codePlaceholder`)"
+      autocomplete="new-password"
     />
     <entryInput
       class="formItem"
@@ -28,6 +29,7 @@
         }
       "
       :placeholder="$t(`entry.reset.passwordPlaceholder`)"
+      autocomplete="new-password"
     />
     <entryInput
       class="formItem"
@@ -39,6 +41,7 @@
         }
       "
       :placeholder="$t(`entry.reset.cPasswordPlaceholder`)"
+      autocomplete="new-password"
     />
     <div class="errorTipsBox">
       <p class="errorTips" v-if="errorType == 1">
@@ -81,6 +84,12 @@ export default {
   },
   mounted() {
     this.form.username = this.$route.params.username;
+    document.onkeydown = (event) => {
+      let e = event ? event : window.event ? window.event : null;
+      if (e.keyCode == 13) {
+        this.submit();
+      }
+    };
   },
   methods: {
     goback() {
@@ -89,17 +98,19 @@ export default {
     submit() {
       this.errorType = 0;
       if (this.form.code == "") {
-        this.$message.warning(this.$t("entry.reset.alertTips.codeEmptyTips"));
+        this.$message.warning({
+          text: this.$t("entry.reset.alertTips.codeEmptyTips"),
+        });
         return;
       } else if (this.form.password == "") {
-        this.$message.warning(
-          this.$t("entry.reset.alertTips.passwordEmptyTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.reset.alertTips.passwordEmptyTips"),
+        });
         return;
       } else if (this.form.cPassword == "") {
-        this.$message.warning(
-          this.$t("entry.reset.alertTips.cPasswordEmptyTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.reset.alertTips.cPasswordEmptyTips"),
+        });
         return;
       }
       if (!checkPassword(this.form.password)) {

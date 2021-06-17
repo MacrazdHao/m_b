@@ -85,6 +85,12 @@ export default {
   watch: {},
   mounted() {
     console.log("身份", this.identity);
+    document.onkeydown = (event) => {
+      let e = event ? event : window.event ? window.event : null;
+      if (e.keyCode == 13) {
+        this.login();
+      }
+    };
   },
   methods: {
     toRegister() {
@@ -98,14 +104,14 @@ export default {
     },
     login() {
       if (this.username == "") {
-        this.$message.warning(
-          this.$t("entry.login.alertTips.usernameErrorTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.login.alertTips.usernameErrorTips"),
+        });
         return;
       } else if (this.password == "") {
-        this.$message.warning(
-          this.$t("entry.login.alertTips.passwordErrorTips")
-        );
+        this.$message.warning({
+          text: this.$t("entry.login.alertTips.passwordErrorTips"),
+        });
         return;
       }
       if (this.remember) {
@@ -131,9 +137,9 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-          // this.$message.warning(
-          //   this.$t("entry.login.alertTips.loginErrorTips")
-          // );
+          this.$message.warning({
+            text: err || this.$t("entry.login.alertTips.loginErrorTips"),
+          });
           return;
         });
     },

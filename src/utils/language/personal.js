@@ -63,8 +63,13 @@ export default {
         newPlaceholder: '输入密码，长度8-20位',
         confirmLabel: '确认密码',
         confirmPlaceholder: '请再次输入密码',
-        confirmErrorTips: '两次输入密码不同，请重新输入',
-        sameErrorTips: '新密码不能与原密码统一',
+        emptyOldPasswordTips: '原密码不能为空',
+        emptyNewPasswordTips: '新密码不能为空',
+        emptyNewPassword2Tips: '请再次输入新密码',
+        confirmErrorTips: '两次输入密码不一致，请重新输入',
+        sameErrorTips: '新密码不能与原密码一致',
+        resetSuccessTips: '修改成功',
+        resetFailTips: '修改失败，请重试',
         saveButton: '保存'
       }
     },

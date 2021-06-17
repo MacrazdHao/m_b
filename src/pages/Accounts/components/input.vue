@@ -1,13 +1,18 @@
 <template>
   <div :class="['Input', focus ? 'Input--focus' : '']">
     <input
-      :style="customStyle || {}"
+      :style="
+        customStyle || {
+          '-webkit-text-security': type == 'password' ? 'disc' : '',
+          'text-security': type == 'password' ? 'disc' : '',
+        }
+      "
       :id="`input${time}`"
       v-model="valueTmp"
       autocomplete="new-password"
       :placeholder="placeholder"
       :disabled="disabled"
-      :type="type"
+      :type="type == 'password' ? 'text' : type"
       @focus="focus = true"
       @blur="focus = false"
     />
@@ -50,7 +55,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.value)
+    console.log(this.value);
     this.valueTmp = this.value || "";
   },
   methods: {
@@ -63,17 +68,17 @@ export default {
         range.selectNode(text);
         window.getSelection().addRange(range);
         if (document.execCommand("Copy")) {
-          this.$message.message(this.copyTips);
+          this.$message.message({ text: this.copyTips });
         } else {
-          this.$message.error(this.copyErrTips);
+          this.$message.error({ text: this.copyErrTips });
           this.showDownloadUrl = true;
         }
       } else {
         text.select();
         if (document.execCommand("Copy")) {
-          this.$message.message(this.copyTips);
+          this.$message.message({ text: this.copyTips });
         } else {
-          this.$message.error(this.copyErrTips);
+          this.$message.error({ text: this.copyErrTips });
           this.showDownloadUrl = true;
         }
         text.blur();

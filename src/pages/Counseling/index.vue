@@ -105,7 +105,20 @@
       </div>
     </div>
     <transition name="slide-fade">
-      <router-view @setStep="setStep" @setSuffixMenu="setSuffixMenu" />
+      <router-view
+        @setStep="setStep"
+        @setSuffixMenu="setSuffixMenu"
+        v-if="jumped"
+      />
+      <div
+        style="
+          width: 100%;
+          height: 100%;
+          padding-top: 130px;
+          padding-bottom: 280px;
+        "
+        v-else
+      ></div>
     </transition>
   </div>
 </template>
@@ -115,6 +128,7 @@ export default {
   data() {
     return {
       step: 1,
+      jumped: false,
     };
   },
   computed: {
@@ -139,6 +153,7 @@ export default {
           this.$router.push({ path: "/index/counseling/consultLive" });
           break;
       }
+      this.jumped = true;
     },
   },
   mounted() {

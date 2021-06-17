@@ -210,7 +210,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.nolist"),
+          });
         });
     },
     editAccount(index) {
@@ -250,7 +252,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.nolist"),
+          });
         });
     },
     currentChange(num) {
@@ -272,7 +276,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.nolist"),
+          });
         });
     },
     prevPage() {
@@ -294,7 +300,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.nolist"),
+          });
         });
     },
     nextPage() {
@@ -316,7 +324,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(this.$t("accounts.accountlist.errorTips.nolist"));
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.nolist"),
+          });
         });
     },
     enterEvent() {
@@ -338,37 +348,39 @@ export default {
     },
     deleteAccount(index) {
       this.$dialog
-        .warning(
-          [
+        .warning({
+          text: [
             this.$t(`accounts.accountlist.deleteTips`),
             this.$t(`accounts.accountlist.deleteTips2`),
           ],
-          () => {
+          confirm: () => {
             this.$store
               .dispatch(this.deleteUrl, this.tableData[index].userId)
               .then((res) => {
                 this.initList();
-                this.$message.message(
-                  this.$t("accounts.accountlist.successTips.deleteSuccess")
-                );
+                this.$message.message({
+                  text: this.$t(
+                    "accounts.accountlist.successTips.deleteSuccess"
+                  ),
+                });
               })
               .catch((err) => {
-                this.$message.error(
-                  this.$t("accounts.accountlist.errorTips.deleteFail")
-                );
+                this.$message.error({
+                  text: this.$t("accounts.accountlist.errorTips.deleteFail"),
+                });
               });
-          }
-        )
+          },
+        })
         .catch(() => {});
     },
     batchDelete() {
       this.$dialog
-        .warning(
-          [
+        .warning({
+          text: [
             this.$t(`accounts.accountlist.deleteTips`),
             this.$t(`accounts.accountlist.deleteTips2`),
           ],
-          () => {
+          confirm: () => {
             let uids = [];
             for (let i = 0; i < this.selected.length; i++) {
               uids.push(this.selected[i].userId);
@@ -377,17 +389,19 @@ export default {
               .dispatch(this.batchDeleteUrl, uids)
               .then((res) => {
                 this.initList();
-                this.$message.message(
-                  this.$t("accounts.accountlist.successTips.deleteSuccess")
-                );
+                this.$message.message({
+                  text: this.$t(
+                    "accounts.accountlist.successTips.deleteSuccess"
+                  ),
+                });
               })
               .catch((err) => {
-                this.$message.error(
-                  this.$t("accounts.accountlist.errorTips.deleteFail")
-                );
+                this.$message.error({
+                  text: this.$t("accounts.accountlist.errorTips.deleteFail"),
+                });
               });
-          }
-        )
+          },
+        })
         .catch(() => {});
     },
   },

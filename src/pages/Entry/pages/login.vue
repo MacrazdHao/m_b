@@ -96,6 +96,14 @@ export default {
     };
   },
   watch: {},
+  mounted() {
+    document.onkeydown = (event) => {
+      let e = event ? event : window.event ? window.event : null;
+      if (e.keyCode == 13) {
+        this.login();
+      }
+    };
+  },
   methods: {
     toRegister() {
       this.$router.push({ path: "/register" });
@@ -108,14 +116,14 @@ export default {
     },
     login() {
       if (this.username == "") {
-        this.$messagege.warning(
-          this.$t("entry.login.alertTips.usernameErrorTips")
-        );
+        this.$messagege.warning({
+          text: this.$t("entry.login.alertTips.usernameErrorTips"),
+        });
         return;
       } else if (this.password == "") {
-        this.$messagesage.warning(
-          this.$t("entry.login.alertTips.passwordErrorTips")
-        );
+        this.$messagesage.warning({
+          text: this.$t("entry.login.alertTips.passwordErrorTips"),
+        });
         return;
       }
       if (this.remember) {
@@ -150,6 +158,10 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+          if (err)
+            this.$messagesage.error({
+              text: err,
+            });
           return;
         });
     },

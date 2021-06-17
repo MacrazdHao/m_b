@@ -14,6 +14,11 @@
               :placeholder="$t('personal.safe.reset.oldPlaceholder')"
               :passwordMode="true"
               :viewer="true"
+              @input="
+                (text) => {
+                  oldPassword = text;
+                }
+              "
             />
           </div>
           <p class="errorTips" v-if="errorType != 1">&nbsp;</p>
@@ -29,6 +34,11 @@
               :placeholder="$t('personal.safe.reset.newPlaceholder')"
               :passwordMode="true"
               :viewer="true"
+              @input="
+                (text) => {
+                  newPassword = text;
+                }
+              "
             />
           </div>
         </div>
@@ -40,15 +50,27 @@
               :placeholder="$t('personal.safe.reset.confirmPlaceholder')"
               :passwordMode="true"
               :viewer="true"
+              @input="
+                (text) => {
+                  newPassword2 = text;
+                }
+              "
             />
           </div>
-          <p class="errorTips" v-if="errorType != 2 && errorType != 3">
-            &nbsp;
+          <p class="errorTips" v-if="errorType <= 0">&nbsp;</p>
+          <p class="errorTips" v-if="errorType == 1">
+            {{ $t("personal.safe.reset.emptyOldPasswordTips") }}
           </p>
           <p class="errorTips" v-if="errorType == 2">
-            {{ $t("personal.safe.reset.confirmErrorTips") }}
+            {{ $t("personal.safe.reset.emptyNewPasswordTips") }}
           </p>
           <p class="errorTips" v-if="errorType == 3">
+            {{ $t("personal.safe.reset.emptyNewPassword2Tips") }}
+          </p>
+          <p class="errorTips" v-if="errorType == 4">
+            {{ $t("personal.safe.reset.confirmErrorTips") }}
+          </p>
+          <p class="errorTips" v-if="errorType == 5">
             {{ $t("personal.safe.reset.sameErrorTips") }}
           </p>
         </div>
@@ -66,6 +88,7 @@
 <script>
 import PInput from "../components/passwordInput";
 import PButton from "@/components/common/button";
+import { getUsertype } from "@/utils/auth";
 export default {
   components: {
     PInput,
@@ -75,16 +98,86 @@ export default {
   data() {
     return {
       // visible: false,
-      errorType: 3,
+      errorType: 0,
+      oldPassword: "",
+      newPassword: "",
+      newPassword2: "",
+      resetUrl: "",
     };
+  },
+  mounted() {
+    console.log(typeof getUsertype());
+    switch (getUsertype()) {
+      case "1":
+        this.resetUrl = "user/resetSchoolPassword";
+      case "10":
+        this.resetUrl = "user/resetAdminPassword";
+        break;
+      default:
+        break;
+    }
   },
   methods: {
     closeBtn() {
       this.$emit("closeBtn");
     },
     saveInfo() {
-      this.closeBtn();
-    }
+      console.log(this.oldPassword, this.newPassword, this.newPassword2);
+      if (this.oldPassword == "") {
+        this.errorType = 1;
+        this.$message.warning({
+          text: this.$t("personal.safe.reset.emptyOldPasswordTips"),
+        });
+        return;
+      }
+      if (!this.newPassword) {
+        this.errorType = 2;
+        this.$message.warning({
+          text: this.$t("personal.safe.reset.emptyNewPasswordTips"),
+        });
+        return;
+      }
+      if (!this.newPassword2) {
+        this.errorType = 3;
+        this.$message.warning({
+          text: this.$t("personal.safe.reset.emptyNewPassword2Tips"),
+        });
+        return;
+      }
+      if (this.newPassword != this.newPassword2) {
+        this.errorType = 4;
+        this.$message.warning({
+          text: this.$t("personal.safe.reset.confirmErrorTips"),
+        });
+        return;
+      }
+      if (this.newPassword == this.oldPassword) {
+        this.errorType = 5;
+        this.$message.warning({
+          text: this.$t("personal.safe.reset.sameErrorTips"),
+        });
+        return;
+      }
+      this.errorType = 0;
+      console.log(this.resetUrl);
+      this.$store
+        .dispatch(this.resetUrl, {
+          oldPassword: this.oldPassword,
+          password: this.newPassword,
+        })
+        .then((res) => {
+          this.$message.message({
+            text: this.$t("personal.safe.reset.resetSuccessTips"),
+          });
+          this.closeBtn();
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.error({
+            text: err || this.$t("personal.safe.reset.resetFailTips"),
+          });
+        });
+    },
   },
 };
 </script>
