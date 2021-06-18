@@ -133,9 +133,7 @@ export default {
           size: 10,
           current: 1,
         };
-        this.initList(() => {
-          console.log("watch");
-        });
+        this.initList();
       }
     },
   },
@@ -147,12 +145,11 @@ export default {
       current: 1,
     };
     this.keyword = "";
-    this.initList(() => {
-      console.log("mounted");
-    });
+    this.initList();
   },
   methods: {
-    initList(cb) {
+    initList() {
+      this.error = false;
       this.loading = true;
       this.$store
         .dispatch("school/getSchoolList", {
@@ -161,7 +158,6 @@ export default {
           keyword: this.keyword,
         })
         .then((res) => {
-          cb();
           this.page = {
             dataNum: res.total,
             total: res.pageTotal,
@@ -176,7 +172,7 @@ export default {
           this.error = true;
           console.log(err);
           this.$message.error({
-            text: this.$t("school.list.errorTips.nolist"),
+            text: this.$t("school.list.errorTips.nolist") + err,
           });
         });
     },
@@ -190,6 +186,7 @@ export default {
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
     goPage() {
+      this.error = false;
       this.loading = true;
       this.$store
         .dispatch("school/getSchoolList", {
@@ -210,11 +207,12 @@ export default {
           this.loading = false;
           this.error = true;
           this.$message.error({
-            text: this.$t("school.list.errorTips.nolist"),
+            text: this.$t("school.list.errorTips.nolist") + err,
           });
         });
     },
     currentChange(num) {
+      this.error = false;
       this.loading = true;
       this.$store
         .dispatch("school/getSchoolList", {
@@ -235,11 +233,12 @@ export default {
           this.loading = false;
           this.error = true;
           this.$message.error({
-            text: this.$t("school.list.errorTips.nolist"),
+            text: this.$t("school.list.errorTips.nolist") + err,
           });
         });
     },
     prevPage() {
+      this.error = false;
       this.loading = true;
       this.$store
         .dispatch("school/getSchoolList", {
@@ -260,11 +259,12 @@ export default {
           this.loading = false;
           this.error = true;
           this.$message.error({
-            text: this.$t("school.list.errorTips.nolist"),
+            text: this.$t("school.list.errorTips.nolist") + err,
           });
         });
     },
     nextPage() {
+      this.error = false;
       this.loading = true;
       this.$store
         .dispatch("school/getSchoolList", {
@@ -285,7 +285,7 @@ export default {
           this.loading = false;
           this.error = true;
           this.$message.error({
-            text: this.$t("school.list.errorTips.nolist"),
+            text: this.$t("school.list.errorTips.nolist") + err,
           });
         });
     },

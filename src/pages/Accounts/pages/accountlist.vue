@@ -131,6 +131,7 @@ export default {
   data() {
     return {
       loading: false,
+      error: false,
       value: "",
       tableData: [],
       pageNum: 1,
@@ -177,6 +178,7 @@ export default {
   },
   methods: {
     initList() {
+      this.error = false;
       this.loading = true;
       switch (this.$route.meta.type) {
         case "admin":
@@ -210,8 +212,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
+          this.error = true;
           this.$message.error({
-            text: this.$t("accounts.accountlist.errorTips.nolist"),
+            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
           });
         });
     },
@@ -234,6 +237,7 @@ export default {
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
     goPage() {
+      this.error = false;
       this.loading = true;
       this.$store
         .dispatch(this.listUrl, {
@@ -252,12 +256,14 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
+          this.error = true;
           this.$message.error({
-            text: this.$t("accounts.accountlist.errorTips.nolist"),
+            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
           });
         });
     },
     currentChange(num) {
+      this.error = false;
       this.loading = true;
       this.$store
         .dispatch(this.listUrl, {
@@ -276,12 +282,14 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
+          this.error = true;
           this.$message.error({
-            text: this.$t("accounts.accountlist.errorTips.nolist"),
+            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
           });
         });
     },
     prevPage() {
+      this.error = false;
       this.loading = true;
       this.$store
         .dispatch(this.listUrl, {
@@ -300,12 +308,14 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
+          this.error = true;
           this.$message.error({
-            text: this.$t("accounts.accountlist.errorTips.nolist"),
+            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
           });
         });
     },
     nextPage() {
+      this.error = false;
       this.loading = true;
       this.$store
         .dispatch(this.listUrl, {
@@ -324,8 +334,9 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
+          this.error = true;
           this.$message.error({
-            text: this.$t("accounts.accountlist.errorTips.nolist"),
+            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
           });
         });
     },
