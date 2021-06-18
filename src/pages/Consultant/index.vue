@@ -2,27 +2,29 @@
   <div class="List">
     <div class="list-content">
       <div class="toolsBar">
-        <!-- <el-select
-          v-model="value"
-          :placeholder="$t('students.list.statusPlaceholder')"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select> -->
         <SInput
           class="searchInput"
           :placeholder="$t('students.list.searchPlaceholder')"
           :icon="require('@/assets/student/icon_seach.svg')"
+          @input="
+            (text) => {
+              keyword = text;
+            }
+          "
         />
         <SButton class="button" :text="$t('students.list.searchButton')" />
       </div>
       <div class="table">
-        <el-table :data="tableData" height="642" style="width: 100%">
+        <el-table
+          :data="tableData"
+          height="642"
+          style="width: 100%"
+          :empty-text="
+            loading
+              ? $t('consultant.list.table.emptyTips.loadingList')
+              : $t('consultant.list.table.emptyTips.emptyList')
+          "
+        >
           <el-table-column min-width="100px" fixed>
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
@@ -31,7 +33,7 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.name) }}
+                {{ overline(scope.row.nickName) }}
               </p>
             </template>
           </el-table-column>
@@ -43,7 +45,7 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.country) }}
+                {{ overline(scope.row.nationality) }}
               </p>
             </template>
           </el-table-column>
@@ -86,6 +88,9 @@
         :pager-count="5"
         :page-count="page.total"
         :current-page="page.current"
+        @prev-click="prevPage"
+        @next-click="nextPage"
+        @current-change="currentChange"
       >
       </el-pagination>
       <div class="jumper">
@@ -116,38 +121,11 @@ export default {
   },
   data() {
     return {
+      error: false,
+      loading: false,
       school: null,
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-      ],
-      value: "",
-      tableData: [
-        {
-          id: 999,
-          name: "梁湛霞",
-          country: "中国",
-          education: "华威大学-统计系-博士",
-        },
-      ],
+      keyword: "",
+      tableData: [],
       pageNum: 1,
       page: {
         dataNum: 1000,
@@ -165,7 +143,57 @@ export default {
       ],
     };
   },
+  watch: {
+    keyword(val) {
+      if (val == "" || val) {
+        this.page = {
+          dataNum: 0,
+          total: 10,
+          size: 10,
+          current: 1,
+        };
+        this.initList();
+      }
+    },
+  },
+  mounted() {
+    this.page = {
+      dataNum: 0,
+      total: 10,
+      size: 10,
+      current: 1,
+    };
+    this.keyword = "";
+    this.initList();
+  },
   methods: {
+    initList() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("consultant/getConsultantList", {
+          pageIndex: this.page.current,
+          pageSize: this.page.size,
+          keyword: this.keyword || "",
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.$message.error({
+            text: this.$t("consultant.list.table.errorTips.nolist") + err,
+          });
+        });
+    },
     deleteInfo(info) {
       console.log("删除", info);
       this.$dialog
@@ -174,18 +202,135 @@ export default {
             this.$t(`consultant.list.table.deleteTips1`),
             this.$t(`consultant.list.table.deleteTips2`),
           ],
+          confirm: () => {
+            this.$store
+              .dispatch("consultant/deleteConsultant", info.userId)
+              .then((res) => {
+                this.initList();
+                this.$message.message({
+                  text: this.$t(
+                    "consultant.list.table.successTips.deleteSuccess"
+                  ),
+                });
+              })
+              .catch((err) => {
+                this.$message.error({
+                  text: this.$t("consultant.list.table.errorTips.deleteFail"),
+                });
+              });
+          },
         })
         .catch((err) => {});
     },
     overline(text = "") {
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
+
     goPage() {
-      this.page = {
-        ...this.page,
-        current: parseInt(this.pageNum),
-      };
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("consultant/getConsultantList", {
+          pageIndex: parseInt(this.pageNum),
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(this.pageNum),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
+          });
+        });
     },
+    currentChange(num) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("consultant/getConsultantList", {
+          pageIndex: parseInt(num),
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(num),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
+          });
+        });
+    },
+    prevPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("consultant/getConsultantList", {
+          pageIndex: this.page.current - 1,
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current - 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
+          });
+        });
+    },
+    nextPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("consultant/getConsultantList", {
+          pageIndex: this.page.current + 1,
+          pageSize: this.page.size,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current + 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
+          });
+        });
+    },
+
     enterEvent() {
       document.onkeydown = (event) => {
         let e = event || window.event;

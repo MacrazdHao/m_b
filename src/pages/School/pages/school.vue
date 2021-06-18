@@ -155,7 +155,7 @@ export default {
         .dispatch("school/getSchoolList", {
           pageIndex: this.page.current,
           pageSize: this.page.size,
-          keyword: this.keyword,
+          keyword: this.keyword || "",
         })
         .then((res) => {
           this.page = {
