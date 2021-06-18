@@ -22,6 +22,8 @@
           :empty-text="
             loading
               ? $t('school.list.emptyTips.loadingList')
+              : error
+              ? $t('school.list.errorTips.nolist')
               : $t('school.list.emptyTips.emptyList')
           "
         >
@@ -110,6 +112,7 @@ export default {
   data() {
     return {
       loading: false,
+      error: false,
       keyword: "",
       tableData: [],
       pageNum: 1,
@@ -123,13 +126,17 @@ export default {
   },
   watch: {
     keyword(val) {
-      this.page = {
-        dataNum: 0,
-        total: 10,
-        size: 10,
-        current: 1,
-      };
-      this.initList();
+      if (val == "" || val) {
+        this.page = {
+          dataNum: 0,
+          total: 10,
+          size: 10,
+          current: 1,
+        };
+        this.initList(() => {
+          console.log("watch");
+        });
+      }
     },
   },
   mounted() {
@@ -139,11 +146,13 @@ export default {
       size: 10,
       current: 1,
     };
-    // this.keyword = "";
-    this.initList();
+    this.keyword = "";
+    this.initList(() => {
+      console.log("mounted");
+    });
   },
   methods: {
-    initList() {
+    initList(cb) {
       this.loading = true;
       this.$store
         .dispatch("school/getSchoolList", {
@@ -152,11 +161,19 @@ export default {
           keyword: this.keyword,
         })
         .then((res) => {
+          cb();
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current,
+          };
           this.tableData = res.data;
           this.loading = false;
         })
         .catch((err) => {
           this.loading = false;
+          this.error = true;
           console.log(err);
           this.$message.error({
             text: this.$t("school.list.errorTips.nolist"),
@@ -191,6 +208,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
+          this.error = true;
           this.$message.error({
             text: this.$t("school.list.errorTips.nolist"),
           });
@@ -215,6 +233,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
+          this.error = true;
           this.$message.error({
             text: this.$t("school.list.errorTips.nolist"),
           });
@@ -239,6 +258,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
+          this.error = true;
           this.$message.error({
             text: this.$t("school.list.errorTips.nolist"),
           });
@@ -263,6 +283,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
+          this.error = true;
           this.$message.error({
             text: this.$t("school.list.errorTips.nolist"),
           });
