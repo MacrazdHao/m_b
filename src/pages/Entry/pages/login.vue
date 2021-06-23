@@ -121,7 +121,7 @@ export default {
         });
         return;
       } else if (this.password == "") {
-        this.$messagesage.warning({
+        this.$message.warning({
           text: this.$t("entry.login.alertTips.passwordErrorTips"),
         });
         return;
@@ -159,7 +159,7 @@ export default {
         .catch((err) => {
           console.log(err);
           if (err)
-            this.$messagesage.error({
+            this.$message.error({
               text: err,
             });
           return;

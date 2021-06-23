@@ -7,11 +7,16 @@
         </div>
         <p class="total">{{ studentNum.total }}</p>
         <div class="chart">
-          <div
-            :style="{ height: (44 * item) / maxChange + 'px' }"
+          <el-tooltip
+            class="item"
             v-for="(item, index) in studentNum.chart"
             :key="index"
-          ></div>
+            effect="dark"
+            :content="item"
+            placement="top"
+          >
+            <div :style="{ height: (44 * item) / maxChange + 'px' }"></div>
+          </el-tooltip>
         </div>
         <div class="enterNumBox">
           <div class="enterItem">
@@ -297,6 +302,7 @@ export default {
           width: 4.255%;
           max-width: 24px;
           min-width: 12px;
+          cursor: pointer;
         }
       }
       .fileTitle {

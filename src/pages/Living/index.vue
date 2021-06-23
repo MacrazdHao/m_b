@@ -20,7 +20,7 @@
           <p>{{ userNum }}</p>
         </div>
         <div class="user">
-          <img :src="$_default.avatar" />
+          <img :src="$store.state.user.userinfo.avatar" />
           <p>
             {{ $store.state.user.userinfo.nickName }}
           </p>
@@ -81,7 +81,7 @@
             class="openBox"
             v-show="rtc.remoteStreams.length == 0 && username != hostId"
           >
-            <p>稍等片刻，导师正在赶来...</p>
+            <p>{{ $t("living.waitingTeacher") }}</p>
           </div>
           <div
             class="openBox"
@@ -91,7 +91,7 @@
               remoteMuteVideo
             "
           >
-            <p>导师已关闭视频画面</p>
+            <p>{{ $t("living.teacherClosedCamera") }}</p>
           </div>
           <div
             class="teacherVideo"
@@ -164,7 +164,7 @@
             class="openBox"
             v-show="rtc.remoteStreams.length == 0 && username == hostId"
           >
-            <p>稍等片刻，学生马上到...</p>
+            <p>{{ $t("living.waittingStudent") }}</p>
           </div>
           <div
             class="openBox"
@@ -174,7 +174,7 @@
               remoteMuteVideo
             "
           >
-            <p>学生已关闭视频画面</p>
+            <p>{{ $t("living.studentClosedCamera") }}</p>
           </div>
           <div
             class="studentVideo"
@@ -328,7 +328,7 @@ export default {
         this.loadingVideo ||
         this.waitingPublish
       ) {
-        this.$message.message({ text: "模式切换中或直播加载中，无法打开设置" });
+        this.$message.message({ text: this.$t("living.changingMode") });
         return;
       }
       this.settingBoxShow = true;
@@ -336,7 +336,7 @@ export default {
     // 设备(摄像头、麦克风)检测完成
     async checkFinish(cameraId) {
       this.loading = this.$loading({
-        text: "数据加载中...",
+        text: this.$t("living.loadingData"),
       });
       this.userNum = 1;
       this.checkBoxShow = false;
@@ -353,7 +353,7 @@ export default {
     },
     async settingFinish(useCamera, useAudio, cameraId) {
       this.loading = this.$loading({
-        text: "数据加载中...",
+        text: this.$t("living.loadingData"),
       });
       this.settingBoxShow = false;
       this.useCamera = useCamera;
@@ -375,7 +375,7 @@ export default {
     },
     openCamera() {
       if (!this.status) {
-        this.$message.error({ text: "还未开始直播，请在直播开始后再试" });
+        this.$message.error({ text: this.$t("living.liveNotStart") });
         return;
       }
       this.setting();
@@ -383,7 +383,7 @@ export default {
 
     toggleLive() {
       if (this.username != this.hostId) {
-        this.$message.warning({ text: "您不是老师，无法进行操作" });
+        this.$message.warning({ text: this.$t("living.noPermission") });
         return;
       }
       if (
@@ -392,13 +392,13 @@ export default {
         this.loadingVideo ||
         this.waitingPublish
       ) {
-        this.$message.warning({ text: "直播状态变更中，请稍后再试" });
+        this.$message.warning({ text: this.$t("living.changingStatus") });
         return;
       }
       this.changingStatus = true;
       if (this.status) {
         this.$dialog.warning({
-          text: "当前正在直播，确定结束直播？",
+          text: this.$t("living.isEndLive"),
           confirm: () => {
             this.$store
               .dispatch(`living/stopLive`, this.roomId)
@@ -427,7 +427,7 @@ export default {
                   );
                   // this.$message.message({text: "直播已结束"});
                   this.$dialog.message({
-                    text: "直播已结束",
+                    text: this.$t("living.liveIsEnd"),
                     confirm: () => {
                       this.$router.go(-1);
                     },
@@ -458,7 +458,7 @@ export default {
           this.status = !this.status;
           if (this.status && this.username == this.hostId) {
             this.joinRTC();
-            this.$message.message({ text: "直播已开始" });
+            this.$message.message({ text: this.$t("living.liveIsBeginning") });
             this.changingStatus = false;
           }
         })
@@ -474,7 +474,7 @@ export default {
         console.log("获取直播间信息失败", err);
         this.$dialog
           .message({
-            text: "获取直播间信息失败，点击确定刷新重试",
+            text: this.$t("living.getLiveInfoFail"),
             confirm: () => {
               history.go(0);
             },
@@ -487,7 +487,7 @@ export default {
           console.log("获取直播间信息成功", res);
           if (res.liveStatus == 2) {
             this.$dialog.error({
-              text: "直播已结束或不存在",
+              text: this.$t("living.liveNotExist"),
               confirm: () => {
                 this.$router.go(-1);
               },
@@ -512,7 +512,7 @@ export default {
           }
           if (!matchUser) {
             this.$message.error({
-              text: "您不是该直播的成员，若有疑问请联系管理员",
+              text: this.$t("living.notLiveMember"),
             });
             this.$router.push({ path: "index" });
             return;
@@ -545,7 +545,7 @@ export default {
                 if (!this.status) {
                   // this.$message.message({text: "直播已结束"});
                   this.$dialog.message({
-                    text: "直播已结束",
+                    text: this.$t("living.liveIsEnd"),
                     confirm: () => {
                       this.$router.go(-1);
                     },
@@ -584,7 +584,9 @@ export default {
             let id = remoteStream.getId();
             if (id == this.hostId && !this.status) {
               // 当前状态为未开始直播，而新增的远程流是老师端，则意味着老师点击了开始直播按钮（对应checkFinish中的joinRTC判断）
-              this.$message.message({ text: "直播已开始" });
+              this.$message.message({
+                text: this.$t("living.liveIsBeginning"),
+              });
               this.status = true;
               this.changeMode(this.mode);
             }
@@ -664,7 +666,9 @@ export default {
           });
           this.rtc.client.on("mute-video", (evt) => {
             console.log("对方关闭了摄像头", evt);
-            this.$message.message({ text: "对方关闭了视频画面" });
+            this.$message.message({
+              text: this.$t("living.otherSideCloseCamera"),
+            });
             this.remoteMuteVideo = true;
           });
           this.rtc.client.on("unmute-video", (evt) => {
@@ -673,7 +677,9 @@ export default {
           });
           this.rtc.client.on("mute-audio", (evt) => {
             console.log("对方关闭了麦克风", evt);
-            this.$message.message({ text: "对方关闭了视频声音" });
+            this.$message.message({
+              text: this.$t("living.otherSideCloseAudio"),
+            });
             // 同步远端流的屏蔽状态
             this.rtc.remoteStreams[0].muteAudio();
             // 远端流主动屏蔽音频
@@ -716,7 +722,7 @@ export default {
     // 接入RTC流（房间）
     joinRTC() {
       if (this.initingRTC) {
-        this.$message.warning({ text: "初始化直播中，请稍后再试" });
+        this.$message.warning({ text: this.$t("living.liveIsIniting") });
         return;
       }
       this.initingRTC = true;
@@ -759,7 +765,7 @@ export default {
                 console.log(err);
                 this.$dialog
                   .message({
-                    text: "进入直播间失败，点击确定刷新重试",
+                    text: this.$t("living.enterLiveFail"),
                     confirm: () => {
                       history.go(0);
                     },
@@ -771,7 +777,7 @@ export default {
             console.log(err);
             this.$dialog
               .message({
-                text: "进入直播间失败，点击确定刷新重试",
+                text: this.$t("living.enterLiveFail"),
                 confirm: () => {
                   history.go(0);
                 },
@@ -783,7 +789,7 @@ export default {
     },
     async changeMode(mode, fromWindow = false) {
       if (this.loadingVideo) {
-        this.$message.message({ text: "模式切换中或直播加载中，请稍后再试" });
+        this.$message.message({ text: this.$t("living.changingMode") });
         return;
       }
       this.loadingVideo = true;
@@ -800,7 +806,7 @@ export default {
         }
       }
       if (!this.status) {
-        this.$message.message({ text: "请先开始直播" });
+        this.$message.message({ text: this.$t("living.pleaseStartLive") });
         this.loadingVideo = false;
         return;
       }
@@ -810,7 +816,7 @@ export default {
           let goon = true;
           if (mode == 2) {
             await this.$dialog.message({
-              text: "切换成屏幕共享模式后，将关闭摄像头，是否继续？",
+              text: this.$t("living.changeToScreen"),
               confirm: () => {
                 goon = true;
               },
@@ -820,7 +826,7 @@ export default {
             });
           } else if (mode == 1) {
             await this.$dialog.message({
-              text: "切换成摄像头后，将关闭屏幕共享模式，是否继续？",
+              text: this.$t("living.changeToCamera"),
               confirm: () => {
                 goon = true;
               },
@@ -839,15 +845,15 @@ export default {
           let closeDialog = false;
           if (mode == 2) {
             await this.$dialog.message({
-              text: "屏幕共享已暂停，请重新选择共享窗口或者切换为摄像头模式",
+              text: this.$t("living.screenPausing"),
               confirm: () => {
                 toCamera = false;
               },
               cancel: () => {
                 toCamera = true;
               },
-              confirmText: "切换共享窗口",
-              cancelText: "切换摄像头模式",
+              confirmText: this.$t("living.screenButton"),
+              cancelText: this.$t("living.cameraButton"),
               close: () => {
                 closeDialog = true;
               },
@@ -897,7 +903,7 @@ export default {
               if (err) {
                 if (err.reason) {
                   this.$message.error({
-                    text: "直播流启动失败，原因：" + err.reason,
+                    text: this.$t("living.streamPublishFail") + err.reason,
                   });
                   this.loadingVideo = false;
                   return;
@@ -935,7 +941,7 @@ export default {
           this.rtc.published = true;
           this.loading.close();
           this.$message.error({
-            text: "推送直播画面失败，请尝试进入设置重新开启摄像头或切换模式",
+            text: this.$t("living.publishFail"),
           });
           this.loadingVideo = false;
         }
@@ -952,8 +958,10 @@ export default {
         ) {
           this.$message.message({
             text: `${
-              this.username == this.hostId ? "" : "对方未进入直播间或"
-            }暂未开启直播`,
+              this.username == this.hostId
+                ? ""
+                : this.$t("living.otherSideNotJoinOr")
+            }${this.$t("liveNotStartNow")}`,
           });
           return;
         }
@@ -970,8 +978,10 @@ export default {
         ) {
           this.$message.error({
             text: `${
-              this.username != this.hostId ? "" : "对方未进入直播间或"
-            }暂未开启直播`,
+              this.username != this.hostId
+                ? ""
+                : this.$t("living.otherSideNotJoinOr")
+            }${this.$t("liveNotStartNow")}`,
           });
           return;
         }
@@ -984,13 +994,15 @@ export default {
       }
       if (flagStr == "remoteMuteAudio") {
         if (this.loadingRemoteAudio) {
-          this.$message.warning({ text: "正在处理对方音频，请勿频繁操作" });
+          this.$message.warning({
+            text: this.$t("living.handlingOtherSideAudio"),
+          });
           return;
         }
         this.loadingRemoteAudio = true;
       } else {
         if (this.loadingLocalAudio) {
-          this.$message.warning({ text: "正在处理您的音频，请勿频繁操作" });
+          this.$message.warning({ text: this.$t("living.handlingYourAudio") });
           return;
         }
         this.loadingLocalAudio = true;
@@ -999,30 +1011,30 @@ export default {
         let success = stream.muteAudio();
         if (success) {
           this[flagStr] = true;
-          this.$message.message({ text: "静音成功" });
+          this.$message.message({ text: this.$t("living.muteSuccess") });
         } else {
           this.$message.error({
             text:
               flagStr == "remoteMuteAudio"
-                ? "静音失败，对方可能未开启麦克风"
+                ? this.$t("living.muteFailWithNoMicro")
                 : this.status
-                ? "静音失败，请重试"
-                : "暂未开启直播",
+                ? this.$t("living.muteFail")
+                : this.$t("living.liveNotStartNow"),
           });
         }
       } else {
         let success = stream.unmuteAudio();
         if (success) {
           this[flagStr] = false;
-          this.$message.message({ text: "关闭静音成功" });
+          this.$message.message({ text: this.$t("living.unmuteSuccess") });
         } else {
           this.$message.error({
             text:
               flagStr == "remoteMuteAudio"
-                ? "关闭静音失败，对方可能未开启麦克风"
+                ? this.$t("living.unmuteFailWithNoMicro")
                 : this.status
-                ? "关闭静音失败，请重试"
-                : "暂未开启直播",
+                ? this.$t("living.unmuteFail")
+                : this.$t("living.liveNotStartNow"),
           });
         }
       }
