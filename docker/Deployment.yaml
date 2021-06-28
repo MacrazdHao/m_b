@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myfellas-web
+  namespace: gitlab
+  labels:
+    app: myfellas-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myfellas-web
+  template:
+    metadata:
+      labels:
+        app: myfellas-web
+    spec:
+      containers:
+      - name: myfellas-web
+        image: harbor.vianstats.com/myfellas/myfellas-admin-web
+        ports:
+          - containerPort: 80
+            name: myfellas-web
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: myfellas-web
+  namespace: gitlab
+  labels:
+    app: myfellas-web
+spec:
+  ports:
+    - name: myfellas-web
+      port: 80
+  selector:
+    app: myfellas-web
+  
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: myfellas-web-ingress
+  namespace: gitlab
+spec:
+  rules:
+    - host: home.myfellas.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: myfellas-web
+              servicePort: 80
