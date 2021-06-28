@@ -48,7 +48,7 @@ docker-build:
   script:
     - docker build -f docker/Dockerfile -t ngnix/app:v1.0.0 .
     - if [ $(docker ps -aq --filter name=myfellas_admin_web) ]; then docker rm -f myfellas_admin_web;fi
-    - docker run -p 8005:80 --name myfellas_admin_web -d ngnix/app:v1.0.0
+    - docker run -p 8004:80 --name myfellas_admin_web -d ngnix/app:v1.0.0
     - pwd && ls
     - docker build -f docker/Dockerfile -t harbor.vianstats.com/myfellas/myfellas-admin-web .
     - docker login --username=viangz harbor.vianstats.com -p Viangz12
