@@ -12,7 +12,7 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 const whiteList = ['/', '/register', '/register2', '/forget', '/reset', '/contact', '/parents', '/adminEntry'] // no redirect whitelist
 
 let getMessages = () => {
-  if (!window.msgTimeout) return;
+  if (window.msgTimeout) clearInterval(window.msgTimeout)
   // 获取系统消息列表
   store.dispatch('user/getMessages', { pageIndex: 1, pageSize: 10, queryTime: (new Date()).getTime() })
   // 设置系统消息定时任务

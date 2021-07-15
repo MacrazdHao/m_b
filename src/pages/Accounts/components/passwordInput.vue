@@ -63,6 +63,7 @@ export default {
     padding: 8px 13px;
     transition: all 0.1s;
     input {
+      padding: 0;
       background: none;
       outline: none;
       border: none;
@@ -89,7 +90,7 @@ export default {
     }
   }
   .inputBox--focus {
-    border: 1px solid #4B78F6;
+    border: 1px solid #4b78f6;
   }
 }
 </style>

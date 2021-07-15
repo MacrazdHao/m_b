@@ -1,25 +1,32 @@
 <template>
-  <div class="FixedMenu" @mouseleave="closeMenu">
+  <div
+    class="FixedMenu"
+    ref="menuBox"
+    @mouseleave="mouseMoveHide ? closeMenu : () => {}"
+    v-clickoutside="closeMenu"
+  >
     <div class="titleBox" @click="toggleMenu">
       <p class="title">{{ text }}</p>
       <img
-        class="pull"
+        :class="['pull', showMenu ? 'pull--show' : 'pull--hide']"
+        :style="iconStyle"
         v-if="showIcon"
-        src="@/assets/index/icon_pull_blue.svg"
+        :src="iconUrl"
       />
     </div>
     <div
       class="coverBox"
       :style="{ height: showMenu ? 34 * this.menu.length + 20 + 'px' : '0' }"
     >
-      <div class="menuBox" :id="menuId" v-if="showMenu">
+      <div class="menuBox" ref="menu" v-if="showMenu">
         <div
           class="menu-item"
+          :id="`menuItem${index}`"
           v-for="(item, index) in menu"
           :key="index"
-          @click="item.callback(extra)"
+          @click="handleSelect(index, item)"
         >
-          <p>{{ item.text }}</p>
+          <p :id="`menuItemp${index}`">{{ item.text }}</p>
         </div>
       </div>
     </div>
@@ -27,12 +34,10 @@
 </template>
 
 <script>
+import Clickoutside from "./utilsFromElement/clickoutside";
 export default {
+  directives: { Clickoutside },
   props: {
-    menuId: {
-      type: String,
-      required: true,
-    },
     text: {
       default: "",
       type: String,
@@ -47,12 +52,25 @@ export default {
         }
       */
     },
+    mouseMoveHide: {
+      default: true,
+      type: Boolean,
+    },
     extra: {
       default: null,
+    },
+    iconUrl: {
+      default: require("@/assets/index/icon_pull_blue.svg"),
     },
     showIcon: {
       default: true,
       type: Boolean,
+    },
+    iconStyle: {
+      default: () => {
+        return {};
+      },
+      type: Object,
     },
   },
   data() {
@@ -60,8 +78,23 @@ export default {
       showMenu: false,
     };
   },
+  watch: {
+    showMenu(val) {
+      this.$emit("handleOpen", val);
+      if (val) this.$emit("focus", val);
+      else this.$emit("blur", val);
+    },
+  },
   mounted() {
-    // console.log(this.extra);
+    document.addEventListener(
+      "mousedown",
+      function (e) {
+        if (e.target.id.match(/menuItem/)) {
+          e.preventDefault();
+        }
+      },
+      false
+    );
   },
   methods: {
     toggleMenu() {
@@ -72,15 +105,15 @@ export default {
       if (this.showMenu) return;
       this.showMenu = true;
       setTimeout(() => {
-        this.menuAnimate(document.getElementById(this.menuId), false);
-      }, 200);
+        this.menuAnimate(this.$refs["menu"]);
+      }, 0);
     },
     closeMenu() {
       if (!this.showMenu) return;
-      this.menuAnimate(document.getElementById(this.menuId), true);
+      this.menuAnimate(this.$refs["menu"], true);
       setTimeout(() => {
         this.showMenu = false;
-      }, 200);
+      }, 100);
     },
     menuAnimate(element, hide) {
       element.style.padding = "4px 0";
@@ -92,6 +125,10 @@ export default {
         element.style.padding = hide ? "0" : "4px 0";
       }, 0);
     },
+    handleSelect(index, item) {
+      item.callback(this.extra, index);
+      this.closeMenu();
+    },
   },
 };
 </script>
@@ -100,6 +137,10 @@ export default {
 .FixedMenu {
   position: relative;
   width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  // justify-content: space-between;
   p {
     margin: 0;
   }
@@ -108,17 +149,30 @@ export default {
     flex-direction: row;
     align-items: center;
     cursor: pointer;
+    width: 100%;
     .title {
       font-size: 14px;
       color: #4b77f6;
       line-height: 20px;
+      white-space: nowrap;
     }
-    img {
+    .pull {
       margin-left: 8px;
       width: 14px;
+      transition: 0.4s;
+    }
+    .pull--show {
+      transform: rotate(180deg);
+    }
+    .pull--hide {
+      transform: rotate(360deg);
     }
   }
   .coverBox {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     position: absolute;
     bottom: 0;
     transform: translate(0%, 100%);

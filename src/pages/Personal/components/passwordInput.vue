@@ -68,6 +68,7 @@ export default {
     padding: 8px 13px;
     transition: all 0.1s;
     input {
+      padding: 0;
       background: none;
       outline: none;
       border: none;

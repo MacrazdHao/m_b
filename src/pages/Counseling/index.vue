@@ -12,8 +12,8 @@
             'url(' +
             require(`@/assets/counseling/step_first${
               stateInfo.nodeType == 11 ? '_selected' : ''
-            }.png`) +
-            ') no-repeat',
+            }.svg`) +
+            ') no-repeat center',
         }"
       >
         <p>1. {{ $t("counseling.step1.title") }}</p>
@@ -29,8 +29,8 @@
             'url(' +
             require(`@/assets/counseling/step${
               stateInfo.nodeType == 12 ? '_selected' : ''
-            }.png`) +
-            ') no-repeat',
+            }.svg`) +
+            ') no-repeat center',
         }"
       >
         <p>2. {{ $t("counseling.step2.title") }}</p>
@@ -46,8 +46,8 @@
             'url(' +
             require(`@/assets/counseling/step${
               stateInfo.nodeType == 13 ? '_selected' : ''
-            }.png`) +
-            ') no-repeat',
+            }.svg`) +
+            ') no-repeat center',
         }"
       >
         <p>3. {{ $t("counseling.step3.title") }}</p>
@@ -63,8 +63,8 @@
             'url(' +
             require(`@/assets/counseling/step${
               stateInfo.nodeType == 21 ? '_selected' : ''
-            }.png`) +
-            ') no-repeat',
+            }.svg`) +
+            ') no-repeat center',
         }"
       >
         <p>4. {{ $t("counseling.step4.title") }}</p>
@@ -80,8 +80,8 @@
             'url(' +
             require(`@/assets/counseling/step${
               step == 5 ? '_selected' : ''
-            }.png`) +
-            ') no-repeat',
+            }.svg`) +
+            ') no-repeat center',
         }"
       >
         <p>5. {{ $t("counseling.step5.title") }}</p>
@@ -97,8 +97,8 @@
             'url(' +
             require(`@/assets/counseling/step_last${
               step == 6 ? '_selected' : ''
-            }.png`) +
-            ') no-repeat',
+            }.svg`) +
+            ') no-repeat center',
         }"
       >
         <p>6. {{ $t("counseling.step6.title") }}</p>
@@ -108,7 +108,7 @@
       <router-view
         @setStep="setStep"
         @setSuffixMenu="setSuffixMenu"
-        v-if="jumped"
+        v-if="loaded"
       />
       <div
         style="
@@ -128,7 +128,7 @@ export default {
   data() {
     return {
       step: 1,
-      jumped: false,
+      loaded: false,
     };
   },
   computed: {
@@ -139,21 +139,22 @@ export default {
   watch: {
     stateInfo(val) {
       console.log("状态信息更新了");
-      switch (val.nodeType) {
-        case 11:
-          this.$router.push({ path: "/index/counseling/baseInfo" });
-          break;
-        case 12:
-          this.$router.push({ path: "/index/counseling/onlineTest" });
-          break;
-        case 13:
-          this.$router.push({ path: "/index/counseling/consultLive" });
-          break;
-        case 21:
-          this.$router.push({ path: "/index/counseling/consultLive" });
-          break;
-      }
-      this.jumped = true;
+      this.$router.push({ path: "/index/counseling/baseInfo" });
+      // switch (val.nodeType) {
+      //   case 11:
+      //     this.$router.push({ path: "/index/counseling/baseInfo" });
+      //     break;
+      //   case 12:
+      //     this.$router.push({ path: "/index/counseling/onlineTest" });
+      //     break;
+      //   case 13:
+      //     this.$router.push({ path: "/index/counseling/consultLive" });
+      //     break;
+      //   case 21:
+      //     this.$router.push({ path: "/index/counseling/consultLive" });
+      //     break;
+      // }
+      this.loaded = true;
     },
   },
   mounted() {
@@ -187,10 +188,10 @@ export default {
     flex-direction: row;
     padding: 22px 24px 0 24px;
     width: 100%;
+      // height: 72px;
     box-sizing: border-box;
     .stepsItem {
       font-size: 14px;
-
       color: #666666;
       line-height: 20px;
       display: flex;
@@ -200,8 +201,9 @@ export default {
       // background-color: #f4f7fa;
       // white-space: nowrap;
       // padding: 15px 0 15px 0;
-      min-width: calc(100% / 6);
-      min-height: 50px;
+      // min-width: calc(100% / 6);
+      flex: 1;
+      height: 50px;
       box-sizing: border-box;
       background-size: 100% 100% !important;
     }

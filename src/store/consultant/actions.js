@@ -1,6 +1,6 @@
 import types from './types';
 import urls from './urls';
-import request from '../../utils/request';
+import request from '../../utils/request_online';
 
 export default {
   getConsultantList: ({ commit, state }, data) => {

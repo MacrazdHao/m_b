@@ -70,6 +70,7 @@ export default {
       background: none;
       outline: none;
       border: none;
+      padding: 0;
       margin: 0;
       width: 100%;
       font-size: 14px;

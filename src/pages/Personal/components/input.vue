@@ -92,6 +92,7 @@ export default {
     cursor: pointer;
   }
   input {
+    padding: 0;
     background: none;
     outline: none;
     border: none;

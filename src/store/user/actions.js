@@ -1,6 +1,6 @@
 import types from './types';
 import urls from './urls';
-import request from '@/utils/request_hr';
+import request from '@/utils/request_online';
 import { setToken, removeToken, setUsertype, getUsertype, removeUsertype } from '@/utils/auth';
 import { resetRouter } from '@/router/resetRouter';
 
@@ -21,6 +21,19 @@ export default {
   studentLogin: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
       request.post(urls.studentLogin, data).then(res => {
+        console.log('登陆成功', res);
+        setToken(res.data.token);
+        setUsertype(res.data.userType);
+        resolve(res);
+      }).catch(err => {
+        console.log('登录失败', err);
+        reject(err);
+      });
+    });
+  },
+  consultantLogin: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.consultantLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
         setUsertype(res.data.userType);

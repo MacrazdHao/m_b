@@ -106,40 +106,55 @@
             "
           ></div>
         </div>
-        <div class="voiceBox">
-          <img
-            v-if="
-              (hostId != username && !remoteMuteAudio) ||
-              (hostId == username && !localMuteAudio)
-            "
-            src="@/assets/living/icon_volume.svg"
-            @click="toggleAudio(0)"
-          />
-          <img
-            v-else-if="
-              (hostId != username && remoteMuteAudio) ||
-              (hostId == username && localMuteAudio)
-            "
-            src="@/assets/living/icon_volume_closed.svg"
-            @click="toggleAudio(0)"
-          />
-          <div
-            class="volume"
-            v-show="
-              (hostId != username && rtc.remoteStreams.length > 0) ||
-              (hostId == username && rtc.published)
-            "
-          >
+        <div
+          class="controlBox"
+          v-show="
+            ((localVideoFinished && username == hostId) ||
+              (remoteVideoFinished && username != hostId)) &&
+            ((rtc.published && username == hostId && useCamera) ||
+              (rtc.remoteStreams.length > 0 &&
+                username != hostId &&
+                !remoteMuteVideo))
+          "
+        >
+          <div class="volumnBox">
+            <img
+              v-if="
+                (hostId != username && !remoteMuteAudio) ||
+                (hostId == username && !localMuteAudio)
+              "
+              src="@/assets/living/icon_volume.svg"
+              @click="toggleAudio(0)"
+            />
+            <img
+              v-else-if="
+                (hostId != username && remoteMuteAudio) ||
+                (hostId == username && localMuteAudio)
+              "
+              src="@/assets/living/icon_volume_closed.svg"
+              @click="toggleAudio(0)"
+            />
             <div
-              :class="[
-                'volume-item',
-                (hostId == username ? localVolume : remoteVolume) >= item
-                  ? 'volume-item--green'
-                  : '',
-              ]"
-              v-for="item in 10"
-              :key="item"
-            ></div>
+              class="volume"
+              v-show="
+                (hostId != username && rtc.remoteStreams.length > 0) ||
+                (hostId == username && rtc.published)
+              "
+            >
+              <div
+                :class="[
+                  'volume-item',
+                  (hostId == username ? localVolume : remoteVolume) >= item
+                    ? 'volume-item--green'
+                    : '',
+                ]"
+                v-for="item in 10"
+                :key="item"
+              ></div>
+            </div>
+          </div>
+          <div class="fullscreenButton" @click="fullScreen">
+            <p class="text">全屏</p>
           </div>
         </div>
       </div>
@@ -191,7 +206,19 @@
             "
           ></div>
         </div>
-        <div class="voiceBox">
+        <div
+          class="controlBox"
+          v-show="
+            (((localVideoFinished && username != hostId) ||
+              (remoteVideoFinished && username == hostId)) &&
+              rtc.published &&
+              username != hostId &&
+              useCamera) ||
+            (rtc.remoteStreams.length > 0 &&
+              username == hostId &&
+              !remoteMuteVideo)
+          "
+        >
           <img
             v-if="
               (hostId != username && !localMuteAudio) ||
@@ -315,8 +342,9 @@ export default {
   },
   mounted() {
     this.roomId = this.$route.query.roomId;
-    this.username = this.$store.state.user.userinfo.id;
-    this.option.uid = this.$store.state.user.userinfo.id;
+    this.username = this.$store.state.user.userinfo.userId;
+    this.option.uid = this.$store.state.user.userinfo.userId;
+    console.log("用户信息", this.$store.state.user.userinfo);
     console.log("本用户", typeof this.option.uid);
     this.getInitInfo(() => {});
   },
@@ -505,6 +533,7 @@ export default {
           for (let i = 0; i < res.memberList.length; i++) {
             if (res.memberList[i].userId == this.username) {
               matchUser = true;
+              // break;
             }
             if (res.memberList[i].hostFlag) {
               this.hostId = res.memberList[i].userId;
@@ -523,11 +552,28 @@ export default {
           errCallback(err);
         });
     },
-
+    fullScreen() {
+      let dom = document.getElementById(
+        `video${
+          this.hostId == this.username
+            ? this.rtc.localStream.getId()
+            : this.rtc.remoteStreams[0].getId()
+        }`
+      );
+      // dom.controls = false;
+      console.log("这是视频dom", dom);
+      if (dom.requestFullscreen) {
+        dom.requestFullscreen();
+      } else if (dom.mozRequestFullScreen) {
+        dom.mozRequestFullScreen();
+      } else if (dom.webkitRequestFullScreen) {
+        dom.webkitRequestFullScreen();
+      }
+    },
     // 初始化直播
     initRTC(callback = () => {}) {
       console.log("初始化直播中", AgoraRTC);
-      this.rtc.client = AgoraRTC.createClient({ mode: "live", codec: "h264" });
+      this.rtc.client = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
       this.rtc.client.init(
         this.option.appID,
         () => {
@@ -749,6 +795,14 @@ export default {
                         " success, uid: " +
                         uid
                     );
+                    // this.rtc.client.enableDualStream(
+                    //   () => {
+                    //     console.log("开启双流成功");
+                    //   },
+                    //   (err) => {
+                    //     console.log("开启双流失败");
+                    //   }
+                    // );
                     this.rtc.joined = true;
                     this.rtc.params.uid = uid;
                     console.log("远程数量:", this.rtc.remoteStreams.length);
@@ -889,6 +943,17 @@ export default {
         screen: this.desktopMode,
         screenAudio: false,
       });
+      if (mode == 2) {
+        // this.rtc.client.disableDualStream(
+        //   () => {
+        //     console.log("关闭双流成功");
+        //   },
+        //   (err) => {
+        //     console.log("关闭双流失败");
+        //   }
+        // );
+        this.rtc.localStream.setScreenProfile("1080p_2");
+      }
       this.mode = mode;
       // 初始化本地流
       this.rtc.localStream.init(
@@ -896,6 +961,23 @@ export default {
           console.log("初始化本流成功");
           // 加载本地流
           this.localVideoFinished = false;
+          this.rtc.localStream.setVideoEncoderConfiguration({
+            // 视频分辨率
+            resolution: {
+              width: 1280,
+              height: 720,
+            },
+            // 视频编码帧率。通常建议是 15 帧，不超过 30 帧
+            frameRate: {
+              min: 15,
+              max: 60,
+            },
+            // 码率。一般情况下推荐使用标准码率
+            bitrate: {
+              min: 1130,
+              max: 1130,
+            },
+          });
           this.rtc.localStream.play(
             this.username == this.hostId ? "teacherVideo" : "studentVideo",
             { fit: "contain" },
@@ -1045,8 +1127,50 @@ export default {
       }
     },
   },
+  beforeDestroy() {
+    this.rtc.localStream.stop();
+    this.rtc.localStream.close();
+    this.rtc.client.unpublish(this.rtc.localStream, (err) => {
+      console.log("unpublish失败", err);
+    });
+    this.rtc.published = false;
+    this.rtc.client.leave(
+      () => {
+        console.log("退出房间成功");
+      },
+      (err) => {
+        console.log("退出房间失败", err);
+      }
+    );
+  },
 };
 </script>
+
+<style lang="scss">
+.Living {
+  video:fullscreen {
+    // display: none !important;
+  }
+  video::-webkit-media-controls {
+    display: none !important;
+  }
+  // video::-webkit-media-controls-fullscreen-button {
+  //   display: none;
+  // }
+  // video::-webkit-media-controls,
+  // video::-moz-media-controls,
+  // video::-webkit-media-controls-enclosure {
+  //   display: none !important;
+  // }
+
+  // video::-webkit-media-controls-panel,
+  // video::-webkit-media-controls-panel-container,
+  // video::-webkit-media-controls-start-playback-button {
+  //   display: none !important;
+  //   -webkit-appearance: none;
+  // }
+}
+</style>
 
 <style lang="scss" scoped>
 .Living {
@@ -1225,30 +1349,50 @@ export default {
           background-color: #333333;
         }
       }
-      .voiceBox {
+      .controlBox {
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
         margin-top: 30px;
-        img {
-          width: 24px;
-          cursor: pointer;
-        }
-        .volume {
+        width: 100%;
+        // background-color: #fff;
+        .volumnBox {
           display: flex;
           flex-direction: row;
-          align-items: center;
-          margin-left: 20px;
-          .volume-item + .volume-item {
-            margin-left: 10px;
+          img {
+            width: 24px;
+            cursor: pointer;
           }
-          .volume-item {
-            width: 4px;
-            height: 22px;
-            border-radius: 2px;
-            background: #fff;
+          .volume {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-left: 20px;
+            .volume-item + .volume-item {
+              margin-left: 10px;
+            }
+            .volume-item {
+              width: 4px;
+              height: 22px;
+              border-radius: 2px;
+              background: #fff;
+            }
+            .volume-item--green {
+              background: #53c41b;
+            }
           }
-          .volume-item--green {
-            background: #53c41b;
+        }
+        .fullscreenButton {
+          padding: 2px 11px;
+          border-radius: 4px;
+          border: 1px solid #ffffff;
+          cursor: pointer;
+          .text {
+            font-size: 14px;
+            font-family: AlibabaPuHuiTiR;
+            color: #ffffff;
+            line-height: 20px;
           }
         }
       }
@@ -1283,7 +1427,7 @@ export default {
           background-color: #333333;
         }
       }
-      .voiceBox {
+      .controlBox {
         display: flex;
         flex-direction: row;
         margin-top: 30px;

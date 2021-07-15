@@ -67,6 +67,7 @@ export default {
       margin-right: 8px;
     }
     input {
+      padding: 0;
       background: none;
       outline: none;
       border: none;

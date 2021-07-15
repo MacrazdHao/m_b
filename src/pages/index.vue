@@ -8,7 +8,7 @@
           v-for="(item, index) in $store.state.global.menu.children.slice(1)"
           :key="index"
         >
-          <div class="menu-item-inbox" v-if="menuFilter(item.name)">
+          <div class="menu-item-inbox" v-if="!item.meta.notShowInMenu">
             <div
               :class="[
                 'button',
@@ -105,7 +105,10 @@
               :src="$store.state.user.userinfo.avatar || $_default.avatar"
             />
             <p class="nickname">
-              {{ $store.state.user.userinfo.nickName || $t("home.header.defaultName") }}
+              {{
+                $store.state.user.userinfo.nickName ||
+                $t("home.header.defaultName")
+              }}
             </p>
             <transition name="slide-fade">
               <div class="drawerBox" v-show="userMenuShow">
@@ -223,16 +226,16 @@ export default {
     this.routeChanged(true);
   },
   methods: {
-    menuFilter(pageName) {
-      switch (pageName) {
-        case "messages":
-          return false;
-        case "personal":
-          return false;
-        default:
-          return true;
-      }
-    },
+    // menuFilter(pageName) {
+    //   switch (pageName) {
+    //     case "messages":
+    //       return false;
+    //     case "personal":
+    //       return false;
+    //     default:
+    //       return true;
+    //   }
+    // },
     routeChanged(initial = false) {
       // console.log(this.$route);
       if (
@@ -241,7 +244,7 @@ export default {
       ) {
         if (
           this.$route.matched.length > 2 &&
-          this.menuFilter(this.$route.matched[1].name)
+          !this.$route.matched[1].meta.notShowInMenu
         ) {
           this.pagePath = this.$route.matched.slice(
             1,
@@ -512,6 +515,7 @@ export default {
             flex-direction: row;
             // align-items: center;
             height: 22px;
+            min-width: 22px;
             p {
               font-size: 16px;
               color: #ffffff;
@@ -602,6 +606,7 @@ export default {
     .content {
       margin-top: 24px;
       margin-right: 24px;
+      width: calc(100% - 24px);
     }
   }
 }

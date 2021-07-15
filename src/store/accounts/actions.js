@@ -1,6 +1,6 @@
 import types from './types';
 import urls from './urls';
-import request from '../../utils/request_hr';
+import request from '../../utils/request_online';
 
 export default {
   getAdminList: ({ commit, state }, data) => {

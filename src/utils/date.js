@@ -21,5 +21,8 @@ export default {
       calendar.push(i);
     }
     return calendar;
-  }
+  },
+  getDateString: (timestamp, format = "YYYY-MM-DD hh:MM") => {
+    return moment(timestamp).format(format);
+  },
 }

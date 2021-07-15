@@ -46,14 +46,36 @@
           <p class="title">{{ $t("counseling.step1.academic.title") }}</p>
         </div>
         <div class="form">
-          <FormTextarea
+          <!-- <FormTextarea
             class="formInput longInput"
             :label="$t('counseling.step1.academic.score.label')"
             :placeholder="$t('counseling.step1.academic.score.placeholder')"
             :value="score"
             :maxLength="500"
             @input="setScore"
-          />
+          /> -->
+          <div class="scoreBox">
+            <p class="label">
+              {{ $t("counseling.step1.academic.score.label") }}：
+            </p>
+            <div class="scoreUploadBox">
+              <p class="uploadTips">最多可以上传最近的三份成绩单，格式为pdf</p>
+              <CButton
+                class="uploadButton"
+                text="上传"
+                theme="wathat"
+                @btnClick="uploadScoreFile"
+              />
+              <div class="filesBox">
+                <template v-for="(item2, index2) in scoreFiles">
+                  <div class="file" :key="index2">
+                    <FileBox :info="item2" buttonText="删除" />
+                  </div>
+                  {{ "" }}
+                </template>
+              </div>
+            </div>
+          </div>
           <FormTextarea
             class="formInput longInput"
             :label="$t('counseling.step1.academic.evaluation.label')"
@@ -122,6 +144,7 @@ import CButton from "@/components/common/button.vue";
 import FormInput from "../components/input.vue";
 import FormRadio from "../components/radio.vue";
 import FormTextarea from "../components/textarea.vue";
+import FileBox from "../components/file";
 export default {
   components: {
     // Dialog,
@@ -129,6 +152,7 @@ export default {
     FormRadio,
     FormTextarea,
     CButton,
+    FileBox,
   },
   computed: {
     stateInfo() {
@@ -155,6 +179,38 @@ export default {
       book: "",
       sport: "",
       showLeaveDialog: true,
+      scoreFiles: [
+        {
+          fileURL: "",
+          fileName: "财务报告1.pdf",
+          fileType: "pdf",
+          fileSize: "9.03MB",
+        },
+        {
+          fileURL: "",
+          fileName: "财务报告2.pdf",
+          fileType: "pdf",
+          fileSize: "9.03MB",
+        },
+        {
+          fileURL: "",
+          fileName: "财务报告3.pdf",
+          fileType: "pdf",
+          fileSize: "9.03MB",
+        },
+        {
+          fileURL: "",
+          fileName: "财务报告4.pdf",
+          fileType: "pdf",
+          fileSize: "9.03MB",
+        },
+        {
+          fileURL: "",
+          fileName: "财务报告5.pdf",
+          fileType: "pdf",
+          fileSize: "9.03MB",
+        },
+      ],
     };
   },
   mounted() {
@@ -277,7 +333,6 @@ export default {
           width: fit-content;
           padding-left: 8px;
           font-size: 16px;
-
           color: #333333;
           line-height: 22px;
         }
@@ -294,6 +349,44 @@ export default {
         }
         .longInput {
           height: 134px;
+        }
+        .scoreBox {
+          display: flex;
+          flex-direction: row;
+          margin-left: 10px;
+          .label {
+            font-size: 14px;
+            color: #333333;
+            line-height: 20px;
+            white-space: nowrap;
+          }
+          .scoreUploadBox {
+            margin-left: 29px;
+            .uploadTips {
+              font-size: 14px;
+              color: #999999;
+              line-height: 20px;
+              text-align: left;
+            }
+            .uploadButton {
+              margin-top: 12px;
+            }
+            .filesBox {
+              // display: flex;
+              // flex-direction: row;
+              // flex-wrap: wrap;
+              margin-top: 16px;
+              margin-bottom: 6px;
+              letter-spacing: 60px;
+              text-align: left;
+              .file {
+                display: inline-block;
+                // margin-right: 60px;
+                margin-bottom: 18px;
+                letter-spacing: normal;
+              }
+            }
+          }
         }
       }
     }

@@ -67,7 +67,6 @@
             </template>
             <template slot-scope="scope">
               <FixedMenu
-                :menuId="`schoolS${scope.$index}${new Date().getTime()}`"
                 :text="$t('consultant.list.table.editButton')"
                 :menu="optionsMenu"
                 :extra="scope.row"
@@ -79,42 +78,27 @@
       </div>
     </div>
     <div class="pagination">
-      <p class="totalNum">
-        {{ $t("global.pagination.totalNum", { num: page.dataNum }) }}
-      </p>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :pager-count="5"
+      <SPagination
+        :page="page"
         :page-count="page.total"
         :current-page="page.current"
+        @goPage="goPage"
         @prev-click="prevPage"
         @next-click="nextPage"
         @current-change="currentChange"
-      >
-      </el-pagination>
-      <div class="jumper">
-        <p>{{ $t("global.pagination.goPage") }}</p>
-        <div>
-          <input
-            v-model="pageNum"
-            type="number"
-            @focus="enterEvent"
-            @blur="removeEnterEvent"
-          />
-        </div>
-        <p>{{ $t("global.pagination.pageUnit") }}</p>
-      </div>
+      />
     </div>
   </div>
 </template>
 
 <script>
+import SPagination from "@/components/common/pagination";
 import SInput from "./components/input";
 import SButton from "@/components/common/button.vue";
 import FixedMenu from "@/components/common/fixedMenu.vue";
 export default {
   components: {
+    SPagination,
     SInput,
     SButton,
     FixedMenu,
@@ -136,7 +120,7 @@ export default {
       optionsMenu: [
         {
           text: this.$t("consultant.list.table.deleteButton"),
-          callback: (info) => {
+          callback: (info, index) => {
             this.deleteInfo(info);
           },
         },
@@ -223,15 +207,16 @@ export default {
         .catch((err) => {});
     },
     overline(text = "") {
+      if (!text) return "";
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
 
-    goPage() {
+    goPage(pageNum) {
       this.error = false;
       this.loading = true;
       this.$store
         .dispatch("consultant/getConsultantList", {
-          pageIndex: parseInt(this.pageNum),
+          pageIndex: parseInt(pageNum),
           pageSize: this.page.size,
         })
         .then((res) => {
@@ -239,7 +224,7 @@ export default {
             dataNum: res.total,
             total: res.pageTotal,
             size: 10,
-            current: parseInt(this.pageNum),
+            current: parseInt(pageNum),
           };
           this.tableData = res.data;
           this.loading = false;

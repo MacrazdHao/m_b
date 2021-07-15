@@ -102,7 +102,6 @@
                   {{ $t("students.list.table.watchButton") }}
                 </p> -->
               <FixedMenu
-                :menuId="`schoolS${scope.$index}${new Date().getTime()}`"
                 :text="$t('school.students.moreButton')"
                 :menu="optionsMenu"
                 :extra="scope.row"
@@ -230,13 +229,13 @@ export default {
       optionsMenu: [
         {
           text: this.$t("school.students.watchButton"),
-          callback: (info) => {
+          callback: (info, index) => {
             this.toDetail(info);
           },
         },
         {
           text: this.$t("school.students.deleteButton"),
-          callback: (info) => {
+          callback: (info, index) => {
             this.deleteInfo(info);
           },
         },
