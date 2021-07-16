@@ -75,6 +75,7 @@ export default {
       matchTitle: "匹配咨询师",
       matchingTips: "系统正在为您科学匹配咨询师导师，匹配成功后可在工作台查看咨询时间",
       matchedTips: "职业发展咨询将于 {time} 进行，请准时进入直播间进行咨询",
+      waitingMatch: '正在等待老师安排时间',
       backButton: "返回工作台",
       liveButton: "进入直播",
       finishTitle: "职业发展咨询",
@@ -86,6 +87,7 @@ export default {
       matchTitle: "匹配咨询师",
       matchingTips: "系统正在为您科学匹配咨询师导师，匹配成功后可在工作台查看咨询时间",
       matchedTips: "大学课程和学科咨询将于 {time} 进行，请准时进入直播间进行咨询",
+      waitingMatch: '正在等待老师安排时间',
       backButton: "返回工作台",
       liveButton: "进入直播",
       finishTitle: "大学课程和学科咨询",
@@ -97,6 +99,7 @@ export default {
       matchTitle: "匹配咨询师",
       matchingTips: "系统正在为您科学匹配咨询师导师，匹配成功后可在工作台查看咨询时间",
       matchedTips: "大学建议和偏好咨询将于 {time} 进行，请准时进入直播间进行咨询",
+      waitingMatch: '正在等待老师安排时间',
       backButton: "返回工作台",
       liveButton: "进入直播",
       finishTitle: "大学建议和偏好咨询",
@@ -111,7 +114,8 @@ export default {
       finishTitle: "生涯文档",
       finishTips: "生涯文档已完成，请查看您的生涯文档",
       reportButton: "查看报告"
-    }
+    },
+    loadInfoError: '获取状态信息出错，请刷新重试',
   },
   en: {
   }

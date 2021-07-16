@@ -1,7 +1,12 @@
 <template>
   <div class="Radio">
     <p class="label">{{ label }}：</p>
-    <div class="content">
+    <div
+      :class="[
+        'content',
+        direction == 'column' ? 'content--column' : 'content--row',
+      ]"
+    >
       <div
         class="item"
         v-for="(item, index) in items"
@@ -27,7 +32,7 @@ export default {
       name: string,
     }
   */
-  props: ["label", "data"],
+  props: ["label", "direction", "data", "value"],
   data() {
     return {
       items: [
@@ -63,8 +68,19 @@ export default {
       selected: -1,
     };
   },
+  watch: {
+    value(val) {
+      if (this.items.length == 0 || this.value < 0) return;
+      if (typeof val == "number") this.setValue(val);
+    },
+    data(val) {
+      this.items = val;
+    },
+  },
   mounted() {
     this.items = this.data;
+    if (this.items.length == 0 || this.value < 0) return;
+    if (typeof this.value == "number") this.setValue(this.value);
   },
   methods: {
     setValue(index) {
@@ -83,14 +99,24 @@ export default {
     margin: 0;
     color: #333333;
     font-size: 14px;
-    
     line-height: 20px;
     white-space: nowrap;
+  }
+  .content--row {
+    flex-direction: row;
+    .item + .item {
+      margin-left: 30px;
+    }
+  }
+  .content--column {
+    flex-direction: column;
+    .item + .item {
+      margin-top: 28px;
+    }
   }
   .content {
     margin-left: 29px;
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     max-width: 620px;
     .item {

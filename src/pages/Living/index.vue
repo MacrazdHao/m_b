@@ -282,6 +282,7 @@ export default {
     return {
       username: "",
       hostId: "",
+      studentId: "",
 
       roomId: "",
       status: 0,
@@ -457,10 +458,12 @@ export default {
                   this.$dialog.message({
                     text: this.$t("living.liveIsEnd"),
                     confirm: () => {
-                      this.$router.go(-1);
+                      // this.$router.go(-1);
+                      this.$router.push({ name: "live" });
                     },
                     cancel: () => {
-                      this.$router.go(-1);
+                      // this.$router.go(-1);
+                      this.$router.push({ name: "live" });
                     },
                     showCancel: false,
                     showClose: false,
@@ -480,7 +483,11 @@ export default {
         return;
       }
       this.$store
-        .dispatch(`living/startLive`, this.roomId)
+        .dispatch(`living/startLive`, {
+          liveId: this.roomId,
+          hostId: this.hostId,
+          studentId: this.studentId,
+        })
         .then((res) => {
           console.log("开启成功", res);
           this.status = !this.status;
@@ -537,6 +544,8 @@ export default {
             }
             if (res.memberList[i].hostFlag) {
               this.hostId = res.memberList[i].userId;
+            } else {
+              this.studentId = res.memberList[i].userId;
             }
           }
           if (!matchUser) {
@@ -673,6 +682,11 @@ export default {
               (err) => {}
             );
             console.log("订阅远程端口uid: ", id);
+            this.$store.dispatch(`living/changeRecordingMode`, {
+              liveId: this.roomId,
+              hostId: this.hostId,
+              studentId: this.studentId,
+            });
           });
           // 移除远程流事件回调（退出房间）
           this.rtc.client.on("stream-removed", (evt) => {
@@ -786,8 +800,8 @@ export default {
                 this.option.token = res;
                 this.rtc.client.join(
                   this.option.token || null,
-                  this.option.channel,
-                  this.option.uid || null,
+                  `${this.option.channel}`,
+                  `${this.option.uid}` || null,
                   (uid) => {
                     console.log(
                       "加入频道: " +

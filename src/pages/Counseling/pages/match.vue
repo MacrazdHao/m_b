@@ -1,13 +1,17 @@
 <template>
   <div class="Match">
-    <div class="matching" v-if="!finished">
+    <div class="matching" v-if="!finished && !loading">
       <img src="@/assets/counseling/matching.svg" />
       <p class="title">{{ $t(`counseling.step${step}.matchTitle`) }}</p>
       <p class="tips" v-if="!matchFinish">
         {{ $t(`counseling.step${step}.matchingTips`) }}
       </p>
       <p class="tips" v-else>
-        {{ $t(`counseling.step${step}.matchedTips`, { time }) }}
+        {{
+          time && !liveEnd
+            ? $t(`counseling.step${step}.matchedTips`, { time })
+            : $t(`counseling.step${step}.waitingMatch`)
+        }}
       </p>
       <CButton
         :class="['button', 'backButton']"
@@ -22,10 +26,10 @@
         :text="$t(`counseling.step${step}.liveButton`)"
         :disable="!liveStarting"
         theme="blue"
-        @btnClick="goLive"
+        @btnClick="toLiving"
       />
     </div>
-    <div class="finish" v-if="finished">
+    <div class="finish" v-if="finished && !loading">
       <img src="@/assets/counseling/success.svg" />
       <p class="title">{{ $t(`counseling.step${step}.finishTitle`) }}</p>
       <p class="tips">{{ $t(`counseling.step${step}.finishTips`) }}</p>
@@ -41,16 +45,21 @@
 
 <script>
 import CButton from "@/components/common/button.vue";
+import DateTools from "@/utils/date";
 export default {
+  props: ["timestamp"],
   components: {
     CButton,
   },
   data() {
     return {
-      finished: true,
+      loading: true,
+      finished: false,
       liveStarting: false,
+      liveEnd: false,
       time: "2021-03-21 20:00",
-      matchFinish: false,
+      matchFinish: true,
+      roomId: null,
     };
   },
   computed: {
@@ -61,22 +70,53 @@ export default {
       return this.$store.state.counseling.stateInfo;
     },
   },
+  watch: {
+    timestamp(val) {
+      this.$store
+        .dispatch("counseling/getConsultStatus")
+        .then((res) => {
+          this.loading = false;
+          // this.finished = res.data.status == 2;
+          // this.liveStarting = res.data.status == 1;
+          this.liveEnd = res.data.status > 1;
+          this.liveStarting =
+            res.data.status < 2 && res.data.startTime <= new Date().getTime();
+          // this.matchFinish = res.data.status == 0;
+          this.roomId = res.data.id;
+          this.time = res.data.startTime
+            ? this.getDateString(res.data.startTime)
+            : null;
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("counseling.loadInfoError"),
+          });
+        });
+    },
+  },
   mounted() {
     this.$emit("setSuffixMenu", [this.$t(`counseling.step${this.step}.title`)]);
     this.$emit("setStep", this.step);
   },
   methods: {
+    ...DateTools,
+    toLiving() {
+      if (!this.liveStarting || this.liveEnd) {
+        return;
+      }
+      this.$router.push({ name: "living", query: { roomId: this.roomId } });
+    },
     backToDashboard() {
       this.$router.push({ path: "/" });
     },
     getReport() {},
-    goLive() {},
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .Match {
+  min-height: 720px;
   p {
     margin: 0;
   }

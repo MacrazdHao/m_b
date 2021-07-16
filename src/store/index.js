@@ -8,6 +8,8 @@ import counseling from './counseling';
 import accounts from './accounts';
 import school from './school';
 import consultant from './consultant';
+import live from './live';
+import management from './management';
 import module111 from './modules111';
 
 Vue.use(Vuex);
@@ -21,6 +23,8 @@ export default new Vuex.Store({
     accounts,
     school,
     consultant,
+    live,
+    management,
     module111
   }
 });

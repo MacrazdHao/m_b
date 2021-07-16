@@ -2,14 +2,14 @@ import axios from 'axios'
 import { MessageBox, Message, Loading } from 'element-ui'
 import store from '@/store'
 import { getToken, removeToken } from '@/utils/auth'
-import { baseURL, mockURL, testURL, wenjieURL, haoranURL, luohuanURL, imgURL } from './config';
+import { baseURL, mockURL, testURL, wenjieURL, haoranURL, luohuanURL, luohuanURL2, imgURL } from './config';
 import i18n from './language';
 import Vue from 'vue';
 
 const service = axios.create({
   // baseURL: mockURL, // url = base url + request url
-  baseURL: luohuanURL,
-  timeout: 5000 // request timeout
+  baseURL: luohuanURL2,
+  timeout: 50000 // request timeout
 })
 
 service.interceptors.request.use(
@@ -38,7 +38,7 @@ service.interceptors.response.use(
       //   type: 'error',
       //   duration: 5 * 1000
       // });
-      Vue.prototype.$message.error({text: i18n.t('tips.loginExpire')})
+      Vue.prototype.$message.error({ text: i18n.t('tips.loginExpire') })
       removeToken();
     }
 
@@ -62,7 +62,7 @@ service.interceptors.response.use(
     //   type: 'error',
     //   duration: 5 * 1000
     // })
-    Vue.prototype.$message.error({text: error.msg || i18n.t('tips.requestTimeout')});
+    Vue.prototype.$message.error({ text: error.msg || i18n.t('tips.requestTimeout') });
     return Promise.reject(error)
   }
 )

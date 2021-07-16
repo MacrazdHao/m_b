@@ -1,10 +1,10 @@
 import urls from './urls';
-import request from '../../utils/request_online';
+import request from '../../utils/request_lh';
 
 export default {
-  startLive: ({ commit, state }, liveId) => {
+  startLive: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
-      request.post(urls.startLive(liveId)).then(res => {
+      request.post(urls.startLive(data.liveId)).then(res => {
         resolve(res.data);
       }).catch(err => {
         reject(err);
@@ -17,6 +17,25 @@ export default {
         resolve(res.data);
       }).catch(err => {
         reject(err);
+      });
+    })
+  },
+  changeRecordingMode: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.recordingMode, {
+        cname: data.liveId.toString(),
+        studentId: parseInt(data.hostId),
+        teacherId: parseInt(data.studentId)
+      }, {
+        params: {
+          cname: data.liveId.toString(),
+          studentId: parseInt(data.hostId),
+          teacherId: parseInt(data.studentId)
+        }
+      }).then(res2 => {
+        console.log('切换录制布局成功', res2);
+      }).catch(err2 => {
+        console.log('切换录制布局失败', err2);
       });
     })
   },

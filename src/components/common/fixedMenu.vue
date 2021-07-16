@@ -16,9 +16,18 @@
     </div>
     <div
       class="coverBox"
-      :style="{ height: showMenu ? 34 * this.menu.length + 20 + 'px' : '0' }"
+      :style="{ height: showMenu ? this.height + 20 + 'px' : '0' }"
     >
-      <div class="menuBox" ref="menu" v-if="showMenu">
+      <div
+        class="menuBox"
+        :style="{
+          'max-height': height + 'px',
+          'overflow-x': 'hidden',
+          'overflow-y': overScroll && menuContentHeight > maxHeight ? 'scroll' : 'hidden',
+        }"
+        ref="menu"
+        v-show="showMenu"
+      >
         <div
           class="menu-item"
           :id="`menuItem${index}`"
@@ -45,12 +54,6 @@ export default {
     menu: {
       defaultStatus: [],
       type: Array,
-      /*
-        {
-          text: String,
-          callback: (extra)=>{}
-        }
-      */
     },
     mouseMoveHide: {
       default: true,
@@ -72,11 +75,29 @@ export default {
       },
       type: Object,
     },
+    maxHeight: {
+      default: null,
+      type: Number,
+    },
+    overScroll: {
+      default: false,
+      type: Boolean,
+    },
   },
   data() {
     return {
       showMenu: false,
     };
+  },
+  computed: {
+    height() {
+      if (34 * this.menu.length + 8 < this.maxHeight)
+        return 34 * this.menu.length + 8;
+      else return this.maxHeight || 34 * this.menu.length + 8;
+    },
+    menuContentHeight() {
+      return 34 * this.menu.length + 8;
+    },
   },
   watch: {
     showMenu(val) {
@@ -116,8 +137,9 @@ export default {
       }, 100);
     },
     menuAnimate(element, hide) {
+      if (!element) return;
       element.style.padding = "4px 0";
-      let targetHeight = 34 * this.menu.length + 8 + "px";
+      let targetHeight = this.height + "px";
       element.style.height = hide ? targetHeight : "0";
       element.style.padding = hide ? "4px 0" : "0";
       setTimeout(() => {
@@ -178,6 +200,7 @@ export default {
     transform: translate(0%, 100%);
     right: -22px;
     z-index: 100;
+    // overflow: scroll;
     .menuBox {
       margin-top: 6px;
       min-width: 120px;
@@ -185,7 +208,6 @@ export default {
       box-shadow: 0px 4px 8px 0px #e0e0e0;
       border-radius: 2px;
       // padding: 4px 0;
-      overflow: hidden;
       transition: all 0.2s;
       height: 0;
       box-sizing: border-box;

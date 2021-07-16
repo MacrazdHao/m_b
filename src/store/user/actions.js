@@ -1,6 +1,6 @@
 import types from './types';
 import urls from './urls';
-import request from '@/utils/request_online';
+import request from '@/utils/request_lh';
 import { setToken, removeToken, setUsertype, getUsertype, removeUsertype } from '@/utils/auth';
 import { resetRouter } from '@/router/resetRouter';
 

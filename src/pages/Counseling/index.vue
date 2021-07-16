@@ -106,10 +106,13 @@
     </div>
     <transition name="slide-fade">
       <router-view
+        :timestamp="timestamp"
         @setStep="setStep"
         @setSuffixMenu="setSuffixMenu"
-        v-if="loaded"
+        v-show="loaded"
       />
+    </transition>
+    <transition name="slide-fade">
       <div
         style="
           width: 100%;
@@ -117,7 +120,7 @@
           padding-top: 130px;
           padding-bottom: 280px;
         "
-        v-else
+        v-show="!loaded"
       ></div>
     </transition>
   </div>
@@ -129,6 +132,7 @@ export default {
     return {
       step: 1,
       loaded: false,
+      timestamp: null,
     };
   },
   computed: {
@@ -137,30 +141,50 @@ export default {
     },
   },
   watch: {
+    $route() {
+      this.initStateInfo();
+    },
     stateInfo(val) {
-      console.log("状态信息更新了");
-      this.$router.push({ path: "/index/counseling/baseInfo" });
-      // switch (val.nodeType) {
-      //   case 11:
-      //     this.$router.push({ path: "/index/counseling/baseInfo" });
-      //     break;
-      //   case 12:
-      //     this.$router.push({ path: "/index/counseling/onlineTest" });
-      //     break;
-      //   case 13:
-      //     this.$router.push({ path: "/index/counseling/consultLive" });
-      //     break;
-      //   case 21:
-      //     this.$router.push({ path: "/index/counseling/consultLive" });
-      //     break;
-      // }
-      this.loaded = true;
+      if (!val.nodeType) return;
     },
   },
   mounted() {
-    this.$store.dispatch("counseling/getStateinfo");
+    this.initStateInfo();
   },
   methods: {
+    initStateInfo() {
+      this.loaded = false;
+      this.$store
+        .dispatch("counseling/getStateinfo")
+        .then((res) => {
+          this.loaded = true;
+          this.timestamp = new Date().getTime();
+          this.loadStep();
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("counseling.loadInfoError"),
+          });
+        });
+    },
+    loadStep() {
+      // console.log(this.$route)
+      if (this.$route.fullPath.indexOf("/index/counseling/") < 0) return;
+      switch (this.stateInfo.nodeType) {
+        case 11:
+          this.$router.push({ path: "/index/counseling/baseInfo" });
+          break;
+        case 12:
+          this.$router.push({ path: "/index/counseling/onlineTest" });
+          break;
+        case 13:
+          this.$router.push({ path: "/index/counseling/consultLive" });
+          break;
+        case 21:
+          this.$router.push({ path: "/index/counseling/consultLive" });
+          break;
+      }
+    },
     nextStep() {
       this.step++;
     },
@@ -188,7 +212,7 @@ export default {
     flex-direction: row;
     padding: 22px 24px 0 24px;
     width: 100%;
-      // height: 72px;
+    // height: 72px;
     box-sizing: border-box;
     .stepsItem {
       font-size: 14px;

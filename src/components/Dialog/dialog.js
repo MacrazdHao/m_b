@@ -59,13 +59,13 @@ _Dialog.install = (Vue) => {
     // message(text, confirm = false, cancel = false, confirmText = "", cancelText = "", close = false) {
     message(options) {
       return new Promise((resolve, reject) => {
-        this.showDialog(options).then(() => { resolve() }).catch(err => { reject(err) });
+        this.showDialog({ ...options, theme: 'blue' }).then(() => { resolve() }).catch(err => { reject(err) });
       });
     },
     // warning(text, confirm = false, cancel = false, confirmText = "", cancelText = "", close = false) {
     warning(options) {
       return new Promise((resolve, reject) => {
-        this.showDialog(options).then(() => { resolve() }).catch(err => { reject(err) });
+        this.showDialog({ ...options, theme: 'red' }).then(() => { resolve() }).catch(err => { reject(err) });
       });
     }
   };

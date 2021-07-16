@@ -20,6 +20,20 @@ export default {
     careerSummaryPlaceholder: '请输入总结的内容',
     careerAdviseLabel: '建议',
     careerAdvisePlaceholder: '请输入建议的内容',
+    status:{
+      noStart: '未开始',
+      collection: '数据收集',
+      discussion: '首次讨论',
+      consultation: '咨询',
+      fllowup: '跟踪',
+      update: '更新',
+      asupport: '申请支持',
+      support: '学业支持',
+      monitoring: '追踪',
+      report: '生成生涯报告',
+      end: '流程结束标志',
+      none: '暂无状态'
+    }
   },
   en: {
   }

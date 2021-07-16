@@ -2,27 +2,46 @@
   <div class="Live">
     <div class="list-content">
       <div class="toolsBar">
-        <el-select
-          v-model="value"
-          :placeholder="$t('live.list.statusPlaceholder')"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
+        <PSelector
+          class="statusSelector"
+          :items="status"
+          :index="statusIndex"
+          :border="true"
+          @handleSelect="handleStatusSelect"
+        />
         <SInput
           class="searchInput"
           :placeholder="$t('live.list.searchPlaceholder')"
           :icon="require('@/assets/student/icon_seach.svg')"
+          :value="value"
+          @input="
+            (text) => {
+              value = text;
+            }
+          "
         />
-        <SButton class="button" :text="$t('live.list.searchButton')" />
+        <SButton
+          class="button"
+          :text="$t('live.list.searchButton')"
+          @btnClick="searchLiveWithKeyword"
+        />
       </div>
       <div class="table">
         <el-table :data="tableData" height="642" style="width: 100%">
+          <div slot="empty">
+            <p class="loadTips" v-if="loading">
+              {{ $t("live.list.emptyTips.loadingList") }}
+            </p>
+            <p
+              class="loadTips"
+              v-if="tableData.length == 0 && !loading & !error"
+            >
+              {{ $t("live.list.emptyTips.emptyList") }}
+            </p>
+            <p class="loadTips" v-if="error">
+              {{ $t("live.list.errorTips.nolist") }}
+            </p>
+          </div>
           <el-table-column fixed>
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
@@ -31,8 +50,18 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.name) }}
+                {{ overline(scope.row.studentName) }}
               </p>
+            </template>
+          </el-table-column>
+          <el-table-column>
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("live.list.table.code") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text">{{ scope.row.userCode }}</p>
             </template>
           </el-table-column>
           <el-table-column>
@@ -42,7 +71,7 @@
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ overline(scope.row.grade) }}</p>
+              <p class="tableRow-text">{{ overline(scope.row.gradeName) }}</p>
             </template>
           </el-table-column>
           <el-table-column>
@@ -68,7 +97,7 @@
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ overline(scope.row.time) }}</p>
+              <p class="tableRow-text">{{ getDateString(scope.row.time) }}</p>
             </template>
           </el-table-column>
           <el-table-column>
@@ -106,7 +135,10 @@
                   :class="[
                     'tableRow-text',
                     'tableRow-button',
-                    scope.row.status != 1 ? 'tableRow-button--disabled' : '',
+                    scope.row.status <= 1 &&
+                    scope.row.time < new Date().getTime()
+                      ? 'tableRow-button--disabled'
+                      : '',
                   ]"
                   @click="toLiving(scope.row)"
                 >
@@ -119,138 +151,247 @@
       </div>
     </div>
     <div class="pagination">
-      <p class="totalNum">
-        {{ $t("global.pagination.totalNum", { num: page.dataNum }) }}
-      </p>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :pager-count="5"
+      <SPagination
+        :page="page"
         :page-count="page.total"
         :current-page="page.current"
-      >
-      </el-pagination>
-      <div class="jumper">
-        <p>{{ $t("global.pagination.goPage") }}</p>
-        <div>
-          <input
-            v-model="pageNum"
-            type="number"
-            @focus="enterEvent"
-            @blur="removeEnterEvent"
-          />
-        </div>
-        <p>{{ $t("global.pagination.pageUnit") }}</p>
-      </div>
+        @goPage="goPage"
+        @prev-click="prevPage"
+        @next-click="nextPage"
+        @current-change="currentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import SPagination from "@/components/common/pagination";
 import SInput from "./components/input";
 import SButton from "@/components/common/button.vue";
+import PSelector from "@/components/common/selector";
+import DateUtils from "@/utils/date";
 export default {
   components: {
+    SPagination,
     SInput,
     SButton,
+    PSelector,
   },
   data() {
     return {
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
+      loading: false,
+      error: false,
+      status: [
+        { text: this.$t("live.list.status.all"), value: -1 },
+        { text: this.$t("live.list.status.living"), value: 1 },
+        { text: this.$t("live.list.status.notStart"), value: 0 },
+        { text: this.$t("live.list.status.end"), value: 2 },
       ],
+      statusIndex: 0,
       value: "",
-      tableData: [
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          process: 0,
-          time: "2021-03-21  20:00",
-          status: 0,
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          process: 1,
-          time: "2021-03-21  20:00",
-          status: 1,
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          process: 2,
-          time: "2021-03-21  20:00",
-          status: 2,
-        },
-      ],
-      pageNum: 1,
+      tableData: [],
       page: {
-        dataNum: 1000,
-        total: 100,
+        dataNum: 0,
+        total: 1,
         size: 10,
         current: 1,
       },
     };
   },
+  mounted() {
+    this.page = {
+      dataNum: 0,
+      total: 1,
+      size: 10,
+      current: 1,
+    };
+    this.tableData = [];
+    this.initList();
+  },
   methods: {
+    ...DateUtils,
+    handleStatusSelect(index) {
+      this.statusIndex = index;
+      this.page = {
+        dataNum: 0,
+        total: 10,
+        size: 10,
+        current: 1,
+      };
+      this.initList();
+    },
+    initList() {
+      console.log(this.status[this.statusIndex].value);
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("live/getLiveList", {
+          pageIndex: this.page.current,
+          pageSize: this.page.size,
+          keyword: this.value,
+          status: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
+    },
+    searchLiveWithKeyword() {
+      if (this.value == "" || this.value) {
+        this.page = {
+          keyword: this.value,
+          dataNum: 0,
+          total: 1,
+          size: 10,
+          current: 1,
+        };
+        this.initList();
+      }
+    },
     toLiving(info) {
-      if (info.status != 1) {
+      if (info.status > 1) {
+        this.$message.warning({ text: "直播暂已结束" });
+        return;
+      }
+      if (info.time > new Date().getTime()) {
         this.$message.warning({ text: "直播暂未开始，请留意直播时间" });
         return;
       }
-      this.$router.push({ name: "living", query: { roomId: "200638" } });
-    },
-    toStatusText(code) {
-      switch (code) {
-        case 0:
-          return "未出报告";
-        case 1:
-          return "完成报告";
-      }
+      this.$router.push({ name: "living", query: { roomId: info.id } });
     },
     overline(text = "") {
+      if (!text) return "";
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
-    goPage() {
-      this.page = {
-        ...this.page,
-        current: parseInt(this.pageNum),
-      };
+    goPage(pageNum) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("live/getLiveList", {
+          pageIndex: parseInt(pageNum),
+          pageSize: this.page.size,
+          keyword: this.value,
+          status: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(pageNum),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
-    enterEvent() {
-      document.onkeydown = (event) => {
-        let e = event || window.event;
-        if (e && e.keyCode == 13) {
-          if (this.pageNum > this.page.total) this.pageNum = this.page.total;
-          else if (this.pageNum <= 0 || this.pageNum == "") this.pageNum = 1;
-          this.goPage();
-        }
-      };
+    currentChange(num) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("live/getLiveList", {
+          pageIndex: parseInt(num),
+          pageSize: this.page.size,
+          keyword: this.value,
+          status: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(num),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
-    removeEnterEvent() {
-      document.onkeydown = () => {};
+    prevPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("live/getLiveList", {
+          pageIndex: this.page.current - 1,
+          pageSize: this.page.size,
+          keyword: this.value,
+          status: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current - 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
+    },
+    nextPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("live/getLiveList", {
+          pageIndex: this.page.current + 1,
+          pageSize: this.page.size,
+          keyword: this.value,
+          status: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current + 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
   },
 };
@@ -321,9 +462,14 @@ export default {
       flex-direction: row;
       width: 100%;
       align-items: center;
+      .statusSelector {
+        width: 120px;
+        height: 36px;
+      }
       .searchInput {
         width: 300px;
         margin-left: 12px;
+        height: 36px;
       }
       .button {
         padding: 7px 20px;
@@ -334,6 +480,12 @@ export default {
       width: 100%;
       box-sizing: border-box;
       margin-top: 22px;
+      .loadTips {
+        font-size: 14px;
+        color: #d3d3d3;
+        line-height: 20px;
+        margin-top: 18px;
+      }
       .tableHeader-text {
         font-size: 14px;
         font-family: AlibabaPuHuiTiM;
@@ -396,60 +548,6 @@ export default {
         }
       }
     }
-  }
-  .pagination {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: 24px;
-    .totalNum {
-      font-size: 14px;
-      color: #666666;
-      line-height: 20px;
-      margin-right: 18px;
-    }
-    .jumper {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-left: 18px;
-      p {
-        font-size: 14px;
-        color: #666666;
-        line-height: 20px;
-      }
-      input {
-        padding: 0;
-        margin: 0;
-        margin-left: 8px;
-        margin-right: 8px;
-        padding-left: 4px;
-        padding-right: 4px;
-        width: 46px;
-        height: 28px;
-        border-radius: 4px;
-        border: 1px solid #dddfe6;
-        box-sizing: border-box;
-        transition: all 0.1s;
-        background: none;
-        outline: none;
-        font-size: 14px;
-        color: #666666;
-        line-height: 20px;
-        text-align: center;
-      }
-      input:focus {
-        border: 1px solid #4b78f6;
-      }
-      input::-webkit-outer-spin-button,
-      input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-      }
-      input[type="number"] {
-        -moz-appearance: textfield;
-      }
-    }
-    // }
   }
 }
 </style>

@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'token'
-const UsertypeKey = 'usertype'
+const TokenKey = 'myfellasToken'
+const UsertypeKey = 'myfellasUsertype'
 
 // console.log('token',Cookies.get(TokenKey))
 

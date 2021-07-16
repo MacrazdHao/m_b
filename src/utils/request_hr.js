@@ -9,7 +9,7 @@ import Vue from 'vue';
 const service = axios.create({
   // baseURL: mockURL, // url = base url + request url
   baseURL: haoranURL,
-  timeout: 5000 // request timeout
+  timeout: 50000 // request timeout
 })
 
 service.interceptors.request.use(
