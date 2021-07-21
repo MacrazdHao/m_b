@@ -20,9 +20,11 @@ export default {
     careerSummaryPlaceholder: '请输入总结的内容',
     careerAdviseLabel: '建议',
     careerAdvisePlaceholder: '请输入建议的内容',
-    status:{
+    status: {
+      all: '全部',
       noStart: '未开始',
       collection: '数据收集',
+      testing: '线上测试',
       discussion: '首次讨论',
       consultation: '咨询',
       fllowup: '跟踪',
@@ -33,7 +35,13 @@ export default {
       report: '生成生涯报告',
       end: '流程结束标志',
       none: '暂无状态'
-    }
+    },
+    consultUnopenPlaceholder: '这个阶段有{num}次直播咨询',
+    consultPlaceholder: '请设置第{num}次直播咨询',
+    getStudentDetailErrorTips: '获取学生信息失败，请刷新重试',
+    getStudentScheduleErrorTips: '获取学生咨询时间列表失败，请刷新重试',
+    saveStudentScheduleErrorTips: '保存学生咨询时间失败，请重试',
+    saveStudentScheduleSuccessTips: '保存学生咨询时间成功',
   },
   en: {
   }

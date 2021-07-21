@@ -1,5 +1,5 @@
 export default {
-  data: function () {
+  data() {
     return {
       language: this.$i18n.locale,
     }
@@ -10,6 +10,7 @@ export default {
         try {
           // console.log(val);
           this.$i18n.locale = val;
+          console.log(this.$i18n.locale)
           this.$store.dispatch('global/setLanguage', val);
           document.title = this.$t('global.title');
           this.languageChangeCallback();

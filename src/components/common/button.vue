@@ -51,6 +51,7 @@ export default {
   },
   methods: {
     btnClick() {
+      if (this.disable) return;
       this.$emit("btnClick");
     },
   },

@@ -116,6 +116,7 @@
       <div
         style="
           width: 100%;
+          min-height: 720px;
           height: 100%;
           padding-top: 130px;
           padding-bottom: 280px;

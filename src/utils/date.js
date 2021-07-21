@@ -1,4 +1,5 @@
 import moment from "moment";
+import Day from "dayjs";
 export default {
   getMonthDays: (date) => {
     let today = moment(date).format("YYYY-MM-DD");
@@ -22,7 +23,7 @@ export default {
     }
     return calendar;
   },
-  getDateString: (timestamp, format = "YYYY-MM-DD hh:MM") => {
+  getDateString: (timestamp, format = "YYYY-MM-DD HH:mm") => {
     return moment(timestamp).format(format);
   },
 }

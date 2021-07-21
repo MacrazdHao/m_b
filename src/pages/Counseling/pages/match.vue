@@ -9,7 +9,9 @@
       <p class="tips" v-else>
         {{
           time && !liveEnd
-            ? $t(`counseling.step${step}.matchedTips`, { time })
+            ? $t(`counseling.step${step}.matchedTips`, {
+                time: getDateString(time),
+              })
             : $t(`counseling.step${step}.waitingMatch`)
         }}
       </p>
@@ -24,7 +26,9 @@
         :class="['button', 'liveButton']"
         v-else
         :text="$t(`counseling.step${step}.liveButton`)"
-        :disable="!liveStarting"
+        :disable="
+          liveEnd || !time || time - 15 * 60 * 1000 > new Date().getTime()
+        "
         theme="blue"
         @btnClick="toLiving"
       />
@@ -57,7 +61,7 @@ export default {
       finished: false,
       liveStarting: false,
       liveEnd: false,
-      time: "2021-03-21 20:00",
+      time: "",
       matchFinish: true,
       roomId: null,
     };
@@ -78,16 +82,15 @@ export default {
           this.loading = false;
           // this.finished = res.data.status == 2;
           // this.liveStarting = res.data.status == 1;
-          this.liveEnd = res.data.status > 1;
-          this.liveStarting =
-            res.data.status < 2 && res.data.startTime <= new Date().getTime();
+          this.liveEnd = res.data.status == -1;
+          this.liveStarting = res.data.status != -1;
           // this.matchFinish = res.data.status == 0;
           this.roomId = res.data.id;
-          this.time = res.data.startTime
-            ? this.getDateString(res.data.startTime)
-            : null;
+          this.time = res.data.startTime;
+          console.log(this.time, new Date().getTime());
         })
         .catch((err) => {
+          console.log(err);
           this.$message.error({
             text: this.$t("counseling.loadInfoError"),
           });
@@ -101,7 +104,11 @@ export default {
   methods: {
     ...DateTools,
     toLiving() {
-      if (!this.liveStarting || this.liveEnd) {
+      if (
+        this.liveEnd ||
+        !this.time ||
+        this.time - 15 * 60 * 1000 > new Date().getTime()
+      ) {
         return;
       }
       this.$router.push({ name: "living", query: { roomId: this.roomId } });

@@ -1,6 +1,6 @@
 import types from './types';
 import urls from './urls';
-import request from '@/utils/request_lh';
+import request from '../../utils/request_lh';
 
 export default {
   test: ({ commit, state }, data) => {

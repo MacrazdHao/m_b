@@ -10,6 +10,7 @@ import school from './school';
 import consultant from './consultant';
 import live from './live';
 import management from './management';
+import playback from './playback';
 import module111 from './modules111';
 
 Vue.use(Vuex);
@@ -25,6 +26,7 @@ export default new Vuex.Store({
     consultant,
     live,
     management,
+    playback,
     module111
   }
 });

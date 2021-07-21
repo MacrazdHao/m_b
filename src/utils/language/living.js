@@ -46,6 +46,9 @@ export default {
     unmuteFail: '关闭静音失败，请重试',
     muteFailWithNoMicro: '静音失败，对方可能未开启麦克风',
     unmuteFailWithNoMicro: '关闭静音失败，对方可能未开启麦克风',
+    stopLiveError: '结束直播失败，请重试',
+    startLiveError: '开始直播失败，请重试',
+    fullscreenButton: '全屏'
   },
   en: {
   }

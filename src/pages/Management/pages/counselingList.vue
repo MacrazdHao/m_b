@@ -42,7 +42,7 @@
               {{ $t("live.list.errorTips.nolist") }}
             </p>
           </div>
-          <el-table-column min-width="100px" fixed>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.school") }}
@@ -54,7 +54,19 @@
               </p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" fixed>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("students.list.table.code") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.userCode }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.name") }}
@@ -150,10 +162,19 @@ export default {
       loading: false,
       error: false,
       status: [
-        { text: this.$t("live.list.status.all"), value: -1 },
-        { text: this.$t("live.list.status.living"), value: 1 },
-        { text: this.$t("live.list.status.notStart"), value: 0 },
-        { text: this.$t("live.list.status.end"), value: 2 },
+        { text: this.$t("management.status.all"), value: -1 },
+        { text: this.$t("management.status.noStart"), value: 0 },
+        { text: this.$t("management.status.collection"), value: 11 },
+        { text: this.$t("management.status.testing"), value: 12 },
+        { text: this.$t("management.status.discussion"), value: 13 },
+        { text: this.$t("management.status.consultation"), value: 21 },
+        { text: this.$t("management.status.fllowup"), value: 31 },
+        { text: this.$t("management.status.update"), value: 32 },
+        { text: this.$t("management.status.asupport"), value: 41 },
+        { text: this.$t("management.status.support"), value: 42 },
+        { text: this.$t("management.status.monitoring"), value: 43 },
+        { text: this.$t("management.status.report"), value: 88 },
+        { text: this.$t("management.status.end"), value: 99 },
       ],
       statusIndex: 0,
       value: "",
@@ -535,7 +556,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 24px;
+    // margin-top: 24px;
     .totalNum {
       font-size: 14px;
       color: #666666;

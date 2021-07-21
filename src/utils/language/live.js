@@ -12,7 +12,7 @@ export default {
       statusPlaceholder: '状态',
       searchPlaceholder: '请输入搜索的内容',
       searchButton: '搜索',
-      status:{
+      status: {
         all: '全部',
         living: '直播中',
         notStart: '未开始',
@@ -28,7 +28,14 @@ export default {
         options: "操作",
         watchButton: '进入直播',
         processText: '职业发展咨询 | 大学课程和学科咨询 | 大学建议和偏好咨询',
-        statusText: '未开始 | 直播中 | 已结束'
+        statusText: {
+          noStart: '未开始',
+          living: '直播中',
+          end: '已结束'
+        },
+        liveEndTips: '直播已结束',
+        liveNoStartTips: '直播暂未开始，请留意直播时间',
+        noSetTime: '未设置时间',
       }
     },
   },

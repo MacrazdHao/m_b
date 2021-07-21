@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="content">
-      <div class="menuBox">
+      <div class="menuBox" v-if="hostId == username">
         <div
           :class="['menuItem', mode == 1 ? 'menuItem--selected' : '']"
           @click="changeMode(1, true)"
@@ -153,8 +153,12 @@
               ></div>
             </div>
           </div>
-          <div class="fullscreenButton" @click="fullScreen">
-            <p class="text">全屏</p>
+          <div
+            class="fullscreenButton"
+            v-if="studentId == username"
+            @click="fullScreen"
+          >
+            <p class="text">{{ $t("living.fullscreenButton") }}</p>
           </div>
         </div>
       </div>
@@ -329,6 +333,8 @@ export default {
         params: {},
       },
       rtcCharacter: "host",
+      startRecord: null,
+      recordReqNum: 0,
     };
   },
   watch: {
@@ -434,6 +440,7 @@ export default {
               .then((res) => {
                 console.log(res);
                 this.status = !this.status;
+                clearInterval(this.startRecord);
                 if (!this.status && this.username == this.hostId) {
                   if (this.rtc.remoteStreams.length > 0) {
                     this.rtc.remoteStreams[0].stop();
@@ -473,6 +480,7 @@ export default {
               })
               .catch((err) => {
                 this.changingStatus = false;
+                this.$message.error({ text: this.$t("living.stopLiveError") });
                 console.log("关闭失败", err);
               });
           },
@@ -499,6 +507,7 @@ export default {
         })
         .catch((err) => {
           this.changingStatus = false;
+          this.$message.error({ text: this.$t("living.startLiveError") });
           console.log("开启失败", err);
         });
     },
@@ -668,6 +677,16 @@ export default {
             console.log("video的内容", video);
             video.style.left = "0";
             this.remoteVideoFinished = true;
+            if (this.hostId == this.username) {
+              this.startRecord = setInterval(() => {
+                if (this.recordReqNum > 30) clearInterval(this.startRecord);
+                this.$store.dispatch(`living/changeRecordingMode`, {
+                  liveId: this.roomId,
+                  hostId: this.hostId,
+                  studentId: this.studentId,
+                });
+              }, 5000);
+            }
           });
           // 获取远程流事件回调（获取他人视口）
           this.rtc.client.on("stream-subscribed", (evt) => {
@@ -1148,6 +1167,7 @@ export default {
       console.log("unpublish失败", err);
     });
     this.rtc.published = false;
+    clearInterval(this.startRecord);
     this.rtc.client.leave(
       () => {
         console.log("退出房间成功");
@@ -1271,7 +1291,8 @@ export default {
         align-items: center;
         margin-left: 30px;
         // max-width: 100px;
-        width: 100%;
+        width: fit-content;
+        max-width: calc(100% - 50px);
         img {
           width: 28px;
           height: 28px;

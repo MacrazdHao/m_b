@@ -167,8 +167,9 @@
 
 <script>
 // import redirectMixin from "@/mixins/redirect";
+import languageMixin from "@/mixins/language";
 export default {
-  // mixins: [redirectMixin],
+  mixins: [languageMixin],
   data() {
     return {
       initial: true,
@@ -182,9 +183,9 @@ export default {
     };
   },
   computed: {
-    language() {
-      return this.$store.state.global.language;
-    },
+    // language() {
+    //   return this.$store.state.global.language;
+    // },
     pageTitle() {
       // 定制header标题
       let title = this.language == "zh" ? "title" : "enTitle";
@@ -253,8 +254,8 @@ export default {
           if (initial) {
             setTimeout(() => {
               if (this.pagePath[0]) {
-                this.childrenMenu[this.pagePath[0].meta.id] = !this
-                  .childrenMenu[this.pagePath[0].meta.id];
+                this.childrenMenu[this.pagePath[0].meta.id] =
+                  !this.childrenMenu[this.pagePath[0].meta.id];
                 this.$forceUpdate();
                 this.menuAnimate(
                   document.getElementById(`/index/${this.pagePath[0].name}`),
@@ -290,9 +291,8 @@ export default {
         }
         this.pageName = this.$route.meta.id;
       } else {
-        this.pageName = this.$route.matched[
-          this.$route.matched.length - 2
-        ].meta.id;
+        this.pageName =
+          this.$route.matched[this.$route.matched.length - 2].meta.id;
       }
     },
     setSuffixMenu(arr, merge = false) {
@@ -313,9 +313,8 @@ export default {
           // 打开子菜单
           this.pagePath = items;
           if (this.pagePath[0]) {
-            this.childrenMenu[this.pagePath[0].meta.id] = !this.childrenMenu[
-              this.pagePath[0].meta.id
-            ];
+            this.childrenMenu[this.pagePath[0].meta.id] =
+              !this.childrenMenu[this.pagePath[0].meta.id];
             this.$forceUpdate();
             this.menuAnimate(
               document.getElementById(`/index/${this.pagePath[0].name}`),
@@ -353,7 +352,9 @@ export default {
       this.$router.push({ path: "/index/personal/" });
     },
     changeLanguage() {
-      this.$getPdf(document.getElementById("index"), "test");
+      // this.$getPdf(document.getElementById("index"), "test");
+      console.log("变更语言", this.language);
+      this.language = this.language == "zh" ? "en" : "zh";
     },
   },
 };

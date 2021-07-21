@@ -7,6 +7,7 @@ export default {
       searchButton: '搜索',
       table: {
         school: "学校",
+        code: '编号',
         name: "姓名",
         grade: "年级",
         sex: "性别",

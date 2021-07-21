@@ -22,21 +22,21 @@ export default {
   },
   changeRecordingMode: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
-      request.post(urls.recordingMode, {
-        cname: data.liveId.toString(),
-        studentId: parseInt(data.hostId),
-        teacherId: parseInt(data.studentId)
-      }, {
-        params: {
-          cname: data.liveId.toString(),
-          studentId: parseInt(data.hostId),
-          teacherId: parseInt(data.studentId)
-        }
-      }).then(res2 => {
-        console.log('切换录制布局成功', res2);
-      }).catch(err2 => {
-        console.log('切换录制布局失败', err2);
-      });
+      // request.post(urls.recordingMode, {
+      //   cname: data.liveId.toString(),
+      //   studentId: parseInt(data.studentId),
+      //   teacherId: parseInt(data.hostId)
+      // }, {
+      //   params: {
+      //     cname: data.liveId.toString(),
+      //     studentId: parseInt(data.studentId),
+      //     teacherId: parseInt(data.hostId)
+      //   }
+      // }).then(res2 => {
+      //   console.log('切换录制布局成功', res2);
+      // }).catch(err2 => {
+      //   console.log('切换录制布局失败', err2);
+      // });
     })
   },
   getAgoraToken: ({ commit, state }, liveId) => {

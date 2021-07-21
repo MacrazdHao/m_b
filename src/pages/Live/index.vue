@@ -97,7 +97,13 @@
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ getDateString(scope.row.time) }}</p>
+              <p class="tableRow-text">
+                {{
+                  scope.row.startTime
+                    ? getDateString(scope.row.startTime)
+                    : $t("live.list.table.noSetTime")
+                }}
+              </p>
             </template>
           </el-table-column>
           <el-table-column>
@@ -115,8 +121,14 @@
                 ></div>
                 <p class="tableRow-text">
                   {{
-                    overline(
-                      $tc("live.list.table.statusText", scope.row.status)
+                    $t(
+                      `live.list.table.statusText.${
+                        scope.row.status == -1
+                          ? "end"
+                          : scope.row.status == 1
+                          ? "living"
+                          : "noStart"
+                      }`
                     )
                   }}
                 </p>
@@ -135,8 +147,8 @@
                   :class="[
                     'tableRow-text',
                     'tableRow-button',
-                    scope.row.status <= 1 &&
-                    scope.row.time < new Date().getTime()
+                    scope.row.startTime - 15 * 60 * 1000 >
+                      new Date().getTime() || scope.row.status == -1
                       ? 'tableRow-button--disabled'
                       : '',
                   ]"
@@ -182,10 +194,10 @@ export default {
       loading: false,
       error: false,
       status: [
-        { text: this.$t("live.list.status.all"), value: -1 },
+        { text: this.$t("live.list.status.all"), value: -2 },
         { text: this.$t("live.list.status.living"), value: 1 },
         { text: this.$t("live.list.status.notStart"), value: 0 },
-        { text: this.$t("live.list.status.end"), value: 2 },
+        { text: this.$t("live.list.status.end"), value: -1 },
       ],
       statusIndex: 0,
       value: "",
@@ -263,12 +275,14 @@ export default {
       }
     },
     toLiving(info) {
-      if (info.status > 1) {
-        this.$message.warning({ text: "直播暂已结束" });
+      if (info.status == -1) {
+        this.$message.warning({ text: this.$t("live.list.table.liveEndTips") });
         return;
       }
-      if (info.time > new Date().getTime()) {
-        this.$message.warning({ text: "直播暂未开始，请留意直播时间" });
+      if (info.startTime - 15 * 60 * 1000 > new Date().getTime()) {
+        this.$message.warning({
+          text: this.$t("live.list.table.liveNoStartTips"),
+        });
         return;
       }
       this.$router.push({ name: "living", query: { roomId: info.id } });

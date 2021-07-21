@@ -13,6 +13,9 @@ export default {
           label: "学校名称",
           placeholder: "请输入学校"
         },
+        code: {
+          label: "学生编号",
+        },
         name: {
           label: "学生姓名",
           placeholder: "请输入姓名"

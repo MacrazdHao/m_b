@@ -12,7 +12,7 @@
             v-for="(item, index) in studentNum.chart"
             :key="index"
             effect="dark"
-            :content="item"
+            :content="`${item}`"
             placement="top"
           >
             <div :style="{ height: (44 * item) / maxChange + 'px' }"></div>

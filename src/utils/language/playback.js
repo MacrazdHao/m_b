@@ -16,7 +16,9 @@ export default {
       list: {
         title: '咨询回看列表',
         subtitle: '咨询阶段'
-      }
+      },
+      getRecordListErrorTips: '获取直播回看列表失败，请重试',
+      playbackButton: '回看'
     },
   },
   en: {
