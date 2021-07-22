@@ -66,7 +66,7 @@
       <div class="header"><p>自定义服务器IP</p></div>
       <div class="content">
         <p class="agreement" @click="changeAgreement">{{ requestAgreement }}</p>
-        <input v-model="customUrl" placeholder="请输入服务器IP" />
+        <input v-model="customUrl" placeholder="请输入服务器IP:PORT" />
       </div>
       <div class="buttonBox">
         <p @click="confirmCustomUrl">确定</p>
@@ -81,7 +81,7 @@
       <div class="header"><p>自定义OSS服务器IP</p></div>
       <div class="content">
         <p class="agreement" @click="changeOssAgreement">{{ ossAgreement }}</p>
-        <input v-model="customOssUrl" placeholder="请输入OSS服务器IP" />
+        <input v-model="customOssUrl" placeholder="请输入OSS服务器IP:PORT" />
       </div>
       <div class="buttonBox">
         <p @click="confirmCustomOssUrl">确定</p>
