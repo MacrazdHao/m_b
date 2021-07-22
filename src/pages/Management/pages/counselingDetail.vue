@@ -338,6 +338,7 @@ export default {
         .dispatch("management/getStudentDetail", this.$route.query.id)
         .then((res) => {
           this.info = res.data;
+          this.$emit("setSuffixMenu", [this.info.nickName]);
           this.$store
             .dispatch("management/getStudentSchedule", this.$route.query.id)
             .then((res) => {

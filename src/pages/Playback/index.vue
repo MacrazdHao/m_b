@@ -47,7 +47,17 @@
               {{ $t("live.list.errorTips.nolist") }}
             </p>
           </div>
-          <el-table-column fixed>
+          <el-table-column>
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("live.list.table.school") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text">{{ scope.row.schoolName }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column>
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("live.list.table.name") }}
@@ -57,16 +67,6 @@
               <p class="tableRow-text tableRow-name">
                 {{ overline(scope.row.studentName) }}
               </p>
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template slot="header" slot-scope="scope">
-              <p class="tableHeader-text">
-                {{ $t("live.list.table.code") }}
-              </p>
-            </template>
-            <template slot-scope="scope">
-              <p class="tableRow-text">{{ scope.row.userCode }}</p>
             </template>
           </el-table-column>
           <el-table-column>
@@ -87,57 +87,8 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text">
-                {{
-                  overline(
-                    $tc("live.list.table.processText", scope.row.process)
-                  )
-                }}
+                {{ statusToText(scope.row.nodeType) }}
               </p>
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template slot="header" slot-scope="scope">
-              <p class="tableHeader-text">
-                {{ $t("live.list.table.time") }}
-              </p>
-            </template>
-            <template slot-scope="scope">
-              <p class="tableRow-text">
-                {{
-                  scope.row.startTime
-                    ? getDateString(scope.row.startTime)
-                    : $t("live.list.table.noSetTime")
-                }}
-              </p>
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template slot="header" slot-scope="scope">
-              <p class="tableHeader-text">
-                {{ $t("live.list.table.status") }}
-              </p>
-            </template>
-            <template slot-scope="scope">
-              <div class="statusBox">
-                <div
-                  :class="[
-                    scope.row.status == 1 ? 'dot--finish' : 'dot--waiting',
-                  ]"
-                ></div>
-                <p class="tableRow-text">
-                  {{
-                    $t(
-                      `live.list.table.statusText.${
-                        scope.row.status == -1
-                          ? "end"
-                          : scope.row.status == 1
-                          ? "living"
-                          : "noStart"
-                      }`
-                    )
-                  }}
-                </p>
-              </div>
             </template>
           </el-table-column>
           <el-table-column width="80">
@@ -150,7 +101,7 @@
               <div class="buttons">
                 <p
                   :class="['tableRow-text', 'tableRow-button']"
-                  @click="showRecords(scope.row.studentId)"
+                  @click="showRecords(scope.row.userId)"
                 >
                   {{ $t("playback.list.table.watchButton") }}
                 </p>
@@ -235,6 +186,34 @@ export default {
   },
   methods: {
     ...DateUtils,
+    statusToText(status) {
+      switch (status) {
+        case 0:
+          return this.$t("management.status.noStart");
+        case 11:
+          return this.$t("management.status.collection");
+        case 12:
+          return this.$t("management.status.discussion");
+        case 21:
+          return this.$t("management.status.consultation");
+        case 31:
+          return this.$t("management.status.fllowup");
+        case 32:
+          return this.$t("management.status.update");
+        case 41:
+          return this.$t("management.status.asupport");
+        case 42:
+          return this.$t("management.status.support");
+        case 43:
+          return this.$t("management.status.monitoring");
+        case 88:
+          return this.$t("management.status.report");
+        case 99:
+          return this.$t("management.status.end");
+        default:
+          return this.$t("management.status.none");
+      }
+    },
     handleStatusSelect(index) {
       this.statusIndex = index;
       this.page = {

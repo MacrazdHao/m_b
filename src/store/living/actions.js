@@ -1,5 +1,5 @@
 import urls from './urls';
-import request from '../../utils/request_lh';
+import request from '../../utils/request';
 
 export default {
   startLive: ({ commit, state }, data) => {
@@ -20,9 +20,18 @@ export default {
       });
     })
   },
-  changeRecordingMode: ({ commit, state }, data) => {
+  stopRecord: ({ commit, state }, studentId) => {
     return new Promise((resolve, reject) => {
-      // request.post(urls.recordingMode, {
+      request.get(urls.stopRecord(studentId)).then(res => {
+        resolve(res.data);
+      }).catch(err => {
+        reject(err);
+      });
+    })
+  },
+  startRecord: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      // request.post(urls.startRecord, {
       //   cname: data.liveId.toString(),
       //   studentId: parseInt(data.studentId),
       //   teacherId: parseInt(data.hostId)

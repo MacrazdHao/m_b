@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <TestConfigBox />
     <transition name="slide-fade2">
       <router-view style="flex: 1 0 auto" :language="language" />
     </transition>
@@ -8,9 +9,13 @@
 
 <script>
 import languageMixin from "./mixins/language";
+import TestConfigBox from "./components/test/testConfigBox_normal.vue";
 export default {
   name: "App",
   mixins: [languageMixin],
+  components: {
+    TestConfigBox,
+  },
   data() {
     return {
       showTop: false,

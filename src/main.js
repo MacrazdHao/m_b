@@ -4,7 +4,6 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import i18n from './utils/language/index';
-import store from './store/index';
 import ElementUI from 'element-ui';
 // import "./assets/font.css";
 import "./assets/animate.css";
@@ -32,6 +31,7 @@ Vue.use(Dialog)
 Vue.use(Message)
 Vue.use(_default)
 Vue.use(html2pdf)
+import store from './store/index';
 
 /* eslint-disable no-new */
 new Vue({

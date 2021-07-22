@@ -21,6 +21,7 @@ export default {
       table: {
         name: "姓名",
         code: "编号",
+        school: "学校",
         grade: "年级",
         process: "阶段",
         time: '直播时间',

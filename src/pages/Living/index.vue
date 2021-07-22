@@ -393,7 +393,6 @@ export default {
       this.settingBoxShow = false;
       this.useCamera = useCamera;
       this.useAudio = useAudio;
-      this.cameraId = cameraId;
       if (this.rtc.published) {
         if (useAudio) {
           this.rtc.localStream.enableAudio();
@@ -405,6 +404,10 @@ export default {
         if (useCamera) {
           this.rtc.localStream.enableVideo();
         } else this.rtc.localStream.disableVideo();
+      }
+      if (this.cameraId != cameraId) {
+        this.cameraId = cameraId;
+        this.changeMode(this.mode);
       }
       this.loading.close();
     },
@@ -442,6 +445,7 @@ export default {
                 this.status = !this.status;
                 clearInterval(this.startRecord);
                 if (!this.status && this.username == this.hostId) {
+                  this.$store.dispatch(`living/stopRecord`, this.studentId);
                   if (this.rtc.remoteStreams.length > 0) {
                     this.rtc.remoteStreams[0].stop();
                     this.rtc.remoteStreams[0].close();
@@ -680,7 +684,7 @@ export default {
             if (this.hostId == this.username) {
               this.startRecord = setInterval(() => {
                 if (this.recordReqNum > 30) clearInterval(this.startRecord);
-                this.$store.dispatch(`living/changeRecordingMode`, {
+                this.$store.dispatch(`living/startRecord`, {
                   liveId: this.roomId,
                   hostId: this.hostId,
                   studentId: this.studentId,
@@ -701,7 +705,7 @@ export default {
               (err) => {}
             );
             console.log("订阅远程端口uid: ", id);
-            this.$store.dispatch(`living/changeRecordingMode`, {
+            this.$store.dispatch(`living/startRecord`, {
               liveId: this.roomId,
               hostId: this.hostId,
               studentId: this.studentId,
@@ -820,7 +824,7 @@ export default {
                 this.rtc.client.join(
                   this.option.token || null,
                   `${this.option.channel}`,
-                  `${this.option.uid}` || null,
+                  this.option.uid || null,
                   (uid) => {
                     console.log(
                       "加入频道: " +
@@ -1159,6 +1163,26 @@ export default {
         this.loadingLocalAudio = false;
       }
     },
+  },
+  beforeRouteLeave(to, from, next) {
+    try {
+      this.rtc.localStream.stop();
+      this.rtc.localStream.close();
+      this.rtc.client.unpublish(this.rtc.localStream, (err) => {
+        console.log("unpublish失败", err);
+      });
+      this.rtc.published = false;
+      clearInterval(this.startRecord);
+      this.rtc.client.leave(
+        () => {
+          console.log("退出房间成功");
+        },
+        (err) => {
+          console.log("退出房间失败", err);
+        }
+      );
+    } catch (err) {}
+    next();
   },
   beforeDestroy() {
     this.rtc.localStream.stop();

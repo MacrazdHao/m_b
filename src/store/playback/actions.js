@@ -1,5 +1,5 @@
 import urls from './urls';
-import request from '../../utils/request_lh';
+import request from '../../utils/request';
 
 export default {
   getLiveList: ({ commit, state }, data) => {
