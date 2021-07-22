@@ -135,14 +135,14 @@ export default {
     },
     status() {
       let serverOptions = this.serverOptions();
-      let requestObject = { title: "无效IP" };
+      let requestObject = { title: "自定义IP", value: config.URL };
       for (let i = 0; i < serverOptions.length; i++) {
         if (serverOptions[i].value == config.URL) {
           requestObject = serverOptions[i];
         }
       }
       let ossServerOptions = this.ossServerOptions();
-      let ossObject = { title: "无效IP" };
+      let ossObject = { title: "自定义IP", value: config.ossURL };
       for (let i = 0; i < ossServerOptions.length; i++) {
         if (ossServerOptions[i].value == config.ossURL) {
           ossObject = ossServerOptions[i];
@@ -234,7 +234,7 @@ export default {
       else if (this.requestAgreement == "https://")
         this.requestAgreement = "http://";
     },
-    confirmCustomOssUrl() {
+    confirmCustomUrl() {
       config.setURL(this.requestAgreement + this.customUrl);
       this.closeCustomUrl();
     },
@@ -252,7 +252,7 @@ export default {
       else if (this.requestOssAgreement == "https://")
         this.requestOssAgreement = "http://";
     },
-    confirmCustomUrl() {
+    confirmCustomOssUrl() {
       config.setOSSURL(this.requestOssAgreement + this.customOssUrl);
       this.closeCustomOssUrl();
     },
