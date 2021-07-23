@@ -45,6 +45,7 @@ export default {
   },
   data() {
     return {
+      sending: false,
       username: "",
     };
   },
@@ -62,12 +63,39 @@ export default {
         });
         return;
       }
-      this.$router.push({
-        name: "reset",
-        params: {
-          username: this.username,
-        },
-      });
+      if (this.sending) {
+        this.$message.warning({
+          text: this.$t("entry.forget.alertTips.sendingCodeErrorTips"),
+        });
+        return;
+      }
+      this.sending = true;
+      this.$store
+        .dispatch(
+          `user/${this.identity == 2 ? "admin" : "student"}EmailVerify`,
+          {
+            email: this.username,
+            operateType: 2,
+          }
+        )
+        .then((res) => {
+          this.sending = false;
+          this.$message.message({
+            text: this.$t("entry.forget.sendCodeSuccessTips"),
+          });
+          this.$router.push({
+            name: "reset",
+            params: {
+              username: this.username,
+            },
+          });
+        })
+        .catch((err) => {
+          this.sending = false;
+          this.$message.error({
+            text: this.$t("entry.forget.sendCodeFailTips"),
+          });
+        });
     },
   },
 };

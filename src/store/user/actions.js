@@ -165,6 +165,28 @@ export default {
       resolve();
     });
   },
+  forgetAndResetPassword: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.forgetAndResetPassword, data).then(res => {
+        console.log('重置管理员密码成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('重置管理员密码失败', err);
+        reject(err);
+      });
+    });
+  },
+  contactAdmin: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.contactAdmin, data, { "Content-Type": "multipart/form-data" }).then(res => {
+        console.log('联系管理员成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('联系管理员失败', err);
+        reject(err);
+      });
+    });
+  },
 
   editAdminPersonalBase: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {

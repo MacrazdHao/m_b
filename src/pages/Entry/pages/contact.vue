@@ -53,6 +53,21 @@ export default {
         });
         return;
       }
+      let formData = new FormData();
+      formData.set("account", this.username);
+      this.$store
+        .dispatch("user/contactAdmin", formData)
+        .then((res) => {
+          this.$message.message({
+            text: this.$t("entry.reset.contactAdminSuccessTips"),
+          });
+          this.$router.push({ path: "/" });
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("entry.reset.contactAdminFailTips") + err,
+          });
+        });
     },
   },
 };

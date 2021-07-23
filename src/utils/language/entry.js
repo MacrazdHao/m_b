@@ -83,7 +83,10 @@ export default {
       },
       alertTips: {
         emailEmptyTips: '请输入有效的邮箱地址',
-      }
+      },
+      sendingCodeErrorTips: '稍安勿躁，验证码正在发送中',
+      sendCodeSuccessTips: '发送验证码成功',
+      sendCodeFailTips: '发送验证码失败，请重试'
     },
     reset: {
       resetTitle: '重置密码',
@@ -108,7 +111,11 @@ export default {
         passwordEmptyTips: '请输入有效的密码',
         cPasswordEmptyTips: '请输入再次输入您的密码',
       },
-      resetButton: '重置'
+      resetButton: '重置',
+      resetSuccessTips: '密码已重置，请进行登录',
+      resetFailTips: '密码重置失败，请重试',
+      contactAdminSuccessTips: '已为您向管理员反馈，请留意后续通知',
+      contactAdminFailTips: '反馈失败，请重试',
     }
   },
   en: {

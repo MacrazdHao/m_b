@@ -32,7 +32,7 @@ service.interceptors.response.use(
     console.log(response)
     if (window.loading) { window.loading.close(); window.loading = null; }
 
-    if (res.code == 422) {
+    if (res.code == 301) {
       // Message({
       //   message: i18n.t('tips.loginExpire'),
       //   type: 'error',

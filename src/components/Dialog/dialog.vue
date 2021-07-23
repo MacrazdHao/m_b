@@ -162,6 +162,7 @@ export default {
           font-size: 14px;
           color: #666666;
           line-height: 20px;
+          text-align: center;
         }
       }
     }

@@ -121,6 +121,23 @@ export default {
         return;
       }
       this.errorType = 0;
+      this.$store
+        .dispatch("user/forgetAndResetPassword", {
+          email: this.form.username,
+          emailCode: this.form.code,
+          password: this.form.cPassword,
+        })
+        .then((res) => {
+          this.$message.message({
+            text: this.$t("entry.reset.resetSuccessTips"),
+          });
+          this.$router.push({ path: "/" });
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("entry.reset.resetFailTips"),
+          });
+        });
     },
   },
 };

@@ -12,6 +12,8 @@ export default {
   admininfo: "/admin/adminUser/info",
   studentEmailVerify: "/user/register/email/code",
   adminEmailVerify: "/admin/email/code",
+  forgetAndResetPassword: '/user/register/password/forget/reset',
+  contactAdmin: '/user/register/password/forget/concat',
   getMessages: '',
   avatarUpload: '/oss/minio/putObjectTest',
   editAdminPersonalBase: '/admin/adminUser/info',

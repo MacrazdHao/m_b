@@ -210,7 +210,8 @@
                           (index2 == 0 &&
                             (item2.status == -1 || item2.status == 1)) ||
                           (index2 > 0 &&
-                            stageTimes[index][index2 - 1].status != -1)
+                            (stageTimes[index][index2 - 1].status != -1 ||
+                              item2.status == 1))
                         "
                         :placeholder="
                           $t('management.consultPlaceholder', {

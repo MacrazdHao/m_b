@@ -65,7 +65,7 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.studentName) }}
+                {{ overline(scope.row.nickName) }}
               </p>
             </template>
           </el-table-column>
