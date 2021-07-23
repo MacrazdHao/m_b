@@ -40,8 +40,16 @@ export default {
     };
   },
   computed: {
+    language() {
+      return this.$i18n.locale;
+    },
     stateInfo() {
       return this.$store.state.counseling.stateInfo;
+    },
+  },
+  watch: {
+    language() {
+      this.$emit("setSuffixMenu", [this.$t("counseling.step6.title")]);
     },
   },
   mounted() {

@@ -73,8 +73,16 @@ export default {
     stateInfo() {
       return this.$store.state.counseling.stateInfo;
     },
+    language() {
+      return this.$i18n.locale;
+    },
   },
   watch: {
+    language() {
+      this.$emit("setSuffixMenu", [
+        this.$t(`counseling.step${this.step}.title`),
+      ]);
+    },
     timestamp(val) {
       this.$store
         .dispatch("counseling/getConsultStatus")

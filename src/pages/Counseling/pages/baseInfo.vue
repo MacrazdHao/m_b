@@ -213,6 +213,16 @@ export default {
       ],
     };
   },
+  computed: {
+    language() {
+      return this.$i18n.locale;
+    },
+  },
+  watch: {
+    language() {
+      this.$emit("setSuffixMenu", [this.$t("counseling.step1.title")]);
+    },
+  },
   mounted() {
     this.$emit("setSuffixMenu", [this.$t("counseling.step1.title")]);
     this.$emit("setStep", 1);
