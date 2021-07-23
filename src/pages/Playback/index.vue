@@ -2,13 +2,13 @@
   <div class="Playback">
     <div class="list-content">
       <div class="toolsBar">
-        <PSelector
+        <!-- <PSelector
           class="statusSelector"
           :items="status"
           :index="statusIndex"
           :border="true"
           @handleSelect="handleStatusSelect"
-        />
+        /> -->
         <SInput
           class="searchInput"
           :placeholder="$t('live.list.searchPlaceholder')"
@@ -477,15 +477,15 @@ export default {
       .statusSelector {
         width: 120px;
         height: 36px;
+        margin-right: 12px;
       }
       .searchInput {
         width: 300px;
-        margin-left: 12px;
         height: 36px;
+        margin-right: 12px;
       }
       .button {
         padding: 7px 20px;
-        margin-left: 12px;
       }
     }
     .table {

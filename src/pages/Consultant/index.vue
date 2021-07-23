@@ -1,5 +1,5 @@
 <template>
-  <div class="List">
+  <div class="Consultant">
     <div class="list-content">
       <div class="toolsBar">
         <SInput
@@ -333,7 +333,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.List {
+.Consultant {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -381,7 +381,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.List {
+.Consultant {
   width: 100%;
   padding: 22px 24px 14px 24px;
   box-sizing: border-box;

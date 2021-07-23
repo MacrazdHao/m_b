@@ -1,5 +1,5 @@
 <template>
-  <div class="Student">
+  <div class="Archives">
     <transition name="slide-fade2">
       <router-view
         @toDetail="toDetail"
@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.Student {
+.Archives {
   display: flex;
   flex-direction: row;
   width: 100%;

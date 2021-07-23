@@ -1,5 +1,5 @@
 <template>
-  <div class="Knowledge">
+  <div class="Messages">
     <div class="messageBox">
       <div class="message" v-for="(item, index) in messages" :key="index">
         <div class="messageTitle" @click="showFiles(index)">
@@ -143,7 +143,7 @@ export default {
 </script>
 
 <style lang="scss">
-.Knowledge {
+.Messages {
   .pagination {
     .el-pagination {
       padding: 0;
@@ -167,7 +167,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.Knowledge {
+.Messages {
   background: #fff;
   box-shadow: 0px 2px 6px 0px rgba(224, 224, 224, 0.5);
   width: 100%;
