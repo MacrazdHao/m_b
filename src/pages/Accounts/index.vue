@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     language() {
-      return this.$store.state.global.language;
+      return this.$i18n.locale;
     },
   },
   mounted() {
