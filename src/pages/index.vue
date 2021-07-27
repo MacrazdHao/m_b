@@ -102,7 +102,11 @@
           >
             <img
               class="avatar"
-              :src="$store.state.user.userinfo.avatar || $_default.avatar"
+              :src="
+                $store.state.user.userinfo.avatar
+                  ? $_default.ossUrl + $store.state.user.userinfo.avatar
+                  : $_default.avatar
+              "
             />
             <p class="nickname">
               {{
