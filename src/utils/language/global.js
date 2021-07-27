@@ -16,7 +16,12 @@ export default {
       totalNum: '共 {num} 条',
       goPage: '前往',
       pageUnit: '页'
-    }
+    },
+    vcode: {
+      sendSuccessTips: '发送验证码成功',
+      sendTooFastTips: '请在{seconds}秒后再试',
+      errorTips: '验证码发送失败，请重试'
+    },
   },
   en: {
     title: 'myFellas'

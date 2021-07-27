@@ -5,7 +5,9 @@ import i18n from '@/utils/language';
 
 const state = {
   menu: null,
-  language: i18n.locale
+  language: i18n.locale,
+  phoneVCodeSeconds: 0,
+  emailVCodeSeconds: 0,
 }
 
 export default {

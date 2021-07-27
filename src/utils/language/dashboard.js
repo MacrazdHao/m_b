@@ -53,6 +53,21 @@ export default {
         newAdmin: '新增管理员',
         newTeacher: '新增老师',
         peopleUnit: '个'
+      },
+      calendar: {
+        year: '年',
+        month: '月',
+        day: '日',
+        monday: '一',
+        tuesday: '二',
+        wednesday: '三',
+        thursday: '四',
+        friday: '五',
+        saturday: '六',
+        sunday: '日',
+        nextMonth: '下个月',
+        lastMonth: '上个月',
+        today: '今天'
       }
     },
     admin: {

@@ -14,21 +14,112 @@
         <p class="edit" @click="showResetBox = true">修改</p>
       </div>
     </div>
+    <div class="strengthBox" v-if="schoolAccount">
+      <p class="title">{{ $t("personal.safe.emailTitle") }}</p>
+      <div class="strength">
+        <p class="tips">
+          {{
+            email
+              ? $t("personal.safe.emailTips") + email
+              : $t("personal.safe.noEmailTips")
+          }}
+        </p>
+        <p class="edit" @click="editEmail">
+          {{
+            email
+              ? $t("personal.safe.editButton")
+              : $t("personal.safe.bindButton")
+          }}
+        </p>
+      </div>
+    </div>
     <ResetBox :visible.sync="showResetBox" @closeBtn="showResetBox = false" />
+    <EmailBox
+      v-if="schoolAccount"
+      :visible.sync="showEmailBox"
+      @closeBtn="showEmailBox = false"
+      @handleNext="verifyEmailCode"
+    />
+    <BindEmailBox
+      v-if="schoolAccount"
+      :visible.sync="showBindEmailBox"
+      @closeBtn="showBindEmailBox = false"
+      @handleNext="verifyEmailCode"
+    />
+    <EmailCodeBox
+      v-if="schoolAccount"
+      :visible.sync="showEmailCodeBox"
+      :email="newEmail"
+      @updateInfo="updateInfo"
+      @closeBtn="showEmailCodeBox = false"
+    />
   </div>
 </template>
 
 <script>
 import ResetBox from "../components/resetBox";
+import EmailBox from "../components/emailBox";
+import BindEmailBox from "../components/bindEmailBox";
+import EmailCodeBox from "../components/emailCodeBox";
+import { getUsertype } from "@/utils/auth";
 export default {
   components: {
     ResetBox,
+    EmailBox,
+    BindEmailBox,
+    EmailCodeBox,
   },
   data() {
     return {
       strengthLevel: 1,
       showResetBox: false,
+      showEmailBox: false,
+      showBindEmailBox: false,
+      showEmailCodeBox: false,
+      newEmail: "",
     };
+  },
+  computed: {
+    email() {
+      return this.$store.state.user.userinfo.email;
+    },
+    schoolAccount() {
+      let userType = getUsertype();
+      return userType == 1 || userType == 2;
+    },
+  },
+  watch: {
+    showEmailCodeBox(val) {
+      if (!val) {
+        this.newEmail = "";
+      }
+    },
+  },
+  methods: {
+    editEmail() {
+      if (this.email) this.showEmailBox = true;
+      else this.showBindEmailBox = true;
+    },
+    verifyEmailCode(email) {
+      this.newEmail = email;
+      this.showEmailBox = false;
+      this.showBindEmailBox = false;
+      this.showEmailCodeBox = true;
+    },
+    updateInfo() {
+      this.$store
+        .dispatch("user/getUserinfo")
+        .then((res) => {
+          this.$message.message({
+            text: this.$t("personal.safe.updateUserinfoSuccessTips"),
+          });
+        })
+        .catch((err) => {
+          this.$message.message({
+            text: this.$t("personal.safe.updateUserinfoFailTips"),
+          });
+        });
+    },
   },
 };
 </script>

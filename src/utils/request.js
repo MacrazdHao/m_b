@@ -17,6 +17,7 @@ service.interceptors.request.use(
     const token = getToken();
     if (token) {
       config.headers['Authorization'] = token;
+      config.headers['Accept-Language'] = i18n.locale == 'zh' ? 'cn' : 'en';
     }
     return config
   },

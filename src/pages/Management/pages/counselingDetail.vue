@@ -80,7 +80,7 @@
               {{ $t("counseling.step1.academic.score.label") }}：
             </p>
             <p class="noScoreTipx" v-if="info.subjectAchievement.length == 0">
-              暂无成绩单
+              {{ $t("management.noScoreTips") }}
             </p>
             <div class="filesBox">
               <template v-for="(item2, index2) in info.subjectAchievement">

@@ -110,6 +110,8 @@ export default {
     switch (getUsertype()) {
       case "1":
         this.resetUrl = "user/resetSchoolPassword";
+      case "2":
+        this.resetUrl = "user/resetSchoolPassword";
       case "10":
         this.resetUrl = "user/resetAdminPassword";
         break;

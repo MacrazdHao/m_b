@@ -10,6 +10,8 @@ export default {
   adminLogout: "/admin/logout",
   userinfo: "/user/info",
   admininfo: "/admin/adminUser/info",
+  schoolEmailChange: '/admin/userAdmin/account/bindEmail/verify',
+  schoolEmailBind: '/admin/userAdmin/account/bindEmail',
   studentEmailVerify: "/user/register/email/code",
   adminEmailVerify: "/admin/email/code",
   forgetAndResetPassword: '/user/register/password/forget/reset',

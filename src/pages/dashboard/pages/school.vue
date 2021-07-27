@@ -100,20 +100,26 @@
       <div class="info-item">
         <div class="calendarBox">
           <div class="header">
-            <p class="date">{{ `${currentYear}年${calendarMonth}月` }}</p>
+            <p class="date">
+              {{
+                `${currentYear}${$t(
+                  "dashboard.school.calendar.year"
+                )}${calendarMonth}${$t("dashboard.school.calendar.month")}`
+              }}
+            </p>
             <ToggleGroup
               :value="calendarMonth - (currentMonth - 1)"
               :items="calendarToggles"
             />
           </div>
           <div class="weekday">
-            <p>一</p>
-            <p>二</p>
-            <p>三</p>
-            <p>四</p>
-            <p>五</p>
-            <p>六</p>
-            <p>日</p>
+            <p>{{ $t("dashboard.school.calendar.monday") }}</p>
+            <p>{{ $t("dashboard.school.calendar.tuesday") }}</p>
+            <p>{{ $t("dashboard.school.calendar.wednesday") }}</p>
+            <p>{{ $t("dashboard.school.calendar.thursday") }}</p>
+            <p>{{ $t("dashboard.school.calendar.friday") }}</p>
+            <p>{{ $t("dashboard.school.calendar.saturday") }}</p>
+            <p>{{ $t("dashboard.school.calendar.sunday") }}</p>
           </div>
           <div class="calendar">
             <div
@@ -187,15 +193,15 @@ export default {
       currentDay: new Date().getDate(),
       calendarToggles: [
         {
-          text: "上个月",
+          text: this.$t("dashboard.school.calendar.lastMonth"),
           callback: this.lastMonth,
         },
         {
-          text: "今天",
+          text: this.$t("dashboard.school.calendar.today"),
           callback: this.thisMonth,
         },
         {
-          text: "下个月",
+          text: this.$t("dashboard.school.calendar.nextMonth"),
           callback: this.nextMonth,
         },
       ],

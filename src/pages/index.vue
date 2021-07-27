@@ -349,12 +349,18 @@ export default {
       this.$router.push({ path: "/index/messages" });
     },
     goPersonal() {
-      this.$router.push({ path: "/index/personal/" });
+      if (this.$route.path.indexOf("/index/personal") < 0) {
+        this.$router.push({ path: "/index/personal/" });
+      }
     },
     changeLanguage() {
       // this.$getPdf(document.getElementById("index"), "test");
       console.log("变更语言", this.language);
-      this.language = this.language == "zh" ? "en" : "zh";
+      // this.language = this.language == "zh" ? "en" : "zh";
+      this.$store.dispatch(
+        "global/setLanguage",
+        this.language == "zh" ? "en" : "zh"
+      );
     },
   },
 };

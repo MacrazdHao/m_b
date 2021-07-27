@@ -1,6 +1,7 @@
 import types from './types';
 import urls from './urls';
 import request from '../../utils/request';
+import * as cookie from 'js-cookie';
 
 export default {
   test: ({ commit, state }, data) => {
@@ -20,9 +21,9 @@ export default {
             path: '/dashboard',
             children: [{
               path: '/schoolDashboard'
-            },{
+            }, {
               path: '/adminDashboard'
-            },{
+            }, {
               path: '/studentDashboard'
             }, {
               path: '/schedules'
@@ -155,7 +156,9 @@ export default {
     commit(types.RESET_MENU);
   },
   setLanguage: ({ commit, state }, language) => {
+    cookie.set("langualekey", language);
     commit('SET_LANGUAGE', language);
+    window.location.reload();
   },
   uploadAvatar: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
@@ -169,5 +172,17 @@ export default {
         reject(err);
       });
     });
-  }
+  },
+  setPhoneVCodeSeconds: ({ commit, state }, seconds) => {
+    return new Promise((resolve, reject) => {
+      commit(types.SET_PHONE_VCODE_SECONDS, seconds);
+      resolve(seconds);
+    })
+  },
+  setEmailVCodeSeconds: ({ commit, state }, seconds) => {
+    return new Promise((resolve, reject) => {
+      commit(types.SET_EMAIL_VCODE_SECONDS, seconds);
+      resolve(seconds);
+    });
+  },
 }

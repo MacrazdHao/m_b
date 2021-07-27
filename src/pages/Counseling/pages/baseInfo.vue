@@ -267,7 +267,6 @@ export default {
           selfEvaluation: this.evaluation,
           sportHobby: this.sport,
           subjectAchievement: this.score,
-
           nodeType: this.stateInfo.nodeType,
           instanceId: this.stateInfo.instanceId,
           nodeId: this.stateInfo.nodeId,

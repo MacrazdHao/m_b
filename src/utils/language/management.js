@@ -36,6 +36,7 @@ export default {
       end: '流程结束标志',
       none: '暂无状态'
     },
+    noScoreTips: '暂无成绩单',
     consultUnopenPlaceholder: '这个阶段有{num}次直播咨询',
     consultPlaceholder: '请设置第{num}次直播咨询',
     getStudentDetailErrorTips: '获取学生信息失败，请刷新重试',

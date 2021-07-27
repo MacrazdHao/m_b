@@ -41,5 +41,44 @@ export default {
     },
   },
   en: {
+    title: 'Student Administration',
+    list: {
+      emptyTips: {
+        loadingList: 'Loading...',
+        emptyList: 'No Data Available',
+      },
+      errorTips: {
+        nolist: "Faild To Gather The list, Please Refresh"
+      },
+      statusPlaceholder: 'Status',
+      searchPlaceholder: 'Please enter your search',
+      searchButton: 'Search',
+      status: {
+        all: 'All',
+        living: 'Live',
+        notStart: 'Wait A Moment',
+        end: 'End'
+      },
+      table: {
+        name: "Name",
+        code: "No.",
+        school: "School",
+        grade: "Grade",
+        process: "Stage",
+        time: 'Live Stream Time',
+        status: "Live Stream Status",
+        options: "Operation",
+        watchButton: 'Join The Live Broadcast Room',
+        processText: 'Career Planning | Acadmic Advisory | College Selection',
+        statusText: {
+          noStart: 'Wait A Moment',
+          living: 'Live',
+          end: 'End'
+        },
+        liveEndTips: 'The live is end',
+        liveNoStartTips: '直播暂未开始，请留意直播时间',
+        noSetTime: '未设置时间',
+      }
+    },
   }
 }

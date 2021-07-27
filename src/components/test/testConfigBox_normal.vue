@@ -66,7 +66,11 @@
       <div class="header"><p>自定义服务器IP</p></div>
       <div class="content">
         <p class="agreement" @click="changeAgreement">{{ requestAgreement }}</p>
-        <input v-model="customUrl" placeholder="请输入服务器IP:PORT" />
+        <input
+          v-model="customUrl"
+          placeholder="请输入服务器IP:PORT"
+          @keydown="enterUrlInput"
+        />
       </div>
       <div class="buttonBox">
         <p @click="confirmCustomUrl">确定</p>
@@ -81,7 +85,11 @@
       <div class="header"><p>自定义OSS服务器IP</p></div>
       <div class="content">
         <p class="agreement" @click="changeOssAgreement">{{ ossAgreement }}</p>
-        <input v-model="customOssUrl" placeholder="请输入OSS服务器IP:PORT" />
+        <input
+          v-model="customOssUrl"
+          placeholder="请输入OSS服务器IP:PORT"
+          @keydown="enterOssUrlInput"
+        />
       </div>
       <div class="buttonBox">
         <p @click="confirmCustomOssUrl">确定</p>
@@ -221,6 +229,12 @@ export default {
       }
     },
 
+    enterUrlInput(event) {
+      let e = event || window.event;
+      if (e && e.keyCode == 13) {
+        this.confirmCustomUrl();
+      }
+    },
     showCustomUrl() {
       this.customUrlBoxShow = true;
     },
@@ -239,6 +253,12 @@ export default {
       this.closeCustomUrl();
     },
 
+    enterOssUrlInput(event) {
+      let e = event || window.event;
+      if (e && e.keyCode == 13) {
+        this.confirmCustomOssUrl();
+      }
+    },
     showCustomOssUrl() {
       this.customOssUrlBoxShow = true;
     },

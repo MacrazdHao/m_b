@@ -3,6 +3,7 @@ import urls from './urls';
 import request from '../../utils/request';
 import { setToken, removeToken, setUsertype, getUsertype, removeUsertype } from '@/utils/auth';
 import { resetRouter } from '@/router/resetRouter';
+import Enum from '@/utils/enum';
 
 export default {
   schoolLogin: ({ commit, state }, data) => {
@@ -63,6 +64,7 @@ export default {
     return new Promise((resolve, reject) => {
       request.get(iUrl, data).then(res => {
         console.log('获取用户信息成功', res);
+        res.data.userType = Enum.getLocalUserType(res.data.userType);
         commit(types.SET_USERINFO, res.data);
         resolve(res);
       }).catch(err => {
@@ -105,6 +107,28 @@ export default {
         resolve(res);
       }).catch(err => {
         console.log('登出失败', err);
+        reject(err);
+      });
+    });
+  },
+  schoolEmailChange: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.schoolEmailChange, data).then(res => {
+        console.log('发送验证码成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('发送验证码失败', err);
+        reject(err);
+      });
+    });
+  },
+  schoolEmailBind: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.schoolEmailBind, data).then(res => {
+        console.log('修改邮箱成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('修改邮箱失败', err);
         reject(err);
       });
     });
