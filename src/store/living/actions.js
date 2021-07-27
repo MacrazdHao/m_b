@@ -1,5 +1,6 @@
 import urls from './urls';
 import request from '../../utils/request';
+import Enum from '@/utils/enum';
 
 export default {
   startLive: ({ commit, state }, data) => {
@@ -60,6 +61,7 @@ export default {
   getLiveInfo: ({ commit, state }, liveId) => {
     return new Promise((resolve, reject) => {
       request.get(urls.getLiveInfo(liveId)).then(res => {
+        res.data.nodeType = Enum.getLocalNodeType(res.data.nodeType);
         resolve(res.data);
       }).catch(err => {
         reject(err);

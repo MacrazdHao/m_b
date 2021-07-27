@@ -89,8 +89,8 @@ export default {
       setting: 'Settings',
     },
     checkBox: {
-      checking: 'checking...',
-      setting: 'setting...',
+      checking: ' checking...',
+      setting: ' setting...',
       setResult: 'set',
       camera: 'camera',
       microphone: 'microphone',

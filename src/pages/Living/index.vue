@@ -13,7 +13,7 @@
           <p>{{ $tc("living.statusText", status + 1) }}</p>
         </div>
       </div>
-      <p class="title">职业发展咨询</p>
+      <p class="title">{{ statusToText(nodeType) }}</p>
       <div class="userBox">
         <div class="userNum">
           <img src="@/assets/living/icon_user.svg" />
@@ -293,6 +293,7 @@ export default {
       username: "",
       hostId: "",
       studentId: "",
+      nodeType: 0,
 
       roomId: "",
       status: 0,
@@ -362,6 +363,34 @@ export default {
     this.getInitInfo(() => {});
   },
   methods: {
+    statusToText(status) {
+      switch (status) {
+        case 0:
+          return this.$t("management.status.noStart");
+        case 11:
+          return this.$t("management.status.collection");
+        case 12:
+          return this.$t("management.status.discussion");
+        case 21:
+          return this.$t("management.status.consultation");
+        case 31:
+          return this.$t("management.status.fllowup");
+        case 32:
+          return this.$t("management.status.update");
+        case 41:
+          return this.$t("management.status.asupport");
+        case 42:
+          return this.$t("management.status.support");
+        case 43:
+          return this.$t("management.status.monitoring");
+        case 88:
+          return this.$t("management.status.report");
+        case 99:
+          return this.$t("management.status.end");
+        default:
+          return this.$t("management.status.none");
+      }
+    },
     setting() {
       if (
         this.changingStatus ||
@@ -554,6 +583,7 @@ export default {
           }
           this.status = res.liveStatus ? 1 : 0;
           this.members = res.memberList;
+          this.nodeType = res.nodeType;
           // this.mode = res.mode;
           let matchUser = false;
           for (let i = 0; i < res.memberList.length; i++) {
