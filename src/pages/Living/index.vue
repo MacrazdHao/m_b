@@ -20,7 +20,13 @@
           <p>{{ userNum }}</p>
         </div>
         <div class="user">
-          <img :src="$store.state.user.userinfo.avatar" />
+          <img
+            :src="
+              $store.state.user.userinfo.avatar
+                ? $_default.ossUrl + $store.state.user.userinfo.avatar
+                : $_default.avatar
+            "
+          />
           <p>
             {{ $store.state.user.userinfo.nickName }}
           </p>
