@@ -20,7 +20,13 @@
                   <img src="@/assets/living/icon_success.svg" />
                 </div>
               </div>
-              <p>{{ checkStep == 1 ? "摄像头设置中..." : "摄像头" }}</p>
+              <p>
+                {{
+                  $t("living.checkBox.camera") + checkStep == 1
+                    ? $t("living.checkBox.setting")
+                    : ""
+                }}
+              </p>
             </div>
             <div class="settingBox-steps-item">
               <div
@@ -37,7 +43,13 @@
                   <img src="@/assets/living/icon_success.svg" />
                 </div>
               </div>
-              <p>{{ checkStep == 2 ? "麦克风设置中..." : "麦克风" }}</p>
+              <p>
+                {{
+                  $t("living.checkBox.microphone") + checkStep == 2
+                    ? $t("living.checkBox.setting")
+                    : ""
+                }}
+              </p>
             </div>
             <div class="settingBox-steps-item">
               <div
@@ -48,18 +60,27 @@
               >
                 <img src="@/assets/living/icon_detect.svg" />
               </div>
-              <p>设置</p>
+              <p>
+                {{ $t("living.checkBox.setResult") }}
+              </p>
             </div>
           </div>
         </div>
         <div class="settingBox-content">
           <div class="settingBox-content-media" v-show="checkStep == 1">
             <p class="settingBox-content-media-tips">
-              是否要打开摄像头/屏幕共享直播模式
+              {{ $t("living.checkBox.isOpenCamera") }}
             </p>
             <div class="settingBox-content-media-selector">
-              <p class="settingBox-content-media-selector-label">摄像头</p>
-              <el-select v-model="cameraInput" placeholder="未检测到摄像头">
+              <p class="settingBox-content-media-selector-label">
+                {{ $t("living.checkBox.camera") }}
+              </p>
+              <el-select
+                v-model="cameraInput"
+                :placeholder="
+                  $t('living.checkBox.noMedia') + $t('living.checkBox.camera')
+                "
+              >
                 <el-option
                   v-for="(item, index) in cameraInputList"
                   :key="index"
@@ -77,13 +98,18 @@
           </div>
           <div class="settingBox-content-media" v-show="checkStep == 2">
             <p class="settingBox-content-media-tips">
-              是否要打开麦克风直播模式
+              {{ $t("living.checkBox.isOpenMicrophone") }}
             </p>
             <div class="settingBox-content-media-selector">
-              <p class="settingBox-content-media-selector-label">麦克风</p>
+              <p class="settingBox-content-media-selector-label">
+                {{ $t("living.checkBox.microphone") }}
+              </p>
               <el-select
                 v-model="audioInput"
-                placeholder="未检测到麦克风"
+                :placeholder="
+                  $t('living.checkBox.noMedia') +
+                  $t('living.checkBox.microphone')
+                "
                 disabled
               >
                 <el-option
@@ -117,12 +143,12 @@
             <table>
               <thead>
                 <tr>
-                  <th>设置项目</th>
-                  <th>设置结果</th>
+                  <th>{{ $t("living.checkBox.setItemTitle") }}</th>
+                  <th>{{ $t("living.checkBox.setResultTitle") }}</th>
                 </tr>
               </thead>
               <tr>
-                <td>摄像头</td>
+                <td>{{ $t("living.checkBox.camera") }}</td>
                 <td>
                   <div class="settingBox-content-media-check-result">
                     <div>
@@ -133,14 +159,18 @@
                         ●
                       </p>
                       <p class="settingBox-content-media-check-status">
-                        {{ cameraOk ? "打开" : "关闭" }}
+                        {{
+                          cameraOk
+                            ? $t("living.checkBox.open")
+                            : $t("living.checkBox.close")
+                        }}
                       </p>
                     </div>
                   </div>
                 </td>
               </tr>
               <tr>
-                <td>麦克风</td>
+                <td>{{ $t("living.checkBox.microphone") }}</td>
                 <td>
                   <div class="settingBox-content-media-check-result">
                     <div>
@@ -151,7 +181,11 @@
                         ●
                       </p>
                       <p class="settingBox-content-media-check-status">
-                        {{ audioOk ? "打开" : "关闭" }}
+                        {{
+                          audioOk
+                            ? $t("living.checkBox.open")
+                            : $t("living.checkBox.close")
+                        }}
                       </p>
                     </div>
                   </div>
@@ -168,8 +202,8 @@
             v-if="checkStep < 3"
             >{{
               (checkStep == 1 && !useCamera) || (checkStep == 2 && !useAudio)
-                ? "已关闭"
-                : "关闭"
+                ? $t("living.checkBox.isClose")
+                : $t("living.checkBox.close")
             }}</el-button
           >
           <el-button
@@ -180,15 +214,18 @@
             v-if="checkStep < 3"
             >{{
               (checkStep == 1 && useCamera) || (checkStep == 2 && useAudio)
-                ? "已打开"
-                : "打开"
+                ? $t("living.checkBox.isOpen")
+                : $t("living.checkBox.open")
             }}</el-button
           >
-          <el-button @click="startCheckMedia" v-if="checkStep == 3"
-            >重新设置</el-button
-          >
-          <el-button @click="settingFinish" type="primary" v-if="checkStep == 3"
-            >设置完成</el-button
+          <el-button @click="startCheckMedia" v-if="checkStep == 3">{{
+            $t("living.checkBox.reset")
+          }}</el-button>
+          <el-button
+            @click="settingFinish"
+            type="primary"
+            v-if="checkStep == 3"
+            >{{ $t("living.checkBox.setFinish") }}</el-button
           >
         </div>
       </div>
@@ -265,17 +302,13 @@ export default {
             })
             .catch((err) => {
               console.log("获取摄像头设备id列表失败", err);
-              alert(
-                "获取摄像头设备信息失败，请允许网页使用相应摄像头设备后重新进入直播间。"
-              );
+              alert(this.$t("living.checkBox.getCameraPermissionError"));
             });
         })
         .catch((err) => {
           Promise.resolve(null);
           console.log("获取摄像头设备列表失败", err);
-          alert(
-            "获取摄像头设备信息失败，请允许网页使用相应摄像头设备后，刷新或重新进入直播间。"
-          );
+          alert(this.$t("living.checkBox.getCameraPermissionError"));
         });
 
       navigator.mediaDevices
@@ -298,17 +331,13 @@ export default {
             })
             .catch((err) => {
               console.log("获取麦克风设备id列表失败", err);
-              alert(
-                "获取麦克风设备信息失败，请允许网页使用相应麦克风设备后重新进入直播间。"
-              );
+              alert(this.$t("living.checkBox.getCameraPermissionError"));
             });
         })
         .catch((err) => {
           Promise.resolve(null);
           console.log("获取麦克风设备列表失败", err);
-          alert(
-            "获取麦克风设备信息失败，请允许网页使用相应麦克风设备后，刷新或重新进入直播间。"
-          );
+          alert(this.$t("living.checkBox.getCameraPermissionError"));
         });
     },
     changeCamera(cameraId) {
