@@ -22,9 +22,8 @@
               </div>
               <p>
                 {{
-                  $t("living.checkBox.camera") + checkStep == 1
-                    ? $t("living.checkBox.setting")
-                    : ""
+                  $t("living.checkBox.camera") +
+                  (checkStep == 1 ? $t("living.checkBox.setting") : "")
                 }}
               </p>
             </div>
@@ -45,9 +44,8 @@
               </div>
               <p>
                 {{
-                  $t("living.checkBox.microphone") + checkStep == 2
-                    ? $t("living.checkBox.setting")
-                    : ""
+                  $t("living.checkBox.microphone") +
+                  (checkStep == 2 ? $t("living.checkBox.setting") : "")
                 }}
               </p>
             </div>
