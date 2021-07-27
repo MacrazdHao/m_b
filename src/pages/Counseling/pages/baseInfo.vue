@@ -59,17 +59,22 @@
               {{ $t("counseling.step1.academic.score.label") }}：
             </p>
             <div class="scoreUploadBox">
-              <p class="uploadTips">最多可以上传最近的三份成绩单，格式为pdf</p>
+              <p class="uploadTips">
+                {{ $t("counseling.step1.baseInfo.uploadTips") }}
+              </p>
               <CButton
                 class="uploadButton"
-                text="上传"
+                :text="$t('counseling.step1.baseInfo.uploadButton')"
                 theme="wathat"
                 @btnClick="uploadScoreFile"
               />
               <div class="filesBox">
                 <template v-for="(item2, index2) in scoreFiles">
                   <div class="file" :key="index2">
-                    <FileBox :info="item2" buttonText="删除" />
+                    <FileBox
+                      :info="item2"
+                      :buttonText="$t('counseling.step1.baseInfo.deleteButton')"
+                    />
                   </div>
                   {{ "" }}
                 </template>
@@ -162,12 +167,15 @@ export default {
   data() {
     return {
       sexData: [
-        { name: "男生", value: 0 },
-        { name: "女生", value: 1 },
+        { name: this.$t("counseling.step1.baseInfo.sex.boy"), value: 0 },
+        { name: this.$t("counseling.step1.baseInfo.sex.girl"), value: 1 },
       ],
       countryData: [
-        { name: "中国籍", value: 0 },
-        { name: "外国籍", value: 1 },
+        { name: this.$t("counseling.step1.baseInfo.country.china"), value: 0 },
+        {
+          name: this.$t("counseling.step1.baseInfo.country.foreign"),
+          value: 1,
+        },
       ],
       name: "",
       gradeclass: "",

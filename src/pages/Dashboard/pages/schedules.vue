@@ -3,7 +3,13 @@
     <div class="info-item">
       <div class="calendarBox">
         <div class="header">
-          <p class="date">{{ `${currentYear}年${calendarMonth}月` }}</p>
+          <p class="date">
+            {{
+              `${currentYear}${$t(
+                "dashboard.school.calendar.year"
+              )}${calendarMonth}${$t("dashboard.school.calendar.month")}`
+            }}
+          </p>
           <ToggleGroup
             :value="calendarMonth - (currentMonth - 1)"
             :items="calendarToggles"
@@ -55,11 +61,14 @@
             <div class="numBox" v-if="getScheduleNum(item, index) > 0">
               <div class="num">
                 <div class="dotBox"><div class="dot"></div></div>
-                <p>{{ getScheduleNum(item, index) }} 项日程</p>
+                <p>
+                  {{ getScheduleNum(item, index) }}
+                  {{ $t("dashboard.schedules.schedulesUnit") }}
+                </p>
               </div>
             </div>
             <p class="detail" v-if="getScheduleNum(item, index) > 0">
-              点击查看详情
+              {{ $t("dashboard.schedules.detailButton") }}
             </p>
           </div>
         </div>
@@ -67,7 +76,7 @@
     </div>
     <!-- <transition name="slide-fade2"> -->
     <div class="schedule" v-if="activities.length > 0">
-      <p class="title">今日进程</p>
+      <p class="title">{{ $t("dashboard.schedules.todaySchedules") }}</p>
       <div class="timeline">
         <el-timeline>
           <el-timeline-item
@@ -128,7 +137,7 @@ export default {
     },
   },
   mounted() {
-    this.$emit("setSuffixMenu", ["日程表"]);
+    this.$emit("setSuffixMenu", [this.$t("dashboard.schedules.title")]);
     this.schedules = Array.apply(
       null,
       Array(this.getMonthDays(`${this.currentYear}-${this.calendarMonth}-1`))

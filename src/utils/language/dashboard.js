@@ -90,6 +90,12 @@ export default {
         newAdmin: '新增管理员',
         peopleUnit: '个'
       },
+    },
+    schedules: {
+      title:'日程表',
+      schedulesUnit: ' 项日程',
+      detailButton: '点击查看详情',
+      todaySchedules: '今日进程'
     }
   },
   en: {

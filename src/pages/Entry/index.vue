@@ -51,7 +51,7 @@
                     }.svg`)
                   "
                 />
-                <p>学校</p>
+                <p>{{ $t("entry.school") }}</p>
               </div>
               <div
                 :class="[
@@ -67,7 +67,7 @@
                     }.svg`)
                   "
                 />
-                <p>学生</p>
+                <p>{{ $t("entry.student") }}</p>
               </div>
               <div
                 :class="[
@@ -83,7 +83,7 @@
                     }.svg`)
                   "
                 />
-                <p>咨询师</p>
+                <p>{{ $t("entry.consultant") }}</p>
               </div>
             </div>
           </div>

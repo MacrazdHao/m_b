@@ -43,6 +43,9 @@ export default {
     getStudentScheduleErrorTips: '获取学生咨询时间列表失败，请刷新重试',
     saveStudentScheduleErrorTips: '保存学生咨询时间失败，请重试',
     saveStudentScheduleSuccessTips: '保存学生咨询时间成功',
+    noReport: '未出报告',
+    finishReport: '完成报告',
+    watchScoreButton: '查看',
   },
   en: {
   }

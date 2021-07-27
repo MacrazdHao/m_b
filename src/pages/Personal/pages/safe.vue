@@ -11,7 +11,9 @@
             })
           }}
         </p>
-        <p class="edit" @click="showResetBox = true">修改</p>
+        <p class="edit" @click="showResetBox = true">
+          {{ $t("personal.safe.editButton") }}
+        </p>
       </div>
     </div>
     <div class="strengthBox" v-if="schoolAccount">

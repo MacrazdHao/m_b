@@ -425,9 +425,9 @@ export default {
     toStatusText(code) {
       switch (code) {
         case 0:
-          return "未出报告";
+          return this.$t(`management.noReport`);
         case 1:
-          return "完成报告";
+          return this.$t(`management.finishReport`);
       }
     },
     overline(text = "") {

@@ -82,7 +82,9 @@
         <p class="num">
           {{ $t("accounts.accountlist.selectedNum", { num: selected.length }) }}
         </p>
-        <p class="delete" @click="batchDelete">批量删除</p>
+        <p class="delete" @click="batchDelete">
+          {{ $t("accounts.accountlist.deleteAllButton") }}
+        </p>
       </div>
       <div class="pagination">
         <p class="totalNum">

@@ -85,7 +85,10 @@
             <div class="filesBox">
               <template v-for="(item2, index2) in info.subjectAchievement">
                 <div class="file" :key="index2">
-                  <FileBox :info="item2" buttonText="查看" />
+                  <FileBox
+                    :info="item2"
+                    :buttonText="$t('management.watchScoreButton')"
+                  />
                 </div>
                 {{ "" }}
               </template>

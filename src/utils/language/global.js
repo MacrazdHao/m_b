@@ -22,6 +22,11 @@ export default {
       sendTooFastTips: '请在{seconds}秒后再试',
       errorTips: '验证码发送失败，请重试'
     },
+    date:{
+      today: '今天',
+      yesterday: '昨天',
+      aweekago: '一周前'
+    }
   },
   en: {
     title: 'myFellas'
