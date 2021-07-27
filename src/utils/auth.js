@@ -6,7 +6,7 @@ const UsertypeKey = 'myfellasUsertype'
 // console.log('token',Cookies.get(TokenKey))
 
 export function getToken() {
-  console.log(Cookies.get(TokenKey))
+  // console.log(Cookies.get(TokenKey))
   return Cookies.get(TokenKey)
 }
 
@@ -20,7 +20,7 @@ export function removeToken() {
 }
 
 export function getUsertype() {
-  console.log(Cookies.get(UsertypeKey))
+  // console.log(Cookies.get(UsertypeKey))
   return Cookies.get(UsertypeKey)
 }
 

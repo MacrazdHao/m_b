@@ -8,7 +8,7 @@ export default {
       request.get(urls.liveList(data.pageIndex, data.pageSize, data.keyword, Enum.getServerLiveStatus(data.status))).then(res => {
         console.log('获取咨询师直播列表成功')
         for (let i = 0; i < res.data.length; i++) {
-          res.data[i].status = getLocalLiveStatus(res.data[i].status);
+          res.data[i].status = Enum.getLocalLiveStatus(res.data[i].status);
         }
         resolve(res);
       }).catch(err => {

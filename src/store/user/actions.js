@@ -59,7 +59,7 @@ export default {
     });
   },
   getUserinfo: ({ commit, state }, data) => {
-    console.log("用户类型", getUsertype());
+    // console.log("用户类型", getUsertype());
     let iUrl = getUsertype() < 10 ? urls.userinfo : urls.admininfo;
     return new Promise((resolve, reject) => {
       request.get(iUrl, data).then(res => {
