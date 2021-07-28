@@ -16,7 +16,9 @@
       notShowThisChildren: 作为子子级是否显示在父级的子菜单中
       group: （自定义）子子级特殊分组标识，和notShowThisChildren配合使用（B作为A子级，但实际路由级别又与A同级的情况下使用）
       groupParent: （自定义）同一分组下的主路由（入口）,
-      type: 一模多用时，用于区分使用该模板的不同页面的特殊标识
+      type: 一模多用时，用于区分使用该模板的不同页面的特殊标识,
+      defaultPrevPath: （数组）默认上级页面的路径，用于无历史操作时的$router返回操作
+      defaultPrevName: （数组）默认上级页面的名称，用于无历史操作时的$router返回操作
     }
   }
 }
@@ -32,7 +34,8 @@ export default {
     name: 'living',
     component: 'Living',
     meta: {
-
+      defaultPrevPath: ["", "/counseling", "/live"],
+      defaultPrevName: ["index", "counseling", "live"],
     }
     // redirect: 'dashboard',
   },
@@ -501,7 +504,9 @@ export default {
       enTitle: "Counseling Files",
       notShowThisChildren: true,
       group: "counseling",
-      groupParent: false
+      groupParent: false,
+      defaultPrevPath: ["/management/counselinglist"],
+      defaultPrevName: ["counselinglist"],
     }
   },
   // 子子级
@@ -583,6 +588,8 @@ export default {
     meta: {
       title: "学校管理",
       enTitle: "School Management",
+      defaultPrevPath: ["/school/schoollist"],
+      defaultPrevName: ["schoollist"],
     }
   },
   // 子子级
@@ -593,6 +600,8 @@ export default {
     meta: {
       title: "学校管理",
       enTitle: "School Management",
+      defaultPrevPath: ["/school/student"],
+      defaultPrevName: ["student"],
     }
   },
   // 子级

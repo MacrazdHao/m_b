@@ -264,8 +264,10 @@ import DatePicker from "../components/datePicker";
 import FileBox from "../components/file";
 import DateTools from "@/utils/date";
 import { numToChinese } from "@/utils/others";
+import defaultBackMixin from "@/mixins/defaultBack";
 export default {
   // props: ["info"],
+  mixins: [defaultBackMixin],
   components: {
     // Dialog,
     FormInput,
@@ -380,9 +382,6 @@ export default {
         ...this.consultStage[index],
         selected: !this.consultStage[index].selected,
       });
-    },
-    goBack() {
-      this.$emit("closeDetail");
     },
     saveInfo() {
       this.$store

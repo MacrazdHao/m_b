@@ -5,7 +5,9 @@ export default {
         school: '学校',
         num: '学生人数',
         options: '操作',
-        watchButton: '查看'
+        serviceButton: '业务设置',
+        watchButton: '查看学校',
+        deleteButton: '删除学校',
       },
       emptyTips: {
         loadingList: '加载数据中...',
@@ -25,9 +27,12 @@ export default {
       watchButton: '查看信息',
       deleteButton: '删除信息',
       deleteTips1: '删除后，学校端和咨询师端的学生信息将删除',
-      deleteTips2: '请谨慎确认是否要删除？'
+      deleteTips2: '请谨慎确认是否要删除？',
+      getInfoErrorTips: '获取学校信息失败',
+      getListErrorTips: '获取学生列表失败',
     },
     detail: {
+      getInfoErrorTips: '获取学生信息失败',
       teacherLabel: '生涯导师',
       notime: '咨询导师暂未安排时间',
       nextButton: '下一页',

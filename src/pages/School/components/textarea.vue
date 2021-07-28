@@ -51,7 +51,7 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  min-height: 134px;
+    min-height: 134px;
   p {
     margin: 0;
     color: #333333;

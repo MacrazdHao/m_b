@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
+import store from './store/index';
 import i18n from './utils/language/index';
 import ElementUI from 'element-ui';
 // import "./assets/font.css";
@@ -16,6 +17,7 @@ import Dialog from './components/Dialog/dialog.js';
 import LogoutDialog from './components/LogoutDialog/logoutDialog.js';
 import Message from './components/Message/message.js';
 import html2pdf from './utils/html2pdf';
+// import VuePageStack from 'vue-page-stack';
 // import '@/assets/icons' // icon
 
 Vue.config.productionTip = false
@@ -31,7 +33,7 @@ Vue.use(Dialog)
 Vue.use(Message)
 Vue.use(_default)
 Vue.use(html2pdf)
-import store from './store/index';
+// Vue.use(VuePageStack, { router }); 
 
 /* eslint-disable no-new */
 new Vue({

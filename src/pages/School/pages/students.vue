@@ -1,29 +1,48 @@
 <template>
-  <div class="List">
+  <div class="Students">
     <div class="list-content">
       <div class="toolsBar">
-        <el-select
-          v-model="value"
-          :placeholder="$t('students.list.statusPlaceholder')"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
+        <PSelector
+          class="statusSelector"
+          :items="status"
+          :index="statusIndex"
+          :border="true"
+          @handleSelect="handleStatusSelect"
+        />
         <SInput
           class="searchInput"
-          :placeholder="$t('students.list.searchPlaceholder')"
+          :placeholder="$t('live.list.searchPlaceholder')"
           :icon="require('@/assets/student/icon_seach.svg')"
+          :value="value"
+          @input="
+            (text) => {
+              value = text;
+            }
+          "
         />
-        <SButton class="button" :text="$t('students.list.searchButton')" />
+        <SButton
+          class="button"
+          :text="$t('live.list.searchButton')"
+          @btnClick="searchLiveWithKeyword"
+        />
       </div>
       <div class="table">
         <el-table :data="tableData" height="642" style="width: 100%">
-          <el-table-column min-width="100px" fixed>
+          <div slot="empty">
+            <p class="loadTips" v-if="loading">
+              {{ $t("live.list.emptyTips.loadingList") }}
+            </p>
+            <p
+              class="loadTips"
+              v-if="tableData.length == 0 && !loading & !error"
+            >
+              {{ $t("live.list.emptyTips.emptyList") }}
+            </p>
+            <p class="loadTips" v-if="error">
+              {{ $t("live.list.errorTips.nolist") }}
+            </p>
+          </div>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.school") }}
@@ -31,11 +50,23 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.school) }}
+                {{ overline(scope.row.schoolName) }}
               </p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" fixed>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("students.list.table.code") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.userCode }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.name") }}
@@ -43,21 +74,21 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.name) }}
+                {{ overline(scope.row.nickName) }}
               </p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" sortable>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.grade") }}
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ overline(scope.row.grade) }}</p>
+              <p class="tableRow-text">{{ overline(scope.row.gradeName) }}</p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" sortable>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.status") }}
@@ -68,27 +99,21 @@
                 <div class="dotBox">
                   <div
                     :class="[
-                      scope.row.status == 0
+                      scope.row.nodeType == 0 || !scope.row.nodeType
                         ? 'dot'
-                        : scope.row.status == 4
+                        : scope.row.nodeType == 99
                         ? 'dot--finish'
                         : 'dot--doing',
                     ]"
                   ></div>
                 </div>
                 <p class="tableRow-text">
-                  {{
-                    overline(
-                      $t(
-                        `students.list.table.consultStatusText${scope.row.status}`
-                      )
-                    )
-                  }}
+                  {{ statusToText(scope.row.nodeType) }}
                 </p>
               </div>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px">
+          <el-table-column width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.options") }}
@@ -96,13 +121,13 @@
             </template>
             <template slot-scope="scope">
               <!-- <p
-                  class="tableRow-text tableRow-button"
-                  @click="toDetail(scope.row)"
-                >
-                  {{ $t("students.list.table.watchButton") }}
-                </p> -->
+                class="tableRow-text tableRow-button"
+                @click="toDetail(scope.row)"
+              >
+                {{ $t("students.list.table.editButton") }}
+              </p> -->
               <FixedMenu
-                :text="$t('school.students.moreButton')"
+                :text="$t('students.list.table.moreButton')"
                 :menu="optionsMenu"
                 :extra="scope.row"
               />
@@ -112,117 +137,62 @@
       </div>
     </div>
     <div class="pagination">
-      <p class="totalNum">
-        {{ $t("global.pagination.totalNum", { num: page.dataNum }) }}
-      </p>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :pager-count="5"
+      <SPagination
+        :page="page"
         :page-count="page.total"
         :current-page="page.current"
-      >
-      </el-pagination>
-      <div class="jumper">
-        <p>{{ $t("global.pagination.goPage") }}</p>
-        <div>
-          <input
-            v-model="pageNum"
-            type="number"
-            @focus="enterEvent"
-            @blur="removeEnterEvent"
-          />
-        </div>
-        <p>{{ $t("global.pagination.pageUnit") }}</p>
-      </div>
+        @goPage="goPage"
+        @prev-click="prevPage"
+        @next-click="nextPage"
+        @current-change="currentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import SPagination from "@/components/common/pagination";
 import SInput from "../components/input";
 import SButton from "@/components/common/button.vue";
+import PSelector from "@/components/common/selector";
 import FixedMenu from "@/components/common/fixedMenu.vue";
-import Bus from "../utils/bus";
+import defaultBackMixin from "@/mixins/defaultBack";
 export default {
+  mixins: [defaultBackMixin],
   components: {
+    SPagination,
     SInput,
     SButton,
+    PSelector,
     FixedMenu,
   },
   data() {
     return {
       school: null,
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
+      loading: false,
+      error: false,
+      status: [
+        { text: this.$t("management.status.all"), value: -1 },
+        { text: this.$t("management.status.noStart"), value: 0 },
+        { text: this.$t("management.status.collection"), value: 11 },
+        { text: this.$t("management.status.testing"), value: 12 },
+        { text: this.$t("management.status.discussion"), value: 13 },
+        { text: this.$t("management.status.consultation"), value: 21 },
+        { text: this.$t("management.status.fllowup"), value: 31 },
+        { text: this.$t("management.status.update"), value: 32 },
+        { text: this.$t("management.status.asupport"), value: 41 },
+        { text: this.$t("management.status.support"), value: 42 },
+        { text: this.$t("management.status.monitoring"), value: 43 },
+        { text: this.$t("management.status.report"), value: 88 },
+        { text: this.$t("management.status.end"), value: 99 },
       ],
+      statusIndex: 0,
       value: "",
-      tableData: [
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          career: {
-            introduce:
-              "很高兴见到Alina，她在学校宿舍进行此次测评。Alina很放松，易于交谈。",
-            discuss:
-              "在我们的会面中，Alina描述了她在学校学习的所有科目。她最爱的科目有经济学、计算机科学和数学，并认为可能最擅长语文和数学，因为中文是她的母语，所以觉得最简单。Alina认为化学是最难的科目，同时也很喜欢这门课。她说:“化学很有趣，但也很困难。”我们谈到了面对挑战带来的好处，她提出了一些明智的观点。谈到家庭，Alina认为父母慈爱善良，让她自己解决问题，在她有需要的时候给予支持。她描述了每周与父母和妹妹弟弟通两次电话的情况，还描述了往返学校和家的路途。我问Alina当iGCSE考试结束后，她对A level科目的选择有什么想法。她说她可能会选修数学、高等数学、经济学、物理和计算机科学。我从学校网站上了解到通常是第一年修数学，第二年再修高等数学，所以这样的选择是可行的。 当被问及在考虑什么职业时，Alina的回答是:商学、计算机工作或“设计师”。为了更准确地了解她的想法，我问了许多问题。她谈了更多关于她对建筑设计的兴趣，这引发了一场活跃的对话，Alina对这个领域展现出了真正的兴趣。当被问及建筑师需要哪些知识和技能时，Alina正确回答出数学和物理，然后补充了计算机科学，并问艺术是否也有帮助。我告诉Alina，英国的大学现在需要艺术、设计或建筑研究的作品集作为入学要求的一部分。Alina认为一名优秀的建筑师能还需要想象力。我让她说出一些她喜欢的建筑，她首先说的是比萨斜塔。当被问到为什么喜欢它时，她的回答比较肤浅：因为它倾斜着却没有倒塌，这太神奇了。我迫使她用逻辑思考，如果比萨斜塔倒塌了，或者并不是倾斜的，它是否仍能举世瞩目! 她知道这会变得非常不同，但她说她仍然喜欢这座塔的风格和年代，所以即使塔不是倾斜的她也仍会喜欢这座建筑。她表示紫禁城是她另一座欣赏的建筑。我们讨论了这座建筑的优点，然后我问她将如何利用她对这两座建筑的欣赏来帮助她设计现代建筑。虽然Alina的推论并不成熟，但她提出了一些很好的观点。",
-            summary: "总结",
-            advise: "建议",
-          },
-          teacher: "Dr Steve Bailey",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 0,
-        },
-      ],
+      tableData: [],
       pageNum: 1,
       page: {
-        dataNum: 1000,
-        total: 100,
+        dataNum: 0,
+        total: 1,
         size: 10,
         current: 1,
       },
@@ -243,67 +213,252 @@ export default {
     };
   },
   mounted() {
-    // 后期修改如果能够通过请求获取到学校详情，则传query到这个页面即可，不再需要使用Bus
-    this.school = Bus.getSchoolInfo();
-    if (!this.school) {
-      this.$router.go(-1);
-      return;
-    }
-    this.$emit("setSuffixMenu", [this.school.orgName]);
+    this.page = {
+      dataNum: 0,
+      total: 1,
+      size: 10,
+      current: 1,
+    };
+    this.tableData = [];
+    this.initInfo();
   },
   methods: {
-    toDetail(info) {
-      Bus.setStudentInfo(info);
-      this.$router.push({
-        name: "sdetail",
-      });
-    },
-    deleteInfo(info) {
-      console.log("删除", info);
-      this.$dialog
-        .warning({
-          text: [
-            this.$t(`school.students.deleteTips1`),
-            this.$t(`school.students.deleteTips2`),
-          ],
+    initInfo() {
+      this.$store
+        .dispatch("school/getSchoolInfo", this.$route.query.id)
+        .then((res) => {
+          this.school = res.data;
+          this.$emit("setSuffixMenu", [this.school.orgName]);
+          this.initList();
         })
-        .catch(() => {});
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("school.students.getInfoErrorTips"),
+          });
+          this.goBack();
+        });
     },
-    toStatusText(code) {
-      switch (code) {
+    statusToText(status) {
+      switch (status) {
         case 0:
-          return this.$t(`management.noReport`);
-        case 1:
-          return this.$t(`management.finishReport`);
+          return this.$t("management.status.noStart");
+        case 11:
+          return this.$t("management.status.collection");
+        case 12:
+          return this.$t("management.status.discussion");
+        case 21:
+          return this.$t("management.status.consultation");
+        case 31:
+          return this.$t("management.status.fllowup");
+        case 32:
+          return this.$t("management.status.update");
+        case 41:
+          return this.$t("management.status.asupport");
+        case 42:
+          return this.$t("management.status.support");
+        case 43:
+          return this.$t("management.status.monitoring");
+        case 88:
+          return this.$t("management.status.report");
+        case 99:
+          return this.$t("management.status.end");
+        default:
+          return this.$t("management.status.none");
       }
     },
+    handleStatusSelect(index) {
+      this.statusIndex = index;
+      this.page = {
+        dataNum: 0,
+        total: 10,
+        size: 10,
+        current: 1,
+      };
+      this.initList();
+    },
+    initList() {
+      console.log(this.status[this.statusIndex].value);
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("school/getStudentList", {
+          pageIndex: this.page.current,
+          pageSize: this.page.size,
+          keyword: this.value,
+          schoolId: this.$route.query.id,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: this.$t("school.students.getInfoErrorTips"),
+          });
+          this.goBack();
+        });
+    },
+    searchLiveWithKeyword() {
+      if (this.value == "" || this.value) {
+        this.page = {
+          keyword: this.value,
+          schoolId: this.$route.query.id,
+          dataNum: 0,
+          total: 1,
+          size: 10,
+          current: 1,
+        };
+        this.initList();
+      }
+    },
+    toDetail(info) {
+      // this.$emit("toDetail", info);
+      this.$router.push({
+        path: "/index/school/sdetail",
+        query: {
+          id: info.userId,
+        },
+      });
+    },
     overline(text = "") {
+      if (!text) return "";
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
-    goPage() {
-      this.page = {
-        ...this.page,
-        current: parseInt(this.pageNum),
-      };
+    goPage(pageNum) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("school/getStudentList", {
+          pageIndex: parseInt(pageNum),
+          pageSize: this.page.size,
+          keyword: this.value,
+          schoolId: this.$route.query.id,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(pageNum),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
-    enterEvent() {
-      document.onkeydown = (event) => {
-        let e = event || window.event;
-        if (e && e.keyCode == 13) {
-          if (this.pageNum > this.page.total) this.pageNum = this.page.total;
-          else if (this.pageNum <= 0 || this.pageNum == "") this.pageNum = 1;
-          this.goPage();
-        }
-      };
+    currentChange(num) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("school/getStudentList", {
+          pageIndex: parseInt(num),
+          pageSize: this.page.size,
+          keyword: this.value,
+          schoolId: this.$route.query.id,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(num),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
-    removeEnterEvent() {
-      document.onkeydown = () => {};
+    prevPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("school/getStudentList", {
+          pageIndex: this.page.current - 1,
+          pageSize: this.page.size,
+          keyword: this.value,
+          schoolId: this.$route.query.id,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current - 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
+    },
+    nextPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("school/getStudentList", {
+          pageIndex: this.page.current + 1,
+          pageSize: this.page.size,
+          keyword: this.value,
+          schoolId: this.$route.query.id,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current + 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
   },
 };
 </script>
 <style lang="scss">
-.List {
+.Students {
   .toolsBar {
     .el-select .el-input.is-focus .el-input__inner {
       border-color: #4b78f6;
@@ -341,7 +496,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.List {
+.Students {
   width: 100%;
   padding: 22px 24px 14px 24px;
   box-sizing: border-box;
@@ -362,9 +517,14 @@ export default {
       flex-direction: row;
       width: 100%;
       align-items: center;
+      .statusSelector {
+        width: 120px;
+        height: 36px;
+      }
       .searchInput {
         width: 300px;
         margin-left: 12px;
+        height: 36px;
       }
       .button {
         padding: 7px 20px;
@@ -375,6 +535,12 @@ export default {
       width: 100%;
       box-sizing: border-box;
       margin-top: 22px;
+      .loadTips {
+        font-size: 14px;
+        color: #d3d3d3;
+        line-height: 20px;
+        margin-top: 18px;
+      }
       .tableHeader-text {
         font-size: 14px;
         font-family: AlibabaPuHuiTiM;
@@ -439,7 +605,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 24px;
+    // margin-top: 24px;
     .totalNum {
       font-size: 14px;
       color: #666666;

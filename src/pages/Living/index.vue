@@ -282,7 +282,10 @@ import LButton from "@/components/common/button";
 import CheckBox from "./components/CheckBox";
 import SettingBox from "./components/SettingBox";
 import AgoraRTC from "agora-rtc-sdk";
+import defaultBackMixin from "@/mixins/defaultBack";
+import { getUsertype } from "@/utils/auth";
 export default {
+  mixins: [defaultBackMixin],
   components: {
     LButton,
     CheckBox,
@@ -343,6 +346,14 @@ export default {
       startRecord: null,
       recordReqNum: 0,
     };
+  },
+  computed: {
+    _goBack() {
+      let userType = getUsertype();
+      return () => {
+        this.goBack({ index: userType == 3 ? 1 : userType == 11 ? 2 : 0 });
+      };
+    },
   },
   watch: {
     useAudio(val) {
@@ -505,11 +516,11 @@ export default {
                     text: this.$t("living.liveIsEnd"),
                     confirm: () => {
                       // this.$router.go(-1);
-                      this.$router.push({ name: "live" });
+                      this._goBack();
                     },
                     cancel: () => {
                       // this.$router.go(-1);
-                      this.$router.push({ name: "live" });
+                      this._goBack();
                     },
                     showCancel: false,
                     showClose: false,
@@ -572,10 +583,12 @@ export default {
             this.$dialog.error({
               text: this.$t("living.liveNotExist"),
               confirm: () => {
-                this.$router.go(-1);
+                // this.$router.go(-1);
+                this._goBack();
               },
               cancel: () => {
-                this.$router.go(-1);
+                // this.$router.go(-1);
+                this._goBack();
               },
               showCancel: false,
               showClose: false,
@@ -651,10 +664,12 @@ export default {
                   this.$dialog.message({
                     text: this.$t("living.liveIsEnd"),
                     confirm: () => {
-                      this.$router.go(-1);
+                      // this.$router.go(-1);
+                      this._goBack();
                     },
                     cancel: () => {
-                      this.$router.go(-1);
+                      // this.$router.go(-1);
+                      this._goBack();
                     },
                     showCancel: false,
                     showClose: false,
@@ -894,7 +909,14 @@ export default {
                   .message({
                     text: this.$t("living.enterLiveFail"),
                     confirm: () => {
-                      history.go(0);
+                      // history.go(0);
+                      this.loading.close();
+                      this._goBack();
+                    },
+                    cancel: () => {
+                      // history.go(0);
+                      this.loading.close();
+                      this._goBack();
                     },
                   })
                   .catch(() => {});

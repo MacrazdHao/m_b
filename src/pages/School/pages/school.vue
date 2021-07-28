@@ -27,7 +27,7 @@
               : $t('school.list.emptyTips.emptyList')
           "
         >
-          <el-table-column min-width="100px" fixed>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("school.list.table.school") }}
@@ -39,7 +39,7 @@
               </p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" fixed>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("school.list.table.num") }}
@@ -51,19 +51,24 @@
               </p>
             </template>
           </el-table-column>
-          <el-table-column width="50">
+          <el-table-column width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("school.list.table.options") }}
               </p>
             </template>
             <template slot-scope="scope">
-              <p
+              <!-- <p
                 class="tableRow-text tableRow-button"
                 @click="toDetail(scope.row)"
               >
                 {{ $t("school.list.table.watchButton") }}
-              </p>
+              </p> -->
+              <FixedMenu
+                :text="$t('students.list.table.moreButton')"
+                :menu="optionsMenu"
+                :extra="scope.row"
+              />
             </template>
           </el-table-column>
         </el-table>
@@ -88,11 +93,13 @@ import SPagination from "@/components/common/pagination";
 import SInput from "../components/input";
 import SButton from "@/components/common/button.vue";
 import Bus from "../utils/bus";
+import FixedMenu from "@/components/common/fixedMenu.vue";
 export default {
   components: {
     SPagination,
     SInput,
     SButton,
+    FixedMenu,
   },
   data() {
     return {
@@ -107,6 +114,26 @@ export default {
         size: 10,
         current: 1,
       },
+      optionsMenu: [
+        {
+          text: this.$t("school.list.table.serviceButton"),
+          callback: (info, index) => {
+            this.setService(info);
+          },
+        },
+        {
+          text: this.$t("school.list.table.watchButton"),
+          callback: (info, index) => {
+            this.toDetail(info);
+          },
+        },
+        {
+          text: this.$t("school.list.table.deleteButton"),
+          callback: (info, index) => {
+            this.deleteSchool(info);
+          },
+        },
+      ],
     };
   },
   watch: {
@@ -163,10 +190,15 @@ export default {
     },
     toDetail(info) {
       this.$router.push({
-        name: "student",
+        path: "/index/school/student",
+        query: {
+          id: info.id,
+        },
       });
-      Bus.setSchoolInfo(info);
+      // Bus.setSchoolInfo(info);
     },
+    setService(info) {},
+    deleteSchool(info) {},
     overline(text = "") {
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
@@ -177,6 +209,7 @@ export default {
         .dispatch("school/getSchoolList", {
           pageIndex: parseInt(pageNum),
           pageSize: this.page.size,
+          keyword: this.keyword || "",
         })
         .then((res) => {
           this.page = {
@@ -203,6 +236,7 @@ export default {
         .dispatch("school/getSchoolList", {
           pageIndex: parseInt(num),
           pageSize: this.page.size,
+          keyword: this.keyword || "",
         })
         .then((res) => {
           this.page = {
@@ -229,6 +263,7 @@ export default {
         .dispatch("school/getSchoolList", {
           pageIndex: this.page.current - 1,
           pageSize: this.page.size,
+          keyword: this.keyword || "",
         })
         .then((res) => {
           this.page = {
@@ -255,6 +290,7 @@ export default {
         .dispatch("school/getSchoolList", {
           pageIndex: this.page.current + 1,
           pageSize: this.page.size,
+          keyword: this.keyword || "",
         })
         .then((res) => {
           this.page = {
@@ -321,6 +357,9 @@ export default {
     }
     .el-table th {
       background-color: #f6f8fa;
+    }
+    .el-table .cell {
+      overflow: initial;
     }
   }
 }

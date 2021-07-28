@@ -78,7 +78,7 @@
               </p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" sortable>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.grade") }}
@@ -88,7 +88,7 @@
               <p class="tableRow-text">{{ overline(scope.row.gradeName) }}</p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" sortable>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.status") }}
