@@ -82,6 +82,7 @@ export default {
   },
   logout: ({ commit, state }, data) => {
     let type = getUsertype();
+    console.log(type)
     return new Promise((resolve, reject) => {
       request.post(urls.logout, data).then(res => {
         console.log('登出成功', res);

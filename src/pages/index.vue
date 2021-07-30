@@ -171,6 +171,7 @@
 
 <script>
 // import redirectMixin from "@/mixins/redirect";
+import {getUsertype } from '@/utils/auth';
 import languageMixin from "@/mixins/language";
 export default {
   mixins: [languageMixin],
