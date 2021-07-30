@@ -747,6 +747,7 @@ export default {
           });
           // 获取远程流事件回调（获取他人视口）
           this.rtc.client.on("stream-subscribed", (evt) => {
+            console.log("远程流", remoteStream, this.rtc.params, id);
             // 待修改
             let remoteStream = evt.stream;
             let id = remoteStream.getId();
@@ -851,7 +852,7 @@ export default {
           callback();
         },
         (err) => {
-          console.error("初始化失败", err);
+          console.log("初始化失败", err);
         }
       );
     },
@@ -901,7 +902,7 @@ export default {
                     if (this.status) this.changeMode(this.mode);
                   },
                   (err) => {
-                    console.error("加入频道失败", err, this.option);
+                    console.log("加入频道失败", err, this.option);
                   }
                 );
               })
@@ -1028,7 +1029,7 @@ export default {
         this.rtc.published = false;
         this.rtc.client.unpublish(this.rtc.localStream, (err) => {
           console.log("取消推流失败");
-          console.error(err);
+          console.log(err);
         });
       }
       // 主播创建本地流
@@ -1101,7 +1102,7 @@ export default {
               this.localVideoFinished = true;
               this.rtc.client.publish(this.rtc.localStream, (err) => {
                 // 本地流推送失败
-                console.error(err);
+                console.log(err);
                 // ???待补充???
                 this.settingFinish(
                   this.useCamera,
@@ -1116,7 +1117,7 @@ export default {
           );
         },
         (err) => {
-          console.error("初始化本地流失败 ", err);
+          console.log("初始化本地流失败 ", err);
           this.rtc.published = true;
           this.loading.close();
           this.$message.error({
