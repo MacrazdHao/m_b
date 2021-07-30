@@ -84,14 +84,15 @@ export default {
   },
   mounted() {
     this.form.username = this.$route.params.username;
-    document.onkeydown = (event) => {
+    document.addEventListener("keydown", this.enterToSubmit);
+  },
+  methods: {
+    enterToSubmit(event) {
       let e = event ? event : window.event ? window.event : null;
       if (e.keyCode == 13) {
         this.submit();
       }
-    };
-  },
-  methods: {
+    },
     goback() {
       this.$router.go(-1);
     },
@@ -139,6 +140,10 @@ export default {
           });
         });
     },
+  },
+  beforeRouteLeave(to, from, next) {
+    document.removeEventListener("keydown", this.enterToSubmit);
+    next();
   },
 };
 </script>
