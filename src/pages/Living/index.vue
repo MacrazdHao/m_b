@@ -650,6 +650,13 @@ export default {
         () => {
           console.log("初始化成功");
           this.rtc.params = this.option;
+          this.rtc.client.on("peer-online", (evt) => {
+            const id = evt.uid;
+            if (id != this.username) {
+              // this.removeView(id);
+              this.userNum = 2;
+            }
+          });
           // 房间有人退出
           this.rtc.client.on("peer-leave", (evt) => {
             console.log("peer-leave", evt);
