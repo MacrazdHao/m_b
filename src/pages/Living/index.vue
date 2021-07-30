@@ -651,6 +651,7 @@ export default {
           console.log("初始化成功");
           this.rtc.params = this.option;
           this.rtc.client.on("peer-online", (evt) => {
+            console.log("peer-online", evt);
             const id = evt.uid;
             if (id != this.username) {
               // this.removeView(id);
