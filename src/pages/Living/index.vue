@@ -83,10 +83,7 @@
               @btnClick="openCamera"
             />
           </div>
-          <div
-            class="openBox"
-            v-show="rtc.remoteStreams.length == 0 && username != hostId"
-          >
+          <div class="openBox" v-show="userNum <= 1 && username != hostId">
             <p>{{ $t("living.waitingTeacher") }}</p>
           </div>
           <div
@@ -185,10 +182,7 @@
               @btnClick="openCamera"
             />
           </div>
-          <div
-            class="openBox"
-            v-show="rtc.remoteStreams.length == 0 && username == hostId"
-          >
+          <div class="openBox" v-show="userNum <= 1 && username == hostId">
             <p>{{ $t("living.waittingStudent") }}</p>
           </div>
           <div
