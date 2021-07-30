@@ -146,7 +146,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     document.removeEventListener("keydown", this.enterToLogin);
-    this.next();
+    next();
   },
 };
 </script>
