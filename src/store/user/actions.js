@@ -191,11 +191,11 @@ export default {
   },
   forgetAndResetPassword: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
-      request.post(urls.forgetAndResetPassword, data).then(res => {
-        console.log('重置管理员密码成功', res);
+      request.post(urls.forgetAndResetPassword, { ...data, userType: Enum.getServerUserType(getUsertype()) }).then(res => {
+        console.log('重置密码成功', res);
         resolve(res);
       }).catch(err => {
-        console.log('重置管理员密码失败', err);
+        console.log('重置密码失败', err);
         reject(err);
       });
     });
