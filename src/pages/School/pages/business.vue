@@ -181,7 +181,7 @@
 import CButton from "@/components/common/button.vue";
 import FormInput from "../components/input.vue";
 import defaultBackMixin from "@/mixins/defaultBack";
-import CCheckBox from "../components/checkBox-row";
+import CCheckBox from "../components/checkbox_row";
 export default {
   mixins: [defaultBackMixin],
   components: {
