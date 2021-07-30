@@ -64,6 +64,10 @@ export default {
       moduleNumPlaceholder: '设置模板数量',
       saveButton: '保存',
       cancelButton: '取消',
+      getTemplateErrorTips: '获取模板信息失败，请重试',
+      saveTemplateSuccessTips: '保存模板信息成功',
+      saveTemplateErrorTips: '保存模板信息失败，请重试',
+      repeatTemplateErrorTips: '存在重复模板，请修改后再试',
     }
   },
   en: {

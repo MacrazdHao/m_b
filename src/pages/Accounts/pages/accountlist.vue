@@ -116,6 +116,7 @@
       </div>
     </div>
     <EditBox
+      v-if="showEditBox"
       :visible.sync="showEditBox"
       :data="tableData[editingAccount]"
       @confirmBtn="saveEdit"
@@ -197,6 +198,7 @@ export default {
           this.listUrl = "accounts/getSchoolList";
           break;
       }
+      console.log(this.$route.meta);
       this.$store
         .dispatch(this.listUrl, {
           pageIndex: this.page.current,
@@ -360,31 +362,31 @@ export default {
       console.log(this.selected);
     },
     deleteAccount(index) {
-      this.$dialog
-        .warning({
-          text: [
-            this.$t(`accounts.accountlist.deleteTips`),
-            this.$t(`accounts.accountlist.deleteTips2`),
-          ],
-          confirm: () => {
-            this.$store
-              .dispatch(this.deleteUrl, this.tableData[index].userId)
-              .then((res) => {
-                this.initList();
-                this.$message.message({
-                  text: this.$t(
-                    "accounts.accountlist.successTips.deleteSuccess"
-                  ),
-                });
-              })
-              .catch((err) => {
-                this.$message.error({
-                  text: this.$t("accounts.accountlist.errorTips.deleteFail"),
-                });
-              });
-          },
+      this.$dialog.warning({
+        text: [
+          this.$t(`accounts.accountlist.deleteTips`),
+          this.$t(`accounts.accountlist.deleteTips2`),
+        ],
+        confirm: () => {
+          this.test(index);
+        },
+      });
+    },
+    test(index) {
+      console.log(this.deleteUrl)
+      this.$store
+        .dispatch(this.deleteUrl, this.tableData[index].userId)
+        .then((res) => {
+          this.initList();
+          this.$message.message({
+            text: this.$t("accounts.accountlist.successTips.deleteSuccess"),
+          });
         })
-        .catch(() => {});
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("accounts.accountlist.errorTips.deleteFail"),
+          });
+        });
     },
     batchDelete() {
       this.$dialog

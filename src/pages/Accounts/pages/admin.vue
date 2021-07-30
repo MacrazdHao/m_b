@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="inputBox permissionBox">
-      <p class="title">{{ $t("accounts.admin.parentsUserLabel") }}</p>
+      <p class="title">{{ $t("accounts.admin.permission.title") }}</p>
       <div class="permission">
         <PCheckbox
           :data="permissions"

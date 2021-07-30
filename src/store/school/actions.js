@@ -59,4 +59,26 @@ export default {
       });
     });
   },
+  getSchoolTemplate: ({ commit, state }, schoolId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.getSchoolTemplate(schoolId)).then(res => {
+        console.log('获取学校模板成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取学校模板失败', err);
+        reject(err);
+      });
+    });
+  },
+  updateSchoolTemplate: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.updateSchoolTemplate, data).then(res => {
+        console.log('保存学校模板成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('保存学校模板失败', err);
+        reject(err);
+      });
+    });
+  },
 }

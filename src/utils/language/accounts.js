@@ -11,9 +11,9 @@ export default {
       createUserLabel: '生成账号',
       createUserPlaceholder: '',
       permission: {
-        title: '权限管理',
+        title: '权限设置',
         student: '学生管理',
-        archives: '生涯档案',
+        archives: '咨询师管理',
         account: '账号设置',
       },
       createButton: '生成账号',
@@ -121,9 +121,9 @@ export default {
       createUserLabel: '生成账号',
       createUserPlaceholder: '',
       permission: {
-        title: '权限管理',
+        title: '权限设置',
         student: '学生管理',
-        archives: '生涯档案',
+        archives: '咨询师管理',
         account: '账号设置',
       },
       createButton: '生成账号',

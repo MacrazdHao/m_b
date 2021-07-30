@@ -1,6 +1,6 @@
 export default {
   beforeRouteEnter(to, from, next) {
-    console.log(to, from);
+    // console.log(to, from);
     next((vm) => {
       console.log(vm.$router)
       if (from.path == "/" || to.params.noPrev) vm.noHistory = true;

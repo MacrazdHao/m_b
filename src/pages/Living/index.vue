@@ -83,7 +83,10 @@
               @btnClick="openCamera"
             />
           </div>
-          <div class="openBox" v-show="userNum <= 1 && username != hostId">
+          <div
+            class="openBox"
+            v-show="rtc.remoteStreams.length == 0 && username != hostId"
+          >
             <p>{{ $t("living.waitingTeacher") }}</p>
           </div>
           <div
@@ -182,7 +185,10 @@
               @btnClick="openCamera"
             />
           </div>
-          <div class="openBox" v-show="userNum <= 1 && username == hostId">
+          <div
+            class="openBox"
+            v-show="rtc.remoteStreams.length == 0 && username == hostId"
+          >
             <p>{{ $t("living.waittingStudent") }}</p>
           </div>
           <div
@@ -645,7 +651,6 @@ export default {
           console.log("初始化成功");
           this.rtc.params = this.option;
           this.rtc.client.on("peer-online", (evt) => {
-            console.log("peer-online", evt);
             const id = evt.uid;
             if (id != this.username) {
               // this.removeView(id);
@@ -747,7 +752,6 @@ export default {
           });
           // 获取远程流事件回调（获取他人视口）
           this.rtc.client.on("stream-subscribed", (evt) => {
-            console.log("远程流", remoteStream, this.rtc.params, id);
             // 待修改
             let remoteStream = evt.stream;
             let id = remoteStream.getId();
@@ -852,7 +856,7 @@ export default {
           callback();
         },
         (err) => {
-          console.log("初始化失败", err);
+          console.error("初始化失败", err);
         }
       );
     },
@@ -902,7 +906,7 @@ export default {
                     if (this.status) this.changeMode(this.mode);
                   },
                   (err) => {
-                    console.log("加入频道失败", err, this.option);
+                    console.error("加入频道失败", err, this.option);
                   }
                 );
               })
@@ -1029,7 +1033,7 @@ export default {
         this.rtc.published = false;
         this.rtc.client.unpublish(this.rtc.localStream, (err) => {
           console.log("取消推流失败");
-          console.log(err);
+          console.error(err);
         });
       }
       // 主播创建本地流
@@ -1102,7 +1106,7 @@ export default {
               this.localVideoFinished = true;
               this.rtc.client.publish(this.rtc.localStream, (err) => {
                 // 本地流推送失败
-                console.log(err);
+                console.error(err);
                 // ???待补充???
                 this.settingFinish(
                   this.useCamera,
@@ -1117,7 +1121,7 @@ export default {
           );
         },
         (err) => {
-          console.log("初始化本地流失败 ", err);
+          console.error("初始化本地流失败 ", err);
           this.rtc.published = true;
           this.loading.close();
           this.$message.error({

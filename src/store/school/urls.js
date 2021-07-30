@@ -4,4 +4,6 @@ export default {
   studentList: (schoolId, index, size, nodeType, keyword) => `/admin/student/${schoolId}/listCecp?pageIndex=${index}&pageSize=${size}&nodeType=${nodeType}&keyword=${keyword}`,
   deleteSchool: (orgId) => `/admin/org/${orgId}/list/deleteOrgAdmin`,
   deleteStudent: (userId) => `/admin/user/student/${userId}/tenantId`,
+  getSchoolTemplate: (schoolId) => `/admin/auth/school/${schoolId}/getSchoolAuth`,
+  updateSchoolTemplate: "/admin/auth/school/updateSchoolAuth",
 }

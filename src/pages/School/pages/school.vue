@@ -4,15 +4,20 @@
       <div class="toolsBar">
         <SInput
           class="searchInput"
-          :placeholder="$t('students.list.searchPlaceholder')"
+          :placeholder="$t('live.list.searchPlaceholder')"
           :icon="require('@/assets/student/icon_seach.svg')"
+          :value="keyword"
           @input="
             (text) => {
               keyword = text;
             }
           "
         />
-        <SButton class="button" :text="$t('students.list.searchButton')" />
+        <SButton
+          class="button"
+          :text="$t('students.list.searchButton')"
+          @btnClick="initList"
+        />
       </div>
       <div class="table">
         <el-table
@@ -138,15 +143,15 @@ export default {
   },
   watch: {
     keyword(val) {
-      if (val == "" || val) {
-        this.page = {
-          dataNum: 0,
-          total: 10,
-          size: 10,
-          current: 1,
-        };
-        this.initList();
-      }
+      // if (val == "" || val) {
+      //   this.page = {
+      //     dataNum: 0,
+      //     total: 10,
+      //     size: 10,
+      //     current: 1,
+      //   };
+      //   this.initList();
+      // }
     },
   },
   mounted() {

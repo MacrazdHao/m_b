@@ -222,7 +222,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$_default);
+    // console.log(this.$_default);
     for (let i = 0; i < this.$store.state.global.menu.children.length; i++) {
       let item = this.$store.state.global.menu.children[i];
       if (item.children) {

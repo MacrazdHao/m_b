@@ -8,26 +8,17 @@
       :ref="`input${time}`"
       :placeholder="placeholder"
       :disabled="disabled"
-      :readonly="readonly || false || timer"
+      :readonly="readonly || false"
       :maxlength="maxLength"
       :type="type || 'text'"
+      :max="maxNumber"
+      :min="minNumber"
       v-bind:value="value"
-      @click="openDatePicker"
       @keydown="enterEvent"
       @input="inputHandler"
       @focus="handleFocus"
       @blur="handleInputBlur"
     />
-    <el-date-picker
-      class="timepicker"
-      v-if="timer"
-      v-show="false"
-      v-model="timerValue"
-      type="datetime"
-      :picker-options="pickerOptions"
-      ref="datePicker"
-    >
-    </el-date-picker>
     <img
       class="copyButton"
       v-if="copy"
@@ -90,40 +81,14 @@ export default {
     "maxLength",
     "showLength",
     "type",
-    "timer",
+    "maxNumber",
+    "minNumber",
   ],
   data() {
     return {
       focusStatus: false,
       time: Math.random().toString(36).slice(2),
       showList: false,
-      timerValue: "",
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: this.$t("global.date.today"),
-            onClick(picker) {
-              picker.$emit("pick", new Date());
-            },
-          },
-          {
-            text: this.$t("global.date.yesterday"),
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit("pick", date);
-            },
-          },
-          {
-            text: this.$t("global.date.aweekago"),
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", date);
-            },
-          },
-        ],
-      },
     };
   },
   computed: {
@@ -138,20 +103,11 @@ export default {
         this.menuAnimate(this.$refs["associate"], false);
       }, 0);
     },
-    timerValue(val) {
-      this.valueTmp = val;
-      this.$emit("input", val);
-    },
   },
   mounted() {
     // console.log("input内部", this.asssociateList);
   },
   methods: {
-    openDatePicker() {
-      if (!this.timer) return;
-      console.log(this.$refs.datePicker);
-      this.$refs.datePicker.showPicker();
-    },
     focus() {
       this.$refs[`input${this.time}`].focus();
     },
@@ -251,13 +207,6 @@ export default {
   transition: all 0.1s;
   border-radius: 2px;
   position: relative;
-  .timepicker {
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
   p {
     margin: 0;
     color: #333333;

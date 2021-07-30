@@ -26,6 +26,7 @@ export default {
     item: {
       value: any,
       name: string,
+      selected: false,
     }
   */
   props: ["data"],
@@ -38,8 +39,8 @@ export default {
   mounted() {
     this.data.forEach((item) => {
       this.items.push({
-        ...item,
         selected: false,
+        ...item,
       });
     });
   },
