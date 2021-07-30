@@ -16,8 +16,9 @@ export function setToken(token) {
 }
 
 export function removeToken() {
+  let res = Cookies.remove(TokenKey)
   window.location.reload()
-  return Cookies.remove(TokenKey)
+  return res
 }
 
 export function getUsertype() {
