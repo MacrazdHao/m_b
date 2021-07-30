@@ -37,4 +37,26 @@ export default {
       });
     });
   },
+  deleteSchool: ({ commit, state }, orgId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.deleteSchool(orgId)).then(res => {
+        console.log('删除学校成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('删除学校失败', err);
+        reject(err);
+      });
+    });
+  },
+  deleteStudent: ({ commit, state }, userId) => {
+    return new Promise((resolve, reject) => {
+      request.delete(urls.deleteStudent(userId)).then(res => {
+        console.log('删除学生成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('删除学生失败', err);
+        reject(err);
+      });
+    });
+  },
 }

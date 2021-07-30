@@ -151,7 +151,7 @@ export default {
               query: this.otherQuery,
             });
           } else {
-            this.$router.push({ path: "index" });
+            this.$router.push({ path: "/index" });
           }
         })
         .catch((err) => {

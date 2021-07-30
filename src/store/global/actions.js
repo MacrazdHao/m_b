@@ -126,6 +126,8 @@ export default {
               path: "/student",
             }, {
               path: "/sdetail",
+            }, {
+              path: "/business",
             }]
           }, {
             path: '/consultant'

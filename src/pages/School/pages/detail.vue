@@ -1,6 +1,6 @@
 <template>
   <div class="Detail">
-    <div class="content" v-if="info">
+    <div class="content" v-if="info" v-show="page == 1">
       <div class="content-item baseInfoBox">
         <div class="title-box">
           <div class="leftline"></div>
@@ -169,53 +169,19 @@
                 v-if="stageTimes[index].length > 0"
                 :key="index"
               >
-                <div class="consultStageLabel" @click="selectItem(index)">
-                  <img
-                    class="checkbox"
-                    :src="
-                      require(`@/assets/archives/icon_checkbox${
-                        item.allCompeleted
-                          ? '_selected_disabled'
-                          : item.selected
-                          ? '_selected'
-                          : ''
-                      }.svg`)
-                    "
-                  />
+                <div class="consultStageLabel">
                   <p class="label">{{ item.label }}</p>
                 </div>
-                <FormInput
-                  class="input"
-                  :placeholder="
-                    $t('management.consultUnopenPlaceholder', {
-                      num: numToChinese(stageTimes[index].length),
-                    })
-                  "
-                  :disabled="true"
-                  v-show="!(item.selected || item.allCompeleted)"
-                />
-                <div
-                  class="timePickers"
-                  v-show="item.selected || item.allCompeleted"
-                >
+                <div class="timePickers">
                   <template v-for="(item2, index2) in stageTimes[index]">
                     <div class="timePickerItem" :key="index2">
                       <DatePicker
                         class="picker"
                         :readonly="true"
-                        :disabled="
-                          item2.status == -1 ||
-                          (index2 == 0 &&
-                            (item2.status == -1 || item2.status == 1)) ||
-                          (index2 > 0 &&
-                            (stageTimes[index][index2 - 1].status != -1 ||
-                              item2.status == 1))
-                        "
                         :placeholder="$t('school.detail.notime')"
                         :value="
                           item2.startTime ? new Date(item2.startTime) : ''
                         "
-                        @change="(e) => selectTime(e, index, index2)"
                       />
                       <div class="statusBox" v-if="item2.status == -1">
                         <img src="@/assets/counseling/icon_finish.svg" />
@@ -227,6 +193,27 @@
               </div>
             </template>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="content" v-show="page == 2">
+      <div
+        class="content-item baseInfoBox"
+        v-for="(item, index) in consultStage"
+        :key="index"
+      >
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ item.label }}</p>
+        </div>
+        <div class="form">
+          <CButton
+            class="button"
+            :text="$t('school.detail.reportButton')"
+            theme="blue"
+            :disable="stageTimes[index].length == 0"
+            @btnClick="showReportList(index)"
+          />
         </div>
       </div>
     </div>
@@ -242,11 +229,28 @@
       />
       <CButton
         class="button"
-        :text="$t('school.detail.nextButton')"
+        :text="$t(`school.detail.${page == 1 ? 'nextButton' : 'prevButton'}`)"
         theme="blue"
         @btnClick="nextPage"
       />
     </div>
+    <TopDrawer ref="reportList" :title="consultStage[reportIndex].label">
+      <div class="reportList">
+        <div class="reportItem"><p>2-1报告2-1报告</p></div>
+        <div class="reportItem"><p>2-99报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+        <div class="reportItem"><p>2-1报告</p></div>
+      </div>
+    </TopDrawer>
   </div>
 </template>
 
@@ -260,6 +264,7 @@ import FileBox from "../components/file";
 import DateTools from "@/utils/date";
 import { numToChinese } from "@/utils/others";
 import defaultBackMixin from "@/mixins/defaultBack";
+import TopDrawer from "@/components/common/topDrawer.vue";
 export default {
   // props: ["info"],
   mixins: [defaultBackMixin],
@@ -271,9 +276,11 @@ export default {
     CButton,
     DatePicker,
     FileBox,
+    TopDrawer,
   },
   data() {
     return {
+      page: 1,
       info: null,
       initial: true,
       consultStage: [
@@ -287,13 +294,14 @@ export default {
           selected: false,
           allCompeleted: false,
         },
-        // {
-        //   label: this.$t("management.consultLabel2"),
-        //   selected: false,
-        // allCompeleted: false,
-        // },
+        {
+          label: this.$t("management.consultLabel2"),
+          selected: false,
+          allCompeleted: false,
+        },
       ],
       times: [],
+      reportIndex: 0,
     };
   },
   computed: {
@@ -324,6 +332,7 @@ export default {
         }
         this.initial = false;
       }
+      console.log(arr);
       return arr;
     },
   },
@@ -364,6 +373,7 @@ export default {
     nodeTypeToLabelIndex(nodeType) {
       if (nodeType > 9 && nodeType < 20) return 0;
       if (nodeType > 19 && nodeType < 30) return 1;
+      // 大学建议和偏好咨询,if (nodeType > 19 && nodeType < 30) return 1;
     },
     selectTime(text, index, index2) {
       // let _index = index2;
@@ -382,7 +392,14 @@ export default {
       //   selected: !this.consultStage[index].selected,
       // });
     },
-    nextPage() {},
+    showReportList() {
+      this.$refs.reportList.openDrawer();
+    },
+    nextPage() {
+      this.page = this.page == 1 ? 2 : 1;
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    },
   },
 };
 </script>
@@ -585,10 +602,17 @@ export default {
           }
         }
       }
+      .button {
+        padding: 7px 20px;
+        margin-left: 10px;
+      }
     }
     .content-item + .content-item {
       margin-top: 28px;
     }
+  }
+  .content:nth-child(2) {
+    padding-bottom: 387px;
   }
   .buttonBox {
     display: flex;
@@ -600,6 +624,34 @@ export default {
     }
     .button + .button {
       margin-left: 80px;
+    }
+  }
+  .reportList {
+    padding: 0 34px 40px;
+    text-align: left;
+    letter-spacing: 84px;
+    .reportItem {
+      display: inline-block;
+      border-radius: 2px;
+      border: 1px solid #4b77f6;
+      // padding: 7px 23px;
+      width: 98px;
+      padding: 0 6px;
+      box-sizing: border-box;
+      height: 36px;
+      margin-bottom: 25px;
+      cursor: pointer;
+      user-select: none;
+      p {
+        font-size: 14px;
+        color: #4b77f6;
+        line-height: 34px;
+        letter-spacing: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;
+      }
     }
   }
 }

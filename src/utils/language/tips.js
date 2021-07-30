@@ -8,6 +8,7 @@ export default {
   en: {
     requestTimeout: 'request timeout, please try again',
     loginExpire: 'login expired, please login again',
-    msgKey: 'enMsg'
+    msgKey: 'enMsg',
+    sendEmailError: 'send verify code error, please try again'
   }
 }

@@ -84,15 +84,15 @@ export default {
   },
   watch: {},
   mounted() {
-    console.log("身份", this.identity);
-    document.onkeydown = (event) => {
+    document.addEventListener("keydown", this.enterToLogin);
+  },
+  methods: {
+    enterToLogin(event) {
       let e = event ? event : window.event ? window.event : null;
       if (e.keyCode == 13) {
         this.login();
       }
-    };
-  },
-  methods: {
+    },
     toRegister() {
       this.$router.push({ path: "/register" });
     },
@@ -132,7 +132,7 @@ export default {
               query: this.otherQuery,
             });
           } else {
-            this.$router.push({ path: "index" });
+            this.$router.push({ path: "/index" });
           }
         })
         .catch((err) => {
@@ -143,6 +143,10 @@ export default {
           return;
         });
     },
+  },
+  beforeRouteLeave(to, from, next) {
+    document.removeEventListener("keydown", this.enterToLogin);
+    this.next();
   },
 };
 </script>

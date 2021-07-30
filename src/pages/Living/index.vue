@@ -614,7 +614,7 @@ export default {
             this.$message.error({
               text: this.$t("living.notLiveMember"),
             });
-            this.$router.push({ path: "index" });
+            this.$router.push({ path: "/index" });
             return;
           }
           callback();

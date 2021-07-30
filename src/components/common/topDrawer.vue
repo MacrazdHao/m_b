@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-fade">
-    <div class="RightDrawer" v-if="show" @click="closeDrawer">
+    <div class="TopDrawer" v-if="show" @click="closeDrawer">
       <div class="drawerBox">
         <div
           :class="['menuBox', showDrawer ? 'menuBox--show' : '']"
@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.RightDrawer {
+.TopDrawer {
   position: fixed;
   top: 0;
   left: 0;
@@ -67,11 +67,11 @@ export default {
       position: absolute;
       top: 0;
       right: 0;
-      width: fit-content;
-      height: 100%;
+      width: 100%;
+      height: fit-content;
       background-color: #fff;
       transition: all 0.25s ease;
-      transform: translate(100%, 0%);
+      transform: translate(0%, -100%);
       .header {
         display: flex;
         flex-direction: row;

@@ -556,7 +556,10 @@ export default {
     }
   }
   .recordsList {
+    width: 380px;
+    padding: 0 24px 0 30px;
     margin-bottom: 30px;
+    box-sizing: border-box;
     .subtitle {
       font-size: 16px;
       color: #333333;

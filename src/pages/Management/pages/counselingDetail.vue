@@ -292,11 +292,11 @@ export default {
           selected: false,
           allCompeleted: false,
         },
-        // {
-        //   label: this.$t("management.consultLabel2"),
-        //   selected: false,
-        // allCompeleted: false,
-        // },
+        {
+          label: this.$t("management.consultLabel2"),
+          selected: false,
+          allCompeleted: false,
+        },
       ],
       times: [],
     };
@@ -365,6 +365,7 @@ export default {
     nodeTypeToLabelIndex(nodeType) {
       if (nodeType > 9 && nodeType < 20) return 0;
       if (nodeType > 19 && nodeType < 30) return 1;
+      // 大学建议和偏好咨询,if (nodeType > 19 && nodeType < 30) return 1;
     },
     selectTime(text, index, index2) {
       let _index = index2;

@@ -5,6 +5,8 @@ export default {
     downloadButton: '下载',
   },
   en: {
-    title: 'myFellas'
+    title: '知识中心',
+    fileTips: '以下的是生涯文档',
+    downloadButton: '下载',
   }
 }

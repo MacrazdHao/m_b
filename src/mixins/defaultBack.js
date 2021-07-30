@@ -9,6 +9,7 @@ export default {
   methods: {
     goBack(options) {
       options = {
+        force: false,
         query: {},
         params: {},
         index: 0,
@@ -18,7 +19,7 @@ export default {
       }
       // let path = options.otherPath || ("/index" + (this.$route.meta.defaultPrevPath ? this.$route.meta.defaultPrevPath[options.index] : ''));
       let name = options.otherName || (this.$route.meta.defaultPrevName ? this.$route.meta.defaultPrevName[options.index] : 'index');
-      if (this.noHistory) {
+      if (this.noHistory || options.force) {
         this.$router.push({
           name, query: options.query, params: { ...options.params, noPrev: true },
         });

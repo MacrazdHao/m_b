@@ -34,7 +34,7 @@ export default {
     name: 'living',
     component: 'Living',
     meta: {
-      defaultPrevPath: ["", "/counseling", "/live"],
+      // defaultPrevPath: ["", "/counseling", "/live"],
       defaultPrevName: ["index", "counseling", "live"],
     }
     // redirect: 'dashboard',
@@ -505,7 +505,7 @@ export default {
       notShowThisChildren: true,
       group: "counseling",
       groupParent: false,
-      defaultPrevPath: ["/management/counselinglist"],
+      // defaultPrevPath: ["/management/counselinglist"],
       defaultPrevName: ["counselinglist"],
     }
   },
@@ -588,7 +588,7 @@ export default {
     meta: {
       title: "学校管理",
       enTitle: "School Management",
-      defaultPrevPath: ["/school/schoollist"],
+      // defaultPrevPath: ["/school/schoollist"],
       defaultPrevName: ["schoollist"],
     }
   },
@@ -600,8 +600,20 @@ export default {
     meta: {
       title: "学校管理",
       enTitle: "School Management",
-      defaultPrevPath: ["/school/student"],
+      // defaultPrevPath: ["/school/student"],
       defaultPrevName: ["student"],
+    }
+  },
+  // 子子级
+  '/business': {
+    path: "business",
+    name: "business",
+    component: "pages/business",
+    meta: {
+      title: "学校管理",
+      enTitle: "School Management",
+      // defaultPrevPath: ["/school/schoollist"],
+      defaultPrevName: ["schoollist"],
     }
   },
   // 子级

@@ -197,8 +197,33 @@ export default {
       });
       // Bus.setSchoolInfo(info);
     },
-    setService(info) {},
-    deleteSchool(info) {},
+    setService(info) {
+      this.$router.push({ name: "business", query: { id: info.id } });
+    },
+    deleteSchool(info) {
+      this.$dialog.warning({
+        text: [
+          this.$t("school.list.deleteTips1"),
+          this.$t("school.list.deleteTips2"),
+        ],
+        confirm: () => {
+          this.$store
+            .dispatch("school/deleteSchool", info.id)
+            .then((res) => {
+              this.$message.message({
+                text: this.$t("school.list.successTips.deleteSuccess"),
+              });
+              this.initList();
+            })
+            .catch((err) => {
+              this.$message.error({
+                text: this.$t("school.list.errorTips.deleteFail"),
+              });
+            });
+        },
+        cancel: () => {},
+      });
+    },
     overline(text = "") {
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
@@ -388,6 +413,7 @@ export default {
       align-items: center;
       .searchInput {
         width: 300px;
+        padding: 7px 12px;
         // margin-left: 12px;
       }
       .button {

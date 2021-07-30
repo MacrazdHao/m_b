@@ -330,6 +330,31 @@ export default {
         },
       });
     },
+    deleteInfo(info) {
+      this.$dialog.warning({
+        text: [
+          this.$t("school.list.deleteTips1"),
+          this.$t("school.list.deleteTips2"),
+        ],
+        confirm: () => {
+          console.log(info);
+          this.$store
+            .dispatch("school/deleteStudent", info.userId)
+            .then((res) => {
+              this.$message.message({
+                text: this.$t("school.list.successTips.deleteSuccess"),
+              });
+              this.initList();
+            })
+            .catch((err) => {
+              this.$message.error({
+                text: this.$t("school.list.errorTips.deleteFail"),
+              });
+            });
+        },
+        cancel: () => {},
+      });
+    },
     overline(text = "") {
       if (!text) return "";
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
