@@ -1008,8 +1008,8 @@ export default {
               cancel: () => {
                 toCamera = true;
               },
-              confirmText: this.$t("living.screenButton"),
-              cancelText: this.$t("living.cameraButton"),
+              confirmText: this.$t("living.usescreenButton"),
+              cancelText: this.$t("living.useCameraButton"),
               close: () => {
                 closeDialog = true;
               },

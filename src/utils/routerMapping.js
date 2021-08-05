@@ -29,6 +29,17 @@
 // 路由映射表(一级结构，单元化，预留可自定义菜单功能——即可编辑子菜单的父级关系)
 export default {
   // 顶级
+  '/reportModule': {
+    path: "/reportModule",
+    name: "reportModule",
+    component: "ReportModule",
+    // redirect: 'base',
+    meta: {
+      // defaultPrevPath: ["", "/counseling", "/live"],
+      defaultPrevName: ["index", "counseling", "live"],
+    }
+  },
+  // 顶级
   '/living': {
     path: '/living',
     name: 'living',

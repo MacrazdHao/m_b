@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="370px" height="438px" viewBox="0 0 370 438" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>pattern </title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="封面" transform="translate(-225.000000, -414.000000)" fill-rule="nonzero">
+            <g id="pattern--" transform="translate(225.000000, 414.000000)">
+                <g id="pattern-">
+                    <path d="M250,250 L0,250 C0,111.934915 111.934915,5.68434189e-14 250,5.68434189e-14 L250,250 Z" id="路径" fill="#013047"></path>
+                    <path d="M250,250 L250,438 C146.174618,438 62,353.825382 62,250 L250,250 Z" id="路径" fill="#FFB706"></path>
+                    <path d="M250,130 L370,130 C370,196.27417 316.27417,250 250,250 L250,130 Z" id="路径" fill="#FFB706"></path>
+                    <path d="M250,250 L130,250 C130,183.72583 183.72583,130 250,130 L250,250 Z" id="路径" fill="#FF6700"></path>
+                    <rect id="矩形" fill="#D3D3D3" x="250" y="250" width="120" height="188"></rect>
+                    <path d="M370,438 L250,438 C250,371.72583 303.72583,318 370,318 L370,438 Z" id="路径" fill="#013047"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

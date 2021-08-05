@@ -5,7 +5,7 @@
         <img class="icon" src="@/assets/testmenu/icon_server.svg" />
         <p>
           <span>{{
-            `当前服务器：${status.requestObject.title}(${status.requestObject.value})`
+            `服务器：${status.requestObject.title}(${status.requestObject.value})`
           }}</span>
         </p>
       </div>
@@ -13,8 +13,14 @@
         <img class="icon" src="@/assets/testmenu/icon_server.svg" />
         <p>
           <span>{{
-            `当前OSS服务器：${status.ossObject.title}(${status.ossObject.value})`
+            `OSS服务器：${status.ossObject.title}(${status.ossObject.value})`
           }}</span>
+        </p>
+      </div>
+      <div class="statusItem">
+        <img class="icon" src="@/assets/testmenu/icon_language.svg" />
+        <p>
+          <span>{{ `语言：${languageText}` }}</span>
         </p>
       </div>
     </div>
@@ -36,7 +42,7 @@
                 <span>{{ item.title }}</span>
               </p>
             </div>
-            <div class="optionItems" v-show="item.show">
+            <div class="optionItems" v-if="item.options" v-show="item.show">
               <div
                 class="optionItem"
                 v-for="(item2, index2) in item.options"
@@ -44,10 +50,17 @@
                 @click="item2.callback"
               >
                 <p>
-                  <span>{{ `${item2.title}(${item2.ip_port})` }}</span>
+                  <span
+                    >{{ item2.title
+                    }}{{ item2.attach ? `(${item2.attach})` : "" }}</span
+                  >
                 </p>
               </div>
-              <div class="optionItem" @click="item.others.customClick">
+              <div
+                class="optionItem"
+                v-if="item.customize"
+                @click="item.others.customClick"
+              >
                 <p>
                   <span>自定义</span>
                 </p>
@@ -102,6 +115,7 @@
 <script>
 import Clickoutside from "../common/utilsFromElement/clickoutside";
 import config from "@/utils/config";
+import getLanguageFile from "@/utils/languageJSON";
 export default {
   directives: { Clickoutside },
   data() {
@@ -115,10 +129,22 @@ export default {
       settingMenu: false,
       settingItems: [
         {
+          title: "下载语言数据",
+          icon: require("@/assets/testmenu/icon_language.svg"),
+          click: () => {
+            console.log(this.$i18n.languages);
+            // getLanguageFile();
+          },
+          show: false,
+          customize: false,
+          options: this.languageOptions(),
+        },
+        {
           title: "服务器",
           icon: require("@/assets/testmenu/icon_server.svg"),
           click: () => {},
           show: false,
+          customize: true,
           options: this.serverOptions(),
           others: {
             customClick: this.showCustomUrl,
@@ -129,6 +155,7 @@ export default {
           icon: require("@/assets/testmenu/icon_server.svg"),
           click: () => {},
           show: false,
+          customize: true,
           options: this.ossServerOptions(),
           others: {
             customClick: this.showCustomOssUrl,
@@ -161,6 +188,15 @@ export default {
         ossObject,
       };
     },
+    languageText() {
+      for (let i = 0; i < this.$i18n.languages.length; i++) {
+        let item = this.$i18n.languages[i];
+        if (item.value == this.$i18n.locale) {
+          return item.cname;
+        }
+      }
+      return "未检测到语言";
+    },
   },
   watch: {
     settingMenu(val) {
@@ -175,29 +211,53 @@ export default {
     },
   },
   methods: {
+    languageOptions() {
+      let options = [];
+      for (let i = 0; i < this.$i18n.languages.length; i++) {
+        let item = this.$i18n.languages[i];
+        options.push({
+          title: item.cname,
+          attach: item.value,
+          value: item.value,
+          callback: () => getLanguageFile(item.value),
+        });
+      }
+      options.push({
+        title: "全部语言",
+        attach: "",
+        value: "all",
+        callback: () =>
+          getLanguageFile(
+            this.$i18n.languages.map((item, index) => {
+              return item.value;
+            })
+          ),
+      });
+      return options;
+    },
     serverOptions() {
       return [
         {
           title: "罗焕",
-          ip_port: this.getIP_PORT(config.urls.luohuanURL2),
+          attach: this.getIP_PORT(config.urls.luohuanURL2),
           value: config.urls.luohuanURL2,
           callback: () => config.setURL(config.urls.luohuanURL2),
         },
         {
           title: "浩然",
-          ip_port: this.getIP_PORT(config.urls.haoranURL),
+          attach: this.getIP_PORT(config.urls.haoranURL),
           value: config.urls.haoranURL,
           callback: () => config.setURL(config.urls.haoranURL),
         },
         {
           title: "文杰",
-          ip_port: this.getIP_PORT(config.urls.wenjieURL),
+          attach: this.getIP_PORT(config.urls.wenjieURL),
           value: config.urls.wenjieURL,
           callback: () => config.setURL(config.urls.wenjieURL),
         },
         {
           title: "测试",
-          ip_port: this.getIP_PORT(config.urls.testURL2),
+          attach: this.getIP_PORT(config.urls.testURL2),
           value: config.urls.testURL2,
           callback: () => config.setURL(config.urls.testURL2),
         },
@@ -207,7 +267,7 @@ export default {
       return [
         {
           title: "OSS_1",
-          ip_port: this.getIP_PORT(config.urls.ossURL),
+          attach: this.getIP_PORT(config.urls.ossURL),
           value: config.urls.ossURL,
           callback: () => config.setOSSURL(config.urls.ossURL),
         },
@@ -221,6 +281,7 @@ export default {
       this.settingMenu = false;
     },
     toggleOptions(index) {
+      this.settingItems[index].click();
       for (let i = 0; i < this.settingItems.length; i++) {
         this.$set(this.settingItems, i, {
           ...this.settingItems[i],

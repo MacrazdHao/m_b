@@ -15,6 +15,7 @@ export default {
   studentEmailVerify: "/user/register/email/code",
   adminEmailVerify: "/admin/email/code",
   forgetAndResetPassword: '/user/register/password/forget/reset',
+  adminForgetAndResetPassword: '/admin/adminUser/account/password/forget/reset',
   contactAdmin: '/user/register/password/forget/concat',
   getMessages: '',
   avatarUpload: '/oss/minio/putObjectTest',

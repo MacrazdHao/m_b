@@ -18,6 +18,21 @@
   src: url(./font/Roboto-Regular.ttf);
 }
 
+@font-face {
+  font-family: 'FrutigerCE-Bold';
+  src: url(./font/Frutiger-CE-65-Bold.ttf);
+}
+
+@font-face {
+  font-family: 'arial';
+  src: url(./font/arial.ttf);
+}
+
+@font-face {
+  font-family: 'arialbd';
+  src: url(./font/arialbd.ttf);
+}
+
 * {
   font-family: AlibabaPuHuiTiR;
 }

@@ -127,6 +127,7 @@ export default {
           email: this.form.username,
           emailCode: this.form.code,
           password: this.form.cPassword,
+          userType: this.identity == 0 ? 1 : this.identity == 1 ? 3 : 11,
         })
         .then((res) => {
           this.$message.message({

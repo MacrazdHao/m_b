@@ -6,10 +6,15 @@ Vue.use(VueI18n);
 
 const files = require.context('.', true, /\.js$/);
 
-const messages = {
-  zh: {},
-  en: {}
-}
+const languages = [{ value: 'zh', cname: '中文' }, { value: 'en', cname: '英语' }]
+
+const messages = (() => {
+  let result = {};
+  for (let i = 0; i < languages.length; i++) {
+    result[languages[i].value] = {};
+  }
+  return result;
+})()
 
 // 遍历引入本文件夹内的所有js文件数据
 files.keys().forEach(key => {
@@ -32,9 +37,11 @@ const getLocale = () => {
   return result || 'zh';
 }
 
-const i18n = new VueI18n({
+let i18n = new VueI18n({
   locale: getLocale(),
   messages
 });
+
+i18n.languages = languages;
 
 export default i18n;
