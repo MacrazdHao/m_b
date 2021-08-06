@@ -22,7 +22,7 @@ export default {
       sendTooFastTips: '请在{seconds}秒后再试',
       errorTips: '验证码发送失败，请重试'
     },
-    date:{
+    date: {
       today: '今天',
       yesterday: '昨天',
       aweekago: '一周前'
@@ -31,30 +31,30 @@ export default {
   en: {
     title: 'myFellas',
     dialog: {
-      tipsTitle: '提示',
-      confirm: '确定',
-      cancel: '取消'
+      tipsTitle: 'tips',
+      confirm: 'confirm',
+      cancel: 'cancel'
     },
     logout: {
-      title: '退出登录确认',
-      content: '您确定退出登录当前账户吗？',
-      confirm: '确定',
-      cancel: '取消'
+      title: 'Proceed to log out',
+      content: 'Log out confirmation',
+      confirm: 'confirm',
+      cancel: 'cancel'
     },
     pagination: {
-      totalNum: '共 {num} 条',
-      goPage: '前往',
-      pageUnit: '页'
+      totalNum: 'sum total {num}',
+      goPage: 'go',
+      pageUnit: 'page'
     },
     vcode: {
-      sendSuccessTips: '发送验证码成功',
-      sendTooFastTips: '请在{seconds}秒后再试',
-      errorTips: '验证码发送失败，请重试'
+      sendSuccessTips: 'verification code sent successfully',
+      sendTooFastTips: 'please retry in {seconds} seconds',
+      errorTips: 'unable to send verification code, please retry'
     },
-    date:{
-      today: '今天',
-      yesterday: '昨天',
-      aweekago: '一周前'
+    date: {
+      today: 'today',
+      yesterday: 'yesterday',
+      aweekago: 'a week ago'
     }
   }
 }

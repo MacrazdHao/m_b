@@ -76,8 +76,8 @@ export default {
           end: 'End'
         },
         liveEndTips: 'The live is end',
-        liveNoStartTips: '直播暂未开始，请留意直播时间',
-        noSetTime: '未设置时间',
+        liveNoStartTips: 'Livestream has not started, please wait',
+        noSetTime: 'No Set Time',
       }
     },
   }
