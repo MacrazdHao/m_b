@@ -1,15 +1,15 @@
 <template>
-  <div class="Catalogue">
+  <div class="Catalogue" ref="catalogue">
     <div class="catalogueItem" v-for="(item, index) in data" :key="index">
-      <p class="en">{{ enTitles[item.titleIndex] }}</p>
-      <p class="cn">{{ cnTitles[item.titleIndex] }}</p>
-      <div class="menu" v-for="(item2, index2) in item.subtitles" :key="index2">
+      <p class="en">{{ enTitles[index + 1] }}</p>
+      <p class="cn">{{ cnTitles[index + 1] }}</p>
+      <div class="menu" v-for="(item2, index2) in item.data" :key="index2">
         <p class="subtitle">{{ item2.title }}</p>
-        <p class="index">{{ item2.pageIndex }}</p>
+        <p class="index">{{ item2.startPage + pageNum }}</p>
       </div>
       <div class="dashed">
-        <template v-for="(item, index) in 100">
-          <div class="line" :key="index"></div>
+        <template v-for="(dot, dotIndex) in 100">
+          <div class="line" :key="dotIndex"></div>
           {{ "" }}
         </template>
       </div>
@@ -19,9 +19,23 @@
 
 <script>
 export default {
-  props: ["data", "cnTitles", "enTitles"],
+  props: ["data", "cnTitles", "enTitles", "contentHeight"],
   data() {
-    return {};
+    return {
+      pageNum: 1,
+    };
+  },
+  watch: {
+    contentHeight() {
+      this.pageNum = Math.ceil(
+        this.$refs.catalogue.offsetHeight / this.contentHeight
+      );
+    },
+    data() {
+      this.pageNum = Math.ceil(
+        this.$refs.catalogue.offsetHeight / this.contentHeight
+      );
+    },
   },
 };
 </script>

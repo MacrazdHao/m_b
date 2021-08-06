@@ -65,7 +65,7 @@ export default {
       }
       if (this.sending) {
         this.$message.warning({
-          text: this.$t("entry.forget.alertTips.sendingCodeErrorTips"),
+          text: this.$t("entry.forget.sendingCodeErrorTips"),
         });
         return;
       }

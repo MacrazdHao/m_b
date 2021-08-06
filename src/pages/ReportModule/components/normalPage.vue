@@ -1,6 +1,6 @@
 <template>
   <div class="NormalPage">
-    <div class="chapterBox" v-for="(item, index) in data" :key="index">
+    <div class="chapterBox" v-for="(item, index) in data.data" :key="index">
       <div class="titleBox">
         <p class="title">{{ item.title }}</p>
       </div>
@@ -41,35 +41,75 @@
 
 <script>
 /*
-  [ 章节
-    {
-      title: string
-      children: [小节]
-    }
-  ],
+  {
+    startPage: 起始页,
+    endPage: 结束页,
+    data: [  章节
+      {
+        title: string,
+        startPage: 起始页,
+        endPage: 结束页,
+        children: [小节]
+      }
+    ],
+  }
 */
 export default {
-  props: ["data", "contentHeight", "chapterIndex"],
+  props: ["data", "contentHeight", "chapterIndex", "startPage"],
+  data() {
+    return {
+      bigChapterPageInfo: {
+        startPage: 1,
+        endPage: 1,
+      },
+      chapterPageInfo: [],
+      partPageCounter: 0,
+    };
+  },
   watch: {
     contentHeight() {
       this.initPage();
     },
+    startPage() {
+      this.$set(this.bigChapterPageInfo, "startPage", this.startPage);
+    },
+    bigChapterPageInfo() {
+      this.$emit(
+        "setPageNum",
+        this.chapterIndex,
+        this.bigChapterPageInfo,
+        this.chapterPageInfo
+      );
+    },
+    chapterPageInfo() {
+      this.$emit(
+        "setPageNum",
+        this.chapterIndex,
+        this.bigChapterPageInfo,
+        this.chapterPageInfo
+      );
+    },
   },
   mounted() {
-    // this.initPage();
+    this.chapterPageInfo = JSON.parse(JSON.stringify(this.data.data));
+    this.bigChapterPageInfo = {
+      startPage: this.startPage,
+      endPage: this.startPage,
+    };
   },
   methods: {
     initPage() {
-      for (let index = 0; index < this.data.length; index++) {
+      for (let index = 0; index < this.data.data.length; index++) {
         let filler = document.createElement("div");
         filler.style.width = "100%";
-        if (!this.data[index].children) {
+        if (!this.data.data[index].children) {
           filler.style.height = this.getChapterRemainHeight(index) + "px";
           this.$refs[`chapter${index}_content`][0].appendChild(filler);
         } else {
+          this.partPageCounter = 0;
           for (
             let index2 = 0;
-            index2 < this.data[index].children.length;
+            index2 < this.data.data[index].children.length;
             index2++
           ) {
             let filler = document.createElement("div");
@@ -87,11 +127,21 @@ export default {
     getChapterRemainHeight(index) {
       let res = 0;
       let chapterDom = this.$refs[`chapter${index}_content`] || null;
-      res =
-        this.contentHeight *
-          Math.ceil(chapterDom[0].offsetHeight / this.contentHeight) -
-        chapterDom[0].offsetHeight -
-        48;
+      let pageNum = Math.ceil(chapterDom[0].offsetHeight / this.contentHeight);
+      let startPage =
+        index == 0
+          ? this.startPage
+          : this.chapterPageInfo[index - 1].endPage + 1;
+      let endPage = startPage + pageNum - 1;
+      res = this.contentHeight * pageNum - chapterDom[0].offsetHeight - 48;
+      this.$set(this.chapterPageInfo, index, {
+        ...this.chapterPageInfo[index],
+        startPage,
+        endPage,
+      });
+      if (index == this.chapterPageInfo.length - 1) {
+        this.$set(this.bigChapterPageInfo, "endPage", endPage);
+      }
       return res;
     },
     // 非纯文本章节补白
@@ -99,11 +149,25 @@ export default {
       let res = 0;
       let partDom =
         this.$refs[`part${this.chapterIndex}-${index}-${index2}_inbox`] || null;
+      let pageNum = Math.ceil(partDom[0].offsetHeight / this.contentHeight);
+      this.partPageCounter += pageNum;
+      let startPage =
+        index == 0
+          ? this.startPage
+          : this.chapterPageInfo[index - 1].endPage + 1;
+      let endPage = this.startPage + this.partPageCounter - 1;
       res =
-        this.contentHeight *
-          Math.ceil(partDom[0].offsetHeight / this.contentHeight) -
+        this.contentHeight * pageNum -
         partDom[0].offsetHeight -
         (index2 == 0 ? 88 : 0);
+      this.$set(this.chapterPageInfo, index, {
+        ...this.chapterPageInfo[index],
+        startPage,
+        endPage,
+      });
+      if (index == this.chapterPageInfo.length - 1) {
+        this.$set(this.bigChapterPageInfo, "endPage", endPage);
+      }
       return res;
     },
   },

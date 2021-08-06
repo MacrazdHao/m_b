@@ -8,7 +8,7 @@ export default {
   install(Vue, options) {
     Vue.prototype.$getPdf = (element, options, fileName) => {
       options = {
-        quality,  // 质量不建议超过4，否则可能会引起某些元素的缺失等问题
+        quality,  // 质量不建议超过3，否则可能会引起某些元素的缺失等问题
         headerHeight: 0,
         footerHeight: 0,
         pageHeight: 0,
@@ -121,7 +121,7 @@ export default {
               })();
             }
           }
-          // PDF.save(fileName + '.pdf');
+          PDF.save(fileName + '.pdf');
           resolve(canvas);
           /*
           // 试验版本，未区分封面及内容页
