@@ -10,17 +10,28 @@
         :cnTitles="cnTitles"
         :enTitles="enTitles"
       />
-      <NormalPage
-        class="page"
-        :style="{ minHeight: contentHeight + 'px' }"
-        v-for="(item, index) in normalChapters"
-        :key="index"
-        :chapterIndex="index"
-        :startPage="index == 0 ? 1 : normalChapters[index - 1].endPage + 1"
-        :data="item"
-        :contentHeight="contentHeight"
-        @setPageNum="setPageNum"
-      />
+      <div v-for="(item, index) in normalChapters" :key="index">
+        <NormalPage
+          class="page"
+          v-if="!item.special"
+          :style="{ minHeight: contentHeight + 'px' }"
+          :chapterIndex="index"
+          :startPage="index == 0 ? 1 : normalChapters[index - 1].endPage + 1"
+          :data="item"
+          :contentHeight="contentHeight"
+          @setPageNum="setPageNum"
+        />
+        <ProgressPage
+          class="page"
+          v-if="item.special && item.specialKey == 'progress'"
+          :style="{ minHeight: contentHeight + 'px' }"
+          :chapterIndex="index"
+          :startPage="index == 0 ? 1 : normalChapters[index - 1].endPage + 1"
+          :data="item"
+          :contentHeight="contentHeight"
+          @setPageNum="setPageNum"
+        />
+      </div>
     </div>
     <Back class="cover progressItem" />
     <Header
@@ -56,6 +67,7 @@
 import Cover from "./components/cover.vue";
 import Catalogue from "./components/catalogue.vue";
 import NormalPage from "./components/normalPage.vue";
+import ProgressPage from "./components/progressPage.vue";
 import Back from "./components/back.vue";
 import Header from "./components/header.vue";
 import Footer from "./components/footer.vue";
@@ -65,6 +77,7 @@ export default {
     Cover,
     Catalogue,
     NormalPage,
+    ProgressPage,
     Back,
     Header,
     Footer,
@@ -82,8 +95,14 @@ export default {
       contentHeight: 852,
       headerHeight: 0,
       footerHeight: 0,
-      cnTitles: ["目录", "概况与背景", "咨询基本情况", "下一步"],
-      enTitles: ["Contents", "Overview", "Interview Notes", "Next Steps"],
+      cnTitles: ["目录", "概况与背景", "咨询基本情况", "下一步", "咨询进度"],
+      enTitles: [
+        "Contents",
+        "Overview",
+        "Interview Notes",
+        "Next Steps",
+        "Progress",
+      ],
       titleIndex: 0,
       nickName: "Alina Li",
       date: "07.21.21",
@@ -113,16 +132,6 @@ export default {
               title: "学生当前状况",
               content:
                 "在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。".replace(
-                  /\n/gm,
-                  "<br/>"
-                ),
-            },
-            {
-              startPage: 1,
-              endPage: 1,
-              title: "学生当前状况",
-              content:
-                "在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。".replace(
                   /\n/gm,
                   "<br/>"
                 ),
@@ -189,6 +198,204 @@ export default {
             },
           ],
         },
+        {
+          startPage: 1,
+          endPage: 1,
+          special: true,
+          specialKey: "progress",
+          noChapters: true,
+          data: {
+            progress: 60,
+            openDate: new Date("2021/08/16").getTime(),
+            schedule: [
+              {
+                title: "学科专业探索",
+                dates: [
+                  {
+                    start: new Date("2021/06/29").getTime(),
+                    end: new Date("2021/06/29").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/05").getTime(),
+                    end: new Date("2021/07/09").getTime(),
+                  },
+                  {
+                    start: new Date("2021/08/02").getTime(),
+                    end: new Date("2021/08/06").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/12").getTime(),
+                    end: new Date("2021/07/16").getTime(),
+                  },
+                  {
+                    start: new Date("2021/08/09").getTime(),
+                    end: new Date("2021/08/13").getTime(),
+                  },
+                  {
+                    start: new Date("2021/06/21").getTime(),
+                    end: new Date("2021/06/25").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/19").getTime(),
+                    end: new Date("2021/07/23").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/26").getTime(),
+                    end: new Date("2021/07/30").getTime(),
+                  },
+                ],
+              },
+              {
+                title: "英语提升",
+                dates: [
+                  {
+                    start: new Date("2021/06/21").getTime(),
+                    end: new Date("2021/06/25").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/02").getTime(),
+                    end: new Date("2021/07/02").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/05").getTime(),
+                    end: new Date("2021/07/09").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/12").getTime(),
+                    end: new Date("2021/07/16").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/19").getTime(),
+                    end: new Date("2021/07/23").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/26").getTime(),
+                    end: new Date("2021/07/30").getTime(),
+                  },
+                  {
+                    start: new Date("2021/08/02").getTime(),
+                    end: new Date("2021/08/06").getTime(),
+                  },
+                  {
+                    start: new Date("2021/08/09").getTime(),
+                    end: new Date("2021/08/13").getTime(),
+                  },
+                ],
+              },
+              {
+                title: "英语提升",
+                dates: [
+                  {
+                    start: new Date("2021/06/21").getTime(),
+                    end: new Date("2021/06/25").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/02").getTime(),
+                    end: new Date("2021/07/02").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/05").getTime(),
+                    end: new Date("2021/07/09").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/12").getTime(),
+                    end: new Date("2021/07/16").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/19").getTime(),
+                    end: new Date("2021/07/23").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/26").getTime(),
+                    end: new Date("2021/07/30").getTime(),
+                  },
+                  {
+                    start: new Date("2021/08/02").getTime(),
+                    end: new Date("2021/08/06").getTime(),
+                  },
+                  {
+                    start: new Date("2021/08/09").getTime(),
+                    end: new Date("2021/08/13").getTime(),
+                  },
+                ],
+              },
+              {
+                title: "英语提升",
+                dates: [
+                  {
+                    start: new Date("2021/06/21").getTime(),
+                    end: new Date("2021/06/25").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/02").getTime(),
+                    end: new Date("2021/07/02").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/05").getTime(),
+                    end: new Date("2021/07/09").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/12").getTime(),
+                    end: new Date("2021/07/16").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/19").getTime(),
+                    end: new Date("2021/07/23").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/26").getTime(),
+                    end: new Date("2021/07/30").getTime(),
+                  },
+                  {
+                    start: new Date("2021/08/02").getTime(),
+                    end: new Date("2021/08/06").getTime(),
+                  },
+                  {
+                    start: new Date("2021/08/09").getTime(),
+                    end: new Date("2021/08/13").getTime(),
+                  },
+                ],
+              },
+              {
+                title: "英语提升",
+                dates: [
+                  {
+                    start: new Date("2021/06/21").getTime(),
+                    end: new Date("2021/06/25").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/02").getTime(),
+                    end: new Date("2021/07/02").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/05").getTime(),
+                    end: new Date("2021/07/09").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/12").getTime(),
+                    end: new Date("2021/07/16").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/19").getTime(),
+                    end: new Date("2021/07/23").getTime(),
+                  },
+                  {
+                    start: new Date("2021/07/26").getTime(),
+                    end: new Date("2021/07/30").getTime(),
+                  },
+                  {
+                    start: new Date("2021/08/02").getTime(),
+                    end: new Date("2021/08/06").getTime(),
+                  },
+                  {
+                    start: new Date("2021/08/09").getTime(),
+                    end: new Date("2021/08/13").getTime(),
+                  },
+                ],
+              },
+            ],
+          },
+        },
       ],
       generating: false,
     };
@@ -210,19 +417,9 @@ export default {
         document.getElementsByClassName("progressItem").length
       );
     },
-    // headerHeight() {
-    //   return this.$refs.header.$el.offsetHeight;
-    // },
-    // footerHeight() {
-    //   return this.$refs.footer.$el.offsetHeight;
-    // },
-  },
-  watch: {
-    contentInfo(val) {
-      console.log("页面信息变更", val);
-    },
   },
   mounted() {
+    console.log(new Date().getMonth());
     this.getCovers();
     this.headerHeight = this.$refs.header.$el.offsetHeight;
     this.footerHeight = this.$refs.footer.$el.offsetHeight;
@@ -235,6 +432,7 @@ export default {
         ...bigChapterPageInfo,
         data: chapterPageInfo,
       });
+      console.log(pageIndex, bigChapterPageInfo);
     },
     html2Img(element) {
       return new Promise((resolve, reject) => {

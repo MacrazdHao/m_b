@@ -88,7 +88,7 @@ export default {
                     if (headers.length > 0) ctx.drawImage(footerImgTag, 0, 0, cWidth, realFooterHeight, 0, realHeaderHeight + contentHeight, cWidth, realFooterHeight);
                     // 将黑色补白底色变为白色
                     let _pageData = ctx.getImageData(0, 0, newCanvas.width, newCanvas.height);
-                    for (var i = 0; i < _pageData.data.length; i += 4) {
+                    for (let i = 0; i < _pageData.data.length; i += 4) {
                       if (_pageData.data[i + 3] == 0) {
                         _pageData.data[i] = 255;
                         _pageData.data[i + 1] = 255;

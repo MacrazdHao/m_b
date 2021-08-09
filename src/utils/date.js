@@ -1,5 +1,4 @@
 import moment from "moment";
-import Day from "dayjs";
 export default {
   getMonthDays: (date) => {
     let today = moment(date).format("YYYY-MM-DD");

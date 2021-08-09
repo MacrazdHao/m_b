@@ -2,9 +2,9 @@
   <div class="PageFooter">
     <div class="info">
       <!-- 底部页码{{ pageNum || "nothing" }} -->
-      <p>Date:{{ date }}</p>
-      <p>{{ title }}</p>
-      <p>{{ getNumString(pageNum) }}</p>
+      <p class="date">Date:{{ date }}</p>
+      <p class="title">{{ title }}</p>
+      <p class="pageNum">{{ getNumString(pageNum) }}</p>
     </div>
   </div>
 </template>
@@ -35,11 +35,28 @@ export default {
     align-items: center;
     padding: 0 50px;
     box-sizing: border-box;
+    position: relative;
     p {
       font-size: 14px;
       color: #898989;
       line-height: 20px;
       margin-top: -4px;
+      position: absolute;
+    }
+    .date{
+      top: 50%;
+      left: 50px;
+      transform: translate(0%,-50%);
+    }
+    .title {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+    }
+    .pageNum {
+      top: 50%;
+      right: 50px;
+      transform: translate(0%,-50%);
     }
   }
 }
