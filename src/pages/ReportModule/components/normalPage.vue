@@ -123,7 +123,7 @@ export default {
         }
       }
     },
-    // 纯文本章节补白
+    // 纯文本章节补白高度
     getChapterRemainHeight(index) {
       let res = 0;
       let chapterDom = this.$refs[`chapter${index}_content`] || null;
@@ -144,7 +144,7 @@ export default {
       }
       return res;
     },
-    // 非纯文本章节补白
+    // 非纯文本章节补白高度
     getPartRemainHeight(index, index2) {
       let res = 0;
       let partDom =

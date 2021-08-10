@@ -459,7 +459,7 @@ export default {
         ...bigChapterPageInfo,
         data: chapterPageInfo,
       });
-      console.log(pageIndex, bigChapterPageInfo);
+      // console.log(pageIndex, bigChapterPageInfo);
     },
     html2Img(element) {
       return new Promise((resolve, reject) => {
@@ -562,6 +562,7 @@ export default {
       //   alert("加载尚未完成，请稍后再试");
       //   return;
       // }
+      return;
       if (this.generating) {
         this.$message.warning({ text: "稍安勿躁，报告已经在生成中" });
         return;
