@@ -15,7 +15,7 @@
     </div>
     <div class="schedule">
       <p class="title">菁英计划时间表</p>
-      <div class="table">
+      <div class="table" ref="table">
         <div class="th">
           <div
             class="tableHeader"
@@ -24,6 +24,7 @@
           >
             <div
               class="tableHeaderItem"
+              ref="tableHeaderItem"
               v-for="(item, index) in group"
               :key="`thItem${index}`"
             >
@@ -39,6 +40,7 @@
         <div class="tb">
           <div
             class="tableBody"
+            ref="tableBody"
             v-for="(group, groupIndex) in timeList"
             :key="`tb${groupIndex}`"
           >
@@ -67,8 +69,8 @@
           </div>
         </div>
       </div>
-      <div class="openDate">
-        <p>开学日：第九周{{getDateString(data.data.openDate)}}</p>
+      <div class="openDate" ref="openDate">
+        <p>开学日：第九周{{ getDateString(data.data.openDate) }}</p>
       </div>
     </div>
   </div>
@@ -88,6 +90,7 @@ export default {
       schedule: [],
       chapterPageInfo: null,
       progressImg: "",
+      pageStartDom: null,
     };
   },
   computed: {
@@ -112,7 +115,11 @@ export default {
         {}
       );
     },
+    data() {},
     schedule() {
+      this.$nextTick().then(() => {
+        this.initTable();
+      });
       let endPage =
         this.startPage +
         Math.ceil(this.$refs.progress.offsetHeight / this.contentHeight) -
@@ -129,9 +136,35 @@ export default {
     };
     this.getPersentCircle();
     this.getMonthSchedule();
+    this.initTable();
   },
   methods: {
     numToChinese,
+    initTable() {
+      this.pageStartDom = this.$refs.progress;
+      let pageStartTop = this.pageStartDom.offsetTop;
+      let headerItems = this.$refs.tableHeaderItem;
+      let tableBody = this.$refs.tableBody;
+      if (!headerItems) return;
+      for (let i = 0; i < headerItems.length; i++) {
+        let lastHeight =
+          this.contentHeight - headerItems[i].offsetTop + pageStartTop;
+        // console.log(pageStartTop, headerItems[i].offsetTop, lastHeight);
+        if (lastHeight < headerItems[i].offsetHeight) {
+          headerItems[i - 1].style.marginBottom = `${lastHeight}px`;
+          tableBody[i - 1].style.marginBottom = `${lastHeight}px`;
+          if (i < headerItems.length - 1) {
+            pageStartTop = headerItems[i].offsetTop;
+          }
+        }
+      }
+      let openDateDom = this.$refs.openDate;
+      let lastHeight = this.contentHeight - openDateDom.offsetTop + pageStartTop;
+      console.log(lastHeight);
+      if (lastHeight < openDateDom.offsetHeight) {
+        this.$refs.table.style.marginBottom = `${lastHeight}px`;
+      }
+    },
     getPersentCircle() {
       let canvas = this.$refs.circle;
       canvas.width = 180;
@@ -246,12 +279,14 @@ export default {
     }
     .persentBox {
       position: relative;
+      width: 180px;
+      height: 180px;
       .persent {
         font-size: 33px;
         font-family: arialbd;
         color: #013047;
         line-height: 38px;
-        margin-top: -4px;
+        // margin-top: -4px;
         position: absolute;
         top: 50%;
         left: 50%;

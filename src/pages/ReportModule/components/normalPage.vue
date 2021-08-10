@@ -149,7 +149,9 @@ export default {
       let res = 0;
       let partDom =
         this.$refs[`part${this.chapterIndex}-${index}-${index2}_inbox`] || null;
-      let pageNum = Math.ceil(partDom[0].offsetHeight / this.contentHeight);
+      let pageNum = Math.ceil(
+        (partDom[0].offsetHeight + (index2 == 0 ? 88 : 0)) / this.contentHeight
+      );
       this.partPageCounter += pageNum;
       let startPage =
         index == 0
@@ -160,6 +162,8 @@ export default {
         this.contentHeight * pageNum -
         partDom[0].offsetHeight -
         (index2 == 0 ? 88 : 0);
+      console.log("小节页数", pageNum);
+      console.log("小节高度", this.contentHeight, partDom[0].offsetHeight);
       this.$set(this.chapterPageInfo, index, {
         ...this.chapterPageInfo[index],
         startPage,
