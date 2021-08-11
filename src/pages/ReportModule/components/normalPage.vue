@@ -1,6 +1,11 @@
 <template>
   <div class="NormalPage">
-    <div class="chapterBox" v-for="(item, index) in data.data" :key="index">
+    <div
+      class="chapterBox"
+      :ref="`chapter${chapterIndex}-${index}`"
+      v-for="(item, index) in data.data"
+      :key="index"
+    >
       <div class="titleBox">
         <p class="title">{{ item.title }}</p>
       </div>
@@ -28,12 +33,21 @@
               </div>
               <p class="subtitle">{{ item2.title }}</p>
             </div>
-            <p class="content" v-html="item2.content"></p>
+            <p
+              class="content"
+              v-if="contents.length > 0"
+              :ref="`chapter${index}-part${index2}-content-text`"
+              v-html="contents[index][index2]"
+            ></p>
           </div>
         </div>
       </div>
       <div class="contentBox" :ref="`chapter${index}_content`" v-else>
-        <p class="content chapterContent" v-html="item.content"></p>
+        <p
+          class="content chapterContent"
+          :ref="`chapter${index}-content-text`"
+          v-html="contents[index]"
+        ></p>
       </div>
     </div>
   </div>
@@ -55,7 +69,7 @@
   }
 */
 export default {
-  props: ["data", "contentHeight", "chapterIndex", "startPage"],
+  props: ["data", "contentHeight", "lineHeight", "chapterIndex", "startPage"],
   data() {
     return {
       bigChapterPageInfo: {
@@ -63,15 +77,18 @@ export default {
         endPage: 1,
       },
       chapterPageInfo: [],
+      contents: [],
       partPageCounter: 0,
     };
   },
   watch: {
     contentHeight() {
-      this.initPage();
+      // this.initContentText();
     },
-    startPage() {
+    startPage(val) {
+      // console.log("起始页改变了", val);
       this.$set(this.bigChapterPageInfo, "startPage", this.startPage);
+      // this.$nextTick(this.initContentText);
     },
     bigChapterPageInfo() {
       this.$emit(
@@ -96,33 +113,34 @@ export default {
       startPage: this.startPage,
       endPage: this.startPage,
     };
+    this.initContentText();
   },
   methods: {
-    initPage() {
-      for (let index = 0; index < this.data.data.length; index++) {
-        let filler = document.createElement("div");
-        filler.style.width = "100%";
-        if (!this.data.data[index].children) {
-          filler.style.height = this.getChapterRemainHeight(index) + "px";
-          this.$refs[`chapter${index}_content`][0].appendChild(filler);
-        } else {
-          this.partPageCounter = 0;
-          for (
-            let index2 = 0;
-            index2 < this.data.data[index].children.length;
-            index2++
-          ) {
-            let filler = document.createElement("div");
-            filler.style.width = "100%";
-            filler.style.height =
-              this.getPartRemainHeight(index, index2) + "px";
-            this.$refs[
-              `part${this.chapterIndex}-${index}-${index2}`
-            ][0].appendChild(filler);
-          }
-        }
-      }
-    },
+    // initPage() {
+    //   for (let index = 0; index < this.data.data.length; index++) {
+    //     let filler = document.createElement("div");
+    //     filler.style.width = "100%";
+    //     if (!this.data.data[index].children) {
+    //       filler.style.height = this.getChapterRemainHeight(index) + "px";
+    //       this.$refs[`chapter${index}_content`][0].appendChild(filler);
+    //     } else {
+    //       this.partPageCounter = 0;
+    //       for (
+    //         let index2 = 0;
+    //         index2 < this.data.data[index].children.length;
+    //         index2++
+    //       ) {
+    //         let filler = document.createElement("div");
+    //         filler.style.width = "100%";
+    //         filler.style.height =
+    //           this.getPartRemainHeight(index, index2) + "px";
+    //         this.$refs[
+    //           `part${this.chapterIndex}-${index}-${index2}`
+    //         ][0].appendChild(filler);
+    //       }
+    //     }
+    //   }
+    // },
     // 纯文本章节补白高度
     getChapterRemainHeight(index) {
       let res = 0;
@@ -162,8 +180,14 @@ export default {
         this.contentHeight * pageNum -
         partDom[0].offsetHeight -
         (index2 == 0 ? 88 : 0);
-      console.log("小节页数", pageNum);
-      console.log("小节高度", this.contentHeight, partDom[0].offsetHeight);
+      // console.log(
+      //   "小节页数",
+      //   pageNum,
+      //   startPage,
+      //   endPage,
+      //   this.chapterPageInfo
+      // );
+      // console.log("小节高度", this.contentHeight, partDom[0].offsetHeight);
       this.$set(this.chapterPageInfo, index, {
         ...this.chapterPageInfo[index],
         startPage,
@@ -173,6 +197,145 @@ export default {
         this.$set(this.bigChapterPageInfo, "endPage", endPage);
       }
       return res;
+    },
+    async initContentText() {
+      // console.log(this.chapterIndex, this.chapterPageInfo);
+      for (let index = 0; index < this.data.data.length; index++) {
+        if (!this.data.data[index].children) {
+          this.contents.push(
+            this.getContentText(this.data.data[index].content, index)
+          );
+        } else {
+          let children = [];
+          for (
+            let index2 = 0;
+            index2 < this.data.data[index].children.length;
+            index2++
+          ) {
+            children.push(
+              this.getContentText(
+                this.data.data[index].children[index2].content,
+                index,
+                index2
+              )
+            );
+          }
+          this.contents.push(children);
+        }
+        // console.log("下一步");
+      }
+      this.$nextTick(this.initChapterContent);
+    },
+    // 章节内容转换
+    getContentText(text, index, index2) {
+      let p = document.createElement("p");
+      p.style.fontSize = "16px";
+      p.style.lineHeight = this.lineHeight + "px";
+      p.style.textAlign = "justify";
+      p.style.textAlignLast = "justify";
+      p.style.wordBreak = "break-word";
+      p.style.width = "100%";
+      // p.style.marginTop = "-4px";
+      let parent =
+        this.$refs[
+          index2 >= 0
+            ? `part${this.chapterIndex}-${index}-${index2}_inbox`
+            : `chapter${index}_content`
+        ][0];
+      parent.appendChild(p);
+      let res = "";
+      let aColumn = "";
+      let cutStart = 0;
+      for (let i = 0; i < text.length; i++) {
+        aColumn = text.substring(cutStart, i + 1);
+        p.innerHTML = aColumn;
+        // console.log(p.scrollHeight, i);
+        if (p.scrollHeight > this.lineHeight) {
+          aColumn = "";
+          p.innerHTML = aColumn;
+          let section = text.substring(cutStart, i);
+          section = `<p style="line-height:${this.lineHeight}px;${
+            section.length < 30 ? "width: fit-content;" : ""
+          }">${section}</p>`;
+          res += section;
+          cutStart = i;
+        }
+      }
+      if (aColumn != "") {
+        let section = aColumn;
+        if (section.length < 30) {
+          section = `<p style="line-height:${this.lineHeight}px;width: fit-content;">${section}</p>`;
+        }
+        res += section;
+      }
+      parent.removeChild(p);
+      return res;
+    },
+    initChapterContent() {
+      let pageStartTop = 0;
+      // 小章节
+      for (let index = 0; index < this.contents.length; index++) {
+        // console.log(this.data.data[index]);
+        if (!this.data.data[index].children) {
+          // 纯文本章节
+          let thisChapter = this.$refs[`chapter${index}-content-text`][0];
+          let contents = thisChapter.childNodes;
+          pageStartTop =
+            this.$refs[`chapter${this.chapterIndex}-${index}`][0].offsetTop;
+          for (let i = 0; i < contents.length; i++) {
+            let lastHeight =
+              this.contentHeight - contents[i].offsetTop + pageStartTop;
+            if (lastHeight < contents[i].offsetHeight) {
+              contents[i - 1].style.marginBottom = `${lastHeight}px`;
+              if (contents[i].innerHTML == "<br>") {
+                contents[i].innerHTML = "";
+              }
+              if (i < contents.length - 1) {
+                pageStartTop = contents[i].offsetTop;
+              }
+            }
+          }
+          let filler = document.createElement("div");
+          filler.style.height = this.getChapterRemainHeight(index) + "px";
+          thisChapter.appendChild(filler);
+          // console.log("下一章节");
+        } else {
+          // 非纯文本章节
+          pageStartTop =
+            this.$refs[`chapter${this.chapterIndex}-${index}`][0].offsetTop;
+          for (let index2 = 0; index2 < this.contents[index].length; index2++) {
+            let thisPart =
+              this.$refs[`part${this.chapterIndex}-${index}-${index2}`][0];
+            let contents =
+              this.$refs[`chapter${index}-part${index2}-content-text`][0]
+                .childNodes;
+            if (index2 > 0) pageStartTop = thisPart.offsetTop;
+            for (let i = 0; i < contents.length; i++) {
+              let lastHeight =
+                this.contentHeight - contents[i].offsetTop + pageStartTop;
+              if (lastHeight < contents[i].offsetHeight) {
+                // console.log(
+                //   lastHeight,
+                //   contents[i].offsetHeight,
+                //   contents[i - 1]
+                // );
+                contents[i - 1].style.marginBottom = `${lastHeight}px`;
+                if (contents[i].innerHTML == "<br>") {
+                  contents[i].innerHTML = "";
+                }
+                if (i < contents.length - 1) {
+                  pageStartTop = contents[i].offsetTop;
+                }
+              }
+            }
+            let filler = document.createElement("div");
+            filler.style.height =
+              this.getPartRemainHeight(index, index2) + "px";
+            thisPart.appendChild(filler);
+            // console.log("下一章节");
+          }
+        }
+      }
     },
   },
 };
@@ -208,14 +371,16 @@ export default {
       align-items: center;
       padding: 0 50px;
       .content {
+        width: 100%;
         font-size: 16px;
         color: #333333;
-        line-height: 22px;
         text-align: justify;
+        text-align-last: justify;
         margin-top: -4px;
+        word-break: break-word;
       }
       .chapterContent {
-        margin-top: 40px;
+        margin-top: 36px;
       }
       .partBox {
         .partInBox {

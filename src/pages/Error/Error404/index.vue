@@ -11,7 +11,7 @@ export default {};
 <style lang="scss" scoped>
 .Error404 {
   .errorImg {
-    width: 30%;
+    width: 100%;
     margin-top: 100px;
   }
 }

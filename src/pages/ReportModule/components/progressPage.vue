@@ -117,9 +117,7 @@ export default {
     },
     data() {},
     schedule() {
-      this.$nextTick().then(() => {
-        this.initTable();
-      });
+      this.$nextTick(this.initTable);
       let endPage =
         this.startPage +
         Math.ceil(this.$refs.progress.offsetHeight / this.contentHeight) -
@@ -159,7 +157,8 @@ export default {
         }
       }
       let openDateDom = this.$refs.openDate;
-      let lastHeight = this.contentHeight - openDateDom.offsetTop + pageStartTop;
+      let lastHeight =
+        this.contentHeight - openDateDom.offsetTop + pageStartTop;
       console.log(lastHeight);
       if (lastHeight < openDateDom.offsetHeight) {
         this.$refs.table.style.marginBottom = `${lastHeight}px`;

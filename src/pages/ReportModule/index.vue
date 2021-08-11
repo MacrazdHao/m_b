@@ -10,28 +10,35 @@
         :cnTitles="cnTitles"
         :enTitles="enTitles"
       />
-      <div v-for="(item, index) in contentInfo" :key="index">
-        <NormalPage
-          class="page"
-          v-if="!item.special"
-          :style="{ minHeight: contentHeight + 'px' }"
-          :chapterIndex="index"
-          :startPage="index == 0 ? 1 : contentInfo[index - 1].endPage + 1"
-          :data="item"
-          :contentHeight="contentHeight"
-          @setPageNum="setPageNum"
-        />
-        <ProgressPage
-          class="page"
-          v-if="item.special && item.specialKey == 'progress'"
-          :style="{ minHeight: contentHeight + 'px' }"
-          :chapterIndex="index"
-          :startPage="index == 0 ? 1 : contentInfo[index - 1].endPage + 1"
-          :data="item"
-          :contentHeight="contentHeight"
-          @setPageNum="setPageNum"
-        />
-      </div>
+      <template v-for="(item, index) in contentInfo">
+        <div :key="index">
+          <NormalPage
+            class="page"
+            v-if="loadingPage >= index && !item.special"
+            :style="{ minHeight: contentHeight + 'px' }"
+            :chapterIndex="index"
+            :startPage="index == 0 ? 1 : contentInfo[index - 1].endPage + 1"
+            :data="item"
+            :contentHeight="contentHeight"
+            :lineHeight="lineHeight"
+            @setPageNum="setPageNum"
+          />
+          <ProgressPage
+            class="page"
+            v-if="
+              loadingPage >= index &&
+              item.special &&
+              item.specialKey == 'progress'
+            "
+            :style="{ minHeight: contentHeight + 'px' }"
+            :chapterIndex="index"
+            :startPage="index == 0 ? 1 : contentInfo[index - 1].endPage + 1"
+            :data="item"
+            :contentHeight="contentHeight"
+            @setPageNum="setPageNum"
+          />
+        </div>
+      </template>
     </div>
     <Back class="cover progressItem" />
     <Header
@@ -93,6 +100,7 @@ export default {
       nowPage: 1,
       pageHeight: 852,
       contentHeight: 852,
+      lineHeight: 22,
       headerHeight: 0,
       footerHeight: 0,
       cnTitles: ["目录", "概况与背景", "咨询基本情况", "下一步", "咨询进度"],
@@ -131,7 +139,17 @@ export default {
               endPage: 1,
               title: "学生当前状况",
               content:
-                "在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。".replace(
+                "在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。".replace(
+                  /\n/gm,
+                  "<br/>"
+                ),
+            },
+            {
+              startPage: 1,
+              endPage: 1,
+              title: "学生当前状况",
+              content:
+                "在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。在本次咨询中,Alina表现得十分积极,并且分享了很多她对于不同事情的看法。\n\n在咨询的开始阶段，Dr.Bailey与Alina进行了上周咨询的内容回顾。在这个环节里面, Alina除了清晰地讲诉了之前探索过的商科/管理课程，同时还提及了艺术/建筑设计方面的内容。".replace(
                   /\n/gm,
                   "<br/>"
                 ),
@@ -435,6 +453,7 @@ export default {
         },
       ],
       generating: false,
+      loadingPage: 0,
     };
   },
   computed: {
@@ -445,6 +464,7 @@ export default {
       );
     },
   },
+  watch: {},
   mounted() {
     console.log(new Date().getMonth());
     this.getCovers();
@@ -452,6 +472,7 @@ export default {
     this.footerHeight = this.$refs.footer.$el.offsetHeight;
     this.contentHeight =
       this.pageHeight - this.headerHeight - this.footerHeight;
+    console.log(this.contentHeight);
   },
   methods: {
     setPageNum(pageIndex, bigChapterPageInfo, chapterPageInfo) {
@@ -459,7 +480,10 @@ export default {
         ...bigChapterPageInfo,
         data: chapterPageInfo,
       });
-      // console.log(pageIndex, bigChapterPageInfo);
+      this.$nextTick(() => {
+        this.loadingPage = pageIndex + 1;
+        console.log(pageIndex, bigChapterPageInfo);
+      });
     },
     html2Img(element) {
       return new Promise((resolve, reject) => {
@@ -562,7 +586,7 @@ export default {
       //   alert("加载尚未完成，请稍后再试");
       //   return;
       // }
-      return;
+      // return;
       if (this.generating) {
         this.$message.warning({ text: "稍安勿躁，报告已经在生成中" });
         return;

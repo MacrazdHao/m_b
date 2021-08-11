@@ -5,7 +5,7 @@
       <div class="cnTitleBox">
         <p class="cn">{{ cnTitles[index + 1] }}</p>
         <p class="index" v-if="item.noChapters">
-          {{ getNumString(item.startPage) }}
+          {{ getNumString(item.startPage + pageNum) }}
         </p>
       </div>
       <div class="menuBox" v-if="!item.noChapters">

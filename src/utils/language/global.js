@@ -26,7 +26,8 @@ export default {
       today: '今天',
       yesterday: '昨天',
       aweekago: '一周前'
-    }
+    },
+    goIndexButton: '返回首页',
   },
   en: {
     title: 'myFellas',
@@ -55,6 +56,7 @@ export default {
       today: 'today',
       yesterday: 'yesterday',
       aweekago: 'a week ago'
-    }
+    },
+    goIndexButton: 'Back To Home',
   }
 }
