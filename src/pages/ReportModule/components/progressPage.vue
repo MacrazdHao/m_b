@@ -163,6 +163,16 @@ export default {
       if (lastHeight < openDateDom.offsetHeight) {
         this.$refs.table.style.marginBottom = `${lastHeight}px`;
       }
+      this.$nextTick(() => {
+        let thisPage = this.$refs.progress;
+        let pageHeight = thisPage.offsetHeight;
+        let pageNum = Math.ceil(pageHeight / this.contentHeight);
+        let filler = document.createElement("div");
+        filler.style.width = "100%";
+        filler.style.height = (pageNum * this.contentHeight - pageHeight)+"px";
+        thisPage.appendChild(filler);
+        // console.log(pageNum);
+      });
     },
     getPersentCircle() {
       let canvas = this.$refs.circle;

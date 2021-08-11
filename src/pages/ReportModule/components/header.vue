@@ -46,7 +46,7 @@ export default {
       padding: 1px 31px 2px 30px;
       box-sizing: border-box;
       border-bottom: 1px solid #666666;
-      margin-top: -4px;
+      // margin-top: -4px;
       p {
         font-size: 14px;
         font-family: arial;
@@ -68,19 +68,20 @@ export default {
     height: 38px;
     background: #ffb706;
     p {
-      margin-top: -4px;
+      // margin-top: -4px;
     }
     .cn {
       font-size: 22px;
       font-family: AlibabaPuHuiTiM;
       color: #013047;
-      line-height: 30px;
+      line-height: 38px;
+      margin-top: -4px;
     }
     .en {
       font-size: 22px;
       font-family: FrutigerCE-Bold;
       color: #013047;
-      line-height: 24px;
+      line-height: 38px;
     }
   }
 }

@@ -39,8 +39,8 @@ export default {
     p {
       font-size: 14px;
       color: #898989;
-      line-height: 20px;
-      margin-top: -4px;
+      line-height: 48px;
+      // margin-top: -4px;
       position: absolute;
     }
     .date{

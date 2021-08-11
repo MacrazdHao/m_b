@@ -61,7 +61,7 @@ export default {};
         width: fit-content;
         background-color: #fff;
         border: 1px solid #ffb706;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
         .icon {
           background-color: #ffb706;
           width: 22px;
@@ -78,7 +78,7 @@ export default {};
           color: #ffb706;
           font-size: 12px;
           color: #ffb706;
-          line-height: 18px;
+          line-height: 22px;
           font-variant: normal !important;
           // letter-spacing: 1px;
           padding: 0 7px;
@@ -92,7 +92,7 @@ export default {};
         width: 100%;
       }
       .address + .address {
-        margin-top: 5px;
+        // margin-top: 5px;
       }
     }
   }

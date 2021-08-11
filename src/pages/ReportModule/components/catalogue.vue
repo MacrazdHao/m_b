@@ -43,6 +43,17 @@ export default {
         this.$refs.catalogue.offsetHeight / this.contentHeight
       );
     },
+    pageNum(val) {
+      this.$nextTick(() => {
+        let thisPage = this.$refs.catalogue;
+        let pageHeight = thisPage.offsetHeight;
+        let filler = document.createElement("div");
+        filler.style.width = "100%";
+        filler.style.height = val * this.contentHeight - pageHeight + "px";
+        thisPage.appendChild(filler);
+        // console.log(val);
+      });
+    },
   },
   methods: {
     getNumString(num) {

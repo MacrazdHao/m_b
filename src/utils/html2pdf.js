@@ -27,26 +27,33 @@ export default {
         pageInfo,
       } = options;
       return new Promise((resolve, reject) => {
+        let canvas = document.createElement("canvas");
+        canvas.height = element.offsetHeight * quality;
+        canvas.width = element.offsetWidth * quality;
+        let context = canvas.getContext("2d");
+        context.mozImageSmoothingEnabled = false;
+        context.webkitImageSmoothingEnabled = false;
+        context.msImageSmoothingEnabled = false;
+        context.imageSmoothingEnabled = false;
         html2canvas(element, {
           backgroundColor: "#fff",
           useCORS: true,
           allowTaint: true,
           height: element.offsetHeight,
           width: element.offsetWidth,
+          canvas,
           scrollY: -(document.documentElement.scrollTop || document.body.scrollTop),
           scrollX: -2,
           scale: quality
         }).then(async (canvas) => {
           let imgData = canvas.toDataURL('image/jpeg', 1);
           let cWidth = canvas.width;  // canvas宽度
-          let cHeight = canvas.height;  // canvas高度
+          // let cHeight = canvas.height / quality;  // canvas高度
           let pageWidth = cWidth / quality;  // 页面宽度
-          let fullHeight = pageHeight * quality;  // 每页的总高度
-          let realHeaderHeight = headerHeight * quality;
-          let realFooterHeight = footerHeight * quality;
-          let contentHeight = fullHeight - realHeaderHeight - realFooterHeight;
-          // let remainHeight = cHeight;  // 剩余高度
-          // let ignoreNowPage = false;
+          let fullHeight = pageHeight;  // 每页的总高度
+          // let realHeaderHeight = headerHeight;
+          // let realFooterHeight = footerHeight;
+          let contentHeight = fullHeight - headerHeight - footerHeight;
           let pageNum = coverIndex.length + pageInfo.length;
           let nowPage = 0;  // 当前绘制页数
           let nowContentPage = 0;  // 当前绘制的内容页数
@@ -54,10 +61,8 @@ export default {
           let coverCounter = 0;
           let positionY = 0;  // y轴偏移
           let PDF = new jspdf('', 'pt', [pageHeight, pageWidth]);
-          // let drawingPage = false;  // 绘制单页中
 
           while (nowPage < pageNum) {
-            // if (drawingPage) continue;
             console.log(`第${nowPage}页加载中...`);
             if (coverIndex.indexOf(nowPage) != -1) {
               PDF.addImage(covers[coverCounter], 'JPEG', 0, 0, pageWidth, pageHeight);
@@ -67,25 +72,28 @@ export default {
               // drawingPage = false;
               console.log(`第${nowPage - 1}页加载完成`);
             } else {
-              let imgTag = new Image(cWidth, cHeight);
+              let imgTag = new Image(pageWidth * quality, fullHeight * quality);
               let newCanvas = document.createElement("canvas");
-              newCanvas.height = fullHeight;
-              newCanvas.width = cWidth;
+              newCanvas.height = contentHeight * quality;
+              newCanvas.width = pageWidth * quality;
               let ctx = newCanvas.getContext("2d");
+              ctx.mozImageSmoothingEnabled = false;
+              ctx.webkitImageSmoothingEnabled = false;
+              ctx.msImageSmoothingEnabled = false;
+              ctx.imageSmoothingEnabled = false;
               await (() => {
                 let loadingPage = new Promise((resolve) => {
                   imgTag.onload = () => {
                     let { height, headers, footers } = pageInfo[nowContentPage];
-                    let headerImgTag = new Image(cWidth, headerHeight);
-                    let footerImgTag = new Image(cWidth, footerHeight);
-                    if (headers.length > 0) {
-                      headerImgTag.src = headers[dividePage];
-                      footerImgTag.src = footers[dividePage];
-                    }
-                    let thisHeight = height * quality >= contentHeight ? contentHeight : (height * quality);
-                    if (headers.length > 0) ctx.drawImage(headerImgTag, 0, 0, cWidth, realHeaderHeight, 0, 0, cWidth, realHeaderHeight);
-                    ctx.drawImage(imgTag, 0, positionY, cWidth, thisHeight, 0, realHeaderHeight, cWidth, thisHeight);
-                    if (headers.length > 0) ctx.drawImage(footerImgTag, 0, 0, cWidth, realFooterHeight, 0, realHeaderHeight + contentHeight, cWidth, realFooterHeight);
+                    // let headerImgTag = new Image(cWidth, headerHeight);
+                    // let footerImgTag = new Image(cWidth, footerHeight);
+                    // if (headers.length > 0) headerImgTag.src = headers[dividePage];
+                    // if (footers.length > 0) footerImgTag.src = footers[dividePage];
+                    let thisHeight = height >= contentHeight ? contentHeight : height;
+                    // if (headers.length > 0) ctx.drawImage(headerImgTag, 0, 0, cWidth*2, realHeaderHeight*2, 0, 0, cWidth, realHeaderHeight);
+                    // ctx.drawImage(imgTag, 0, positionY, cWidth, thisHeight, 0, realHeaderHeight, cWidth, thisHeight);
+                    ctx.drawImage(imgTag, 0, positionY, pageWidth * quality, thisHeight * quality, 0, 0, pageWidth*quality, thisHeight*quality);
+                    // if (footers.length > 0) ctx.drawImage(footerImgTag, 0, 0, cWidth*2, realFooterHeight*2, 0, realHeaderHeight + contentHeight, cWidth, realFooterHeight);
                     // 将黑色补白底色变为白色
                     let _pageData = ctx.getImageData(0, 0, newCanvas.width, newCanvas.height);
                     for (let i = 0; i < _pageData.data.length; i += 4) {
@@ -99,9 +107,11 @@ export default {
                     ctx.putImageData(_pageData, 0, 0);
                     let pageData = newCanvas.toDataURL('image/jpeg', 1);
                     // PDF.addImage(pageData, 'JPEG', 0, 0, pageWidth, pageHeight);
-                    PDF.addImage(pageData, 'JPEG', 0, 0, pageWidth, pageHeight);
-                    positionY += thisHeight;
-                    pageInfo[nowContentPage].height -= (contentHeight / quality);
+                    if (headers.length > 0) PDF.addImage(headers[dividePage], 'JPEG', 0, 0, pageWidth, headerHeight);
+                    PDF.addImage(pageData, 'JPEG', 0, headerHeight, pageWidth, thisHeight);
+                    if (footers.length > 0) PDF.addImage(footers[dividePage], 'JPEG', 0, headerHeight + contentHeight, pageWidth, footerHeight);
+                    positionY += (thisHeight * quality);
+                    pageInfo[nowContentPage].height -= contentHeight;
                     console.log(`第${nowPage}页组装完成`, pageInfo[nowContentPage].height);
                     if (pageInfo[nowContentPage].height <= 0) {
                       dividePage = 0;
