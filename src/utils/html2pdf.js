@@ -46,6 +46,8 @@ export default {
           scrollX: -2,
           scale: quality
         }).then(async (canvas) => {
+          let pageDatas = [];
+
           let imgData = canvas.toDataURL('image/jpeg', 1);
           let cWidth = canvas.width;  // canvas宽度
           // let cHeight = canvas.height / quality;  // canvas高度
@@ -92,7 +94,7 @@ export default {
                     let thisHeight = height >= contentHeight ? contentHeight : height;
                     // if (headers.length > 0) ctx.drawImage(headerImgTag, 0, 0, cWidth*2, realHeaderHeight*2, 0, 0, cWidth, realHeaderHeight);
                     // ctx.drawImage(imgTag, 0, positionY, cWidth, thisHeight, 0, realHeaderHeight, cWidth, thisHeight);
-                    ctx.drawImage(imgTag, 0, positionY, pageWidth * quality, thisHeight * quality, 0, 0, pageWidth*quality, thisHeight*quality);
+                    ctx.drawImage(imgTag, 0, positionY, pageWidth * quality, thisHeight * quality, 0, 0, pageWidth * quality, thisHeight * quality);
                     // if (footers.length > 0) ctx.drawImage(footerImgTag, 0, 0, cWidth*2, realFooterHeight*2, 0, realHeaderHeight + contentHeight, cWidth, realFooterHeight);
                     // 将黑色补白底色变为白色
                     let _pageData = ctx.getImageData(0, 0, newCanvas.width, newCanvas.height);
@@ -109,6 +111,7 @@ export default {
                     // PDF.addImage(pageData, 'JPEG', 0, 0, pageWidth, pageHeight);
                     if (headers.length > 0) PDF.addImage(headers[dividePage], 'JPEG', 0, 0, pageWidth, headerHeight);
                     PDF.addImage(pageData, 'JPEG', 0, headerHeight, pageWidth, thisHeight);
+                    pageDatas.push(pageData);
                     if (footers.length > 0) PDF.addImage(footers[dividePage], 'JPEG', 0, headerHeight + contentHeight, pageWidth, footerHeight);
                     positionY += (thisHeight * quality);
                     pageInfo[nowContentPage].height -= contentHeight;
@@ -132,7 +135,7 @@ export default {
             }
           }
           PDF.save(fileName + '.pdf');
-          resolve(canvas);
+          resolve({ pageDatas, canvas });
           /*
           // 试验版本，未区分封面及内容页
           while (remainHeight > 0) {
