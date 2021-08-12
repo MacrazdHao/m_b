@@ -67,8 +67,11 @@
       </div>
     </div>
     <div id="canvas"></div>
+    <div v-for="(item, index) in canvases" :key="'test' + index">
+      <div v-html="item"></div>
+    </div>
     <div>
-      <div v-for="(item, index) in pageDatas" :key="'test' + index">
+      <div v-for="(item, index) in pageDatas" :key="'test2' + index">
         <img :height="pageHeight" :src="item" />
       </div>
     </div>
@@ -104,6 +107,7 @@ export default {
       loadedProgress: 0,
       nowPage: 1,
       pageHeight: 852,
+      pageWidth: 596,
       contentHeight: 852,
       lineHeight: 22,
       headerHeight: 0,
@@ -468,6 +472,7 @@ export default {
       generating: false,
       loadingPage: 0,
       pageDatas: [],
+      canvases: [],
     };
   },
   computed: {
@@ -610,6 +615,8 @@ export default {
       //   return;
       // }
       // return;
+      let contentPages = document.getElementsByClassName("page");
+      console.log(contentPages);
       if (this.generating) {
         this.$message.warning({ text: "稍安勿躁，报告已经在生成中" });
         return;
@@ -617,7 +624,8 @@ export default {
       this.generating = true;
       this.getPageInfo().then(() => {
         this.$getPdf(
-          this.$refs.pages,
+          // this.$refs.pages,
+          contentPages,
           {
             quality: this.quality,
             // header: this.headerImg,
@@ -625,14 +633,16 @@ export default {
             headerHeight: this.headerHeight,
             footerHeight: this.footerHeight,
             pageHeight: this.pageHeight,
+            pageWidth: this.pageWidth,
             pageInfo: this.pageInfo,
-            coverIndex: [0, document.getElementsByClassName("page").length + 1], // 从0开始，此处的序号不包含分页，只按内容页面的页数为准
+            coverIndex: [0, contentPages.length + 1], // 从0开始，此处的序号不包含分页，只按内容页面的页数为准
             covers: this.coversImg,
           },
           "test"
         ).then((res) => {
-          document.getElementById("canvas").appendChild(res.canvas);
+          // document.getElementById("canvas").appendChild(res.canvas);
           this.pageDatas = res.pageDatas;
+          this.canvases = res.canvases;
           this.generating = false;
         });
       });
