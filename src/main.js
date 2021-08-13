@@ -6,6 +6,8 @@ import router from './router';
 import store from './store/index';
 import i18n from './utils/language/index';
 import ElementUI from 'element-ui';
+import eleEn from 'element-ui/lib/locale/lang/en';
+import eleZh from 'element-ui/lib/locale/lang/zh-CN';
 // import "./assets/font.css";
 import "./assets/animate.css";
 import "./assets/transition.css";
@@ -26,7 +28,7 @@ Vue.config.productionTip = false
 //   console.log(to, from)
 // })
 
-Vue.use(ElementUI)
+Vue.use(ElementUI, { locale: i18n.getLocale() == "zh" ? eleZh : eleEn })
 
 Vue.use(LogoutDialog)
 Vue.use(Dialog)

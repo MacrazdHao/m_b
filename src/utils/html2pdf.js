@@ -136,8 +136,7 @@ export default {
           }
           console.log(`第${nowPage}页加载完成`);
         }
-        PDF.save(fileName + '.pdf');
-        resolve({ pageDatas, canvases });
+        resolve({ pageDatas, canvases, downloadPDF: () => { PDF.save(fileName + '.pdf'); } });
       });
     }
   }

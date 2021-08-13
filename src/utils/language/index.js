@@ -43,5 +43,6 @@ let i18n = new VueI18n({
 });
 
 i18n.languages = languages;
+i18n.getLocale = getLocale;
 
 export default i18n;

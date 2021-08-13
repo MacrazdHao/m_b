@@ -67,7 +67,7 @@ export default {
     component: "Dashboard",
     meta: {
       title: '工作台',
-      enTitle: 'Workbench',
+      enTitle: 'Dashboard',
       icon: "icon_workbench",
       notShowChildren: true
     }
@@ -79,7 +79,7 @@ export default {
     component: "pages/student",
     meta: {
       title: '工作台',
-      enTitle: 'Workbench',
+      enTitle: 'Dashboard',
       icon: "icon_workbench",
     }
   },
@@ -90,7 +90,7 @@ export default {
     component: "pages/school",
     meta: {
       title: '工作台',
-      enTitle: 'Workbench',
+      enTitle: 'Dashboard',
       icon: "icon_workbench",
     }
   },
@@ -101,7 +101,7 @@ export default {
     component: "pages/admin",
     meta: {
       title: '工作台',
-      enTitle: 'Workbench',
+      enTitle: 'Dashboard',
       icon: "icon_workbench",
     }
   },
@@ -112,7 +112,7 @@ export default {
     component: "pages/schedules",
     meta: {
       title: '工作台',
-      enTitle: 'Workbench',
+      enTitle: 'Dashboard',
       icon: "icon_workbench",
     }
   },
@@ -191,7 +191,7 @@ export default {
     component: "Students",
     meta: {
       title: '学生管理',
-      enTitle: 'Student Manage',
+      enTitle: 'Student Management',
       icon: "icon_student",
       notShowChildren: true
     }
@@ -203,7 +203,7 @@ export default {
     component: "pages/list",
     meta: {
       title: '学生管理',
-      enTitle: 'Student Manage',
+      enTitle: 'Student Management',
       icon: "icon_student",
     }
   },
@@ -214,7 +214,7 @@ export default {
     component: "pages/detail",
     meta: {
       title: '学生管理',
-      enTitle: 'Student Manage',
+      enTitle: 'Student Management',
       icon: "icon_student",
     }
   },
@@ -225,7 +225,7 @@ export default {
     component: "pages/process",
     meta: {
       title: '学生管理',
-      enTitle: 'Student Manage',
+      enTitle: 'Student Management',
       icon: "icon_student",
     }
   },
@@ -236,7 +236,7 @@ export default {
     component: "Archives",
     meta: {
       title: '生涯档案',
-      enTitle: 'Student Manage',
+      enTitle: 'Career Archive',
       icon: "icon_archives",
       notShowChildren: true
     }
@@ -248,7 +248,7 @@ export default {
     component: "pages/list",
     meta: {
       title: '生涯档案',
-      enTitle: 'Student Manage',
+      enTitle: 'Career Archive',
       icon: "icon_archives",
     }
   },
@@ -259,7 +259,7 @@ export default {
     component: "pages/detail",
     meta: {
       title: '生涯档案',
-      enTitle: 'Student Manage',
+      enTitle: 'Career Archive',
       icon: "icon_archives",
     }
   },
@@ -356,7 +356,7 @@ export default {
     // redirect: 'base',
     meta: {
       title: '账号管理',
-      enTitle: 'Accounts Manage',
+      enTitle: 'Account Management',
       icon: "icon_accounts",
       notShowChildren: true
     }
@@ -398,7 +398,7 @@ export default {
     component: "pages/accountlist",
     meta: {
       title: "账号管理",
-      enTitle: "Accounts Manage",
+      enTitle: "Account Management",
       type: "teacher"
     }
   },
@@ -409,7 +409,7 @@ export default {
     component: "pages/accountlist",
     meta: {
       title: "管理员账号管理",
-      enTitle: "Accounts Manage",
+      enTitle: "Account Management",
       type: "admin"
     }
   },
@@ -420,7 +420,7 @@ export default {
     component: "pages/accountlist",
     meta: {
       title: "学校账号管理",
-      enTitle: "Accounts Manage",
+      enTitle: "Account Management",
       type: "school"
     }
   },
@@ -442,7 +442,7 @@ export default {
     // redirect: 'testing1',
     meta: {
       title: "直播咨询",
-      enTitle: 'Live Consult',
+      enTitle: 'Live Consulting',
       icon: "icon_live",
     }
   },
@@ -500,7 +500,7 @@ export default {
     component: "pages/counselingList",
     meta: {
       title: "生涯档案",
-      enTitle: "Counseling Files",
+      enTitle: "Career Archive",
       group: "counseling",
       groupParent: true
     }
@@ -512,7 +512,7 @@ export default {
     component: "pages/counselingDetail",
     meta: {
       title: "生涯档案",
-      enTitle: "Counseling Files",
+      enTitle: "Career Archive",
       notShowThisChildren: true,
       group: "counseling",
       groupParent: false,
@@ -634,7 +634,7 @@ export default {
     component: "Consultant",
     meta: {
       title: "咨询师管理",
-      enTitle: 'Consultant Management',
+      enTitle: 'Counselor Management',
       icon: "icon_consultant",
     }
   },
@@ -645,7 +645,7 @@ export default {
     component: "Playback",
     meta: {
       title: "咨询回看",
-      enTitle: 'Consult Playback',
+      enTitle: 'Consultation Playback',
       icon: "icon_playback",
     }
   },
