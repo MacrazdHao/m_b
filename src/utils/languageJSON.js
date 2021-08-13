@@ -69,13 +69,17 @@ function getDuplicate(options) {
   for (let key in data) {
     switch (key) {
       case standardLang:
-        if (!duplicate[data[standardLang]]) {
-          duplicate[data[standardLang]] = [{ text: data[checkLang], path: path.join(".") }];
-        } else {
-          if (!withPath) {
+        if (!withPath) {
+          if (!duplicate[data[standardLang]]) {
+            duplicate[data[standardLang]] = [data[checkLang]];
+          } else {
             if (!noRepeat || duplicate[data[standardLang]].indexOf(data[checkLang]) == -1) {
               duplicate[data[standardLang]].push(data[checkLang]);
             }
+          }
+        } else {
+          if (!duplicate[data[standardLang]]) {
+            duplicate[data[standardLang]] = [{ text: data[checkLang], path: path.join(".") }];
           } else {
             let exist = false;
             for (let i = 0; i < duplicate[data[standardLang]].length; i++) {
@@ -89,6 +93,7 @@ function getDuplicate(options) {
             }
           }
         }
+
         break;
       case checkLang: break;
       default:
@@ -108,7 +113,8 @@ function getTwoVersionDuplicate() {
   return result;
 }
 
-export function getDuplicateJSONFile(options) {
+export function getDuplicateJSONFile(options, callback) {
+  duplicate = {};
   let { checkLang, standardLang, withPath, twoVersionFilter, noRepeat } = options;
   checkLang = checkLang || "en";
   standardLang = standardLang || "zh";
@@ -124,6 +130,8 @@ export function getDuplicateJSONFile(options) {
   document.body.appendChild(downLink)
   downLink.click()
   document.body.removeChild(downLink)
+  callback()
+  return true
 }
 
 export function getLanguageJSONFile(language) {

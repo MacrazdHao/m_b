@@ -189,7 +189,7 @@
                 :class="[languageDuplicateOptions.withPath ? 'selected' : '']"
               ></div>
             </div>
-            <p>携带路径</p>
+            <p>携带I18N路径</p>
           </div>
           <div
             class="item"
@@ -253,6 +253,7 @@ export default {
         twoVersionFilter: false,
         noRepeat: false,
       },
+      generatingLanguageDuplicateList: false,
       settingMenu: false,
       settingItems: [
         {
@@ -354,7 +355,22 @@ export default {
       this.languageDuplicateBoxShow = false;
     },
     downloadLanguageDuplicate() {
-      getDuplicateJSONFile(this.languageDuplicateOptions);
+      if (this.generatingLanguageDuplicateList) {
+        alert("正在生成上一个查重表，请稍后");
+        return;
+      }
+      this.generatingLanguageDuplicateList = true;
+      if (!this.languageDuplicateOptions.standardLang) {
+        alert("请选择基准语言");
+        return;
+      }
+      if (!this.languageDuplicateOptions.checkLang) {
+        alert("请选择排查语言");
+        return;
+      }
+      getDuplicateJSONFile(this.languageDuplicateOptions, () => {
+        this.generatingLanguageDuplicateList = false;
+      });
     },
     selectStandardLang(lang) {
       this.$set(
