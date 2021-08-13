@@ -32,7 +32,7 @@ files.keys().forEach(key => {
 });
 
 const getLocale = () => {
-  const key = 'langualekey';
+  const key = 'myfellaslanguagekey';
   const result = cookie.get(key);
   return result || 'zh';
 }

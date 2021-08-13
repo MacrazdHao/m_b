@@ -160,7 +160,7 @@ export default {
     commit(types.RESET_MENU);
   },
   setLanguage: ({ commit, state }, language) => {
-    cookie.set("langualekey", language);
+    cookie.set("myfellaslanguagekey", language);
     commit('SET_LANGUAGE', language);
     window.location.reload();
   },

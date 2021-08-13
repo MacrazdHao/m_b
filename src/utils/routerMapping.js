@@ -123,7 +123,7 @@ export default {
     component: "Counseling",
     meta: {
       title: '生涯辅导',
-      enTitle: 'Life Coach',
+      enTitle: 'Career Counsel',
       icon: "icon_counseling",
       notShowChildren: true
     }
@@ -135,7 +135,7 @@ export default {
     component: "pages/baseInfo",
     meta: {
       title: '生涯辅导',
-      enTitle: 'Life Coach',
+      enTitle: 'Career Counsel',
       icon: "icon_counseling",
     }
   },
@@ -146,7 +146,7 @@ export default {
     component: "pages/test",
     meta: {
       title: '生涯辅导',
-      enTitle: 'Life Coach',
+      enTitle: 'Career Counsel',
       icon: "icon_counseling",
     }
   },
@@ -157,7 +157,7 @@ export default {
     component: "pages/match",
     meta: {
       title: '生涯辅导',
-      enTitle: 'Life Coach',
+      enTitle: 'Career Counsel',
       icon: "icon_counseling",
     }
   },
@@ -168,7 +168,7 @@ export default {
     component: "pages/report",
     meta: {
       title: '生涯辅导',
-      enTitle: 'Life Coach',
+      enTitle: 'Career Counsel',
       icon: "icon_counseling",
     }
   },
