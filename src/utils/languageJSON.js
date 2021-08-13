@@ -109,7 +109,7 @@ function getTwoVersionDuplicate() {
 }
 
 export function getDuplicateJSONFile(options) {
-  let { checkLang, withPath, twoVersionFilter, noRepeat } = options;
+  let { checkLang, standardLang, withPath, twoVersionFilter, noRepeat } = options;
   checkLang = checkLang || "en";
   standardLang = standardLang || "zh";
   withPath = withPath || false;
