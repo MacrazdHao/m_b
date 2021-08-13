@@ -454,7 +454,7 @@ export default {
     // redirect: 'testing1',
     meta: {
       title: "学生档案",
-      enTitle: 'Student Files',
+      enTitle: 'Student Profile',
       icon: "icon_files",
       notShowChildren: true
     }
@@ -466,7 +466,7 @@ export default {
     component: "pages/list",
     meta: {
       title: "学生档案",
-      enTitle: 'Student Files',
+      enTitle: 'Student Profile',
       icon: "icon_files",
     }
   },
@@ -477,7 +477,7 @@ export default {
     component: "pages/detail",
     meta: {
       title: "学生档案",
-      enTitle: 'Student Files',
+      enTitle: 'Student Profile',
       icon: "icon_files",
     }
   },
