@@ -104,7 +104,7 @@ export default {
       time: 'time',
       aboutMe: {
         title: 'about me',
-        baseInfo: 'basic infomation',
+        baseInfo: 'basic information',
         academic: 'academic performance',
         hobby: 'interest and hobbies'
       },

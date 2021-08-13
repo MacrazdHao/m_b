@@ -442,7 +442,7 @@ export default {
     // redirect: 'testing1',
     meta: {
       title: "直播咨询",
-      enTitle: 'Live Consulting',
+      enTitle: 'Live Consultation',
       icon: "icon_live",
     }
   },

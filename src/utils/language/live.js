@@ -1,6 +1,6 @@
 export default {
   zh: {
-    title: '学生管理',
+    title: '直播咨询',
     list: {
       emptyTips: {
         loadingList: '加载数据中...',
@@ -41,7 +41,7 @@ export default {
     },
   },
   en: {
-    title: 'Student Administration',
+    title: 'Live Consultation',
     list: {
       emptyTips: {
         loadingList: 'Loading...',
