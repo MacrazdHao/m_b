@@ -1,0 +1,224 @@
+{
+  "请输入密码": [
+    "please enter password",
+    "Please Enter Password"
+  ],
+  "none": [
+    "none",
+    "switch to sharing window"
+  ],
+  "学生管理": [
+    "student management",
+    "Student Administration"
+  ],
+  "请输入学校名称": [
+    "please enter school name",
+    "school name"
+  ],
+  "生涯档案": [
+    "career archive",
+    "career profile"
+  ],
+  "操作": [
+    "operate",
+    "Operation",
+    "Operatge"
+  ],
+  "修改": [
+    "edit account",
+    "edit"
+  ],
+  "取消": [
+    "cancel",
+    "Cancel"
+  ],
+  "加载数据中...": [
+    "loading data...",
+    "Loading...",
+    "Loading Data..."
+  ],
+  "暂无数据": [
+    "no data available",
+    "No Data Available",
+    "No Data"
+  ],
+  "修改成功": [
+    "edit successfully",
+    "edit succesfully",
+    "reset success",
+    "Successfully modified"
+  ],
+  "删除成功": [
+    "delete successfully",
+    "Successfully deleted"
+  ],
+  "获取列表失败，请刷新再试": [
+    "Failed to get the list, please refresh and try again",
+    "Please refresh"
+  ],
+  "保存": [
+    "save",
+    "Save"
+  ],
+  "姓名": [
+    "name",
+    "Name"
+  ],
+  "国籍": [
+    "country",
+    "nationality"
+  ],
+  "基本信息": [
+    "basic information",
+    "basic infomation"
+  ],
+  "自我评价": [
+    "self evaluation",
+    "Self-evaluation"
+  ],
+  "看书类目": [
+    "reading type",
+    "reading list"
+  ],
+  "在线评测": [
+    "Online Testing",
+    "online aptitude testing",
+    "Online Aptitude Testing"
+  ],
+  "查看报告": [
+    "Accessing the Report",
+    "view your report",
+    "read report"
+  ],
+  "职业发展咨询": [
+    "Career Counseling",
+    "career consulting",
+    "Career Planning",
+    "career counseling",
+    "career consultation"
+  ],
+  "进入直播": [
+    "Join Now",
+    "Join The Live Broadcast Room"
+  ],
+  "大学课程和学科咨询": [
+    "Acadmic Advisory",
+    "university course and subject exploration",
+    "University course and subject exploration",
+    "university course and subject",
+    "university course and subject exploratiion"
+  ],
+  "大学建议和偏好咨询": [
+    "University exploration and suggestions",
+    "university exploration and suggestions",
+    "university suggestions"
+  ],
+  "生涯辅导": [
+    "career consultation",
+    "Career Counsel"
+  ],
+  "已完成": [
+    "finish",
+    "Completed"
+  ],
+  "未开始": [
+    "pending",
+    "Wait A Moment",
+    "Not Started",
+    "not started"
+  ],
+  "日": [
+    "none",
+    "SUN"
+  ],
+  "当月新增": [
+    "new counselor",
+    "new school"
+  ],
+  "学校": [
+    "school",
+    "School"
+  ],
+  "请输入账号": [
+    "Please Enter Your Account",
+    "please enter account"
+  ],
+  "发送了一封邮件验证码，请您注意接收邮件": [
+    "An email verification code was sent, please pay attention to receiving the email",
+    "verification email sent successfully"
+  ],
+  "请输入验证码": [
+    "Please Enter Verification Code",
+    "please enter verification code"
+  ],
+  "发送验证码失败，请重试": [
+    "unable to send verification code, please retry",
+    "send verify code error, please try again"
+  ],
+  "知识中心": [
+    "Knowledge Center",
+    "knowledge center"
+  ],
+  "个人中心": [
+    "Personal Center",
+    "personal center"
+  ],
+  "状态": [
+    "Status",
+    "status"
+  ],
+  "请输入搜索的内容": [
+    "Please enter your search",
+    "please search for content",
+    "please enter search content"
+  ],
+  "搜索": [
+    "Search",
+    "search"
+  ],
+  "编号": [
+    "No.",
+    "code"
+  ],
+  "年级": [
+    "Grade",
+    "grade"
+  ],
+  "阶段": [
+    "Stage",
+    "phase"
+  ],
+  "职业发展咨询 | 大学课程和学科咨询 | 大学建议和偏好咨询": [
+    "Career Planning | Acadmic Advisory | College Selection",
+    "career consultation | university course and subject exploration | university exploration"
+  ],
+  "直播已结束": [
+    "The live is end",
+    "The live broadcast is over."
+  ],
+  "设置": [
+    "Settings",
+    "set"
+  ],
+  "检测结果": [
+    "check result",
+    "Result"
+  ],
+  "查看": [
+    "View",
+    "review",
+    "view"
+  ],
+  "查看信息": [
+    "check information",
+    "view information"
+  ],
+  "阶段设置": [
+    "stage settings",
+    "phase settings"
+  ],
+  "阶段分配": [
+    "phase allocation",
+    "process allocation"
+  ]
+}

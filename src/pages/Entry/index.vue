@@ -90,6 +90,19 @@
         </div>
         <div class="white"></div>
         <div class="right">
+          <!-- <img class="languageButton" src="@/assets/index/icon_language.svg" /> -->
+          <img
+            class="languageButton"
+            v-if="language == 'en'"
+            @click="language = 'zh'"
+            src="@/assets/entry/icon_language_en.svg"
+          />
+          <img
+            class="languageButton"
+            v-if="language == 'zh'"
+            @click="language = 'en'"
+            src="@/assets/entry/icon_language_ch.svg"
+          />
           <!-- <transition name="slide-fade2"> -->
           <router-view style="min-height: 280px" :identity="identity" />
           <!-- </transition> -->
@@ -101,7 +114,9 @@
 </template>
 
 <script>
+import languageMixin from "@/mixins/language";
 export default {
+  mixins: [languageMixin],
   data() {
     return {
       identity: 0,
@@ -331,6 +346,15 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
+        position: relative;
+        .languageButton {
+          position: absolute;
+          top: 2.8333vw;
+          right: 2.8333vw;
+          width: 1.0417vw;
+          height: 1.0417vw;
+          cursor: pointer;
+        }
         .license {
           // justify-self: flex-end;
           font-size: 0.5208vw;

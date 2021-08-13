@@ -96,7 +96,7 @@
       v-clickoutside="closeCustomOssUrl"
     >
       <div class="header"><p>自定义OSS服务器IP</p></div>
-      <div class="content">
+      <div class="content content--row">
         <p class="agreement" @click="changeOssAgreement">{{ ossAgreement }}</p>
         <input
           v-model="customOssUrl"
@@ -109,13 +109,132 @@
         <p @click="closeCustomOssUrl">取消</p>
       </div>
     </div>
+    <div
+      class="customUrlBox"
+      v-if="languageDuplicateBoxShow"
+      v-clickoutside="closeLanguageDuplicateBox"
+    >
+      <div class="header"><p>选择查重方案</p></div>
+      <div class="content content--column">
+        <!-- <p class="agreement" @click="changeOssAgreement">{{ ossAgreement }}</p>
+        <input
+          v-model="customOssUrl"
+          placeholder="请输入OSS服务器IP:PORT"
+          @keydown="enterOssUrlInput"
+        /> -->
+        <div class="languages">
+          <p>基准语言：</p>
+          <div class="items">
+            <template v-for="(item, index) in $i18n.languages">
+              <div
+                class="itemBox"
+                v-if="item.value != languageDuplicateOptions.checkLang"
+                :key="index"
+                @click="selectStandardLang(item.value)"
+              >
+                <div class="item">
+                  <div class="radio">
+                    <div
+                      :class="[
+                        item.value == languageDuplicateOptions.standardLang
+                          ? 'selected'
+                          : '',
+                      ]"
+                    ></div>
+                  </div>
+                  <p>{{ item.cname }}</p>
+                </div>
+              </div>
+              {{ "" }}
+            </template>
+          </div>
+        </div>
+        <div class="languages">
+          <p>排查语言：</p>
+          <div class="items">
+            <template v-for="(item, index) in $i18n.languages">
+              <div
+                class="itemBox"
+                v-if="item.value != languageDuplicateOptions.standardLang"
+                :key="index"
+                @click="selectCheckLang(item.value)"
+              >
+                <div class="item">
+                  <div class="radio">
+                    <div
+                      :class="[
+                        item.value == languageDuplicateOptions.checkLang
+                          ? 'selected'
+                          : '',
+                      ]"
+                    ></div>
+                  </div>
+                  <p>{{ item.cname }}</p>
+                </div>
+              </div>
+              {{ "" }}
+            </template>
+          </div>
+        </div>
+        <div class="filters">
+          <div
+            class="item"
+            @click="
+              languageDuplicateOptions.withPath =
+                !languageDuplicateOptions.withPath
+            "
+          >
+            <div class="checkbox">
+              <div
+                :class="[languageDuplicateOptions.withPath ? 'selected' : '']"
+              ></div>
+            </div>
+            <p>携带路径</p>
+          </div>
+          <div
+            class="item"
+            @click="
+              languageDuplicateOptions.twoVersionFilter =
+                !languageDuplicateOptions.twoVersionFilter
+            "
+          >
+            <div class="checkbox">
+              <div
+                :class="[
+                  languageDuplicateOptions.twoVersionFilter ? 'selected' : '',
+                ]"
+              ></div>
+            </div>
+            <p>只显示存在两种或以上译文的项</p>
+          </div>
+          <div
+            class="item"
+            @click="
+              languageDuplicateOptions.noRepeat =
+                !languageDuplicateOptions.noRepeat
+            "
+          >
+            <div class="checkbox">
+              <div
+                :class="[languageDuplicateOptions.noRepeat ? 'selected' : '']"
+              ></div>
+            </div>
+            <p>排除译文相同的项</p>
+          </div>
+        </div>
+      </div>
+      <div class="buttonBox">
+        <p @click="downloadLanguageDuplicate">下载</p>
+        <p @click="closeLanguageDuplicateBox">取消</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Clickoutside from "../common/utilsFromElement/clickoutside";
 import config from "@/utils/config";
-import getLanguageFile from "@/utils/languageJSON";
+import { getLanguageFile, getDuplicateJSONFile } from "@/utils/languageJSON";
 export default {
   directives: { Clickoutside },
   data() {
@@ -126,8 +245,28 @@ export default {
       ossAgreement: "http://",
       customUrlBoxShow: false,
       customOssUrlBoxShow: false,
+      languageDuplicateBoxShow: false,
+      languageDuplicateOptions: {
+        standardLang: "",
+        checkLang: "",
+        withPath: false,
+        twoVersionFilter: false,
+        noRepeat: false,
+      },
       settingMenu: false,
       settingItems: [
+        {
+          title: "下载语言数据查重表",
+          icon: require("@/assets/testmenu/icon_language.svg"),
+          click: () => {
+            console.log(this.$i18n.languages);
+            // getLanguageFile();
+            this.languageDuplicateBoxShow = true;
+          },
+          show: false,
+          customize: false,
+          // options: this.languageOptions(),
+        },
         {
           title: "下载语言数据",
           icon: require("@/assets/testmenu/icon_language.svg"),
@@ -211,6 +350,33 @@ export default {
     },
   },
   methods: {
+    closeLanguageDuplicateBox() {
+      this.languageDuplicateBoxShow = false;
+    },
+    downloadLanguageDuplicate() {
+      getDuplicateJSONFile(this.languageDuplicateOptions);
+    },
+    selectStandardLang(lang) {
+      this.$set(
+        this.languageDuplicateOptions,
+        "standardLang",
+        this.languageDuplicateOptions.standardLang == lang ? "" : lang
+      );
+      if (this.languageDuplicateOptions.checkLang == lang) {
+        this.$set(this.languageDuplicateOptions, "checkLang", "");
+      }
+    },
+    selectCheckLang(lang) {
+      this.$set(
+        this.languageDuplicateOptions,
+        "checkLang",
+        this.languageDuplicateOptions.checkLang == lang ? "" : lang
+      );
+      if (this.languageDuplicateOptions.standardLang == lang) {
+        this.$set(this.languageDuplicateOptions, "standardLang", "");
+      }
+    },
+
     languageOptions() {
       let options = [];
       for (let i = 0; i < this.$i18n.languages.length; i++) {
@@ -464,16 +630,98 @@ export default {
         text-align: center;
       }
     }
-    .content {
-      display: flex;
+    .content--row {
       flex-direction: row;
       align-items: center;
+    }
+    .content--column {
+      flex-direction: column;
+      justify-content: center;
+    }
+    .content {
+      display: flex;
       padding: 24px 18px;
       width: 250px;
       .agreement {
         margin-right: 4px;
         cursor: pointer;
         user-select: none;
+      }
+      .languages {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        .items {
+          text-align: left;
+          max-width: 250px;
+          letter-spacing: 6px;
+          .itemBox {
+            display: inline-block;
+            .item {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              cursor: pointer;
+              .radio {
+                width: 10px;
+                height: 10px;
+                background-color: #fff;
+                border-radius: 10px;
+                border: 1px solid gray;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                div {
+                  width: 6px;
+                  height: 6px;
+                  border-radius: 6px;
+                  background-color: white;
+                }
+                .selected {
+                  background-color: rgb(67, 96, 194);
+                }
+              }
+              p {
+                white-space: nowrap;
+                margin-left: 4px;
+                user-select: none;
+                letter-spacing: 0px;
+              }
+            }
+          }
+        }
+      }
+      .filters {
+        display: flex;
+        flex-direction: column;
+        margin-top: 12px;
+        .item {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          cursor: pointer;
+          .checkbox {
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border: 1px solid gray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            div {
+              width: 6px;
+              height: 6px;
+              background-color: white;
+            }
+            .selected {
+              background-color: rgb(67, 96, 194);
+            }
+          }
+          p {
+            user-select: none;
+            margin-left: 4px;
+          }
+        }
       }
     }
     .buttonBox {
