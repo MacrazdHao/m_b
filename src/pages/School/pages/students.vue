@@ -289,11 +289,21 @@ export default {
           nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
+          if (res.pageTotal < res.pageIndex) {
+            this.page = {
+              dataNum: res.total,
+              total: res.pageTotal,
+              size: 10,
+              current: res.pageIndex > 1 ? res.pageIndex - 1 : 1,
+            };
+            this.initList();
+            return;
+          }
           this.page = {
             dataNum: res.total,
             total: res.pageTotal,
             size: 10,
-            current: 1,
+            current: this.page.current,
           };
           this.tableData = res.data;
           this.loading = false;
