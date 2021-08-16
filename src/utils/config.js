@@ -1,5 +1,5 @@
 const baseOssURL = "http://192.168.0.104:32747";
-const baseURL = 'https://api.myfellas.net';
+const baseURL = 'https://api.myfellas.net/api/';
 const mockURL = 'http://192.168.0.104:3001/mock/11';
 const testURL = 'http://192.168.0.104:9080';
 const testURL2 = 'http://192.168.0.104:8003';
