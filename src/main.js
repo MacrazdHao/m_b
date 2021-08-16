@@ -11,7 +11,11 @@ import eleZh from 'element-ui/lib/locale/lang/zh-CN';
 // import "./assets/font.css";
 import "./assets/animate.css";
 import "./assets/transition.css";
-import "./assets/font.css";
+setTimeout(() => {
+  import("./assets/font.css").then(() => {
+    console.log("字体完成");
+  });
+});
 import 'element-ui/lib/theme-chalk/index.css';
 import './utils/permission';
 import _default from './utils/default.js';

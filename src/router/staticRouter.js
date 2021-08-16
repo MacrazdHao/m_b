@@ -15,6 +15,7 @@ const staticRouter = [
     component: entry,
     children: [{
       path: '/',
+      alias: '/login',
       name: 'login',
       component: login,
     }, {

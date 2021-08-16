@@ -9,7 +9,7 @@ import { getToken } from '@/utils/auth' // get token from cookie
 // console.log(process.env)
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/', '/register', '/register2', '/forget', '/reset', '/contact', '/parents', '/adminEntry'] // no redirect whitelist
+const whiteList = ['/', '/login', '/register', '/register2', '/forget', '/reset', '/contact', '/parents', '/adminEntry'] // no redirect whitelist
 
 let getMessages = () => {
   if (window.msgTimeout) clearInterval(window.msgTimeout)
@@ -22,6 +22,9 @@ let getMessages = () => {
 }
 
 router.beforeEach(async (to, from, next) => {
+  // console.log(to);
+  let query = to.query;
+  if (query.lang && query.lang != store.state.global.language) store.dispatch("global/setLanguage", query.lang)
   NProgress.start()
   // console.log('跳转title', to.meta)
   // document.title = getPageTitle(to.meta.title)

@@ -21,7 +21,10 @@ export default {
       showTop: false,
     };
   },
-  mounted() {},
+  mounted() {
+    // console.log(this.$route.query.lang);
+    // if()
+  },
   methods: {},
 };
 </script>

@@ -234,7 +234,7 @@
 <script>
 import Clickoutside from "../common/utilsFromElement/clickoutside";
 import config from "@/utils/config";
-import { getLanguageFile, getDuplicateJSONFile } from "@/utils/languageJSON";
+import { getLanguageJSONFile, getDuplicateJSONFile } from "@/utils/languageJSON";
 export default {
   directives: { Clickoutside },
   data() {
@@ -261,7 +261,7 @@ export default {
           icon: require("@/assets/testmenu/icon_language.svg"),
           click: () => {
             console.log(this.$i18n.languages);
-            // getLanguageFile();
+            // getLanguageJSONFile();
             this.languageDuplicateBoxShow = true;
           },
           show: false,
@@ -273,7 +273,7 @@ export default {
           icon: require("@/assets/testmenu/icon_language.svg"),
           click: () => {
             console.log(this.$i18n.languages);
-            // getLanguageFile();
+            // getLanguageJSONFile();
           },
           show: false,
           customize: false,
@@ -401,7 +401,7 @@ export default {
           title: item.cname,
           attach: item.value,
           value: item.value,
-          callback: () => getLanguageFile(item.value),
+          callback: () => getLanguageJSONFile(item.value),
         });
       }
       options.push({
@@ -409,7 +409,7 @@ export default {
         attach: "",
         value: "all",
         callback: () =>
-          getLanguageFile(
+          getLanguageJSONFile(
             this.$i18n.languages.map((item, index) => {
               return item.value;
             })

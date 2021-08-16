@@ -1,5 +1,5 @@
 const files = require.context('./language', true, /\.js$/);
-import allText from "@/language.json";
+// import allText from "@/language.json";
 
 let languageJSON = {};
 
@@ -114,24 +114,26 @@ function getTwoVersionDuplicate() {
 }
 
 export function getDuplicateJSONFile(options, callback) {
-  duplicate = {};
-  let { checkLang, standardLang, withPath, twoVersionFilter, noRepeat } = options;
-  checkLang = checkLang || "en";
-  standardLang = standardLang || "zh";
-  withPath = withPath || false;
-  twoVersionFilter = twoVersionFilter || false;
-  noRepeat = noRepeat || false;
-  getDuplicate({ data: allText, withPath, checkLang, noRepeat });
-  let str = JSON.stringify(twoVersionFilter ? getTwoVersionDuplicate() : duplicate);
-  let blob = new Blob([str], { type: "text/plain;charset=utf-8" });
-  let downLink = document.createElement('a')
-  downLink.download = "duplicate.json"
-  downLink.href = URL.createObjectURL(blob)
-  document.body.appendChild(downLink)
-  downLink.click()
-  document.body.removeChild(downLink)
-  callback()
-  return true
+  getJSON(language).then(res => {
+    duplicate = {};
+    let { checkLang, standardLang, withPath, twoVersionFilter, noRepeat } = options;
+    checkLang = checkLang || "en";
+    standardLang = standardLang || "zh";
+    withPath = withPath || false;
+    twoVersionFilter = twoVersionFilter || false;
+    noRepeat = noRepeat || false;
+    getDuplicate({ data: res, withPath, checkLang, noRepeat });
+    let str = JSON.stringify(twoVersionFilter ? getTwoVersionDuplicate() : duplicate);
+    let blob = new Blob([str], { type: "text/plain;charset=utf-8" });
+    let downLink = document.createElement('a')
+    downLink.download = "duplicate.json"
+    downLink.href = URL.createObjectURL(blob)
+    document.body.appendChild(downLink)
+    downLink.click()
+    document.body.removeChild(downLink)
+    callback()
+    return true
+  });
 }
 
 export function getLanguageJSONFile(language) {
