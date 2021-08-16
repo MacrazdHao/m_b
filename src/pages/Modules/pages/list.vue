@@ -2,21 +2,29 @@
   <div class="List">
     <div class="list-content">
       <div class="toolsBar">
-        <SInput
-          class="searchInput"
-          :placeholder="$t('live.list.searchPlaceholder')"
-          :icon="require('@/assets/student/icon_seach.svg')"
-          :value="keyword"
-          @input="
-            (text) => {
-              keyword = text;
-            }
-          "
-        />
+        <div class="searchBox">
+          <SInput
+            class="searchInput"
+            :placeholder="$t('live.list.searchPlaceholder')"
+            :icon="require('@/assets/student/icon_seach.svg')"
+            :value="keyword"
+            @input="
+              (text) => {
+                keyword = text;
+              }
+            "
+          />
+          <SButton
+            class="button"
+            :text="$t('students.list.searchButton')"
+            @btnClick="initList"
+          />
+        </div>
         <SButton
           class="button"
-          :text="$t('students.list.searchButton')"
-          @btnClick="initList"
+          theme="blue"
+          :text="$t('modules.list.createModule')"
+          @btnClick="toDetail"
         />
       </div>
       <div class="table">
@@ -32,27 +40,67 @@
               : $t('school.list.emptyTips.emptyList')
           "
         >
-          <el-table-column min-width="100px">
+          <el-table-column>
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("school.list.table.school") }}
+                {{ $t("modules.list.table.name") }}
               </p>
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.orgName) }}
+                {{ overline(scope.row.name) }}
               </p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px">
+          <el-table-column>
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("school.list.table.num") }}
+                {{ $t("modules.list.table.stage1") }}
               </p>
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ scope.row.count }}
+                {{ scope.row.initDiscussTimes }}
+                {{ $t("modules.list.table.unit") }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column>
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("modules.list.table.stage2") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.onionCircleTimes }}
+                {{ $t("modules.list.table.unit") }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column>
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("modules.list.table.stage3") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.estuaryCircleTimes }}
+                {{ $t("modules.list.table.unit") }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column>
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("modules.list.table.stage4") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.bayesTimes }}
+                {{ $t("modules.list.table.unit") }}
               </p>
             </template>
           </el-table-column>
@@ -120,21 +168,15 @@ export default {
       },
       optionsMenu: [
         {
-          text: this.$t("school.list.table.serviceButton"),
-          callback: (info, index) => {
-            // this.setService(info);
-          },
-        },
-        {
-          text: this.$t("school.list.table.watchButton"),
+          text: this.$t("modules.list.table.editButton"),
           callback: (info, index) => {
             this.toDetail(info);
           },
         },
         {
-          text: this.$t("school.list.table.deleteButton"),
+          text: this.$t("modules.list.table.deleteButton"),
           callback: (info, index) => {
-            this.deleteSchool(info);
+            this.deleteModule(info);
           },
         },
       ],
@@ -168,7 +210,7 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("school/getSchoolList", {
+        .dispatch("modules/getModuleList", {
           pageIndex: this.page.current,
           pageSize: this.page.size,
           keyword: this.keyword || "",
@@ -192,36 +234,33 @@ export default {
           });
         });
     },
-    toDetail(info) {
+    toDetail(info = { templateId: "new" }) {
       this.$router.push({
-        path: "/index/school/student",
+        path: "/index/modules/editModule",
         query: {
-          id: info.id,
+          id: info.templateId,
         },
       });
-      // Bus.setSchoolInfo(info);
     },
-    // setService(info) {
-    //   this.$router.push({ name: "business", query: { id: info.id } });
-    // },
-    deleteSchool(info) {
+    deleteModule(info) {
+      console.log(info);
       this.$dialog.warning({
         text: [
-          this.$t("school.list.deleteTips1"),
-          this.$t("school.list.deleteTips2"),
+          this.$t("modules.list.deleteTips1"),
+          this.$t("modules.list.deleteTips2"),
         ],
         confirm: () => {
           this.$store
-            .dispatch("school/deleteSchool", info.id)
+            .dispatch("modules/deleteModule", info.templateId)
             .then((res) => {
               this.$message.message({
-                text: this.$t("school.list.successTips.deleteSuccess"),
+                text: this.$t("modules.list.successTips.deleteSuccess"),
               });
               this.initList();
             })
             .catch((err) => {
               this.$message.error({
-                text: this.$t("school.list.errorTips.deleteFail"),
+                text: this.$t("modules.list.errorTips.deleteFail"),
               });
             });
         },
@@ -235,7 +274,7 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("school/getSchoolList", {
+        .dispatch("modules/getModuleList", {
           pageIndex: parseInt(pageNum),
           pageSize: this.page.size,
           keyword: this.keyword || "",
@@ -262,7 +301,7 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("school/getSchoolList", {
+        .dispatch("modules/getModuleList", {
           pageIndex: parseInt(num),
           pageSize: this.page.size,
           keyword: this.keyword || "",
@@ -289,7 +328,7 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("school/getSchoolList", {
+        .dispatch("modules/getModuleList", {
           pageIndex: this.page.current - 1,
           pageSize: this.page.size,
           keyword: this.keyword || "",
@@ -316,7 +355,7 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("school/getSchoolList", {
+        .dispatch("modules/getModuleList", {
           pageIndex: this.page.current + 1,
           pageSize: this.page.size,
           keyword: this.keyword || "",
@@ -415,13 +454,21 @@ export default {
       flex-direction: row;
       width: 100%;
       align-items: center;
-      .searchInput {
-        width: 300px;
-        padding: 7px 12px;
-        // margin-left: 12px;
+      justify-content: space-between;
+      .searchBox {
+        display: flex;
+        flex-direction: row;
+        .searchInput {
+          width: 300px;
+          padding: 7px 12px;
+        }
+        .button {
+          padding: 7px 20px;
+          margin-left: 12px;
+        }
       }
       .button {
-        padding: 7px 20px;
+        padding: 7px 15px;
         margin-left: 12px;
       }
     }

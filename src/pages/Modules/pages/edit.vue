@@ -4,23 +4,21 @@
       <div class="content-item">
         <div class="title-box">
           <div class="leftline"></div>
-          <p class="title">{{ $t("school.business.distributionTitle") }}</p>
+          <p class="title">{{ $t("modules.edit.nameTitle") }}</p>
         </div>
         <div class="form">
           <div class="form-item">
             <p class="item-label">
-              {{ $t("school.business.peopleNumLabel") }}
+              {{ $t("modules.edit.nameLabel") }}
             </p>
             <p class="item-content">
               <FormInput
                 class="input"
-                :placeholder="$t('school.business.peopleNumPlaceholder')"
-                :value="authStudentCount"
-                type="number"
-                :minNumber="0"
+                :placeholder="$t('modules.edit.namePlaceholder')"
+                :value="name"
                 @input="
                   (text) => {
-                    authStudentCount = text;
+                    name = text;
                   }
                 "
               />
@@ -34,40 +32,29 @@
           <p class="title">{{ $t("school.business.stageTitle") }}</p>
         </div>
         <div class="form">
-          <div class="header">
-            <div class="addButton" @click="addTemplate">
-              <img src="@/assets/school/icon_add.svg" />
-              <p>{{ $t("school.business.addButton") }}</p>
-            </div>
-          </div>
           <div class="modulesBox">
-            <div
-              class="moduleItem"
-              :id="`template${index}`"
-              v-for="(item, index) in templateDTOList"
-              :key="index"
-            >
+            <div class="moduleItem">
               <div
                 :class="[
                   'selection',
-                  getShowContent(item) ? '' : 'selection--nothing',
+                  getShowContent() ? '' : 'selection--nothing',
                 ]"
               >
                 <CCheckBox
-                  :data="getStageSelection(index)"
+                  :data="stageSelection"
                   @setValue="
                     (valIndex) => {
-                      setStage(index, valIndex);
+                      setStage(valIndex);
                     }
                   "
                 />
               </div>
               <div
                 :class="[
-                  getShowContent(item) ? 'moduleData' : 'moduleData--nothing',
+                  getShowContent() ? 'moduleData' : 'moduleData--nothing',
                 ]"
               >
-                <div class="form-item" v-if="item.hasInitDiscuss">
+                <div class="form-item" v-if="hasInitDiscuss">
                   <p class="item-label">
                     {{ $t("school.business.stage1Label") }}
                   </p>
@@ -75,14 +62,14 @@
                     <FormInput
                       class="input"
                       :placeholder="$t('school.business.stage1Placeholder')"
-                      :value="item.initDiscussTimes"
+                      :value="initDiscussTimes"
                       type="number"
                       :minNumber="0"
-                      @input="(val) => setConsultCount(index, 0, val)"
+                      @input="(val) => setConsultCount(0, val)"
                     />
                   </p>
                 </div>
-                <div class="form-item" v-if="item.hasOnionCircle">
+                <div class="form-item" v-if="hasOnionCircle">
                   <p class="item-label">
                     {{ $t("school.business.stage2Label") }}
                   </p>
@@ -90,14 +77,14 @@
                     <FormInput
                       class="input"
                       :placeholder="$t('school.business.stage2Placeholder')"
-                      :value="item.onionCircleTimes"
+                      :value="onionCircleTimes"
                       type="number"
                       :minNumber="0"
-                      @input="(val) => setConsultCount(index, 1, val)"
+                      @input="(val) => setConsultCount(1, val)"
                     />
                   </p>
                 </div>
-                <div class="form-item" v-if="item.hasEstuary">
+                <div class="form-item" v-if="hasEstuary">
                   <p class="item-label">
                     {{ $t("school.business.stage3Label") }}
                   </p>
@@ -105,14 +92,14 @@
                     <FormInput
                       class="input"
                       :placeholder="$t('school.business.stage3Placeholder')"
-                      :value="item.estuaryCircleTimes"
+                      :value="estuaryCircleTimes"
                       type="number"
                       :minNumber="0"
-                      @input="(val) => setConsultCount(index, 2, val)"
+                      @input="(val) => setConsultCount(2, val)"
                     />
                   </p>
                 </div>
-                <div class="form-item" v-if="item.hasBayes">
+                <div class="form-item" v-if="hasBayes">
                   <p class="item-label">
                     {{ $t("school.business.stage4Label") }}
                   </p>
@@ -120,25 +107,10 @@
                     <FormInput
                       class="input"
                       :placeholder="$t('school.business.stage4Placeholder')"
-                      :value="item.bayesTimes"
+                      :value="bayesTimes"
                       type="number"
                       :minNumber="0"
-                      @input="(val) => setConsultCount(index, 3, val)"
-                    />
-                  </p>
-                </div>
-                <div class="form-item" v-if="getShowContent(item)">
-                  <p class="item-label">
-                    {{ $t("school.business.moduleNumLabel") }}
-                  </p>
-                  <p class="item-content">
-                    <FormInput
-                      class="input"
-                      :placeholder="$t('school.business.moduleNumPlaceholder')"
-                      :value="item.remainAuthCount"
-                      type="number"
-                      :minNumber="0"
-                      @input="(val) => setTemplateCount(index, val)"
+                      @input="(val) => setConsultCount(3, val)"
                     />
                   </p>
                 </div>
@@ -166,7 +138,7 @@
 
 <script>
 import CButton from "@/components/common/button.vue";
-import FormInput from "../components/input.vue";
+import FormInput from "../../School/components/input.vue";
 import defaultBackMixin from "@/mixins/defaultBack";
 import CCheckBox from "../components/checkbox_row";
 export default {
@@ -178,145 +150,121 @@ export default {
   },
   data() {
     return {
-      school: null,
-      authStudentCount: 0,
       id: null,
-      remainStudentCount: 0,
-      schoolId: null,
-      status: null,
-      templateDTOList: [],
-      tenantId: null,
+      templateId: null,
+      name: null,
+      hasInitDiscuss: 0,
+      hasOnionCircle: 0,
+      hasEstuary: 0,
+      hasBayes: 0,
+      initDiscussTimes: 0,
+      onionCircleTimes: 0,
+      estuaryCircleTimes: 0,
+      bayesTimes: 0,
+      stageSelection: [],
     };
   },
   computed: {
     form() {
-      let templateDTOList = [...this.templateDTOList];
-      for (let i = 0; i < templateDTOList.length; i++) {
-        if (templateDTOList[i].initDiscussTimes < 0)
-          templateDTOList[i].initDiscussTimes = 0;
-        if (templateDTOList[i].onionCircleTimes < 0)
-          templateDTOList[i].onionCircleTimes = 0;
-        if (templateDTOList[i].estuaryCircleTimes < 0)
-          templateDTOList[i].estuaryCircleTimes = 0;
-        if (templateDTOList[i].bayesTimes < 0)
-          templateDTOList[i].bayesTimes = 0;
-        if (templateDTOList[i].remainAuthCount < 0)
-          templateDTOList[i].remainAuthCount = 0;
-      }
       return {
-        authStudentCount: this.authStudentCount,
         id: this.id,
-        remainStudentCount: this.remainStudentCount,
-        schoolId: this.$route.query.id,
-        status: this.status,
-        templateDTOList,
-        tenantId: this.tenantId,
+        templateId: this.templateId,
+        name: this.name,
+        hasInitDiscuss: this.hasInitDiscuss,
+        hasOnionCircle: this.hasOnionCircle,
+        hasEstuary: this.hasEstuary,
+        hasBayes: this.hasBayes,
+        initDiscussTimes: this.hasInitDiscuss
+          ? parseInt(this.initDiscussTimes)
+          : 0,
+        onionCircleTimes: this.hasOnionCircle
+          ? parseInt(this.onionCircleTimes)
+          : 0,
+        estuaryCircleTimes: this.hasEstuary
+          ? parseInt(this.estuaryCircleTimes)
+          : 0,
+        bayesTimes: this.hasBayes ? parseInt(this.bayesTimes) : 0,
       };
-    },
-  },
-  watch: {
-    authStudentCount(val) {
-      if (!val) return;
-      if (val < 0) {
-        this.authStudentCount = 0;
-      }
     },
   },
   mounted() {
-    this.initInfo();
-  },
-  methods: {
-    initInfo() {
-      this.$store
-        .dispatch("school/getSchoolInfo", this.$route.query.id)
-        .then((res) => {
-          this.school = res.data;
-          this.$emit("setSuffixMenu", [this.school.orgName]);
-          this.$store
-            .dispatch("school/getSchoolTemplate", this.$route.query.id)
-            .then((res2) => {
-              for (let key in res2.data) {
-                this[key] = res2.data[key];
-              }
-            })
-            .catch((err2) => {
-              this.$message.error({
-                text: this.$t("school.business.getTemplateErrorTips"),
-              });
-              this.goBack();
-            });
-        })
-        .catch((err) => {
-          this.$message.error({
-            text: this.$t("school.students.getInfoErrorTips"),
-          });
-          this.goBack();
-        });
-    },
-    addTemplate() {
-      this.templateDTOList.push({
-        bayesTimes: 0,
-        estuaryCircleTimes: 0,
-        hasBayes: 0,
-        hasEstuary: 0,
-        hasInitDiscuss: 0,
-        hasOnionCircle: 0,
-        id: 0,
-        initDiscussTimes: 0,
-        instanceNum: 0,
-        onionCircleTimes: 0,
-        remainAuthCount: 0,
-        schoolId: this.$route.query.id,
-        status: 0,
-        templateId: 0,
-        templateStatus: 0,
-      });
-    },
-    getShowContent(item) {
-      return (
-        item.hasInitDiscuss ||
-        item.hasOnionCircle ||
-        item.hasEstuary ||
-        item.hasBayes
-      );
-    },
-    setStage(index, valIndex) {
-      let result = {
-        ...this.templateDTOList[index],
-      };
-      for (let i = 0; i < 4; i++) {
-        result[this.selectionIndexToKey(i)] = valIndex.includes(i) ? 1 : 0;
-      }
-      this.$set(this.templateDTOList, index, result);
-      console.log(this.templateDTOList[index]);
-    },
-    getStageSelection(index) {
-      return [
+    if (this.$route.query.id == "new") {
+      this.$emit("setSuffixMenu", [this.$t("modules.edit.createNewModule")]);
+      this.stageSelection = [
         {
           name: this.$t("school.business.stage1"),
           value: 0,
-          selected:
-            this.templateDTOList[index][this.selectionIndexToKey(0)] == 1,
+          selected: false,
         },
         {
           name: this.$t("school.business.stage2"),
           value: 1,
-          selected:
-            this.templateDTOList[index][this.selectionIndexToKey(1)] == 1,
+          selected: false,
         },
         {
           name: this.$t("school.business.stage3"),
           value: 2,
-          selected:
-            this.templateDTOList[index][this.selectionIndexToKey(2)] == 1,
+          selected: false,
         },
         {
           name: this.$t("school.business.stage4"),
           value: 3,
-          selected:
-            this.templateDTOList[index][this.selectionIndexToKey(3)] == 1,
+          selected: false,
         },
       ];
+    } else this.initInfo();
+  },
+  methods: {
+    initInfo() {
+      this.$store
+        .dispatch("modules/getModuleInfo", this.$route.query.id)
+        .then((res) => {
+          this.$emit("setSuffixMenu", [res.data.name]);
+          for (let key in res.data) {
+            this[key] = res.data[key];
+          }
+          this.stageSelection = [
+            {
+              name: this.$t("school.business.stage1"),
+              value: 0,
+              selected: this[this.selectionIndexToKey(0)] == 1,
+            },
+            {
+              name: this.$t("school.business.stage2"),
+              value: 1,
+              selected: this[this.selectionIndexToKey(1)] == 1,
+            },
+            {
+              name: this.$t("school.business.stage3"),
+              value: 2,
+              selected: this[this.selectionIndexToKey(2)] == 1,
+            },
+            {
+              name: this.$t("school.business.stage4"),
+              value: 3,
+              selected: this[this.selectionIndexToKey(3)] == 1,
+            },
+          ];
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("school.business.getTemplateErrorTips"),
+          });
+          this.goBack();
+        });
+    },
+    getShowContent() {
+      return (
+        this.hasInitDiscuss ||
+        this.hasOnionCircle ||
+        this.hasEstuary ||
+        this.hasBayes
+      );
+    },
+    setStage(valIndex) {
+      for (let i = 0; i < 4; i++) {
+        this[this.selectionIndexToKey(i)] = valIndex.includes(i) ? 1 : 0;
+      }
     },
     selectionIndexToKey(index) {
       switch (index) {
@@ -342,55 +290,34 @@ export default {
           return "bayesTimes";
       }
     },
-    setConsultCount(index, valIndex, val) {
-      let result = {
-        ...this.templateDTOList[index],
-      };
-      result[this.stageIndexToKey(valIndex)] = parseInt(val);
-      this.$set(this.templateDTOList, index, result);
-    },
-    setTemplateCount(index, val) {
-      this.$set(this.templateDTOList, index, {
-        ...this.templateDTOList[index],
-        remainAuthCount: parseInt(val),
-      });
+    setConsultCount(valIndex, val) {
+      this[this.stageIndexToKey(valIndex)] = val;
     },
     submit() {
-      let checkArr = this.templateDTOList.map((item, index) => {
-        return JSON.stringify({
-          hasInitDiscuss: item.hasInitDiscuss,
-          hasOnionCircle: item.hasOnionCircle,
-          hasEstuary: item.hasEstuary,
-          hasBayes: item.hasBayes,
-          initDiscussTimes: item.initDiscussTimes,
-          onionCircleTimes: item.onionCircleTimes,
-          estuaryCircleTimes: item.estuaryCircleTimes,
-          bayesTimes: item.bayesTimes,
-          remainAuthCount: item.remainAuthCount,
-        });
-      });
-      for (let index = 0; index < checkArr.length; index++) {
-        let item = checkArr[index];
-        if (checkArr.indexOf(item) != checkArr.lastIndexOf(item)) {
-          console.log("存在重复", index);
-          document.getElementById(`template${index}`).scrollIntoView();
-          this.$message.warning({
-            text: this.$t("school.business.repeatTemplateErrorTips"),
-          });
-          return;
-        }
-      }
       this.$store
-        .dispatch("school/updateSchoolTemplate", this.form)
+        .dispatch(
+          this.$route.query.id == "new"
+            ? "modules/createTemplate"
+            : "modules/editTemplateInfo",
+          this.form
+        )
         .then((res) => {
           this.$message.message({
-            text: this.$t("school.business.saveTemplateSuccessTips"),
+            text: this.$t(
+              `school.business.${
+                this.$route.query.id == "new" ? "create" : "save"
+              }TemplateSuccessTips`
+            ),
           });
-          // this.goBack();
+          this.goBack();
         })
         .catch((err) => {
           this.$message.error({
-            text: this.$t("school.business.saveTemplateErrorTips"),
+            text: this.$t(
+              `school.business.${
+                this.$route.query.id == "new" ? "create" : "save"
+              }TemplateErrorTips`
+            ),
           });
         });
     },
@@ -457,7 +384,7 @@ export default {
             font-size: 14px;
             color: #333333;
             line-height: 20px;
-            width: 100px;
+            width: 500px;
           }
         }
         .header {
@@ -490,7 +417,7 @@ export default {
           }
         }
         .modulesBox {
-          margin-top: 20px;
+          // margin-top: 20px;
           width: 100%;
           display: flex;
           flex-direction: column;

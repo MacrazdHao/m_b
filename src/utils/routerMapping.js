@@ -615,16 +615,39 @@ export default {
       defaultPrevName: ["student"],
     }
   },
-  // 子子级
-  '/business': {
-    path: "business",
-    name: "business",
-    component: "pages/business",
+  // 子级
+  '/modules': {
+    path: "modules",
+    name: "modules",
+    component: "Modules",
+    // redirect: 'testing1',
     meta: {
-      title: "学校管理",
-      enTitle: "School Management",
+      title: "模板设置",
+      enTitle: 'Modules Management',
+      icon: "icon_modules",
+      notShowChildren: true
+    }
+  },
+  // 子子级
+  '/modulelist': {
+    path: "modulelist",
+    name: "modulelist",
+    component: "pages/list",
+    meta: {
+      title: "模板设置",
+      enTitle: 'Modules Management',
+    }
+  },
+  // 子子级
+  '/editModule': {
+    path: "editModule",
+    name: "editModule",
+    component: "pages/edit",
+    meta: {
+      title: "模板设置",
+      enTitle: 'Modules Management',
       // defaultPrevPath: ["/school/schoollist"],
-      defaultPrevName: ["schoollist"],
+      defaultPrevName: ["modulelist"],
     }
   },
   // 子级

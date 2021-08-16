@@ -126,8 +126,13 @@ export default {
               path: "/student",
             }, {
               path: "/sdetail",
+            }]
+          }, {
+            path: '/modules',
+            children: [{
+              path: '/modulelist',
             }, {
-              path: "/business",
+              path: '/editModule',
             }]
           }, {
             path: '/consultant'

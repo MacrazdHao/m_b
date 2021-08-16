@@ -66,7 +66,9 @@ export default {
       cancelButton: '取消',
       getTemplateErrorTips: '获取模板信息失败，请重试',
       saveTemplateSuccessTips: '保存模板信息成功',
+      createTemplateSuccessTips: '新建模板信息成功',
       saveTemplateErrorTips: '保存模板信息失败，请重试',
+      createTemplateErrorTips: '新建模板信息失败，请重试',
       repeatTemplateErrorTips: '存在重复模板，请修改后再试',
     }
   },
