@@ -48,7 +48,7 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.name) }}
+                {{ scope.row.name }}
               </p>
             </template>
           </el-table-column>
@@ -266,9 +266,6 @@ export default {
         },
         cancel: () => {},
       });
-    },
-    overline(text = "") {
-      return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
     goPage(pageNum) {
       this.error = false;
