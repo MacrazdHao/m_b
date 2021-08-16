@@ -24,22 +24,22 @@ export default {
   en: {
     list: {
       statusPlaceholder: 'status',
-      searchPlaceholder: 'please search for content',
+      searchPlaceholder: 'Please enter your search',
       searchButton: 'search',
       table: {
         school: 'school',
         name: "name",
         grade: "grade",
         process: "phase",
-        options: "operate",
-        watchButton: 'review',
-        processText: 'career consultation | university course and subject exploration | university exploration',
+        options: "Operation",
+        watchButton: 'View',
+        processText: 'Career Consultation | Acadmic Advisory | University Exploration',
       },
       list: {
         title: 'consultation playback list',
         subtitle: 'consultation phase'
       },
-      getRecordListErrorTips: 'Failed to get the live broadcast review list, please try again',
+      getRecordListErrorTips: 'Failed to get the live broadcast view list, please try again',
       playbackButton: 'playback'
     },
   }

@@ -163,7 +163,7 @@ export default {
       nextButton: 'next step',
       registerButton: 'Register',
       sendEmailTips: 'Email Sent To {email}',
-      sendEmailTips2: 'An email verification code was sent, please pay attention to receiving the email',
+      sendEmailTips2: 'Verification email sent successfully',
       codePlaceholder: 'Please Enter Verification Code',
       passwordPlaceholder: 'Please Enter Password, 8-20 characters long',
       cPasswordPlaceholder: 'Please Confirm Password',
@@ -205,7 +205,7 @@ export default {
       },
       sendingCodeErrorTips: 'please wait, the verification code is being processed',
       sendCodeSuccessTips: 'verification code sent successfully',
-      sendCodeFailTips: 'unable to send verification code, please retry'
+      sendCodeFailTips: 'Send verify code error, please try again'
     },
     reset: {
       resetTitle: 'Reset Password',

@@ -144,7 +144,7 @@ export default {
     cbase: {
       nameLabel: 'name',
       namePlaceholder: 'school name',
-      countryLabel: 'nationality',
+      countryLabel: 'country',
       countryPlaceholder: 'country name',
       educationLabel: 'education level',
       educationPlaceholder: 'please enter education level',

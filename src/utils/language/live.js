@@ -48,7 +48,7 @@ export default {
         emptyList: 'No Data Available',
       },
       errorTips: {
-        nolist: "Faild To Gather The list, Please Refresh"
+        nolist: "Faild To Gather The list, please refresh and try again"
       },
       statusPlaceholder: 'Status',
       searchPlaceholder: 'Please enter your search',
@@ -69,13 +69,13 @@ export default {
         status: "Live Stream Status",
         options: "Operation",
         watchButton: 'Join The Live Broadcast Room',
-        processText: 'Career Planning | Acadmic Advisory | College Selection',
+        processText: 'Career Consultation | Acadmic Advisory | College Selection',
         statusText: {
           noStart: 'Wait A Moment',
           living: 'Live',
           end: 'End'
         },
-        liveEndTips: 'The live is end',
+        liveEndTips: 'The live broadcast is over.',
         liveNoStartTips: 'Livestream has not started, please wait',
         noSetTime: 'No Set Time',
       }

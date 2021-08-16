@@ -109,22 +109,22 @@ export default {
         hobby: 'interest and hobbies'
       },
       onlineTest: {
-        title: 'online aptitude testing',
+        title: 'Online Aptitude Testing',
         testQuestion: 'aptitude testing',
-        watchReport: 'view your report'
+        watchReport: 'Accessing the Report'
       },
       counseling: {
-        title: 'career consultation',
-        careerConsult: 'career consulting',
-        courseConsult: 'university course and subject exploration',
-        collegeConsult: 'university exploration and suggestions',
+        title: 'Career Consultation',
+        careerConsult: 'Career Consultation',
+        courseConsult: 'Acadmic Advisory',
+        collegeConsult: 'University exploration and suggestions',
         lifeFile: 'career profile'
       },
       consult: {
         title: 'consultation process',
-        careerConsult: 'career consulting',
-        courseConsult: 'university course and subject exploration',
-        collegeConsult: 'university exploration and suggestions',
+        careerConsult: 'Career Consultation',
+        courseConsult: 'Acadmic Advisory',
+        collegeConsult: 'University exploration and suggestions',
         status: {
           finish: 'finish',
           start: 'start',

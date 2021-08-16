@@ -14,7 +14,7 @@ export default {
   en: {
     menu: {
       dashboard: 'Dashboard',
-      counseling: 'Career Counsel',
+      counseling: 'Career Consultation',
       knowledge: 'Knowledge Center',
     },
     header: {

@@ -53,36 +53,36 @@ export default {
     title: 'student management',
     list: {
       statusPlaceholder: 'status',
-      searchPlaceholder: 'please enter search content',
+      searchPlaceholder: 'Please enter your search',
       searchButton: 'search',
       table: {
         school: "school",
-        code: 'code',
+        code: "No.",
         name: "name",
         grade: "grade",
         sex: "gender",
-        country: "nationality",
+        country: "country",
         score:
-          "academic scoresheet",
+        "academic scoresheet",
         selfAssess:
           "Self-evaluation",
         extraStudy: "Extra-curricular program",
         books:
-          "reading list",
+          "reading type",
         sports: "sporting hobbies",
         status: "status",
-        consultStatusText0: 'not started',
-        consultStatusText1: 'career consultation',
-        consultStatusText2: 'university course and subject exploratiion',
-        consultStatusText3: 'university exploration and suggestions',
-        consultStatusText4: 'complete career archive',
-        options: "operate",
+        consultStatusText0: 'Not started',
+        consultStatusText1: 'Career Consultation',
+        consultStatusText2: 'Acadmic Advisory',
+        consultStatusText3: 'University exploration and suggestions',
+        consultStatusText4: 'Complete career profile',
+        options: "Operation",
         moreButton: "more",
-        watchButton: 'view',
+        watchButton: 'View',
         editButton: 'edit',
         optionsMenu: {
-          watchButton: 'view information',
-          processButton: 'phase allocation'
+          watchButton: 'View information',
+          processButton: 'process allocation'
         }
       }
     },
@@ -91,10 +91,10 @@ export default {
     },
     process: {
       processTitle: 'process allocation',
-      processLabel: 'phase settings',
-      step1: 'career consultation',
-      step2: 'university course and subject exploratiion',
-      step3: 'university exploration and suggestions',
+      processLabel: 'stage settings',
+      step1: 'Career Consultation',
+      step2: 'Acadmic Advisory',
+      step3: 'University exploration and suggestions',
       cancelButton: 'cancel',
       saveButton: 'save'
     }

@@ -31,14 +31,14 @@ export default {
         name: 'name',
         country: 'country',
         education: 'education level',
-        options: 'operate',
+        options: 'Operation',
         editButton: 'edit',
         deleteButton: 'delate counselor',
         deleteTips1: 'After deletion, the counselor will be terminated of service',
         deleteTips2: 'Proceed to delete?',
         emptyTips: {
-          loadingList: 'loading data...',
-          emptyList: 'no data available',
+          loadingList: 'Loading...',
+          emptyList: 'No Data Available',
         },
         successTips: {
           editSuccess: 'edit succesfully',

@@ -165,7 +165,7 @@ export default {
       permission: {
         title: 'permission settings',
         student: 'student management',
-        archives: 'career archive',
+        archives: 'career profile',
       },
       createButton: 'generate account',
     },
@@ -173,7 +173,7 @@ export default {
       account: 'account',
       type: 'account type',
       password: 'password',
-      options: 'operate',
+      options: 'Operation',
       accountType: {
         admin: 'admin account',
         school: 'school account',
@@ -196,11 +196,11 @@ export default {
       deleteTips: 'After deletion, the account personal information will also be deleted',
       deleteTips2: 'Please carefully confirm whether you want to delete the account?',
       emptyTips: {
-        loadingList: 'loading data...',
-        emptyList: 'no data available',
+        loadingList: 'Loading...',
+        emptyList: 'No Data Available',
       },
       successTips: {
-        editSuccess: 'edit successfully',
+        editSuccess: 'edit succesfully',
         deleteSuccess: 'delete successfully',
       },
       errorTips: {

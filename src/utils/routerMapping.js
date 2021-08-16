@@ -123,7 +123,7 @@ export default {
     component: "Counseling",
     meta: {
       title: '生涯辅导',
-      enTitle: 'Career Counsel',
+      enTitle: 'Career Consultation',
       icon: "icon_counseling",
       notShowChildren: true
     }
@@ -135,7 +135,7 @@ export default {
     component: "pages/baseInfo",
     meta: {
       title: '生涯辅导',
-      enTitle: 'Career Counsel',
+      enTitle: 'Career Consultation',
       icon: "icon_counseling",
     }
   },
@@ -146,7 +146,7 @@ export default {
     component: "pages/test",
     meta: {
       title: '生涯辅导',
-      enTitle: 'Career Counsel',
+      enTitle: 'Career Consultation',
       icon: "icon_counseling",
     }
   },
@@ -157,7 +157,7 @@ export default {
     component: "pages/match",
     meta: {
       title: '生涯辅导',
-      enTitle: 'Career Counsel',
+      enTitle: 'Career Consultation',
       icon: "icon_counseling",
     }
   },
@@ -168,7 +168,7 @@ export default {
     component: "pages/report",
     meta: {
       title: '生涯辅导',
-      enTitle: 'Career Counsel',
+      enTitle: 'Career Consultation',
       icon: "icon_counseling",
     }
   },
@@ -236,7 +236,7 @@ export default {
     component: "Archives",
     meta: {
       title: '生涯档案',
-      enTitle: 'Career Archive',
+      enTitle: 'Career Profile',
       icon: "icon_archives",
       notShowChildren: true
     }
@@ -248,7 +248,7 @@ export default {
     component: "pages/list",
     meta: {
       title: '生涯档案',
-      enTitle: 'Career Archive',
+      enTitle: 'Career Profile',
       icon: "icon_archives",
     }
   },
@@ -259,7 +259,7 @@ export default {
     component: "pages/detail",
     meta: {
       title: '生涯档案',
-      enTitle: 'Career Archive',
+      enTitle: 'Career Profile',
       icon: "icon_archives",
     }
   },
@@ -500,7 +500,7 @@ export default {
     component: "pages/counselingList",
     meta: {
       title: "生涯档案",
-      enTitle: "Career Archive",
+      enTitle: "Career Profile",
       group: "counseling",
       groupParent: true
     }
@@ -512,7 +512,7 @@ export default {
     component: "pages/counselingDetail",
     meta: {
       title: "生涯档案",
-      enTitle: "Career Archive",
+      enTitle: "Career Profile",
       notShowThisChildren: true,
       group: "counseling",
       groupParent: false,

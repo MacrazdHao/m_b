@@ -20,7 +20,7 @@ export default {
   en: {
     detail: {
       archives: {
-        title: 'career archive'
+        title: 'career profile'
       },
       follow: {
         title: 'Follow Up',

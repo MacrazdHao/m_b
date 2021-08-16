@@ -94,7 +94,7 @@ export default {
       setResult: 'set',
       camera: 'camera',
       microphone: 'microphone',
-      checkResult: 'check result',
+      checkResult: 'Result',
       isCameraOk: 'Livefeed check',
       noMedia: 'No ',
       isMicrophoneOk: 'Microphone check',

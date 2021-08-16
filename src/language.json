@@ -197,7 +197,7 @@
       },
       "options": {
         "zh": "操作",
-        "en": "operate"
+        "en": "Operation"
       },
       "accountType": {
         "admin": {
@@ -294,7 +294,7 @@
       "errorTips": {
         "nolist": {
           "zh": "获取列表失败，请刷新再试",
-          "en": "Failed to get the list, please refresh and try again"
+          "en": "Failed to get the list, Failed to get the list, please refresh and try again and try again"
         },
         "deleteFail": {
           "zh": "删除失败",
@@ -402,7 +402,7 @@
         },
         "options": {
           "zh": "操作",
-          "en": "operate"
+          "en": "Operation"
         },
         "editButton": {
           "zh": "编辑",
@@ -443,7 +443,7 @@
         "errorTips": {
           "nolist": {
             "zh": "获取列表失败，请刷新再试",
-            "en": "Failed to get the list, please refresh and try again"
+            "en": "Failed to get the list, Failed to get the list, please refresh and try again and try again"
           },
           "deleteFail": {
             "zh": "删除失败",
@@ -537,7 +537,7 @@
         "country": {
           "label": {
             "zh": "学生国籍",
-            "en": "student nationality"
+            "en": "student country"
           },
           "china": {
             "zh": "中国籍",
@@ -713,7 +713,7 @@
       },
       "matchedTips": {
         "zh": "大学课程和学科咨询将于 {time} 进行，请准时进入直播间进行咨询",
-        "en": "The counseling of university course and subject exploration will begin at  {time} , Please Join the Consultation on time"
+        "en": "The counseling of Acadmic Advisory will begin at  {time} , Please Join the Consultation on time"
       },
       "waitingMatch": {
         "zh": "正在等待老师安排时间",
@@ -814,7 +814,7 @@
     },
     "loadInfoError": {
       "zh": "获取状态信息出错，请刷新重试",
-      "en": "Failed to Access Status Information, Please Refresh and Try Again"
+      "en": "Failed to Access Status Information, Failed to get the list, please refresh and try again and Try Again"
     }
   },
   "dashboard": {
@@ -870,11 +870,11 @@
         },
         "courseConsult": {
           "zh": "大学课程和学科咨询",
-          "en": "university course and subject exploration"
+          "en": "Acadmic Advisory"
         },
         "collegeConsult": {
           "zh": "大学建议和偏好咨询",
-          "en": "university exploration and suggestions"
+          "en": "University exploration and suggestions"
         },
         "lifeFile": {
           "zh": "生涯档案",
@@ -892,11 +892,11 @@
         },
         "courseConsult": {
           "zh": "大学课程和学科咨询",
-          "en": "university course and subject exploration"
+          "en": "Acadmic Advisory"
         },
         "collegeConsult": {
           "zh": "大学建议和偏好咨询",
-          "en": "university exploration and suggestions"
+          "en": "University exploration and suggestions"
         },
         "status": {
           "finish": {
@@ -1245,7 +1245,7 @@
       },
       "sendEmailTips2": {
         "zh": "发送了一封邮件验证码，请您注意接收邮件",
-        "en": "An email verification code was sent, please pay attention to receiving the email"
+        "en": "verification email sent successfully"
       },
       "codePlaceholder": {
         "zh": "请输入验证码",
@@ -1359,7 +1359,7 @@
       },
       "sendCodeFailTips": {
         "zh": "发送验证码失败，请重试",
-        "en": "unable to send verification code, please retry"
+        "en": "send verify code error, please try again"
       }
     },
     "reset": {
@@ -1517,7 +1517,7 @@
       },
       "errorTips": {
         "zh": "验证码发送失败，请重试",
-        "en": "unable to send verification code, please retry"
+        "en": "send verify code error, please try again"
       }
     },
     "date": {
@@ -1603,7 +1603,7 @@
       "errorTips": {
         "nolist": {
           "zh": "获取列表失败，请刷新重试",
-          "en": "Faild To Gather The list, Please Refresh"
+          "en": "Faild To Gather The list, Failed to get the list, please refresh and try again"
         }
       },
       "statusPlaceholder": {
@@ -1881,7 +1881,7 @@
     },
     "noPermission": {
       "zh": "您不是老师，无法进行操作",
-      "en": "You are not a teacher and can not operate"
+      "en": "You are not a teacher and can not Operation"
     },
     "changingStatus": {
       "zh": "直播状态变更中，请稍后再试",
@@ -1969,11 +1969,11 @@
     },
     "handlingOtherSideAudio": {
       "zh": "正在处理对方音频，请勿频繁操作",
-      "en": "Other audio is being processed, please do not operate frequently"
+      "en": "Other audio is being processed, please do not Operation frequently"
     },
     "handlingYourAudio": {
       "zh": "正在处理您的音频，请勿频繁操作",
-      "en": "Your audio is being processed, please do not operate frequently"
+      "en": "Your audio is being processed, please do not Operation frequently"
     },
     "muteSuccess": {
       "zh": "静音成功",
@@ -2039,11 +2039,11 @@
     },
     "consultLabel1": {
       "zh": "大学课程和学科咨询",
-      "en": "University course and subject exploration"
+      "en": "Acadmic Advisory"
     },
     "consultLabel2": {
       "zh": "大学建议和偏好咨询",
-      "en": "university exploration and suggestions"
+      "en": "University exploration and suggestions"
     },
     "finishTips": {
       "zh": "已完成",
@@ -2169,11 +2169,11 @@
     },
     "getStudentDetailErrorTips": {
       "zh": "获取学生信息失败，请刷新重试",
-      "en": "Failed to Access Student Information, Please Refresh and Try Again"
+      "en": "Failed to Access Student Information, Failed to get the list, please refresh and try again and Try Again"
     },
     "getStudentScheduleErrorTips": {
       "zh": "获取学生咨询时间列表失败，请刷新重试",
-      "en": "Failed to Access Student's Scheduling of Consultation , Please Refresh and Try Again"
+      "en": "Failed to Access Student's Scheduling of Consultation , Failed to get the list, please refresh and try again and Try Again"
     },
     "saveStudentScheduleErrorTips": {
       "zh": "保存学生咨询时间失败，请重试",
@@ -2288,7 +2288,7 @@
       },
       "countryLabel": {
         "zh": "国籍",
-        "en": "nationality"
+        "en": "country"
       },
       "countryPlaceholder": {
         "zh": "请输入国家",
@@ -2396,7 +2396,7 @@
       },
       "updateUserinfoFailTips": {
         "zh": "更新用户信息失败，请刷新重试",
-        "en": "Failed to update user information, please refresh and try again"
+        "en": "Failed to update user information, Failed to get the list, please refresh and try again and try again"
       },
       "reset": {
         "title": {
@@ -2592,7 +2592,7 @@
       },
       "searchPlaceholder": {
         "zh": "请输入搜索的内容",
-        "en": "please search for content"
+        "en": "Please enter your search"
       },
       "searchButton": {
         "zh": "搜索",
@@ -2617,7 +2617,7 @@
         },
         "options": {
           "zh": "操作",
-          "en": "operate"
+          "en": "Operation"
         },
         "watchButton": {
           "zh": "查看",
@@ -2625,7 +2625,7 @@
         },
         "processText": {
           "zh": "职业发展咨询 | 大学课程和学科咨询 | 大学建议和偏好咨询",
-          "en": "career consultation | university course and subject exploration | university exploration"
+          "en": "career consultation | Acadmic Advisory | university exploration"
         }
       },
       "list": {
@@ -2661,7 +2661,7 @@
         },
         "options": {
           "zh": "操作",
-          "en": "Operatge"
+          "en": "Operation"
         },
         "serviceButton": {
           "zh": "业务设置",
@@ -2707,7 +2707,7 @@
       "errorTips": {
         "nolist": {
           "zh": "获取列表失败，请刷新再试",
-          "en": "Please refresh"
+          "en": "Failed to get the list, please refresh and try again"
         },
         "deleteFail": {
           "zh": "删除失败，请重试",
@@ -2802,11 +2802,11 @@
       },
       "stage2": {
         "zh": "大学课程和学科咨询",
-        "en": "university course and subject"
+        "en": "Acadmic Advisory"
       },
       "stage3": {
         "zh": "大学建议和偏好咨询",
-        "en": "university suggestions"
+        "en": "University exploration and suggestions"
       },
       "stage4": {
         "zh": "第四阶段咨询",
@@ -2890,7 +2890,7 @@
       },
       "searchPlaceholder": {
         "zh": "请输入搜索的内容",
-        "en": "please enter search content"
+        "en": "Please enter your search"
       },
       "searchButton": {
         "zh": "搜索",
@@ -2903,7 +2903,7 @@
         },
         "code": {
           "zh": "编号",
-          "en": "code"
+          "en": "No."
         },
         "name": {
           "zh": "姓名",
@@ -2919,7 +2919,7 @@
         },
         "country": {
           "zh": "国籍",
-          "en": "nationality"
+          "en": "country"
         },
         "score": {
           "zh": "各科成绩",
@@ -2955,11 +2955,11 @@
         },
         "consultStatusText2": {
           "zh": "大学课程和学科咨询",
-          "en": "university course and subject exploratiion"
+          "en": "Acadmic Advisory exploratiion"
         },
         "consultStatusText3": {
           "zh": "大学建议和偏好咨询",
-          "en": "university exploration and suggestions"
+          "en": "University exploration and suggestions"
         },
         "consultStatusText4": {
           "zh": "完成生涯档案",
@@ -2967,7 +2967,7 @@
         },
         "options": {
           "zh": "操作",
-          "en": "operate"
+          "en": "Operation"
         },
         "moreButton": {
           "zh": "更多",
@@ -3014,11 +3014,11 @@
       },
       "step2": {
         "zh": "大学课程和学科咨询",
-        "en": "university course and subject exploratiion"
+        "en": "Acadmic Advisory exploratiion"
       },
       "step3": {
         "zh": "大学建议和偏好咨询",
-        "en": "university exploration and suggestions"
+        "en": "University exploration and suggestions"
       },
       "cancelButton": {
         "zh": "取消",

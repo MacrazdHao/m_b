@@ -154,7 +154,7 @@ export default {
           girl: "girl",
         },
         country: {
-          label: "student nationality",
+          label: "student country",
           china: "chinese",
           foreign: "foreign",
         },
@@ -169,8 +169,8 @@ export default {
           placeholder: "Please enter the score data of each subject"
         },
         evaluation: {
-          label: "self evaluation",
-          placeholder: "please type in your self evaluation"
+          label: "Self-evaluation",
+          placeholder: "please type in your Self-evaluation"
         },
         extracurricular: {
           label: "Extra-curricular program",
@@ -193,7 +193,7 @@ export default {
       }
     },
     step2: {
-      title: "Online Testing",
+      title: "Online Aptitude Testing",
       numTitle: "The Number of Testing",
       numUnit: "questions",
       finishTitle: "Evaluation Report",
@@ -201,27 +201,27 @@ export default {
       reportButton: "Accessing the Report"
     },
     step3: {
-      title: "Career Counseling",
+      title: "Career Consultation",
       matchTitle: "Matching Consultants",
       matchingTips: "the System is Matching the Consultant for You.  Please check the Consulting Timeline once the Match is Completed.",
       matchedTips: "The Counseling of University Selection will begain at  {time} , Please Join the Consultation on time",
       waitingMatch: 'Waiting for The Scheduling Arranged by Teachers',
       backButton: "Return to Dashboard",
-      liveButton: "Join Now",
-      finishTitle: "Career Counseling",
-      finishTips: "The counseling of College Selection is completed, Please Access Your Career Planning Report.",
+      liveButton: "Join The Live Broadcast Room",
+      finishTitle: "Career Consultation",
+      finishTips: "The counseling of College Selection is completed, please access your Consultation Report.",
       reportButton: "Accessing the Report"
     },
     step4: {
       title: "Acadmic Advisory",
       matchTitle: "Matching Consultants",
       matchingTips: "the System is Matching the Consultant for You.  Please check the Consulting Timeline once the Match is Completed.",
-      matchedTips: "The counseling of university course and subject exploration will begin at  {time} , Please Join the Consultation on time",
+      matchedTips: "The counseling of Acadmic Advisory will begin at  {time} , Please Join the Consultation on time",
       waitingMatch: 'Waiting for The Scheduling Arranged by Teachers',
       backButton: "Return to Dashboard",
-      liveButton: "Join Now",
+      liveButton: "Join The Live Broadcast Room",
       finishTitle: "Acadmic Advisory",
-      finishTips: "The counseling of College Selection is completed, Please Access Your Career Planning Report.",
+      finishTips: "The counseling of College Selection is completed, please access your Consultation Report.",
       reportButton: "Accessing the Report"
     },
     step5: {
@@ -231,20 +231,20 @@ export default {
       matchedTips: "The Counseling of university exploration will begin at  {time} , Please Join the Consultation on time",
       waitingMatch: 'Waiting for The Scheduling Arranged by Teachers',
       backButton: "Return to Dashboard",
-      liveButton: "Join Now",
+      liveButton: "Join The Live Broadcast Room",
       finishTitle: "University exploration and suggestions",
-      finishTips: "The Counseling of University exploration is complete, Please Access Your Career Planning Report.",
+      finishTips: "The Counseling of University exploration is complete, please access your Career Consultation Report.",
       reportButton: "Accessing the Report"
     },
     step6: {
       title: "The Mentor is Exporting Documents",
-      outputingTitle: "Career Planning Profile",
+      outputingTitle: "Career Consultation Profile",
       outputingTips: "The Consultant is Exporting Documents",
       backButton: "Return to Dashboard",
-      finishTitle: "Career Planning Profile",
-      finishTips: "Career Planning Document is Completed, Please Access Your Report",
+      finishTitle: "Career Consultation Profile",
+      finishTips: "Career Consultation Document is Completed, Please Access Your Report",
       reportButton: "Accessing the Report"
     },
-    loadInfoError: 'Failed to Access Status Information, Please Refresh and Try Again',
+    loadInfoError: 'Failed to Access Status Information, please refresh and try again',
   }
 }
