@@ -289,7 +289,7 @@ export default {
           nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
-          if (res.pageTotal < res.pageIndex) {
+          if (res.pageTotal != 0 && res.pageTotal < res.pageIndex) {
             this.page = {
               dataNum: res.total,
               total: res.pageTotal,

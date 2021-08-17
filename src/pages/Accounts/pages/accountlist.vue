@@ -205,7 +205,7 @@ export default {
           pageSize: this.page.size,
         })
         .then((res) => {
-          if (res.pageTotal < res.pageIndex) {
+          if (res.pageTotal != 0 && res.pageTotal < res.pageIndex) {
             this.page = {
               dataNum: res.total,
               total: res.pageTotal,
@@ -383,7 +383,7 @@ export default {
       });
     },
     test(index) {
-      console.log(this.deleteUrl)
+      console.log(this.deleteUrl);
       this.$store
         .dispatch(this.deleteUrl, this.tableData[index].userId)
         .then((res) => {
