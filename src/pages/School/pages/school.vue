@@ -158,7 +158,7 @@ export default {
         {
           text: this.$t("school.list.table.serviceButton"),
           callback: (info, index) => {
-            // this.setService(info);
+            this.toTemplateAllocate(info);
           },
         },
         {
