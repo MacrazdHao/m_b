@@ -139,6 +139,7 @@ function routerFilter(routerMap, isChild = false, parents = []) {
                       resolve(res2)
                     }).catch(() => {
                       reject(-1);
+                      // 添加默认指向
                     })
                   })
                 });

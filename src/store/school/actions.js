@@ -81,4 +81,37 @@ export default {
       });
     });
   },
+  getSchoolTemplateList: ({ commit, state }, schoolId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.schoolTemplateList(schoolId)).then(res => {
+        console.log('获取学校模板列表成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取学校模板列表失败', err);
+        reject(err);
+      });
+    });
+  },
+  getSchoolTemplateAllocateList: ({ commit, state }, schoolId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.schoolTemplateAllocateList(schoolId)).then(res => {
+        console.log('获取学校模板分配列表成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取学校模板分配列表失败', err);
+        reject(err);
+      });
+    });
+  },
+  saveSchoolTemplateAllocate: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.saveSchoolTemplateAllocate, data).then(res => {
+        console.log('保存学校模板分配列表成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('保存学校模板分配列表失败', err);
+        reject(err);
+      });
+    });
+  },
 }

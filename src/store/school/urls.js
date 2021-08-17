@@ -6,4 +6,7 @@ export default {
   deleteStudent: (userId) => `/admin/user/student/${userId}/tenantId`,
   getSchoolTemplate: (schoolId) => `/admin/auth/school/${schoolId}/getSchoolAuth`,
   updateSchoolTemplate: "/admin/auth/school/updateSchoolAuth",
+  schoolTemplateList: (schoolId) => `/admin/auth/school/${schoolId}/getSchoolAuth`,
+  schoolTemplateAllocateList: (schoolId) => `/admin/auth/school/${schoolId}/getSchoolAuthAllTemplate`,
+  saveSchoolTemplateAllocate: '/admin/auth/school/updateSchoolAuth',
 }

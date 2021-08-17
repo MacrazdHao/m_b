@@ -40,7 +40,19 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.orgName) }}
+                {{ scope.row.orgName }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("school.list.table.id") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.orgCode }}
               </p>
             </template>
           </el-table-column>
@@ -53,6 +65,30 @@
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
                 {{ scope.row.count }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("school.list.table.totalNum") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.authCount }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("school.list.table.remainNum") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.remainAuthCount }}
               </p>
             </template>
           </el-table-column>
@@ -123,6 +159,12 @@ export default {
           text: this.$t("school.list.table.serviceButton"),
           callback: (info, index) => {
             // this.setService(info);
+          },
+        },
+        {
+          text: this.$t("school.list.table.templateButton"),
+          callback: (info, index) => {
+            this.toTemplateList(info);
           },
         },
         {
@@ -211,6 +253,24 @@ export default {
       });
       // Bus.setSchoolInfo(info);
     },
+    toTemplateList(info) {
+      this.$router.push({
+        path: "/index/school/templateList",
+        query: {
+          id: info.id,
+        },
+      });
+      // Bus.setSchoolInfo(info);
+    },
+    toTemplateAllocate(info) {
+      this.$router.push({
+        path: "/index/school/templateAllocate",
+        query: {
+          id: info.id,
+        },
+      });
+      // Bus.setSchoolInfo(info);
+    },
     // setService(info) {
     //   this.$router.push({ name: "business", query: { id: info.id } });
     // },
@@ -237,9 +297,6 @@ export default {
         },
         cancel: () => {},
       });
-    },
-    overline(text = "") {
-      return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
     goPage(pageNum) {
       this.error = false;

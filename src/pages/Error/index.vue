@@ -3,12 +3,12 @@
     <transition name="slide-fade2">
       <router-view />
     </transition>
-        <SButton
-          class="button"
-          :text="$t('global.goIndexButton')"
-          theme="blue"
-          @btnClick="goIndex"
-        />
+    <SButton
+      class="button"
+      :text="$t('global.goIndexButton')"
+      theme="blue"
+      @btnClick="goIndex"
+    />
   </div>
 </template>
 
@@ -18,11 +18,11 @@ export default {
   components: {
     SButton,
   },
-  methods:{
-    goIndex(){
+  methods: {
+    goIndex() {
       this.$router.push({ path: "/" });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -34,7 +34,7 @@ export default {
   flex-direction: column;
   // justify-content: center;
   align-items: center;
-  .button{
+  .button {
     margin-top: 50px;
     padding: 7px 17px;
   }

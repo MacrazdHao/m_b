@@ -3,9 +3,13 @@ export default {
     list: {
       table: {
         school: '学校',
+        id: '学校编码',
         num: '学生人数',
+        totalNum: 'CECP人数',
+        remainNum: 'CECP剩余人数',
         options: '操作',
-        serviceButton: '业务设置',
+        serviceButton: '分配模板',
+        templateButton: '查看模板',
         watchButton: '查看学校',
         deleteButton: '删除学校',
       },
@@ -70,15 +74,42 @@ export default {
       saveTemplateErrorTips: '保存模板信息失败，请重试',
       createTemplateErrorTips: '新建模板信息失败，请重试',
       repeatTemplateErrorTips: '存在重复模板，请修改后再试',
-    }
+    },
+    templateList: {
+      title: '查看模板',
+      totalNum: '总人数',
+      remainNum: '剩余人数',
+      cancelButton: '返回',
+      errorTips: {
+        nolist: '获取列表失败，请刷新再试',
+      },
+    },
+    templateAllocate: {
+      title: '分配模板',
+      count: '人数',
+      countPlaceholder: '输入人数',
+      saveButton: '保存',
+      cancelButton: '取消',
+      successTips: {
+        saveSuccess: '分配信息已保存',
+      },
+      errorTips: {
+        nolist: '获取列表失败，请刷新再试',
+        saveFail: "分配信息保存失败，请重试"
+      },
+    },
   },
   en: {
     list: {
       table: {
         school: 'School',
+        id: 'No.',
         num: 'Student Headcount',
+        totalNum: 'CECP Student Headcount',
+        remainNum: 'CECP Remain Student Headcount',
         options: 'Operation',
-        serviceButton: 'Service Settings',
+        serviceButton: 'Allocate Template',
+        templateButton: 'Template Check',
         watchButton: 'School Check',
         deleteButton: 'Delete School',
       },
@@ -141,6 +172,29 @@ export default {
       saveTemplateSuccessTips: 'save template successfully',
       saveTemplateErrorTips: 'failed to save template information, please retry',
       repeatTemplateErrorTips: 'repeated template, please modify',
-    }
+    },
+    templateList: {
+      title: 'Template Check',
+      totalNum: 'total',
+      remainNum: 'remain',
+      cancelButton: 'back',
+      errorTips: {
+        nolist: 'Failed to get the list, please refresh and try again',
+      },
+    },
+    templateAllocate: {
+      title: 'Allocate Template',
+      count: 'headcount',
+      countPlaceholder: 'headcount',
+      saveButton: 'save',
+      cancelButton: 'back',
+      successTips: {
+        saveSuccess: 'saved successfully',
+      },
+      errorTips: {
+        nolist: 'Failed to get the list, please refresh and try again',
+        saveFail: "failed to save, please retry"
+      },
+    },
   }
 }

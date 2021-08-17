@@ -610,6 +610,13 @@ export default {
               this.studentId = res.memberList[i].userId;
             }
           }
+          if (res.startTime - 15 * 60 * 1000 > new Date().getTime()) {
+            this.$message.warning({
+              text: this.$t("live.list.table.liveNoStartTips"),
+            });
+            this.$router.push({ path: "/index" });
+            return;
+          }
           if (!matchUser) {
             this.$message.error({
               text: this.$t("living.notLiveMember"),

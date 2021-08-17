@@ -225,6 +225,17 @@ export default {
       });
     });
   },
+  resetStudentPassword: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.put(urls.resetStudentPassword, data).then(res => {
+        console.log('修改学生密码成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('修改学生密码失败', err);
+        reject(err);
+      });
+    });
+  },
   resetAdminPassword: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
       request.put(urls.resetAdminPassword, data).then(res => {

@@ -126,6 +126,10 @@ export default {
               path: "/student",
             }, {
               path: "/sdetail",
+            }, {
+              path: "/templateList",
+            }, {
+              path: "/templateAllocate",
             }]
           }, {
             path: '/modules',
@@ -142,6 +146,8 @@ export default {
             path: "/testing",
             children: [{
               path: "/testing1",
+            },{
+              path: "/testing2",
             }]
           },]
       }, {

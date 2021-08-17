@@ -20,6 +20,7 @@ export default {
   getMessages: '',
   avatarUpload: '/oss/minio/putObjectTest',
   editAdminPersonalBase: '/admin/adminUser/info',
+  resetStudentPassword: '/user/register/password/reset',
   resetAdminPassword: '/admin/adminUser/account/password',
   resetSchoolPassword: '/admin/userAdmin/account/password',
 }
