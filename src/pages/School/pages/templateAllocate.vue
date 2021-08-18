@@ -206,7 +206,9 @@ export default {
     form() {
       let templateDTOList = JSON.parse(JSON.stringify(this.tableData));
       return {
-        authStudentCount: parseInt(this.authStudentCount),
+        authStudentCount: this.authStudentCount
+          ? parseInt(this.authStudentCount)
+          : 0,
         schoolAuthId: this.schoolAuthId,
         remainStudentCount: this.remainStudentCount,
         schoolId: this.schoolId,
@@ -282,7 +284,7 @@ export default {
           this.$message.message({
             text: this.$t("school.templateAllocate.successTips.saveSuccess"),
           });
-          this.goBack()
+          this.goBack();
         })
         .catch((err) => {
           this.$message.error({
