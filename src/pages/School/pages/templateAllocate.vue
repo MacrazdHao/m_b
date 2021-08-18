@@ -188,7 +188,7 @@ export default {
       loading: false,
       error: false,
       authStudentCount: 0,
-      id: null,
+      schoolAuthId: null,
       remainStudentCount: 0,
       schoolId: null,
       tableData: [],
@@ -207,7 +207,7 @@ export default {
       let templateDTOList = JSON.parse(JSON.stringify(this.tableData));
       return {
         authStudentCount: parseInt(this.authStudentCount),
-        id: this.id,
+        schoolAuthId: this.schoolAuthId,
         remainStudentCount: this.remainStudentCount,
         schoolId: this.schoolId,
         templateDTOList,
@@ -282,6 +282,7 @@ export default {
           this.$message.message({
             text: this.$t("school.templateAllocate.successTips.saveSuccess"),
           });
+          this.goBack()
         })
         .catch((err) => {
           this.$message.error({
