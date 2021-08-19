@@ -3,11 +3,12 @@
     <p>{{ label }}：</p>
     <div :class="['textareaBox', focus ? 'textareaBox--focus' : '']">
       <textarea
-        v-model="valueTmp"
+        v-bind:value="value"
         :placeholder="placeholder"
         :disabled="disabled"
         @focus="tFocus"
         @blur="tBlur"
+        @input="inputHandler"
       />
       <!-- <p>{{ valueTmp.length }}/{{ maxLength }}</p> -->
     </div>
@@ -19,28 +20,24 @@ export default {
   props: ["label", "value", "placeholder", "maxLength", "disabled", "height"],
   data() {
     return {
-      valueTmp: "",
       focus: false,
     };
   },
-  watch: {
-    valueTmp(val, oldVal) {
-      if (this.valueTmp > this.maxLength) {
-        this.valueTmp = oldVal;
-        return;
-      }
-      this.$emit("input", val);
+  computed: {
+    _value() {
+      return this.value;
     },
   },
-  mounted() {
-    this.valueTmp = this.value;
-  },
+  mounted() {},
   methods: {
     tFocus() {
       this.focus = true;
     },
     tBlur() {
       this.focus = false;
+    },
+    inputHandler(e) {
+      this.$emit("input", e.target.value);
     },
   },
 };
@@ -51,7 +48,7 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-    min-height: 134px;
+  min-height: 134px;
   p {
     margin: 0;
     color: #333333;

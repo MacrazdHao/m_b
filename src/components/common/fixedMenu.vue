@@ -23,7 +23,8 @@
         :style="{
           'max-height': height + 'px',
           'overflow-x': 'hidden',
-          'overflow-y': overScroll && menuContentHeight > maxHeight ? 'scroll' : 'hidden',
+          'overflow-y':
+            overScroll && menuContentHeight > maxHeight ? 'scroll' : 'hidden',
         }"
         ref="menu"
         v-show="showMenu"
@@ -177,6 +178,8 @@ export default {
       color: #4b77f6;
       line-height: 20px;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .pull {
       margin-left: 8px;
@@ -221,6 +224,7 @@ export default {
           width: 100%;
           font-size: 14px;
           line-height: 20px;
+          white-space: nowrap;
         }
       }
       .menu-item:hover {

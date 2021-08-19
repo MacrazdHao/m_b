@@ -52,7 +52,7 @@
     <Footer
       class="progressItem qualityScale"
       ref="footer"
-      :date="date"
+      :date="getDateString(date, 'YY.MM.DD')"
       :title="enTitles[titleIndex]"
       :pageNum="nowPage"
     />
@@ -87,6 +87,7 @@ import Back from "./components/back.vue";
 import Header from "./components/header.vue";
 import Footer from "./components/footer.vue";
 import html2canvas from "html2canvas";
+import DateTools from "@/utils/date";
 export default {
   components: {
     Cover,
@@ -122,22 +123,7 @@ export default {
       ],
       titleIndex: 0,
       nickName: "Alina Li",
-      date: "07.21.21",
-      catalogue: [
-        {
-          titleIndex: 1,
-          subtitles: [
-            {
-              title: "子标题1-1",
-              pageIndex: "01",
-            },
-            {
-              title: "子标题1-2",
-              pageIndex: "02",
-            },
-          ],
-        },
-      ],
+      date: new Date().getTime(),
       contentInfo: [
         {
           startPage: 1,
@@ -494,6 +480,7 @@ export default {
     console.log(this.contentHeight, this.headerHeight, this.footerHeight);
   },
   methods: {
+    ...DateTools,
     setPageNum(pageIndex, bigChapterPageInfo, chapterPageInfo) {
       this.$set(this.contentInfo, pageIndex, {
         ...bigChapterPageInfo,

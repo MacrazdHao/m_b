@@ -88,4 +88,7 @@ export default {
       default: return -2;
     }
   },
+  getServerNodeStage(stage) {
+    return stage < 10 ? stage : parseInt(stage / 10);
+  }
 }

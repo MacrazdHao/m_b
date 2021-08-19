@@ -161,7 +161,7 @@
           <p class="title">{{ $t("management.consultTitle") }}</p>
         </div>
         <div class="consultSetting">
-          <p class="label">{{ $t("management.consultTitle") }}：</p>
+          <p class="label">{{ $t("management.consultTitle2") }}：</p>
           <div class="consult-item">
             <template v-for="(item, index) in consultStage">
               <div
@@ -187,9 +187,11 @@
                 <FormInput
                   class="input"
                   :placeholder="
-                    $t('management.consultUnopenPlaceholder', {
-                      num: numToChinese(stageTimes[index].length),
-                    })
+                    stageTimes[index].length == 0
+                      ? $t('management.consultNoTimesPlaceholder')
+                      : $t('management.consultUnopenPlaceholder', {
+                          num: numToChinese(stageTimes[index].length),
+                        })
                   "
                   :disabled="true"
                   v-show="!(item.selected || item.allCompeleted)"

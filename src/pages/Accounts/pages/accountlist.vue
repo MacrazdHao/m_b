@@ -496,7 +496,7 @@ export default {
     margin: 0;
   }
   .list-content {
-    overflow: hidden;
+    // overflow: hidden;
     width: 100%;
     display: flex;
     flex-direction: column;

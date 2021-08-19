@@ -553,18 +553,21 @@ export default {
     meta: {
       title: "大学课程和学科咨询",
       enTitle: "Course&Subject Consult",
-      notShowThisChildren: true
+      group: "course",
+      groupParent: true
     }
   },
   // 子子级
-  '/adviselist': {
-    path: "adviselist",
-    name: "adviselist",
-    component: "pages/adviseList",
+  '/courseDetail': {
+    path: "courseDetail",
+    name: "courseDetail",
+    component: "pages/courseDetail",
     meta: {
-      title: "大学建议和偏好咨询",
-      enTitle: "Advise&Hobby Consult",
-      notShowThisChildren: true
+      title: "大学课程和学科咨询",
+      enTitle: "Course&Subject Consult",
+      notShowThisChildren: true,
+      group: "course",
+      groupParent: false
     }
   },
   // 子级

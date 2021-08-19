@@ -76,9 +76,13 @@ export default {
       }
     }
     .coverBox {
-      left: 50%;
-      right: 0 !important;
-      transform: translate(-50%, 100%) !important;
+      left: -13px;
+      // left: 50%;
+      // right: 0 !important;
+      // transform: translate(-50%, 100%) !important;
+      .menuBox {
+        margin-top: 9px !important;
+      }
     }
   }
 }
@@ -94,7 +98,7 @@ export default {
       }
     }
     .coverBox {
-      width: calc(100% + 24px) !important;
+      // width: calc(100% + 24px) !important;
       .menuBox {
         width: 100% !important;
         min-width: 0 !important;

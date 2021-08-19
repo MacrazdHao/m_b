@@ -1,3 +1,5 @@
+import i18n from './language';
+
 export function numToLetter(num, big = false) {
   switch (num) {
     case 1: return big ? 'A' : 'a';
@@ -61,11 +63,14 @@ export function letterToNum(letter) {
   }
 }
 export function numToChinese(num) {
+  if (i18n.locale == 'en') return num;
   let changeNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
   let unit = ["", "十", "百", "千", "万"];
   num = parseInt(num);
+  if (num == 0) return changeNum[0];
   let getWan = (temp) => {
     let strArr = temp.toString().split("").reverse();
+    // console.log(strArr)
     let newNum = "";
     for (var i = 0; i < strArr.length; i++) {
       newNum = (i == 0 && strArr[i] == 0 ? "" : (i > 0 && strArr[i] == 0 && strArr[i - 1] == 0 ? "" : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i]))) + newNum;

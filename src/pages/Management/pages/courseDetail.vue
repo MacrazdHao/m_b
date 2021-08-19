@@ -1,6 +1,21 @@
 <template>
   <div class="Detail">
     <div class="content">
+      <div class="content-item baseInfoBox">
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ $t("management.reportTitle") }}</p>
+        </div>
+        <div class="subtitle">{{ $t("management.reportSubtitle") }}</div>
+        <div class="form">
+          <CButton
+            class="button"
+            :text="$t('school.detail.reportButton')"
+            theme="blue"
+            @btnClick="showReportList(1)"
+          />
+        </div>
+      </div>
       <div class="content-item baseInfoBox" v-if="times">
         <div class="title-box">
           <div class="leftline"></div>
@@ -10,24 +25,29 @@
           <p class="label">{{ $t("management.consultTitle2") }}：</p>
           <div class="consult-item">
             <div class="timeBox">
-              <div class="consultStageLabel">
-                <p class="label">{{ consultStage[0].label }}</p>
+              <div class="consultStageLabel" v-if="stageTimes[1].length == 0">
+                <p class="label">{{ consultStage[1].label }}</p>
               </div>
               <FormInput
                 class="input"
-                v-if="stageTimes[0].length == 0"
+                v-if="stageTimes[1].length == 0"
                 :placeholder="
-                  stageTimes[0].length == 0
+                  stageTimes[1].length == 0
                     ? $t('management.consultNoTimesPlaceholder')
                     : $t('management.consultUnopenPlaceholder', {
-                        num: numToChinese(stageTimes[0].length),
+                        num: numToChinese(stageTimes[1].length),
                       })
                 "
                 :disabled="true"
               />
-              <div class="timePickers" v-if="stageTimes[0].length > 0">
-                <template v-for="(item2, index2) in stageTimes[0]">
+              <div class="timePickers" v-if="stageTimes[1].length > 0">
+                <template v-for="(item2, index2) in stageTimes[1]">
                   <div class="timePickerItem" :key="index2">
+                    <div class="consultStageLabel">
+                      <p class="label">
+                        {{ consultStage[1].label }}2-{{ index2 + 1 }}
+                      </p>
+                    </div>
                     <DatePicker
                       class="picker"
                       :readonly="
@@ -41,7 +61,7 @@
                         (index2 == 0 &&
                           (item2.status == -1 || item2.status == 1)) ||
                         (index2 > 0 &&
-                          (stageTimes[0][index2 - 1].status != -1 ||
+                          (stageTimes[1][index2 - 1].status != -1 ||
                             item2.status == 1))
                       "
                       :placeholder="
@@ -52,12 +72,13 @@
                       :value="item2.startTime ? new Date(item2.startTime) : ''"
                       @change="(e) => selectTime(e, 0, index2)"
                     />
-                    <div class="statusBox" v-if="item2.status == -1">
+                    <!-- <div class="statusBox" v-if="item2.status == -1">
                       <img src="@/assets/counseling/icon_finish.svg" />
                       <p>{{ $t("management.finishTips") }}</p>
-                    </div>
-                    <div class="statusBox" v-else></div></div
-                ></template>
+                    </div> -->
+                    <!-- <div class="statusBox" v-else></div> -->
+                  </div>
+                </template>
               </div>
             </div>
           </div>
@@ -140,6 +161,16 @@
         @btnClick="saveInfo"
       />
     </div>
+    <TopDrawer ref="reportList" :title="consultStage[1].label">
+      <div class="reportList">
+        <template v-for="(item, index) in reportList">
+          <div class="reportItem" :key="index">
+            <p>{{ item.name }}</p>
+          </div>
+          {{ "" }}
+        </template>
+      </div>
+    </TopDrawer>
   </div>
 </template>
 
@@ -153,6 +184,7 @@ import FileBox from "../components/file";
 import DateTools from "@/utils/date";
 import { numToChinese } from "@/utils/others";
 import defaultBackMixin from "@/mixins/defaultBack";
+import TopDrawer from "@/components/common/topDrawer.vue";
 export default {
   // props: ["info"],
   mixins: [defaultBackMixin],
@@ -164,6 +196,7 @@ export default {
     CButton,
     DatePicker,
     FileBox,
+    TopDrawer,
   },
   data() {
     return {
@@ -197,6 +230,35 @@ export default {
         "Progress",
       ],
       date: new Date().getTime(),
+      reportList: [
+        {
+          name: "2-1报告2-1报告",
+        },
+        {
+          name: "2-1报告2-1报告",
+        },
+        {
+          name: "2-1报告2-1报告",
+        },
+        {
+          name: "2-1报告2-1报告",
+        },
+        {
+          name: "2-1报告2-1报告",
+        },
+        {
+          name: "2-1报告2-1报告",
+        },
+        {
+          name: "2-1报告2-1报告",
+        },
+        {
+          name: "2-1报告2-1报告",
+        },
+        {
+          name: "2-1报告2-1报告",
+        },
+      ],
     };
   },
   computed: {
@@ -346,24 +408,46 @@ export default {
                   this.$message.error({
                     text: this.$t("management.getStudentProfileErrorTips"),
                   });
+                  this.goBack();
                 });
             })
             .catch((err) => {
               this.$message.error({
                 text: this.$t("management.getStudentScheduleErrorTips"),
               });
+              this.goBack();
             });
         })
         .catch((err) => {
           this.$message.error({
             text: this.$t("management.getStudentDetailErrorTips"),
           });
+          this.goBack();
         });
     },
     nodeTypeToLabelIndex(nodeType) {
       if (nodeType > 9 && nodeType < 20) return 0;
       if (nodeType > 19 && nodeType < 30) return 1;
       // 大学建议和偏好咨询,if (nodeType > 19 && nodeType < 30) return 1;
+    },
+    showReportList() {
+      this.$store
+        .dispatch("management/getStudentProfileList", this.$route.query.id)
+        .then((res) => {
+          this.reportList = res.data;
+          if (this.reportList.length == 0) {
+            this.$message.message({
+              text: this.$t("management.getReportListEmptyTips"),
+            });
+            return;
+          }
+          this.$refs.reportList.openDrawer();
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("management.getReportListErrorTips"),
+          });
+        });
     },
     selectTime(text, index, index2) {
       let _index = index2;
@@ -482,6 +566,38 @@ export default {
     // padding-bottom: 32px;
     padding: 0 24px 32px 24px;
     border-bottom: 1px solid #d3d3d3;
+    .button {
+      padding: 7px 20px;
+      margin-left: 10px;
+    }
+    .reportList {
+      padding: 0 34px 40px;
+      text-align: left;
+      letter-spacing: 84px;
+      .reportItem {
+        display: inline-block;
+        border-radius: 2px;
+        border: 1px solid #4b77f6;
+        // padding: 7px 23px;
+        width: 98px;
+        padding: 0 6px;
+        box-sizing: border-box;
+        height: 36px;
+        margin-bottom: 25px;
+        cursor: pointer;
+        user-select: none;
+        p {
+          font-size: 14px;
+          color: #4b77f6;
+          line-height: 34px;
+          letter-spacing: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          text-align: center;
+        }
+      }
+    }
     .reportBox {
       margin-top: 34px;
     }

@@ -2,28 +2,47 @@
   <div class="List">
     <div class="list-content">
       <div class="toolsBar">
-        <!-- <el-select
-          v-model="value"
-          :placeholder="$t('students.list.statusPlaceholder')"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select> -->
+        <!-- <PSelector
+          class="statusSelector"
+          :items="status"
+          :index="statusIndex"
+          :border="true"
+          @handleSelect="handleStatusSelect"
+        /> -->
         <SInput
           class="searchInput"
-          :placeholder="$t('students.list.searchPlaceholder')"
+          :placeholder="$t('live.list.searchPlaceholder')"
           :icon="require('@/assets/student/icon_seach.svg')"
+          :value="value"
+          @input="
+            (text) => {
+              value = text;
+            }
+          "
         />
-        <SButton class="button" :text="$t('students.list.searchButton')" />
+        <SButton
+          class="button"
+          :text="$t('live.list.searchButton')"
+          @btnClick="searchLiveWithKeyword"
+        />
       </div>
       <div class="table">
         <el-table :data="tableData" height="642" style="width: 100%">
-          <el-table-column min-width="100px" fixed>
+          <div slot="empty">
+            <p class="loadTips" v-if="loading">
+              {{ $t("live.list.emptyTips.loadingList") }}
+            </p>
+            <p
+              class="loadTips"
+              v-if="tableData.length == 0 && !loading & !error"
+            >
+              {{ $t("live.list.emptyTips.emptyList") }}
+            </p>
+            <p class="loadTips" v-if="error">
+              {{ $t("live.list.errorTips.nolist") }}
+            </p>
+          </div>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.school") }}
@@ -31,11 +50,23 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.school) }}
+                {{ overline(scope.row.schoolName) }}
               </p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" fixed>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("students.list.table.code") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.userCode }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.name") }}
@@ -43,21 +74,21 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.name) }}
+                {{ overline(scope.row.nickName) }}
               </p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" >
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.grade") }}
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ overline(scope.row.grade) }}</p>
+              <p class="tableRow-text">{{ overline(scope.row.gradeName) }}</p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" >
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.status") }}
@@ -68,22 +99,16 @@
                 <div class="dotBox">
                   <div
                     :class="[
-                      scope.row.status == 0
+                      scope.row.nodeType == 0 || !scope.row.nodeType
                         ? 'dot'
-                        : scope.row.status == 4
+                        : scope.row.nodeType == 99
                         ? 'dot--finish'
                         : 'dot--doing',
                     ]"
                   ></div>
                 </div>
                 <p class="tableRow-text">
-                  {{
-                    overline(
-                      $t(
-                        `students.list.table.consultStatusText${scope.row.status}`
-                      )
-                    )
-                  }}
+                  {{ statusToText(scope.row.nodeType) }}
                 </p>
               </div>
             </template>
@@ -107,430 +132,300 @@
       </div>
     </div>
     <div class="pagination">
-      <p class="totalNum">
-        {{ $t("global.pagination.totalNum", { num: page.dataNum }) }}
-      </p>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :pager-count="5"
+      <SPagination
+        :page="page"
         :page-count="page.total"
         :current-page="page.current"
-      >
-      </el-pagination>
-      <div class="jumper">
-        <p>{{ $t("global.pagination.goPage") }}</p>
-        <div>
-          <input
-            v-model="pageNum"
-            type="number"
-            @focus="enterEvent"
-            @blur="removeEnterEvent"
-          />
-        </div>
-        <p>{{ $t("global.pagination.pageUnit") }}</p>
-      </div>
+        @goPage="goPage"
+        @prev-click="prevPage"
+        @next-click="nextPage"
+        @current-change="currentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import SPagination from "@/components/common/pagination";
 import SInput from "../components/input";
 import SButton from "@/components/common/button.vue";
+import PSelector from "@/components/common/selector";
+import Enum from "@/utils/enum";
 export default {
   components: {
+    SPagination,
     SInput,
     SButton,
+    PSelector,
   },
   data() {
     return {
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
+      loading: false,
+      error: false,
+      status: [
+        { text: this.$t("management.status.all"), value: -1 },
+        { text: this.$t("management.status.noStart"), value: 0 },
+        // { text: this.$t("management.status.collection"), value: 11 },
+        // { text: this.$t("management.status.testing"), value: 12 },
+        // { text: this.$t("management.status.discussion"), value: 13 },
+        // { text: this.$t("management.status.consultation"), value: 21 },
+        // { text: this.$t("management.status.fllowup"), value: 31 },
+        // { text: this.$t("management.status.update"), value: 32 },
+        // { text: this.$t("management.status.asupport"), value: 41 },
+        // { text: this.$t("management.status.support"), value: 42 },
+        // { text: this.$t("management.status.monitoring"), value: 43 },
+        // { text: this.$t("management.status.report"), value: 88 },
+        // { text: this.$t("management.status.end"), value: 99 },
+        { text: this.$t("management.status.consultLabel0"), value: 1 },
+        { text: this.$t("management.status.consultLabel1"), value: 2 },
       ],
+      statusIndex: 2,
       value: "",
-      tableData: [
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 0,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 1,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 2,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 3,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 4,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 0,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 0,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 0,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 0,
-        },
-        {
-          id: 999,
-          school: "华南师范大学附属中学国际部",
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          score:
-            "数学:B、物理:B、政治:A、英语:A、社会学:A、统计学:C、历史:B、经济学:B、社会及环境生",
-          selfAssess:
-            "学习生活方面自我评价 在本学年,本人在学习上，严格要求自己，刻苦钻研，勤奋好学，态度端正，目",
-          extraStudy: "现在有参加数学、物理和经济学的课外补习",
-          books:
-            "《异类》、《秘密花园》、《人性的枷锁》、《傲慢与偏见》、《风格练习》、《历史的终结与最后",
-          sports: "篮球、羽毛球、乒乓球、高尔夫、保龄球",
-          testReport: "这是评测报告",
-          consult: [
-            {
-              time: 1618992995,
-              status: 1,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-            {
-              time: null,
-              status: 0,
-            },
-          ],
-          status: 0,
-        },
-      ],
+      tableData: [],
       pageNum: 1,
       page: {
-        dataNum: 1000,
-        total: 100,
+        dataNum: 0,
+        total: 1,
         size: 10,
         current: 1,
       },
     };
   },
+  mounted() {
+    this.page = {
+      dataNum: 0,
+      total: 1,
+      size: 10,
+      current: 1,
+    };
+    this.tableData = [];
+    this.initList();
+  },
   methods: {
-    toDetail(info) {
-      this.$emit("toDetail", info);
-    },
-    toStatusText(code) {
-      switch (code) {
+    statusToText(status) {
+      let _status = Enum.getServerNodeStage(status);
+      switch (_status) {
         case 0:
-          return this.$t("management.noReport");
+          return this.$t("management.status.noStart");
         case 1:
-          return this.$t("management.finishReport");
+          return this.$t("management.status.consultLabel0");
+        case 2:
+          return this.$t("management.status.consultLabel1");
+        // case 11:
+        //   return this.$t("management.status.collection");
+        // case 12:
+        //   return this.$t("management.status.discussion");
+        // case 21:
+        //   return this.$t("management.status.consultation");
+        // case 31:
+        //   return this.$t("management.status.fllowup");
+        // case 32:
+        //   return this.$t("management.status.update");
+        // case 41:
+        //   return this.$t("management.status.asupport");
+        // case 42:
+        //   return this.$t("management.status.support");
+        // case 43:
+        //   return this.$t("management.status.monitoring");
+        // case 88:
+        //   return this.$t("management.status.report");
+        // case 99:
+        //   return this.$t("management.status.end");
+        default:
+          return this.$t("management.status.none");
       }
     },
+    handleStatusSelect(index) {
+      this.statusIndex = index;
+      this.page = {
+        dataNum: 0,
+        total: 10,
+        size: 10,
+        current: 1,
+      };
+      this.initList();
+    },
+    initList() {
+      console.log(this.status[this.statusIndex].value);
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("management/getCounselingList", {
+          pageIndex: this.page.current,
+          pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          if (res.pageTotal != 0 && res.pageTotal < res.pageIndex) {
+            this.page = {
+              dataNum: res.total,
+              total: res.pageTotal,
+              size: 10,
+              current: res.pageIndex > 1 ? res.pageIndex - 1 : 1,
+            };
+            this.initList();
+            return;
+          }
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
+    },
+    searchLiveWithKeyword() {
+      if (this.value == "" || this.value) {
+        this.page = {
+          keyword: this.value,
+          dataNum: 0,
+          total: 1,
+          size: 10,
+          current: 1,
+        };
+        this.initList();
+      }
+    },
+    toDetail(info) {
+      // this.$emit("toDetail", info);
+      this.$router.push({
+        path: "/index/management/careerDetail",
+        query: {
+          id: info.userId,
+          nodeId: info.nodeId,
+        },
+      });
+    },
     overline(text = "") {
+      if (!text) return "";
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
-    goPage() {
-      this.page = {
-        ...this.page,
-        current: parseInt(this.pageNum),
-      };
+    goPage(pageNum) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("management/getCounselingList", {
+          pageIndex: parseInt(pageNum),
+          pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(pageNum),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
-    enterEvent() {
-      document.onkeydown = (event) => {
-        let e = event || window.event;
-        if (e && e.keyCode == 13) {
-          if (this.pageNum > this.page.total) this.pageNum = this.page.total;
-          else if (this.pageNum <= 0 || this.pageNum == "") this.pageNum = 1;
-          this.goPage();
-        }
-      };
+    currentChange(num) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("management/getCounselingList", {
+          pageIndex: parseInt(num),
+          pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(num),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
-    removeEnterEvent() {
-      document.onkeydown = () => {};
+    prevPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("management/getCounselingList", {
+          pageIndex: this.page.current - 1,
+          pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current - 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
+    },
+    nextPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("management/getCounselingList", {
+          pageIndex: this.page.current + 1,
+          pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current + 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
   },
 };
@@ -583,7 +478,7 @@ export default {
     margin: 0;
   }
   .list-content {
-    overflow: hidden;
+    // overflow: hidden;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -592,9 +487,14 @@ export default {
       flex-direction: row;
       width: 100%;
       align-items: center;
+      .statusSelector {
+        width: 120px;
+        height: 36px;
+      }
       .searchInput {
         width: 300px;
         // margin-left: 12px;
+        height: 36px;
       }
       .button {
         padding: 7px 20px;
@@ -605,6 +505,12 @@ export default {
       width: 100%;
       box-sizing: border-box;
       margin-top: 22px;
+      .loadTips {
+        font-size: 14px;
+        color: #d3d3d3;
+        line-height: 20px;
+        margin-top: 18px;
+      }
       .tableHeader-text {
         font-size: 14px;
         font-family: AlibabaPuHuiTiM;
@@ -669,7 +575,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 24px;
+    // margin-top: 24px;
     .totalNum {
       font-size: 14px;
       color: #666666;

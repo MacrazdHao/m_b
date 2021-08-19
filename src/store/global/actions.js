@@ -2,6 +2,7 @@ import types from './types';
 import urls from './urls';
 import request from '../../utils/request';
 import * as cookie from 'js-cookie';
+import config from '@/utils/config';
 
 export default {
   test: ({ commit, state }, data) => {
@@ -115,7 +116,7 @@ export default {
             }, {
               path: "/courselist",
             }, {
-              path: "/adviselist",
+              path: "/courseDetail",
             }]
           },
           {
@@ -198,6 +199,17 @@ export default {
     return new Promise((resolve, reject) => {
       commit(types.SET_EMAIL_VCODE_SECONDS, seconds);
       resolve(seconds);
+    });
+  },
+  getHtmlContent: ({ commit, state }, url) => {
+    return new Promise((resolve, reject) => {
+      fetch(config.ossURL + url).then(res => {
+        console.log('获取富文本成功', res);
+        resolve(res.text());
+      }).catch(err => {
+        console.log('获取富文本失败', err);
+        reject(err)
+      });
     });
   },
 }

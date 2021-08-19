@@ -1,34 +1,75 @@
 <template>
-  <div class="Consultant">
+  <div class="List">
     <div class="list-content">
       <div class="toolsBar">
+        <!-- <PSelector
+          class="statusSelector"
+          :items="status"
+          :index="statusIndex"
+          :border="true"
+          @handleSelect="handleStatusSelect"
+        /> -->
         <SInput
           class="searchInput"
-          :placeholder="$t('students.list.searchPlaceholder')"
+          :placeholder="$t('live.list.searchPlaceholder')"
           :icon="require('@/assets/student/icon_seach.svg')"
+          :value="value"
           @input="
             (text) => {
-              keyword = text;
+              value = text;
             }
           "
         />
-        <SButton class="button" :text="$t('students.list.searchButton')" />
+        <SButton
+          class="button"
+          :text="$t('live.list.searchButton')"
+          @btnClick="searchLiveWithKeyword"
+        />
       </div>
       <div class="table">
-        <el-table
-          :data="tableData"
-          height="642"
-          style="width: 100%"
-          :empty-text="
-            loading
-              ? $t('consultant.list.table.emptyTips.loadingList')
-              : $t('consultant.list.table.emptyTips.emptyList')
-          "
-        >
-          <el-table-column min-width="100px" fixed>
+        <el-table :data="tableData" height="642" style="width: 100%">
+          <div slot="empty">
+            <p class="loadTips" v-if="loading">
+              {{ $t("live.list.emptyTips.loadingList") }}
+            </p>
+            <p
+              class="loadTips"
+              v-if="tableData.length == 0 && !loading & !error"
+            >
+              {{ $t("live.list.emptyTips.emptyList") }}
+            </p>
+            <p class="loadTips" v-if="error">
+              {{ $t("live.list.errorTips.nolist") }}
+            </p>
+          </div>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("consultant.list.table.name") }}
+                {{ $t("students.list.table.school") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ overline(scope.row.schoolName) }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("students.list.table.code") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.userCode }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("students.list.table.name") }}
               </p>
             </template>
             <template slot-scope="scope">
@@ -37,41 +78,54 @@
               </p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" fixed>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("consultant.list.table.country") }}
+                {{ $t("students.list.table.grade") }}
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.nationality) }}
-              </p>
+              <p class="tableRow-text">{{ overline(scope.row.gradeName) }}</p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" >
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("consultant.list.table.education") }}
+                {{ $t("students.list.table.status") }}
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ overline(scope.row.education) }}</p>
+              <div class="statusBox">
+                <div class="dotBox">
+                  <div
+                    :class="[
+                      scope.row.nodeType == 0 || !scope.row.nodeType
+                        ? 'dot'
+                        : scope.row.nodeType == 99
+                        ? 'dot--finish'
+                        : 'dot--doing',
+                    ]"
+                  ></div>
+                </div>
+                <p class="tableRow-text">
+                  {{ statusToText(scope.row.nodeType) }}
+                </p>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column width="80px">
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("consultant.list.table.options") }}
+                {{ $t("students.list.table.options") }}
               </p>
             </template>
             <template slot-scope="scope">
-              <FixedMenu
-                :text="$t('consultant.list.table.editButton')"
-                :menu="optionsMenu"
-                :extra="scope.row"
-                :showIcon="false"
-              />
+              <p
+                class="tableRow-text tableRow-button"
+                @click="toDetail(scope.row)"
+              >
+                {{ $t("students.list.table.editButton") }}
+              </p>
             </template>
           </el-table-column>
         </el-table>
@@ -93,72 +147,114 @@
 
 <script>
 import SPagination from "@/components/common/pagination";
-import SInput from "./components/input";
+import SInput from "../components/input";
 import SButton from "@/components/common/button.vue";
-import FixedMenu from "@/components/common/fixedMenu.vue";
+import PSelector from "@/components/common/selector";
+import Enum from "@/utils/enum";
 export default {
   components: {
     SPagination,
     SInput,
     SButton,
-    FixedMenu,
+    PSelector,
   },
   data() {
     return {
-      error: false,
       loading: false,
-      school: null,
-      keyword: "",
+      error: false,
+      status: [
+        { text: this.$t("management.status.all"), value: -1 },
+        { text: this.$t("management.status.noStart"), value: 0 },
+        // { text: this.$t("management.status.collection"), value: 11 },
+        // { text: this.$t("management.status.testing"), value: 12 },
+        // { text: this.$t("management.status.discussion"), value: 13 },
+        // { text: this.$t("management.status.consultation"), value: 21 },
+        // { text: this.$t("management.status.fllowup"), value: 31 },
+        // { text: this.$t("management.status.update"), value: 32 },
+        // { text: this.$t("management.status.asupport"), value: 41 },
+        // { text: this.$t("management.status.support"), value: 42 },
+        // { text: this.$t("management.status.monitoring"), value: 43 },
+        // { text: this.$t("management.status.report"), value: 88 },
+        // { text: this.$t("management.status.end"), value: 99 },
+        { text: this.$t("management.status.consultLabel0"), value: 1 },
+        { text: this.$t("management.status.consultLabel1"), value: 2 },
+      ],
+      statusIndex: 3,
+      value: "",
       tableData: [],
       pageNum: 1,
       page: {
-        dataNum: 1000,
-        total: 100,
+        dataNum: 0,
+        total: 1,
         size: 10,
         current: 1,
       },
-      optionsMenu: [
-        {
-          text: this.$t("consultant.list.table.deleteButton"),
-          callback: (info, index) => {
-            this.deleteInfo(info);
-          },
-        },
-      ],
     };
-  },
-  watch: {
-    keyword(val) {
-      if (val == "" || val) {
-        this.page = {
-          dataNum: 0,
-          total: 10,
-          size: 10,
-          current: 1,
-        };
-        this.initList();
-      }
-    },
   },
   mounted() {
     this.page = {
       dataNum: 0,
-      total: 10,
+      total: 1,
       size: 10,
       current: 1,
     };
-    this.keyword = "";
+    this.tableData = [];
     this.initList();
   },
   methods: {
+    statusToText(status) {
+      let _status = Enum.getServerNodeStage(status);
+      switch (_status) {
+        case 0:
+          return this.$t("management.status.noStart");
+        case 1:
+          return this.$t("management.status.consultLabel0");
+        case 2:
+          return this.$t("management.status.consultLabel1");
+        // case 11:
+        //   return this.$t("management.status.collection");
+        // case 12:
+        //   return this.$t("management.status.discussion");
+        // case 21:
+        //   return this.$t("management.status.consultation");
+        // case 31:
+        //   return this.$t("management.status.fllowup");
+        // case 32:
+        //   return this.$t("management.status.update");
+        // case 41:
+        //   return this.$t("management.status.asupport");
+        // case 42:
+        //   return this.$t("management.status.support");
+        // case 43:
+        //   return this.$t("management.status.monitoring");
+        // case 88:
+        //   return this.$t("management.status.report");
+        // case 99:
+        //   return this.$t("management.status.end");
+        default:
+          return this.$t("management.status.none");
+      }
+    },
+    handleStatusSelect(index) {
+      this.statusIndex = index;
+      this.page = {
+        dataNum: 0,
+        total: 10,
+        size: 10,
+        current: 1,
+      };
+      this.initList();
+    },
     initList() {
+      console.log(this.status[this.statusIndex].value);
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("consultant/getConsultantList", {
+        .dispatch("management/getCounselingList", {
           pageIndex: this.page.current,
           pageSize: this.page.size,
-          keyword: this.keyword || "",
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
           if (res.pageTotal != 0 && res.pageTotal < res.pageIndex) {
@@ -183,51 +279,47 @@ export default {
         .catch((err) => {
           this.loading = false;
           this.error = true;
+          this.tableData = [];
           this.$message.error({
-            text: this.$t("consultant.list.table.errorTips.nolist") + err,
+            text: err || this.$t("live.list.errorTips.nolist"),
           });
         });
     },
-    deleteInfo(info) {
-      console.log("删除", info);
-      this.$dialog
-        .warning({
-          text: [
-            this.$t(`consultant.list.table.deleteTips1`),
-            this.$t(`consultant.list.table.deleteTips2`),
-          ],
-          confirm: () => {
-            this.$store
-              .dispatch("consultant/deleteConsultant", info.userId)
-              .then((res) => {
-                this.initList();
-                this.$message.message({
-                  text: this.$t(
-                    "consultant.list.table.successTips.deleteSuccess"
-                  ),
-                });
-              })
-              .catch((err) => {
-                this.$message.error({
-                  text: this.$t("consultant.list.table.errorTips.deleteFail"),
-                });
-              });
-          },
-        })
-        .catch((err) => {});
+    searchLiveWithKeyword() {
+      if (this.value == "" || this.value) {
+        this.page = {
+          keyword: this.value,
+          dataNum: 0,
+          total: 1,
+          size: 10,
+          current: 1,
+        };
+        this.initList();
+      }
+    },
+    toDetail(info) {
+      // this.$emit("toDetail", info);
+      this.$router.push({
+        path: "/index/management/courseDetail",
+        query: {
+          id: info.userId,
+          nodeId: info.nodeId,
+        },
+      });
     },
     overline(text = "") {
       if (!text) return "";
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
-
     goPage(pageNum) {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("consultant/getConsultantList", {
+        .dispatch("management/getCounselingList", {
           pageIndex: parseInt(pageNum),
           pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
           this.page = {
@@ -242,8 +334,9 @@ export default {
         .catch((err) => {
           this.loading = false;
           this.error = true;
+          this.tableData = [];
           this.$message.error({
-            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
+            text: err || this.$t("live.list.errorTips.nolist"),
           });
         });
     },
@@ -251,9 +344,11 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("consultant/getConsultantList", {
+        .dispatch("management/getCounselingList", {
           pageIndex: parseInt(num),
           pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
           this.page = {
@@ -268,8 +363,9 @@ export default {
         .catch((err) => {
           this.loading = false;
           this.error = true;
+          this.tableData = [];
           this.$message.error({
-            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
+            text: err || this.$t("live.list.errorTips.nolist"),
           });
         });
     },
@@ -277,9 +373,11 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("consultant/getConsultantList", {
+        .dispatch("management/getCounselingList", {
           pageIndex: this.page.current - 1,
           pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
           this.page = {
@@ -294,8 +392,9 @@ export default {
         .catch((err) => {
           this.loading = false;
           this.error = true;
+          this.tableData = [];
           this.$message.error({
-            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
+            text: err || this.$t("live.list.errorTips.nolist"),
           });
         });
     },
@@ -303,9 +402,11 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("consultant/getConsultantList", {
+        .dispatch("management/getCounselingList", {
           pageIndex: this.page.current + 1,
           pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
           this.page = {
@@ -320,40 +421,17 @@ export default {
         .catch((err) => {
           this.loading = false;
           this.error = true;
+          this.tableData = [];
           this.$message.error({
-            text: this.$t("accounts.accountlist.errorTips.nolist") + err,
+            text: err || this.$t("live.list.errorTips.nolist"),
           });
         });
-    },
-
-    enterEvent() {
-      document.onkeydown = (event) => {
-        let e = event || window.event;
-        if (e && e.keyCode == 13) {
-          if (this.pageNum > this.page.total) this.pageNum = this.page.total;
-          else if (this.pageNum <= 0 || this.pageNum == "") this.pageNum = 1;
-          this.goPage();
-        }
-      };
-    },
-    removeEnterEvent() {
-      document.onkeydown = () => {};
     },
   },
 };
 </script>
 <style lang="scss">
-.Consultant {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  // height: 792px;
-  box-shadow: 0px 2px 6px 0px rgba(224, 224, 224, 0.5);
-  background: #fff;
-  margin-bottom: 24px;
-  p {
-    margin: 0;
-  }
+.List {
   .toolsBar {
     .el-select .el-input.is-focus .el-input__inner {
       border-color: #4b78f6;
@@ -384,14 +462,11 @@ export default {
     .el-table th {
       background-color: #f6f8fa;
     }
-    .el-table .cell {
-      overflow: initial;
-    }
   }
 }
 </style>
 <style lang="scss" scoped>
-.Consultant {
+.List {
   width: 100%;
   padding: 22px 24px 14px 24px;
   box-sizing: border-box;
@@ -412,9 +487,14 @@ export default {
       flex-direction: row;
       width: 100%;
       align-items: center;
+      .statusSelector {
+        width: 120px;
+        height: 36px;
+      }
       .searchInput {
         width: 300px;
         // margin-left: 12px;
+        height: 36px;
       }
       .button {
         padding: 7px 20px;
@@ -425,6 +505,12 @@ export default {
       width: 100%;
       box-sizing: border-box;
       margin-top: 22px;
+      .loadTips {
+        font-size: 14px;
+        color: #d3d3d3;
+        line-height: 20px;
+        margin-top: 18px;
+      }
       .tableHeader-text {
         font-size: 14px;
         font-family: AlibabaPuHuiTiM;
@@ -489,7 +575,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 24px;
+    // margin-top: 24px;
     .totalNum {
       font-size: 14px;
       color: #666666;
