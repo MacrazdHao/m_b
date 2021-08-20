@@ -297,7 +297,9 @@ export default {
                     ...res2.data,
                     ...res3.data.currentNodeDTO,
                   };
-                  this.$forceUpdate();
+                  this.$nextTick(() => {
+                    this.$forceUpdate();
+                  });
                 })
                 .catch((err) => {
                   this.$message.error({

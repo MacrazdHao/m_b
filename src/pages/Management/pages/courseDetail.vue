@@ -35,6 +35,7 @@
                     </div>
                     <DatePicker
                       class="picker"
+                      ref="datePicker"
                       :readonly="true"
                       :placeholder="$t('management.noSetTimePlaceholder')"
                       :value="
@@ -450,7 +451,9 @@ export default {
                     ...res2.data,
                     ...res3.data.currentNodeDTO,
                   };
-                  this.$forceUpdate();
+                  this.$nextTick(() => {
+                    this.$forceUpdate();
+                  });
                 })
                 .catch((err) => {
                   this.$message.error({
