@@ -50,7 +50,7 @@ export default {
     vcode: {
       sendSuccessTips: 'verification code sent successfully',
       sendTooFastTips: 'please retry in {seconds} seconds',
-      errorTips: 'send verify code error, please try again'
+      errorTips: 'Unable to send verification code, please retry'
     },
     date: {
       today: 'today',

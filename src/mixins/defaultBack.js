@@ -18,7 +18,7 @@ export default {
         ...options,
       }
       // let path = options.otherPath || ("/index" + (this.$route.meta.defaultPrevPath ? this.$route.meta.defaultPrevPath[options.index] : ''));
-      let name = options.otherName || (this.$route.meta.defaultPrevName ? this.$route.meta.defaultPrevName[options.index] : 'index');
+      let name = options.otherName || (this.$route.meta.defaultPrevName ? this.$route.meta.defaultPrevName[options.index] : '/');
       if (this.noHistory || options.force) {
         this.$router.push({
           name, query: options.query, params: { ...options.params, noPrev: true },

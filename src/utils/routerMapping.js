@@ -542,7 +542,8 @@ export default {
       enTitle: "Career Consult",
       notShowThisChildren: true,
       group: "career",
-      groupParent: false
+      groupParent: false,
+      defaultPrevName: ["careerlist"],
     }
   },
   // 子子级
@@ -567,7 +568,8 @@ export default {
       enTitle: "Course&Subject Consult",
       notShowThisChildren: true,
       group: "course",
-      groupParent: false
+      groupParent: false,
+      defaultPrevName: ["courselist"],
     }
   },
   // 子级

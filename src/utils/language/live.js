@@ -64,7 +64,7 @@ export default {
         code: "No.",
         school: "School",
         grade: "Grade",
-        process: "Stage",
+        process: "Phase",
         time: 'Live Stream Time',
         status: "Live Stream Status",
         options: "Operation",

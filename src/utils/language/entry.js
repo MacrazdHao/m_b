@@ -205,7 +205,7 @@ export default {
       },
       sendingCodeErrorTips: 'please wait, the verification code is being processed',
       sendCodeSuccessTips: 'verification code sent successfully',
-      sendCodeFailTips: 'Send verify code error, please try again'
+      sendCodeFailTips: 'Unable to send verification code, please retry'
     },
     reset: {
       resetTitle: 'Reset Password',

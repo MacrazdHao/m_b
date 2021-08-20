@@ -50,6 +50,7 @@
 <script>
 import CButton from "@/components/common/button.vue";
 import DateTools from "@/utils/date";
+import Enum from "@/utils/enum";
 export default {
   props: ["timestamp"],
   components: {
@@ -68,7 +69,8 @@ export default {
   },
   computed: {
     step() {
-      return this.$route.meta.step;
+      // return this.$route.meta.step;
+      return Enum.getServerNodeStage(this.stateInfo.nodeType) + 2;
     },
     stateInfo() {
       return this.$store.state.counseling.stateInfo;

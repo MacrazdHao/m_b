@@ -148,7 +148,7 @@ export default {
     },
     business: {
       distributionTitle: 'distribution settings',
-      stageTitle: 'stage settings',
+      stageTitle: 'phase settings',
       peopleNumLabel: 'cecp participants：',
       peopleNumPlaceholder: 'please enter number of people',
       addButton: 'new template',

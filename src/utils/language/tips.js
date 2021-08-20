@@ -9,6 +9,6 @@ export default {
     requestTimeout: 'request timeout, please try again',
     loginExpire: 'login expired, please login again',
     msgKey: 'enMsg',
-    sendEmailError: 'send verify code error, please try again'
+    sendEmailError: 'Unable to send verification code, please retry'
   }
 }

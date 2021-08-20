@@ -189,7 +189,7 @@
             class="openBox"
             v-show="rtc.remoteStreams.length == 0 && username == hostId"
           >
-            <p>{{ $t("living.waittingStudent") }}</p>
+            <p>{{ $t("living.waitingStudent") }}</p>
           </div>
           <div
             class="openBox"
@@ -491,7 +491,6 @@ export default {
                 this.status = !this.status;
                 clearInterval(this.startRecord);
                 if (!this.status && this.username == this.hostId) {
-                  this.$store.dispatch(`living/stopRecord`, this.studentId);
                   if (this.rtc.remoteStreams.length > 0) {
                     this.rtc.remoteStreams[0].stop();
                     this.rtc.remoteStreams[0].close();
@@ -1015,7 +1014,7 @@ export default {
               cancel: () => {
                 toCamera = true;
               },
-              confirmText: this.$t("living.usescreenButton"),
+              confirmText: this.$t("living.useScreenButton"),
               cancelText: this.$t("living.useCameraButton"),
               close: () => {
                 closeDialog = true;

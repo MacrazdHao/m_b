@@ -83,4 +83,41 @@ export default {
       });
     })
   },
+  endLiveNode: ({ commit, state }, studentId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.endLiveNode(studentId)).then(res => {
+        resolve(res.data);
+      }).catch(err => {
+        reject(err);
+      });
+    })
+  },
+  getStudentCurrentLiveInfo: ({ commit, state }, userId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.studentCurrentLiveInfo(userId)).then(res => {
+        console.log('获取学生当前直播信息成功', res)
+        for (let i = 0; i < res.data.length; i++) {
+          res.data.status = Enum.getLocalLiveStatus(res.data[i].status);
+          // res.data.nodeType = Enum.getLocalNodeType(res.data[i].nodeType);
+        }
+        resolve(res);
+      }).catch(err => {
+        reject(err);
+      });
+    })
+  },
+  getStudentHistoryLiveList: ({ commit, state }, userId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.studentHistoryLiveList(userId)).then(res => {
+        console.log('获取学生直播时间成功', res)
+        for (let i = 0; i < res.data.length; i++) {
+          res.data[i].status = Enum.getLocalLiveStatus(res.data[i].status);
+          res.data[i].nodeType = Enum.getLocalNodeType(res.data[i].nodeType);
+        }
+        resolve(res);
+      }).catch(err => {
+        reject(err);
+      });
+    })
+  },
 }

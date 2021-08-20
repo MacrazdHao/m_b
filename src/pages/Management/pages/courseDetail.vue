@@ -16,75 +16,146 @@
           />
         </div>
       </div>
-      <div class="content-item baseInfoBox" v-if="times">
-        <div class="title-box">
-          <div class="leftline"></div>
-          <p class="title">{{ $t("management.consultTitle") }}</p>
-        </div>
-        <div class="consultSetting">
-          <p class="label">{{ $t("management.consultTitle2") }}：</p>
-          <div class="consult-item">
-            <div class="timeBox">
-              <div class="consultStageLabel" v-if="stageTimes[1].length == 0">
-                <p class="label">{{ consultStage[1].label }}</p>
-              </div>
-              <FormInput
-                class="input"
-                v-if="stageTimes[1].length == 0"
-                :placeholder="
-                  stageTimes[1].length == 0
-                    ? $t('management.consultNoTimesPlaceholder')
-                    : $t('management.consultUnopenPlaceholder', {
-                        num: numToChinese(stageTimes[1].length),
-                      })
-                "
-                :disabled="true"
-              />
-              <div class="timePickers" v-if="stageTimes[1].length > 0">
-                <template v-for="(item2, index2) in stageTimes[1]">
-                  <div class="timePickerItem" :key="index2">
+      <div class="curReportForm" v-if="stageNum == 2">
+        <div class="content-item baseInfoBox" v-show="!historyMode">
+          <div class="title-box">
+            <div class="leftline"></div>
+            <p class="title">{{ $t("management.consultTitle") }}</p>
+          </div>
+          <div class="consultSetting" v-if="liveInfo">
+            <p class="label">{{ $t("management.consultTitle2") }}：</p>
+            <div class="consult-item">
+              <div class="timeBox">
+                <div class="timePickers">
+                  <div class="timePickerItem">
                     <div class="consultStageLabel">
                       <p class="label">
-                        {{ consultStage[1].label }}2-{{ index2 + 1 }}
+                        {{ consultStage[1].label }}2-{{ liveInfo.sessionNum }}
                       </p>
                     </div>
                     <DatePicker
                       class="picker"
-                      :readonly="
-                        !(
-                          consultStage[nodeTypeToLabelIndex(item2.nodeType)]
-                            .selected && item2.status != -1
-                        )
+                      :readonly="true"
+                      :placeholder="$t('management.noSetTimePlaceholder')"
+                      :value="
+                        liveInfo.startTime ? new Date(liveInfo.startTime) : ''
                       "
-                      :disabled="
-                        item2.status == -1 ||
-                        (index2 == 0 &&
-                          (item2.status == -1 || item2.status == 1)) ||
-                        (index2 > 0 &&
-                          (stageTimes[1][index2 - 1].status != -1 ||
-                            item2.status == 1))
-                      "
-                      :placeholder="
-                        $t('management.consultPlaceholder', {
-                          num: numToChinese(index2 + 1),
-                        })
-                      "
-                      :value="item2.startTime ? new Date(item2.startTime) : ''"
-                      @change="(e) => selectTime(e, 0, index2)"
                     />
-                    <!-- <div class="statusBox" v-if="item2.status == -1">
+                    <!-- <div class="statusBox" v-if="liveInfo.status == -1">
                       <img src="@/assets/counseling/icon_finish.svg" />
                       <p>{{ $t("management.finishTips") }}</p>
                     </div> -->
                     <!-- <div class="statusBox" v-else></div> -->
                   </div>
-                </template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reportBox" v-if="contentInfo" v-show="!historyMode">
+          <div class="content-item baseInfoBox">
+            <div class="title-box">
+              <div class="leftline"></div>
+              <p class="title">{{ $t("management.backgroundTitle") }}</p>
+            </div>
+            <div class="form">
+              <FormTextarea
+                class="formInput"
+                :label="$t('management.currentStatusLabel')"
+                :placeholder="$t('management.currentStatusPlaceholder')"
+                :value="contentInfo[0].data[0].content"
+                @input="(text) => setContent(text, 0, 0)"
+              />
+            </div>
+          </div>
+          <div class="content-item baseInfoBox">
+            <div class="title-box">
+              <div class="leftline"></div>
+              <p class="title">{{ $t("management.basicMatterTitle") }}</p>
+            </div>
+            <p class="subtitle">{{ $t("management.basicMatterSubtitle") }}</p>
+            <div class="form">
+              <FormTextarea
+                class="formInput"
+                :label="$t('management.subjectLabel')"
+                :placeholder="$t('management.subjectPlaceholder')"
+                :value="contentInfo[1].data[0].children[0].content"
+                @input="(text) => setContent(text, 1, 0, 0)"
+              />
+              <FormTextarea
+                class="formInput"
+                :label="$t('management.exploreLabel')"
+                :placeholder="$t('management.explorePlaceholder')"
+                :value="contentInfo[1].data[0].children[1].content"
+                @input="(text) => setContent(text, 1, 0, 1)"
+              />
+            </div>
+          </div>
+          <div class="content-item baseInfoBox">
+            <div class="title-box">
+              <div class="leftline"></div>
+              <p class="title">{{ $t("management.nextStepTitle") }}</p>
+            </div>
+            <p class="subtitle">{{ $t("management.nextStepSubtitle") }}</p>
+            <div class="form">
+              <FormTextarea
+                class="formInput"
+                :label="$t('management.adviseLabel')"
+                :placeholder="$t('management.advisePlaceholder')"
+                :value="contentInfo[2].data[0].children[0].content"
+                @input="(text) => setContent(text, 2, 0, 0)"
+              />
+              <FormTextarea
+                class="formInput"
+                :label="$t('management.announceLabel')"
+                :placeholder="$t('management.announcePlaceholder')"
+                :value="contentInfo[2].data[0].children[1].content"
+                @input="(text) => setContent(text, 2, 0, 1)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-item baseInfoBox" v-show="historyMode">
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ $t("management.consultTitle") }}</p>
+        </div>
+        <div class="consultSetting" v-if="historyReport">
+          <p class="label">{{ $t("management.consultTitle2") }}：</p>
+          <div class="consult-item">
+            <div class="timeBox">
+              <div class="timePickers">
+                <div class="timePickerItem">
+                  <div class="consultStageLabel">
+                    <p class="label">
+                      {{ consultStage[1].label }}2-{{
+                        historyLiveInfo.sessionNum
+                      }}
+                    </p>
+                  </div>
+                  <DatePicker
+                    class="picker"
+                    :readonly="true"
+                    :placeholder="$t('management.noSetTimePlaceholder')"
+                    :value="
+                      historyLiveInfo.nodeStartTime
+                        ? new Date(historyLiveInfo.nodeStartTime)
+                        : ''
+                    "
+                  />
+                  <!-- <div class="statusBox" v-if="liveInfo.status == -1">
+                      <img src="@/assets/counseling/icon_finish.svg" />
+                      <p>{{ $t("management.finishTips") }}</p>
+                    </div> -->
+                  <!-- <div class="statusBox" v-else></div> -->
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="reportBox" v-if="contentInfo">
+      <div class="reportBox" v-if="historyReport" v-show="historyMode">
         <div class="content-item baseInfoBox">
           <div class="title-box">
             <div class="leftline"></div>
@@ -95,8 +166,8 @@
               class="formInput"
               :label="$t('management.currentStatusLabel')"
               :placeholder="$t('management.currentStatusPlaceholder')"
-              :value="contentInfo[0].data[0].content"
-              @input="(text) => setContent(text, 0, 0)"
+              :value="historyReport[0].data[0].content"
+              :disabled="true"
             />
           </div>
         </div>
@@ -111,15 +182,15 @@
               class="formInput"
               :label="$t('management.subjectLabel')"
               :placeholder="$t('management.subjectPlaceholder')"
-              :value="contentInfo[1].data[0].children[0].content"
-              @input="(text) => setContent(text, 1, 0, 0)"
+              :value="historyReport[1].data[0].children[0].content"
+              :disabled="true"
             />
             <FormTextarea
               class="formInput"
               :label="$t('management.exploreLabel')"
               :placeholder="$t('management.explorePlaceholder')"
-              :value="contentInfo[1].data[0].children[1].content"
-              @input="(text) => setContent(text, 1, 0, 1)"
+              :value="historyReport[1].data[0].children[1].content"
+              :disabled="true"
             />
           </div>
         </div>
@@ -134,15 +205,15 @@
               class="formInput"
               :label="$t('management.adviseLabel')"
               :placeholder="$t('management.advisePlaceholder')"
-              :value="contentInfo[2].data[0].children[0].content"
-              @input="(text) => setContent(text, 2, 0, 0)"
+              :value="historyReport[2].data[0].children[0].content"
+              :disabled="true"
             />
             <FormTextarea
               class="formInput"
               :label="$t('management.announceLabel')"
               :placeholder="$t('management.announcePlaceholder')"
-              :value="contentInfo[2].data[0].children[1].content"
-              @input="(text) => setContent(text, 2, 0, 1)"
+              :value="historyReport[2].data[0].children[1].content"
+              :disabled="true"
             />
           </div>
         </div>
@@ -151,21 +222,36 @@
     <div class="buttonBox">
       <CButton
         class="button"
-        :text="$t('management.cancelButton')"
+        v-if="!historyMode"
+        :text="
+          stageNum == 2
+            ? $t('management.cancelButton')
+            : $t('management.backButton')
+        "
         @btnClick="cancel"
       />
       <CButton
         class="button"
+        v-if="
+          !historyMode && liveInfo && liveInfo.status == -1 && stageNum == 2
+        "
         :text="$t('management.saveButton')"
         theme="blue"
         @btnClick="saveInfo"
+      />
+      <CButton
+        class="button"
+        v-if="historyMode"
+        :text="$t('management.backButton')"
+        theme="blue"
+        @btnClick="closeHistory"
       />
     </div>
     <TopDrawer ref="reportList" :title="consultStage[1].label">
       <div class="reportList">
         <template v-for="(item, index) in reportList">
-          <div class="reportItem" :key="index">
-            <p>{{ item.name }}</p>
+          <div class="reportItem" :key="index" @click="showHistory(index)">
+            <p>{{ item.name || $t("management.unkonwReportName") }}</p>
           </div>
           {{ "" }}
         </template>
@@ -185,6 +271,7 @@ import DateTools from "@/utils/date";
 import { numToChinese } from "@/utils/others";
 import defaultBackMixin from "@/mixins/defaultBack";
 import TopDrawer from "@/components/common/topDrawer.vue";
+import Enum from "@/utils/enum";
 export default {
   // props: ["info"],
   mixins: [defaultBackMixin],
@@ -219,7 +306,7 @@ export default {
           allCompeleted: false,
         },
       ],
-      times: [],
+      liveInfo: null,
       contentInfo: null,
       cnTitles: ["目录", "概况与背景", "咨询基本情况", "下一步", "咨询进度"],
       enTitles: [
@@ -230,67 +317,14 @@ export default {
         "Progress",
       ],
       date: new Date().getTime(),
-      reportList: [
-        {
-          name: "2-1报告2-1报告",
-        },
-        {
-          name: "2-1报告2-1报告",
-        },
-        {
-          name: "2-1报告2-1报告",
-        },
-        {
-          name: "2-1报告2-1报告",
-        },
-        {
-          name: "2-1报告2-1报告",
-        },
-        {
-          name: "2-1报告2-1报告",
-        },
-        {
-          name: "2-1报告2-1报告",
-        },
-        {
-          name: "2-1报告2-1报告",
-        },
-        {
-          name: "2-1报告2-1报告",
-        },
-      ],
+      reportList: null,
+      historyMode: false,
+      historyReport: null,
+      historyLiveInfo: null,
+      historyTimes: null,
     };
   },
   computed: {
-    stageTimes() {
-      let finished = Array.apply(null, Array(this.consultStage.length)).map(
-        () => 0
-      );
-      let arr = Array.apply(null, Array(this.consultStage.length)).map(
-        (item, index) => {
-          return this.times.filter((_item, _index) => {
-            let i = this.nodeTypeToLabelIndex(_item.nodeType);
-            // console.log(index, _item.scheduleId, _item.status, i);
-            if (_item.status == -1 && i == index) {
-              finished[i]++;
-            }
-            return i == index;
-          });
-        }
-      );
-      if (this.initial && this.times.length > 0) {
-        for (let i = 0; i < this.consultStage.length; i++) {
-          this.$set(this.consultStage, i, {
-            ...this.consultStage[i],
-            selected: finished[i] > 0,
-            allCompeleted: finished[i] == arr[i].length,
-          });
-          console.log(finished[i], arr[i].length);
-        }
-        this.initial = false;
-      }
-      return arr;
-    },
     form() {
       return {
         contentInfo: this.contentInfo,
@@ -300,9 +334,26 @@ export default {
         date: new Date().getTime(),
       };
     },
+    stageNum() {
+      if (!this.liveInfo) return -1;
+      return Enum.getServerNodeStage(this.liveInfo.nodeType);
+    },
   },
-  watch: {},
+  watch: {
+    stageNum(val) {
+      if (val < 2) {
+        this.$message.warning({
+          text: this.$t("management.stageNotStartTips"),
+        });
+        this.goBack();
+      }
+    },
+  },
   mounted() {
+    if (!this.$route.query.id || !this.$route.query.nodeId) {
+      this.goBack();
+      return;
+    }
     this.initInfo();
   },
   methods: {
@@ -315,105 +366,94 @@ export default {
           this.info = res.data;
           this.$emit("setSuffixMenu", [this.info.nickName]);
           this.$store
-            .dispatch("management/getStudentSchedule", this.$route.query.id)
-            .then((res) => {
-              this.times = res.data;
+            .dispatch(
+              "management/getStudentCurrentLiveInfo",
+              this.$route.query.id
+            )
+            .then((res2) => {
+              this.contentInfo = [
+                {
+                  startPage: 1,
+                  endPage: 1,
+                  data: [
+                    {
+                      startPage: 1,
+                      endPage: 1,
+                      title: "学生当前状况",
+                      content: "",
+                    },
+                  ],
+                },
+                {
+                  startPage: 1,
+                  endPage: 1,
+                  data: [
+                    {
+                      startPage: 1,
+                      endPage: 1,
+                      title: "与学生的沟通",
+                      children: [
+                        {
+                          title: "专业科目探索",
+                          content: "",
+                        },
+                        {
+                          title: "探索总结",
+                          content: "",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  startPage: 1,
+                  endPage: 1,
+                  data: [
+                    {
+                      title: "建议及咨询预告",
+                      children: [
+                        {
+                          startPage: 1,
+                          endPage: 1,
+                          title: "建议",
+                          content: "",
+                        },
+                        {
+                          startPage: 1,
+                          endPage: 1,
+                          title: "咨询内容预告",
+                          content: "",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ];
               this.$store
-                .dispatch("management/getStudentProfile", {
-                  userId: this.$route.query.id,
-                  nodeId: this.$route.query.nodeId,
-                })
-                .then((res) => {
-                  // TODO
-                  if (!res.data.reportUrl) {
-                    this.contentInfo = [
-                      {
-                        startPage: 1,
-                        endPage: 1,
-                        data: [
-                          {
-                            startPage: 1,
-                            endPage: 1,
-                            title: "学生当前状况",
-                            content: "",
-                          },
-                        ],
-                      },
-                      {
-                        startPage: 1,
-                        endPage: 1,
-                        data: [
-                          {
-                            startPage: 1,
-                            endPage: 1,
-                            title: "与学生的沟通",
-                            children: [
-                              {
-                                title: "专业科目探索",
-                                content: "",
-                              },
-                              {
-                                title: "探索总结",
-                                content: "",
-                              },
-                            ],
-                          },
-                        ],
-                      },
-                      {
-                        startPage: 1,
-                        endPage: 1,
-                        data: [
-                          {
-                            title: "建议及咨询预告",
-                            children: [
-                              {
-                                startPage: 1,
-                                endPage: 1,
-                                title: "建议",
-                                content: "",
-                              },
-                              {
-                                startPage: 1,
-                                endPage: 1,
-                                title: "咨询内容预告",
-                                content: "",
-                              },
-                            ],
-                          },
-                        ],
-                      },
-                    ];
-                  } else {
-                    this.$store
-                      .dispatch("global/getHtmlContent", res.data.reportUrl)
-                      .then((res) => {
-                        let result = JSON.parse(res);
-                        console.log(result);
-                        for (let key in result) {
-                          this[key] = result[key];
-                        }
-                        console.log(this);
-                      })
-                      .catch((err) => {
-                        this.$message.error({
-                          text: this.$t(
-                            "management.getStudentProfileErrorTips"
-                          ),
-                        });
-                      });
-                  }
+                .dispatch(
+                  "management/getStudentHistoryLiveList",
+                  this.$route.query.id
+                )
+                .then((res3) => {
+                  this.historyTimes = res3.data.allNodeDTO.filter(
+                    (item, index) => {
+                      return item.nodeType == 21;
+                    }
+                  );
+                  this.liveInfo = {
+                    ...res2.data,
+                    ...res3.data.currentNodeDTO,
+                  };
                 })
                 .catch((err) => {
                   this.$message.error({
-                    text: this.$t("management.getStudentProfileErrorTips"),
+                    text: this.$t("management.getConsultStatusError"),
                   });
-                  this.goBack();
                 });
             })
             .catch((err) => {
               this.$message.error({
-                text: this.$t("management.getStudentScheduleErrorTips"),
+                text: this.$t("management.getLiveStatusErrorTips"),
               });
               this.goBack();
             });
@@ -431,34 +471,25 @@ export default {
       // 大学建议和偏好咨询,if (nodeType > 19 && nodeType < 30) return 1;
     },
     showReportList() {
-      this.$store
-        .dispatch("management/getStudentProfileList", this.$route.query.id)
-        .then((res) => {
-          this.reportList = res.data;
-          if (this.reportList.length == 0) {
-            this.$message.message({
-              text: this.$t("management.getReportListEmptyTips"),
+      if (!this.reportList) {
+        this.$store
+          .dispatch("management/getStudentProfileList", this.$route.query.id)
+          .then((res) => {
+            this.reportList = res.data;
+            if (this.reportList.length == 0) {
+              this.$message.message({
+                text: this.$t("management.getReportListEmptyTips"),
+              });
+              return;
+            }
+            this.$refs.reportList.openDrawer();
+          })
+          .catch((err) => {
+            this.$message.error({
+              text: this.$t("management.getReportListErrorTips"),
             });
-            return;
-          }
-          this.$refs.reportList.openDrawer();
-        })
-        .catch((err) => {
-          this.$message.error({
-            text: this.$t("management.getReportListErrorTips"),
           });
-        });
-    },
-    selectTime(text, index, index2) {
-      let _index = index2;
-      for (let i = 0; i < index; i++) {
-        _index += this.stageTimes[i].length;
-      }
-      console.log(new Date(text).getTime(), _index);
-      this.$set(this.times, _index, {
-        ...this.times[_index],
-        startTime: new Date(text).getTime(),
-      });
+      } else this.$refs.reportList.openDrawer();
     },
     selectItem(index) {
       this.$set(this.consultStage, index, {
@@ -471,9 +502,12 @@ export default {
       if (!result.data[chapter].children) result.data[chapter].content = text;
       else result.data[chapter].children[part].content = text;
       this.$set(this.contentInfo, bigChapter, result);
-      console.log(this.contentInfo);
     },
     cancel() {
+      if (this.stageNum != 2) {
+        this.goBack();
+        return;
+      }
       this.$dialog.warning({
         text: [
           this.$t("management.cancelTips1"),
@@ -496,16 +530,20 @@ export default {
         confirm: () => {
           this.$store
             .dispatch("management/saveStudentProfile", {
+              userId: this.$route.query.id,
               nodeId: this.$route.query.nodeId,
               reportData: this.form,
             })
             .then((res) => {
+              this.$store.dispatch(
+                `management/endLiveNode`,
+                this.$route.query.id
+              );
               this.$message.message({
                 text: this.$t("management.saveStudentScheduleSuccessTips"),
               });
             })
             .catch((err) => {
-              console.log(err);
               this.$message.error({
                 text: this.$t("management.saveStudentProfileErrorTips"),
               });
@@ -515,6 +553,34 @@ export default {
         showCancel: true,
         showClose: false,
       });
+    },
+    showHistory(index) {
+      this.historyTimes.forEach((item, _index) => {
+        if (item.nodeId == this.reportList[index].nodeId) {
+          this.historyLiveInfo = { ...item, sessionNum: _index + 1 };
+        }
+      });
+      this.$store
+        .dispatch("global/getHtmlContent", this.reportList[index].reportUrl)
+        .then((res) => {
+          this.historyReport = JSON.parse(res).contentInfo;
+          this.historyMode = true;
+          this.$refs.reportList.closeDrawer();
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("management.getHistoryReportError", {
+              name:
+                this.reportList[index].name ||
+                $t("management.unkonwReportName"),
+            }),
+          });
+        });
+    },
+    closeHistory() {
+      this.historyReport = null;
+      this.historyMode = false;
+      this.$refs.reportList.closeDrawer();
     },
   },
 };
@@ -600,6 +666,9 @@ export default {
     }
     .reportBox {
       margin-top: 34px;
+    }
+    .curReportForm {
+      margin-top: 28px;
     }
     .content-item {
       display: flex;

@@ -184,6 +184,12 @@ export default {
         case 21:
           this.$router.push({ path: "/index/counseling/consultLive" });
           break;
+        case 31:
+          this.$router.push({ path: "/index/counseling/consultLive" });
+          break;
+        case 32:
+          this.$router.push({ path: "/index/counseling/consultLive" });
+          break;
       }
     },
     nextStep() {

@@ -1,7 +1,6 @@
 export default {
   startLive: (liveId) => `/live/liveroom/${liveId}/start`,
   startRecord: `/admin/live/record/updateLayoutLiveRecordVideo`,
-  stopRecord: (studentId) => `/cecp/onion/endLiveNode/${studentId}`,
   stopLive: (liveId) => `/live/liveroom/${liveId}/stop`,
   getAgoraToken: (liveId) => `/live/liveroom/${liveId}/getToken`,
   getLiveInfo: (liveId) => `/live/liveroom/${liveId}/info`,

@@ -21,15 +21,6 @@ export default {
       });
     })
   },
-  stopRecord: ({ commit, state }, studentId) => {
-    return new Promise((resolve, reject) => {
-      request.get(urls.stopRecord(studentId)).then(res => {
-        resolve(res.data);
-      }).catch(err => {
-        reject(err);
-      });
-    })
-  },
   startRecord: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
       // request.post(urls.startRecord, {

@@ -91,7 +91,7 @@ export default {
     },
     process: {
       processTitle: 'process allocation',
-      processLabel: 'stage settings',
+      processLabel: 'phase settings',
       step1: 'Career Consultation',
       step2: 'Acadmic Advisory',
       step3: 'University exploration and suggestions',
