@@ -65,6 +65,7 @@
                 :label="$t('management.currentStatusLabel')"
                 :placeholder="$t('management.currentStatusPlaceholder')"
                 :value="contentInfo[0].data[0].content"
+                :disabled="!(stageNum == 2 && liveInfo.status == -1)"
                 @input="(text) => setContent(text, 0, 0)"
               />
             </div>
@@ -81,6 +82,7 @@
                 :label="$t('management.subjectLabel')"
                 :placeholder="$t('management.subjectPlaceholder')"
                 :value="contentInfo[1].data[0].children[0].content"
+                :disabled="!(stageNum == 2 && liveInfo.status == -1)"
                 @input="(text) => setContent(text, 1, 0, 0)"
               />
               <FormTextarea
@@ -88,6 +90,7 @@
                 :label="$t('management.exploreLabel')"
                 :placeholder="$t('management.explorePlaceholder')"
                 :value="contentInfo[1].data[0].children[1].content"
+                :disabled="!(stageNum == 2 && liveInfo.status == -1)"
                 @input="(text) => setContent(text, 1, 0, 1)"
               />
             </div>
@@ -104,6 +107,7 @@
                 :label="$t('management.adviseLabel')"
                 :placeholder="$t('management.advisePlaceholder')"
                 :value="contentInfo[2].data[0].children[0].content"
+                :disabled="!(stageNum == 2 && liveInfo.status == -1)"
                 @input="(text) => setContent(text, 2, 0, 0)"
               />
               <FormTextarea
@@ -111,6 +115,7 @@
                 :label="$t('management.announceLabel')"
                 :placeholder="$t('management.announcePlaceholder')"
                 :value="contentInfo[2].data[0].children[1].content"
+                :disabled="!(stageNum == 2 && liveInfo.status == -1)"
                 @input="(text) => setContent(text, 2, 0, 1)"
               />
             </div>
@@ -225,7 +230,7 @@
         class="button"
         v-if="!historyMode"
         :text="
-          stageNum == 2
+          stageNum == 2 && liveInfo.status == -1
             ? $t('management.cancelButton')
             : $t('management.backButton')
         "
