@@ -88,6 +88,7 @@ export default {
       font-family: arial;
       color: #666666;
       line-height: 21px;
+      height: 21px;
     }
     .cnTitleBox {
       display: flex;
@@ -100,11 +101,13 @@ export default {
         font-family: AlibabaPuHuiTiM;
         color: #333333;
         line-height: 27px;
+        height: 27px;
       }
       .index {
         color: #999999;
         font-size: 18px;
         line-height: 25px;
+        height: 25px;
       }
     }
     .menuBox {
@@ -119,6 +122,7 @@ export default {
         p {
           font-size: 18px;
           line-height: 25px;
+          height: 25px;
         }
         .subtitle {
           color: #333333;

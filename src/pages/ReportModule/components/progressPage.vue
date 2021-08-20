@@ -169,7 +169,7 @@ export default {
         let pageNum = Math.ceil(pageHeight / this.contentHeight);
         let filler = document.createElement("div");
         filler.style.width = "100%";
-        filler.style.height = (pageNum * this.contentHeight - pageHeight)+"px";
+        filler.style.height = pageNum * this.contentHeight - pageHeight + "px";
         thisPage.appendChild(filler);
         // console.log(pageNum);
       });
@@ -284,6 +284,7 @@ export default {
       font-family: AlibabaPuHuiTiM;
       color: #333333;
       line-height: 27px;
+      height: 27px;
       margin-bottom: 10px;
     }
     .persentBox {
@@ -295,6 +296,7 @@ export default {
         font-family: arialbd;
         color: #013047;
         line-height: 38px;
+        height: 38px;
         // margin-top: -4px;
         position: absolute;
         top: 50%;
@@ -315,6 +317,7 @@ export default {
       font-family: AlibabaPuHuiTiM;
       color: #333333;
       line-height: 25px;
+      height: 25px;
       text-align: center;
     }
     .table {
@@ -343,6 +346,7 @@ export default {
                 font-size: 12px;
                 color: #013047;
                 line-height: 17px;
+                height: 17px;
                 white-space: nowrap;
               }
             }
@@ -385,6 +389,7 @@ export default {
               font-size: 12px;
               color: #333333;
               line-height: 17px;
+              height: 17px;
               white-space: nowrap;
             }
           }
@@ -412,6 +417,7 @@ export default {
         font-size: 12px;
         color: #333333;
         line-height: 17px;
+        height: 17px;
       }
     }
   }

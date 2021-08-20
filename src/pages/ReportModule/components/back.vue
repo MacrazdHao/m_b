@@ -79,6 +79,7 @@ export default {};
           font-size: 12px;
           color: #ffb706;
           line-height: 22px;
+          height: 22px;
           font-variant: normal !important;
           // letter-spacing: 1px;
           padding: 0 7px;
@@ -89,6 +90,7 @@ export default {};
         font-size: 12px;
         color: #999999;
         line-height: 13px;
+        height: 13px;
         width: 100%;
       }
       .address + .address {

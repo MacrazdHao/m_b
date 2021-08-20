@@ -54,12 +54,14 @@ export default {};
       font-family: FrutigerCE-Bold;
       color: #013047;
       line-height: 52px;
+      height: 52px;
     }
     .title {
       font-size: 50px;
       font-family: AlibabaPuHuiTiM;
       color: #013047;
       line-height: 65px;
+      height: 65px;
       letter-spacing: 1px;
       margin-top: 20px;
     }
@@ -67,6 +69,7 @@ export default {};
       font-size: 34px;
       color: #013047;
       line-height: 43px;
+      height: 43px;
       margin-top: 10px;
     }
   }
@@ -78,6 +81,7 @@ export default {};
       font-size: 14px;
       color: #999999;
       line-height: 18px;
+      height: 72px;
       text-align: left;
       white-space: nowrap;
     }

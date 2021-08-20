@@ -52,6 +52,7 @@ export default {
         font-family: arial;
         color: #666666;
         line-height: 16px;
+        height: 16px;
         text-align: right;
       }
       p + p {
@@ -75,6 +76,7 @@ export default {
       font-family: AlibabaPuHuiTiM;
       color: #013047;
       line-height: 38px;
+      height: 38px;
       margin-top: -4px;
     }
     .en {
@@ -82,6 +84,7 @@ export default {
       font-family: FrutigerCE-Bold;
       color: #013047;
       line-height: 38px;
+      height: 38px;
     }
   }
 }

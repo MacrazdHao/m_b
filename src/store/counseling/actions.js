@@ -41,4 +41,15 @@ export default {
       });
     });
   },
+  getCurrentProfile: ({ commit, state }, nodeId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.currentProfile(nodeId)).then(res => {
+        console.log('获取报告内容成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取报告内容失败', err);
+        reject(err);
+      });
+    });
+  },
 }

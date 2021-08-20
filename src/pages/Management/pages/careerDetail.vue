@@ -185,14 +185,8 @@ export default {
       ],
       liveInfo: null,
       contentInfo: null,
-      cnTitles: ["目录", "概况与背景", "咨询基本情况", "下一步", "咨询进度"],
-      enTitles: [
-        "Contents",
-        "Overview",
-        "Interview Notes",
-        "Next Steps",
-        "Progress",
-      ],
+      cnTitles: ["目录", "概况与背景", "咨询基本情况", "下一步"],
+      enTitles: ["Contents", "Overview", "Interview Notes", "Next Steps"],
       date: new Date().getTime(),
     };
   },

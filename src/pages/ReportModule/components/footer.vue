@@ -40,23 +40,24 @@ export default {
       font-size: 14px;
       color: #898989;
       line-height: 48px;
+      height: 48px;
       // margin-top: -4px;
       position: absolute;
     }
-    .date{
+    .date {
       top: 50%;
       left: 50px;
-      transform: translate(0%,-50%);
+      transform: translate(0%, -50%);
     }
     .title {
       top: 50%;
       left: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
     }
     .pageNum {
       top: 50%;
       right: 50px;
-      transform: translate(0%,-50%);
+      transform: translate(0%, -50%);
     }
   }
 }

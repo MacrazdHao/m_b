@@ -1,8 +1,17 @@
 <template>
   <div class="ReportModule">
-    <div class="generateBox" v-show="!generated">
+    <p class="generateTips" v-show="loadingInfo">
+      {{ $t("reportModule.loadingReportInfoTips") }}
+    </p>
+    <p class="generateTips" v-show="!loadingInfo && !generated">
+      {{ $t("reportModule.generatingTips") }}
+    </p>
+    <p class="generateTips" v-show="loadInfoError">
+      {{ $t("reportModule.loadReportInfoError") }}
+    </p>
+    <div class="generateBox" v-if="!loadingInfo" v-show="!generated">
       <Cover class="cover progressItem qualityScale" />
-      <div ref="pages" @click="generateReport">
+      <div v-if="finishedContentHeight" ref="pages" @click="generateReport">
         <Catalogue
           class="page qualityScale"
           :style="{ minHeight: contentHeight + 'px' }"
@@ -98,7 +107,6 @@ import Footer from "./components/footer.vue";
 import html2canvas from "html2canvas";
 import DateTools from "@/utils/date";
 export default {
-  props: ["info"],
   components: {
     Cover,
     Catalogue,
@@ -120,6 +128,7 @@ export default {
       pageHeight: 852,
       pageWidth: 596,
       contentHeight: 852,
+      finishedContentHeight: false,
       lineHeight: 22,
       headerHeight: 0,
       footerHeight: 0,
@@ -465,6 +474,8 @@ export default {
           },
         },
       ],
+      loadingInfo: true,
+      loadInfoError: false,
       generating: false,
       generated: false,
       loadingPage: 0,
@@ -481,22 +492,62 @@ export default {
       );
     },
   },
-  watch: {},
+  watch: {
+    contentInfo(val) {
+      console.log("contentInfo更新", val);
+    },
+  },
   mounted() {
-    if (this.info) {
-      for (let key in this.info) {
-        this[key] = this.info[key];
-      }
-    }
-    this.getCovers();
-    this.headerHeight = this.$refs.header.$el.offsetHeight;
-    this.footerHeight = this.$refs.footer.$el.offsetHeight;
-    this.contentHeight =
-      this.pageHeight - this.headerHeight - this.footerHeight;
-    console.log(this.contentHeight, this.headerHeight, this.footerHeight);
+    this.initInfo();
   },
   methods: {
     ...DateTools,
+    initInfo() {
+      this.loadingInfo = true;
+      this.$store
+        .dispatch("counseling/getCurrentProfile", this.$route.query.nodeId)
+        .then((res) => {
+          this.$store
+            .dispatch("global/getHtmlContent", res.data.reportUrl)
+            .then((res2) => {
+              let data = JSON.parse(res2);
+              this.cnTitles = [];
+              this.enTitles = [];
+              this.date = null;
+              this.nickName = null;
+              this.contentInfo = null;
+              for (let key in data) {
+                if (key == "contentInfo") continue;
+                this[key] = data[key];
+              }
+              console.log(data);
+              this.contentInfo = data.contentInfo;
+              this.loadingInfo = false;
+              this.$nextTick(() => {
+                this.headerHeight = this.$refs.header.$el.offsetHeight;
+                this.footerHeight = this.$refs.footer.$el.offsetHeight;
+                this.contentHeight =
+                  this.pageHeight - this.headerHeight - this.footerHeight;
+                this.finishedContentHeight = true;
+                this.getCovers();
+              });
+            })
+            .catch((err) => {
+              this.loadingInfo = false;
+              this.loadInfoError = true;
+              this.$message.error({
+                text: this.$t("reportModule.loadReportInfoError"),
+              });
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.error({
+            text: this.$t("reportModule.loadReportInfoError"),
+          });
+        });
+    },
     setPageNum(pageIndex, bigChapterPageInfo, chapterPageInfo) {
       this.$set(this.contentInfo, pageIndex, {
         ...bigChapterPageInfo,
@@ -666,7 +717,16 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+  .generateTips {
+    color: white;
+    font-size: 14px;
+  }
   .generateBox {
+    position: absolute;
+    top: 1000px;
+    left: 1000px;
     display: flex;
     flex-direction: column;
     align-items: center;

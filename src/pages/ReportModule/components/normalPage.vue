@@ -167,6 +167,7 @@ export default {
       let res = 0;
       let partDom =
         this.$refs[`part${this.chapterIndex}-${index}-${index2}_inbox`] || null;
+      console.log(partDom[0]);
       let pageNum = Math.ceil(
         (partDom[0].offsetHeight + (index2 == 0 ? 88 : 0)) / this.contentHeight
       );
@@ -254,7 +255,9 @@ export default {
           aColumn = "";
           p.innerHTML = aColumn;
           let section = text.substring(cutStart, i);
-          section = `<p style="line-height:${this.lineHeight}px;${
+          section = `<p style="line-height:${this.lineHeight}px;height:${
+            this.lineHeight
+          }px;${
             section.length < 30 ? "width: fit-content;" : ""
           }">${section}</p>`;
           res += section;
@@ -264,7 +267,7 @@ export default {
       if (aColumn != "") {
         let section = aColumn;
         if (section.length < 30) {
-          section = `<p style="line-height:${this.lineHeight}px;width: fit-content;">${section}</p>`;
+          section = `<p style="line-height:${this.lineHeight}px;height:${this.lineHeight}px;width: fit-content;">${section}</p>`;
         }
         res += section;
       }
@@ -362,13 +365,14 @@ export default {
         font-size: 20px;
         color: #ffffff;
         line-height: 27px;
+        height: 27px;
         margin-top: -4px;
       }
     }
     .contentBox {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      // align-items: center;
       padding: 0 50px;
       .content {
         width: 100%;
@@ -408,6 +412,7 @@ export default {
               font-family: AlibabaPuHuiTiM;
               color: #013047;
               line-height: 25px;
+              height: 25px;
               margin-left: 8px;
               margin-top: -4px;
             }

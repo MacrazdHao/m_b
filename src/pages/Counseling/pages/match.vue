@@ -65,6 +65,7 @@ export default {
       time: "",
       matchFinish: true,
       roomId: null,
+      nodeId: null,
     };
   },
   computed: {
@@ -95,6 +96,7 @@ export default {
           this.liveEnd = res.data.status == -1;
           this.liveStarting = res.data.status != -1;
           // this.matchFinish = res.data.status == 0;
+          this.nodeId = res.data.nodeId;
           this.roomId = res.data.id;
           this.time = res.data.startTime;
           console.log(this.time, new Date().getTime());
@@ -105,6 +107,11 @@ export default {
             text: this.$t("counseling.loadInfoError"),
           });
         });
+    },
+    step() {
+      this.$emit("setSuffixMenu", [
+        this.$t(`counseling.step${this.step}.title`),
+      ]);
     },
   },
   mounted() {
@@ -126,7 +133,13 @@ export default {
     backToDashboard() {
       this.$router.push({ path: "/" });
     },
-    getReport() {},
+    getReport() {
+      if (!this.nodeId) return;
+      console.log(window.location);
+      window.open(
+        `${window.location.origin}/reportModule?nodeId=${this.nodeId}`
+      );
+    },
   },
 };
 </script>
