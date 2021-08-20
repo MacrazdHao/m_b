@@ -30,8 +30,9 @@ export default {
         pageInfo,
       } = options;
       return new Promise(async (resolve, reject) => {
-        let pageDatas = [];  // 测试用返回值
-        let canvases = [];  // 测试用返回值
+        let imageBook = [];  // 测试用返回值，存储完整页的数据
+        let pageDatas = [];  // 测试用返回值，存储内容页的分页的image数据（不含页眉页脚）
+        let canvases = [];  // 测试用返回值，存储每个内容页的canvas（不含页眉页脚）
         let cWidth = pageWidth * quality;  // canvas宽度
         let contentHeight = pageHeight - headerHeight - footerHeight;  // 内容页的body(内容)高度
         let PDF = new jspdf('', 'pt', [pageHeight, pageWidth]);
@@ -62,6 +63,11 @@ export default {
           if (coverIndex.indexOf(nowPage) != -1) {
             // 封面是已截好的img数据，直接插入PDF即可
             PDF.addImage(covers[coverCounter], 'JPEG', 0, 0, pageWidth, pageHeight);
+            imageBook.push({
+              header: null,
+              body: covers[coverCounter],
+              footer: null
+            });
             coverCounter++;
             if (nowPage < pageNum - 1) PDF.addPage();
           } else {
@@ -116,9 +122,18 @@ export default {
                       let pageData = divideCanvas.toDataURL('image/jpeg', 1);
                       pageDatas.push(pageData);
                       // 分别向当前PDF页插入页眉、内容、页脚
-                      if (headers.length > 0) PDF.addImage(headers[dividePage], 'JPEG', 0, 0, pageWidth, headerHeight);
+                      let imageBookPage = { header: null, body: null, footer: null };
+                      if (headers.length > 0) {
+                        imageBookPage.header = headers[dividePage];
+                        PDF.addImage(headers[dividePage], 'JPEG', 0, 0, pageWidth, headerHeight);
+                      }
                       PDF.addImage(pageData, 'JPEG', 0, headerHeight, pageWidth, thisHeight);
-                      if (footers.length > 0) PDF.addImage(footers[dividePage], 'JPEG', 0, headerHeight + contentHeight, pageWidth, footerHeight);
+                      imageBookPage.body = pageData;
+                      if (footers.length > 0) {
+                        imageBookPage.footer = footers[dividePage];
+                        PDF.addImage(footers[dividePage], 'JPEG', 0, headerHeight + contentHeight, pageWidth, footerHeight);
+                      }
+                      imageBook.push(imageBookPage);
                       positionY += thisImgHeight;  // 下一个分页的y轴偏移（坐标）
                       height -= contentHeight;  // 当前内容页剩余高度
                       console.log(`第${nowPage}页组装中`, height);
@@ -136,7 +151,7 @@ export default {
           }
           console.log(`第${nowPage}页加载完成`);
         }
-        resolve({ pageDatas, canvases, downloadPDF: () => { PDF.save(fileName + '.pdf'); } });
+        resolve({ pageDatas, canvases, imageBook, PDFData: PDF, downloadPDF: () => { PDF.save(fileName + '.pdf'); } });
       });
     }
   }

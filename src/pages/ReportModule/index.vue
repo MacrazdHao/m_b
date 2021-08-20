@@ -1,78 +1,87 @@
 <template>
   <div class="ReportModule">
-    <Cover class="cover progressItem qualityScale" />
-    <div ref="pages" @click="downloadPDF">
-      <Catalogue
-        class="page qualityScale"
-        :style="{ minHeight: contentHeight + 'px' }"
-        :contentHeight="contentHeight"
-        :data="contentInfo"
-        :cnTitles="cnTitles"
-        :enTitles="enTitles"
+    <div class="generateBox" v-show="!generated">
+      <Cover class="cover progressItem qualityScale" />
+      <div ref="pages" @click="generateReport">
+        <Catalogue
+          class="page qualityScale"
+          :style="{ minHeight: contentHeight + 'px' }"
+          :contentHeight="contentHeight"
+          :data="contentInfo"
+          :cnTitles="cnTitles"
+          :enTitles="enTitles"
+        />
+        <template v-for="(item, index) in contentInfo">
+          <div :key="index">
+            <NormalPage
+              class="page qualityScale"
+              v-if="loadingPage >= index && !item.special"
+              :style="{ minHeight: contentHeight + 'px' }"
+              :chapterIndex="index"
+              :startPage="index == 0 ? 1 : contentInfo[index - 1].endPage + 1"
+              :data="item"
+              :contentHeight="contentHeight"
+              :lineHeight="lineHeight"
+              @setPageNum="setPageNum"
+            />
+            <ProgressPage
+              class="page qualityScale"
+              v-if="
+                loadingPage >= index &&
+                item.special &&
+                item.specialKey == 'progress'
+              "
+              :style="{ minHeight: contentHeight + 'px' }"
+              :chapterIndex="index"
+              :startPage="index == 0 ? 1 : contentInfo[index - 1].endPage + 1"
+              :data="item"
+              :contentHeight="contentHeight"
+              @setPageNum="setPageNum"
+            />
+          </div>
+        </template>
+      </div>
+      <Back class="cover progressItem qualityScale" />
+      <Header
+        class="progressItem qualityScale"
+        ref="header"
+        :username="nickName"
+        :cn="cnTitles[titleIndex]"
+        :en="enTitles[titleIndex]"
+        :pageNum="nowPage"
       />
-      <template v-for="(item, index) in contentInfo">
-        <div :key="index">
-          <NormalPage
-            class="page qualityScale"
-            v-if="loadingPage >= index && !item.special"
-            :style="{ minHeight: contentHeight + 'px' }"
-            :chapterIndex="index"
-            :startPage="index == 0 ? 1 : contentInfo[index - 1].endPage + 1"
-            :data="item"
-            :contentHeight="contentHeight"
-            :lineHeight="lineHeight"
-            @setPageNum="setPageNum"
-          />
-          <ProgressPage
-            class="page qualityScale"
-            v-if="
-              loadingPage >= index &&
-              item.special &&
-              item.specialKey == 'progress'
-            "
-            :style="{ minHeight: contentHeight + 'px' }"
-            :chapterIndex="index"
-            :startPage="index == 0 ? 1 : contentInfo[index - 1].endPage + 1"
-            :data="item"
-            :contentHeight="contentHeight"
-            @setPageNum="setPageNum"
-          />
+      <Footer
+        class="progressItem qualityScale"
+        ref="footer"
+        :date="getDateString(date, 'YY.MM.DD')"
+        :title="enTitles[titleIndex]"
+        :pageNum="nowPage"
+      />
+      <div>以下是生成的每页头部和底部</div>
+      <div v-for="(item, index) in pageInfo" :key="index">
+        <p>---{{ index }} - {{ item.height }}---</p>
+        <div v-for="(item2, index2) in item.headers" :key="`header${index2}`">
+          <img :src="item2" width="596" />
         </div>
-      </template>
-    </div>
-    <Back class="cover progressItem qualityScale" />
-    <Header
-      class="progressItem qualityScale"
-      ref="header"
-      :username="nickName"
-      :cn="cnTitles[titleIndex]"
-      :en="enTitles[titleIndex]"
-      :pageNum="nowPage"
-    />
-    <Footer
-      class="progressItem qualityScale"
-      ref="footer"
-      :date="getDateString(date, 'YY.MM.DD')"
-      :title="enTitles[titleIndex]"
-      :pageNum="nowPage"
-    />
-    <div>以下是生成的每页头部和底部</div>
-    <div v-for="(item, index) in pageInfo" :key="index">
-      <p>---{{ index }} - {{ item.height }}---</p>
-      <div v-for="(item2, index2) in item.headers" :key="`header${index2}`">
-        <img :src="item2" width="596" />
+        <div v-for="(item2, index2) in item.footers" :key="`footer${index2}`">
+          <img :src="item2" width="596" />
+        </div>
       </div>
-      <div v-for="(item2, index2) in item.footers" :key="`footer${index2}`">
-        <img :src="item2" width="596" />
+      <div id="canvas"></div>
+      <div v-for="(item, index) in canvases" :key="'test' + index">
+        <div v-html="item"></div>
+      </div>
+      <div>
+        <div v-for="(item, index) in pageDatas" :key="'test2' + index">
+          <img :height="pageHeight" :src="item" />
+        </div>
       </div>
     </div>
-    <div id="canvas"></div>
-    <div v-for="(item, index) in canvases" :key="'test' + index">
-      <div v-html="item"></div>
-    </div>
-    <div>
-      <div v-for="(item, index) in pageDatas" :key="'test2' + index">
-        <img :height="pageHeight" :src="item" />
+    <div ref="report">
+      <div class="reportPage" v-for="(item, index) in imageBook" :key="index">
+        <img v-if="item.header" :src="item.header" :width="pageWidth" />
+        <img v-if="item.body" :src="item.body" :width="pageWidth" />
+        <img v-if="item.footer" :src="item.footer" :width="pageWidth" />
       </div>
     </div>
   </div>
@@ -89,6 +98,7 @@ import Footer from "./components/footer.vue";
 import html2canvas from "html2canvas";
 import DateTools from "@/utils/date";
 export default {
+  props: ["info"],
   components: {
     Cover,
     Catalogue,
@@ -456,9 +466,11 @@ export default {
         },
       ],
       generating: false,
+      generated: false,
       loadingPage: 0,
       pageDatas: [],
       canvases: [],
+      imageBook: [],
     };
   },
   computed: {
@@ -471,7 +483,11 @@ export default {
   },
   watch: {},
   mounted() {
-    console.log(new Date().getMonth());
+    if (this.info) {
+      for (let key in this.info) {
+        this[key] = this.info[key];
+      }
+    }
     this.getCovers();
     this.headerHeight = this.$refs.header.$el.offsetHeight;
     this.footerHeight = this.$refs.footer.$el.offsetHeight;
@@ -525,6 +541,7 @@ export default {
           console.log(`封面${i}完成`);
         });
       }
+      this.generateReport();
     },
     async getHeader() {
       return new Promise((resolve, reject) => {
@@ -596,7 +613,7 @@ export default {
         });
       });
     },
-    downloadPDF() {
+    generateReport() {
       // if (!this.loadFinish) {
       //   alert("加载尚未完成，请稍后再试");
       //   return;
@@ -631,6 +648,9 @@ export default {
           this.pageDatas = res.pageDatas;
           this.canvases = res.canvases;
           this.generating = false;
+          this.generated = true;
+          console.log(res);
+          this.imageBook = res.imageBook;
         });
       });
     },
@@ -646,10 +666,20 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 60px 0;
-  // transform: scale(2);
-  // height: fit-content;
-  .qualityScale {
-    // transform: scale(1.2);
+  .generateBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .reportPage + .reportPage {
+    margin-top: 10px;
+  }
+  .reportPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
