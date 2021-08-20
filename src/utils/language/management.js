@@ -57,6 +57,7 @@ export default {
     reportTitle: '报告回看',
     reportSubtitle: '点击可查看过往咨询报告',
     unkonwReportName: '未知报告',
+    reportName: '报告',
     getHistoryReportError: '获取{name}报告失败，请重试',
     getConsultStatusError: '获取咨询流程状态失败，请重试',
     stageHasPassTips: '该阶段已结束',
@@ -145,6 +146,7 @@ export default {
 
     reportTitle: '报告回看',
     unkonwReportName: 'Unknow Report',
+    reportName: 'Report',
     getHistoryReportError: '获取{name}报告失败，请重试',
     getConsultStatusError: '获取咨询流程状态失败，请重试',
     stageHasPassTips: '该阶段已结束',

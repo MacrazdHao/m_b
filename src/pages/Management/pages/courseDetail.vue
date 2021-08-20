@@ -251,7 +251,13 @@
       <div class="reportList">
         <template v-for="(item, index) in reportList">
           <div class="reportItem" :key="index" @click="showHistory(index)">
-            <p>{{ item.name || $t("management.unkonwReportName") }}</p>
+            <p>
+              {{
+                item.name
+                  ? item.name + $t("management.reportName")
+                  : $t("management.unkonwReportName")
+              }}
+            </p>
           </div>
           {{ "" }}
         </template>
@@ -532,6 +538,7 @@ export default {
             .dispatch("management/saveStudentProfile", {
               userId: this.$route.query.id,
               nodeId: this.$route.query.nodeId,
+              name: `2-${this.liveInfo.sessionNum}`,
               reportData: this.form,
             })
             .then((res) => {

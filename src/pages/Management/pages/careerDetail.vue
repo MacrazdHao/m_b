@@ -364,6 +364,7 @@ export default {
             .dispatch("management/saveStudentProfile", {
               userId: this.$route.query.id,
               nodeId: this.$route.query.nodeId,
+              name: `1-1`,
               reportData: this.form,
             })
             .then((res) => {
