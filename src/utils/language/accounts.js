@@ -83,6 +83,7 @@ export default {
         confirmButton: '确定',
         cancelButton: '取消'
       },
+      batchSelectedEmpty: '请至少选择一个账号',
       deleteTips: '删除后，账号个人信息也将删除',
       deleteTips2: '请谨慎确认是否要删除账号？',
       emptyTips: {
@@ -193,6 +194,7 @@ export default {
         confirmButton: 'confirm',
         cancelButton: 'cancel'
       },
+      batchSelectedEmpty: '请至少选择一个账号',
       deleteTips: 'After deletion, the account personal information will also be deleted',
       deleteTips2: 'Please carefully confirm whether you want to delete the account?',
       emptyTips: {

@@ -157,6 +157,7 @@ import SButton from "@/components/common/button.vue";
 import PSelector from "@/components/common/selector";
 import FixedMenu from "@/components/common/fixedMenu.vue";
 import defaultBackMixin from "@/mixins/defaultBack";
+import Enum from "@/utils/enum";
 export default {
   mixins: [defaultBackMixin],
   components: {
@@ -174,17 +175,19 @@ export default {
       status: [
         { text: this.$t("management.status.all"), value: -1 },
         { text: this.$t("management.status.noStart"), value: 0 },
-        { text: this.$t("management.status.collection"), value: 11 },
-        { text: this.$t("management.status.testing"), value: 12 },
-        { text: this.$t("management.status.discussion"), value: 13 },
-        { text: this.$t("management.status.consultation"), value: 21 },
-        { text: this.$t("management.status.fllowup"), value: 31 },
-        { text: this.$t("management.status.update"), value: 32 },
-        { text: this.$t("management.status.asupport"), value: 41 },
-        { text: this.$t("management.status.support"), value: 42 },
-        { text: this.$t("management.status.monitoring"), value: 43 },
-        { text: this.$t("management.status.report"), value: 88 },
-        { text: this.$t("management.status.end"), value: 99 },
+        // { text: this.$t("management.status.collection"), value: 11 },
+        // { text: this.$t("management.status.testing"), value: 12 },
+        // { text: this.$t("management.status.discussion"), value: 13 },
+        // { text: this.$t("management.status.consultation"), value: 21 },
+        // { text: this.$t("management.status.fllowup"), value: 31 },
+        // { text: this.$t("management.status.update"), value: 32 },
+        // { text: this.$t("management.status.asupport"), value: 41 },
+        // { text: this.$t("management.status.support"), value: 42 },
+        // { text: this.$t("management.status.monitoring"), value: 43 },
+        // { text: this.$t("management.status.report"), value: 88 },
+        // { text: this.$t("management.status.end"), value: 99 },
+        { text: this.$t("management.status.consultLabel0"), value: 1 },
+        { text: this.$t("management.status.consultLabel1"), value: 2 },
       ],
       statusIndex: 0,
       value: "",
@@ -239,29 +242,34 @@ export default {
         });
     },
     statusToText(status) {
-      switch (status) {
+      let _status = Enum.getServerNodeStage(status);
+      switch (_status) {
         case 0:
           return this.$t("management.status.noStart");
-        case 11:
-          return this.$t("management.status.collection");
-        case 12:
-          return this.$t("management.status.discussion");
-        case 21:
-          return this.$t("management.status.consultation");
-        case 31:
-          return this.$t("management.status.fllowup");
-        case 32:
-          return this.$t("management.status.update");
-        case 41:
-          return this.$t("management.status.asupport");
-        case 42:
-          return this.$t("management.status.support");
-        case 43:
-          return this.$t("management.status.monitoring");
-        case 88:
-          return this.$t("management.status.report");
-        case 99:
-          return this.$t("management.status.end");
+        case 1:
+          return this.$t("management.status.consultLabel0");
+        case 2:
+          return this.$t("management.status.consultLabel1");
+        // case 11:
+        //   return this.$t("management.status.collection");
+        // case 12:
+        //   return this.$t("management.status.discussion");
+        // case 21:
+        //   return this.$t("management.status.consultation");
+        // case 31:
+        //   return this.$t("management.status.fllowup");
+        // case 32:
+        //   return this.$t("management.status.update");
+        // case 41:
+        //   return this.$t("management.status.asupport");
+        // case 42:
+        //   return this.$t("management.status.support");
+        // case 43:
+        //   return this.$t("management.status.monitoring");
+        // case 88:
+        //   return this.$t("management.status.report");
+        // case 99:
+        //   return this.$t("management.status.end");
         default:
           return this.$t("management.status.none");
       }

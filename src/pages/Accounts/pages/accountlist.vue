@@ -399,6 +399,12 @@ export default {
         });
     },
     batchDelete() {
+      if (this.selected.length == 0) {
+        this.$message.warning({
+          text: this.$t("accounts.accountlist.batchSelectedEmpty"),
+        });
+        return;
+      }
       this.$dialog
         .warning({
           text: [
