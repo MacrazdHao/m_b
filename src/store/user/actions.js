@@ -11,7 +11,7 @@ export default {
       request.post(urls.schoolLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
-        setUsertype(res.data.userType);
+        setUsertype(Enum.getLocalUserType(res.data.userType));
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
@@ -24,7 +24,7 @@ export default {
       request.post(urls.studentLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
-        setUsertype(res.data.userType);
+        setUsertype(Enum.getLocalUserType(res.data.userType));
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
@@ -37,7 +37,7 @@ export default {
       request.post(urls.consultantLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
-        setUsertype(res.data.userType);
+        setUsertype(Enum.getLocalUserType(res.data.userType));
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
@@ -50,7 +50,7 @@ export default {
       request.post(urls.adminLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
-        setUsertype(res.data.userType);
+        setUsertype(Enum.getLocalUserType(res.data.userType));
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
@@ -80,11 +80,11 @@ export default {
       resolve();
     });
   },
-  logout: ({ commit, state }, data) => {
+  logout: ({ commit, state }) => {
     let type = getUsertype();
     console.log(type)
     return new Promise((resolve, reject) => {
-      request.post(urls.logout, data).then(res => {
+      request.post(type >= 10 ? urls.adminLogout : urls.logout).then(res => {
         console.log('登出成功', res);
         resetRouter();
         removeToken();
@@ -97,9 +97,9 @@ export default {
       });
     });
   },
-  adminLogout: ({ commit, state }, data) => {
+  adminLogout: ({ commit, state }) => {
     return new Promise((resolve, reject) => {
-      request.post(urls.adminLogout, data).then(res => {
+      request.post(urls.adminLogout).then(res => {
         console.log('登出成功', res);
         resetRouter();
         removeToken();

@@ -229,6 +229,7 @@ export default {
     },
     // 章节内容转换
     getContentText(text, index, index2) {
+      text = text.replace(/\n/gm, "<br/>");
       let p = document.createElement("p");
       p.style.fontSize = "16px";
       p.style.lineHeight = this.lineHeight + "px";

@@ -557,6 +557,7 @@ export default {
               this.$message.message({
                 text: this.$t("management.saveStudentScheduleSuccessTips"),
               });
+              this.goBack();
             })
             .catch((err) => {
               this.$message.error({

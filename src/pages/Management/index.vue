@@ -1,57 +1,52 @@
 <template>
   <div class="Management">
     <transition name="slide-fade2">
-      <router-view
-        @setSuffixMenu="setSuffixMenu"
-        @toDetail="toDetail"
-        @closeDetail="closeDetail"
-        :info="detailInfo"
-      />
+      <router-view @setSuffixMenu="setSuffixMenu" />
     </transition>
   </div>
 </template>
 
 <script>
-import Bus from "./utils/bus";
+// import Bus from "./utils/bus";
 export default {
   data() {
     return {
-      detailInfo: null,
+      // detailInfo: null,
     };
   },
-  computed: {
-    whichPage() {
-      return this.$route.name;
-    },
-    whichGroup() {
-      return this.$route.meta.group;
-    },
-  },
-  mounted() {
-    this.detailInfo = this.getDetailInfo();
-  },
+  // computed: {
+  // whichPage() {
+  //   return this.$route.name;
+  // },
+  // whichGroup() {
+  //   return this.$route.meta.group;
+  // },
+  // },
+  // mounted() {
+  // this.detailInfo = this.getDetailInfo();
+  // },
   methods: {
-    getDetailInfo() {
-      switch (this.whichPage) {
-        case "counselingDetail":
-          return Bus.getStudentInfo_counseling();
-        case "careerDetail":
-          return Bus.getStudentInfo_career();
-        default:
-          return null;
-      }
-    },
+    // getDetailInfo() {
+    //   switch (this.whichPage) {
+    //     case "counselingDetail":
+    //       return Bus.getStudentInfo_counseling();
+    //     case "careerDetail":
+    //       return Bus.getStudentInfo_career();
+    //     default:
+    //       return null;
+    //   }
+    // },
     setSuffixMenu(arr) {
       this.$emit("setSuffixMenu", arr, true);
     },
-    toDetail(info) {
-      this.detailInfo = info;
-      Bus[`setStudentInfo_${this.whichGroup}`](info);
-      this.$router.push({ path: `/index/management/${this.whichGroup}Detail` });
-    },
-    closeDetail() {
-      this.$router.push({ path: `/index/management/${this.whichGroup}List` });
-    },
+    // toDetail(info) {
+    //   this.detailInfo = info;
+    //   Bus[`setStudentInfo_${this.whichGroup}`](info);
+    //   this.$router.push({ path: `/index/management/${this.whichGroup}Detail` });
+    // },
+    // closeDetail() {
+    //   this.$router.push({ path: `/index/management/${this.whichGroup}List` });
+    // },
   },
 };
 </script>
