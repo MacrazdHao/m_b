@@ -13,8 +13,8 @@
       hideHeaderTitle: 是否隐藏头部的菜单（需要完全自定义头部时使用）
       notShowInMenu: 是否在菜单下显示该路由,
       notShowChildren: 是否在菜单下显示子菜单,
-      notShowThisChildren: 作为子子级是否显示在父级的子菜单中
-      group: （自定义）子子级特殊分组标识，和notShowThisChildren配合使用（B作为A子级，但实际路由级别又与A同级的情况下使用）
+      notShowThisChild: 作为子子级是否显示在父级的子菜单中
+      group: （自定义）子子级特殊分组标识，和notShowThisChild配合使用（B作为A子级，但实际路由级别又与A同级的情况下使用）
       groupParent: （自定义）同一分组下的主路由（入口）,
       type: 一模多用时，用于区分使用该模板的不同页面的特殊标识,
       defaultPrevPath: （数组）默认上级页面的路径，用于无历史操作时的$router返回操作
@@ -513,7 +513,7 @@ export default {
     meta: {
       title: "生涯档案",
       enTitle: "Career Profile",
-      notShowThisChildren: true,
+      notShowThisChild: true,
       group: "counseling",
       groupParent: false,
       // defaultPrevPath: ["/management/counselinglist"],
@@ -540,7 +540,7 @@ export default {
     meta: {
       title: "职业发展咨询",
       enTitle: "Career Consult",
-      notShowThisChildren: true,
+      notShowThisChild: true,
       group: "career",
       groupParent: false,
       defaultPrevName: ["careerlist"],
@@ -566,7 +566,7 @@ export default {
     meta: {
       title: "大学课程和学科咨询",
       enTitle: "Course&Subject Consult",
-      notShowThisChildren: true,
+      notShowThisChild: true,
       group: "course",
       groupParent: false,
       defaultPrevName: ["courselist"],

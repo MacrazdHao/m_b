@@ -13,6 +13,7 @@
               :class="[
                 'button',
                 pageName == item.meta.id ? 'button--selected' : '',
+                childrenMenu[item.meta.id] ? 'cmenu--selected' : '',
               ]"
               @click="selectItem([item], `/index/${item.path}`)"
             >
@@ -51,7 +52,7 @@
                     'button',
                     pageName == item2.meta.id ? 'button--selected' : '',
                   ]"
-                  v-if="index2 > 0 && !item2.meta.notShowThisChildren"
+                  v-if="index2 > 0 && !item2.meta.notShowThisChild"
                   @click="
                     selectItem(
                       [item, item2],
@@ -171,7 +172,7 @@
 
 <script>
 // import redirectMixin from "@/mixins/redirect";
-import {getUsertype } from '@/utils/auth';
+import { getUsertype } from "@/utils/auth";
 import languageMixin from "@/mixins/language";
 export default {
   mixins: [languageMixin],
@@ -270,7 +271,7 @@ export default {
             }, 0);
           }
         }
-        if (this.$route.meta.notShowThisChildren) {
+        if (this.$route.meta.notShowThisChild) {
           let group = this.$route.meta.group;
           let route = this.$route.matched;
           let menu = this.$store.state.global.menu;
@@ -443,6 +444,14 @@ export default {
           .button--selected,
           .button--selected:hover {
             background-color: #4b78f6;
+            .button-title {
+              p {
+                color: #fff;
+              }
+            }
+          }
+          .cmenu--selected {
+            background-color: #101117;
             .button-title {
               p {
                 color: #fff;

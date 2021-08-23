@@ -9,6 +9,11 @@
       theme="blue"
       @btnClick="goIndex"
     />
+    <SButton
+      class="button"
+      :text="$t('home.header.logout')"
+      @btnClick="logout"
+    />
   </div>
 </template>
 
@@ -21,6 +26,14 @@ export default {
   methods: {
     goIndex() {
       this.$router.push({ path: "/" });
+    },
+    logout() {
+      this.$logoutDialog(() => {
+        this.$store.dispatch("user/logout").then((res) => {
+          console.log(res);
+          this.$router.push({ path: res.type == 10 ? "/adminEntry" : "/" });
+        });
+      });
     },
   },
 };
@@ -37,6 +50,9 @@ export default {
   .button {
     margin-top: 50px;
     padding: 7px 17px;
+  }
+  .button + .button {
+    margin-top: 12px;
   }
 }
 </style>

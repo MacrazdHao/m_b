@@ -32,6 +32,13 @@
         theme="blue"
         @btnClick="toLiving"
       />
+      <CButton
+        :class="['reportButton', 'liveButton']"
+        v-if="reportNodeId"
+        :text="$t(`counseling.step${step}.reportButton`)"
+        theme="blue"
+        @btnClick="getReport"
+      />
     </div>
     <div class="finish" v-if="finished && !loading">
       <img src="@/assets/counseling/success.svg" />
@@ -75,6 +82,21 @@ export default {
     },
     stateInfo() {
       return this.$store.state.counseling.stateInfo;
+    },
+    reportNodeId() {
+      let nodeId = null;
+      for (
+        let i = this.$store.state.counseling.allNodeStatus.length - 1;
+        i > 0;
+        i--
+      ) {
+        let item = this.$store.state.counseling.allNodeStatus[i];
+        if (item.nodeStatus == 3) {
+          nodeId = item.nodeId;
+          break;
+        }
+      }
+      return nodeId;
     },
     language() {
       return this.$i18n.locale;
@@ -137,7 +159,7 @@ export default {
       if (!this.nodeId) return;
       console.log(window.location);
       window.open(
-        `${window.location.origin}/reportModule?nodeId=${this.nodeId}`
+        `${window.location.origin}/reportModule?nodeId=${this.reportNodeId}`
       );
     },
   },
@@ -173,6 +195,9 @@ export default {
     }
     .button {
       margin-top: 34px;
+    }
+    .reportButton {
+      margin-top: 12px;
     }
     .backButton {
       padding-left: 14px;

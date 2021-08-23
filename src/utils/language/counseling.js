@@ -74,7 +74,7 @@ export default {
       numUnit: "道",
       finishTitle: "评测报告",
       finishTips: "评测报告正在生成，请稍等片刻",
-      reportButton: "查看报告"
+      reportButton: "上回报告"
     },
     step3: {
       title: "职业发展咨询",
@@ -86,7 +86,7 @@ export default {
       liveButton: "进入直播",
       finishTitle: "职业发展咨询",
       finishTips: "职业发展咨询已完成，请查看您的职业发展报告",
-      reportButton: "查看报告"
+      reportButton: "上回报告"
     },
     step4: {
       title: "大学课程和学科咨询",
@@ -98,7 +98,7 @@ export default {
       liveButton: "进入直播",
       finishTitle: "大学课程和学科咨询",
       finishTips: "大学课程和学科咨询已完成，请查看您的职业发展报告",
-      reportButton: "查看报告"
+      reportButton: "上回报告"
     },
     step5: {
       title: "大学建议和偏好咨询",
@@ -110,7 +110,7 @@ export default {
       liveButton: "进入直播",
       finishTitle: "大学建议和偏好咨询",
       finishTips: "大学建议和偏好咨询已完成，请查看您的职业发展报告",
-      reportButton: "查看报告"
+      reportButton: "上回报告"
     },
     step6: {
       title: "导师输出生涯文档",
@@ -119,7 +119,7 @@ export default {
       backButton: "返回工作台",
       finishTitle: "生涯文档",
       finishTips: "生涯文档已完成，请查看您的生涯文档",
-      reportButton: "查看报告"
+      reportButton: "上回报告"
     },
     loadInfoError: '获取状态信息出错，请刷新重试',
   },

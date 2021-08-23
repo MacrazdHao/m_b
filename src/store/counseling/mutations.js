@@ -2,7 +2,8 @@ import types from './types';
 
 const getDefaultState = () => {
   return {
-    stateInfo: null
+    stateInfo: null,
+    allNodeStatus: [],
   }
 }
 
@@ -12,5 +13,8 @@ export default {
   },
   [types.SET_STATEINFO](state, stateInfo) {
     state.stateInfo = stateInfo;
-  }
+  },
+  [types.SET_ALLNODESTATUS](state, allNodeStatus) {
+    state.allNodeStatus = allNodeStatus;
+  },
 }

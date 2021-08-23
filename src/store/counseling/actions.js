@@ -4,12 +4,13 @@ import request from '../../utils/request';
 import Enum from '@/utils/enum';
 
 export default {
-  getStateinfo: ({ commit, state }, data) => {
+  getStateinfo: ({ commit, state }) => {
     return new Promise((resolve, reject) => {
-      request.get(urls.stateInfo, data).then(res => {
+      request.get(urls.allConsultStageInfo).then(res => {
         console.log('获取cecp状态信息成功', res);
         res.data.currentNodeDTO.nodeType = Enum.getLocalStage(res.data.currentNodeDTO.nodeType);
         commit(types.SET_STATEINFO, res.data.currentNodeDTO);
+        commit(types.SET_ALLNODESTATUS, res.data.allNodeDTO);
         resolve(res);
       }).catch(err => {
         console.log('获取cecp状态信息失败', err);
@@ -48,6 +49,17 @@ export default {
         resolve(res);
       }).catch(err => {
         console.log('获取报告内容失败', err);
+        reject(err);
+      });
+    });
+  },
+  getAllConsultStageInfo: ({ commit, state }) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.allConsultStageInfo).then(res => {
+        console.log('获取所有咨询节点信息成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取所有咨询节点信息失败', err);
         reject(err);
       });
     });

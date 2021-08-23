@@ -3,7 +3,8 @@ import mutations from './mutations';
 import actions from './actions';
 
 const state = {
-  stateInfo: {}
+  stateInfo: {},
+  allNodeStatus: [],
 }
 
 export default {
