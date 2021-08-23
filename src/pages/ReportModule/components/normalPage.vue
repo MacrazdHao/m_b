@@ -236,7 +236,8 @@ export default {
       p.style.textAlign = "justify";
       p.style.textAlignLast = "justify";
       p.style.wordBreak = "break-word";
-      p.style.width = "100%";
+      p.style.maxWidth = "100%";
+      p.style.width = "fit-content";
       // p.style.marginTop = "-4px";
       let parent =
         this.$refs[
@@ -253,21 +254,23 @@ export default {
         p.innerHTML = aColumn;
         // console.log(p.scrollHeight, i);
         if (p.scrollHeight > this.lineHeight) {
-          aColumn = "";
-          p.innerHTML = aColumn;
           let section = text.substring(cutStart, i);
+          p.innerHTML = section;
           section = `<p style="line-height:${this.lineHeight}px;height:${
             this.lineHeight
           }px;${
-            section.length < 30 ? "width: fit-content;" : ""
+            // section.length < 30 ? "width: fit-content;" : ""
+            p.scrollWidth < parent.offsetWidth ? "width: fit-content;" : ""
           }">${section}</p>`;
           res += section;
           cutStart = i;
+          aColumn = "";
+          p.innerHTML = aColumn;
         }
       }
       if (aColumn != "") {
         let section = aColumn;
-        if (section.length < 30) {
+        if (p.scrollWidth < parent.offsetWidth) {
           section = `<p style="line-height:${this.lineHeight}px;height:${this.lineHeight}px;width: fit-content;">${section}</p>`;
         }
         res += section;
@@ -351,6 +354,7 @@ export default {
   width: 596px;
   box-sizing: border-box;
   .chapterBox {
+    width: 100%;
     display: flex;
     flex-direction: column;
     .titleBox {
@@ -371,10 +375,12 @@ export default {
       }
     }
     .contentBox {
+      width: 100%;
       display: flex;
       flex-direction: column;
       // align-items: center;
       padding: 0 50px;
+      box-sizing: border-box;
       .content {
         width: 100%;
         font-size: 16px;
@@ -388,7 +394,9 @@ export default {
         margin-top: 36px;
       }
       .partBox {
+        width: 100%;
         .partInBox {
+          width: 100%;
           .subtitleBox {
             display: flex;
             flex-direction: row;
