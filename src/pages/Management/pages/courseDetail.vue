@@ -321,12 +321,7 @@ export default {
       liveInfo: null,
       contentInfo: null,
       cnTitles: ["目录", "概况与背景", "咨询基本情况", "下一步"],
-      enTitles: [
-        "Contents",
-        "Overview",
-        "Interview Notes",
-        "Next Steps",
-      ],
+      enTitles: ["Contents", "Overview", "Interview Notes", "Next Steps"],
       date: new Date().getTime(),
       reportList: null,
       historyMode: false,
@@ -574,6 +569,9 @@ export default {
       this.historyTimes.forEach((item, _index) => {
         if (item.nodeId == this.reportList[index].nodeId) {
           this.historyLiveInfo = { ...item, sessionNum: _index + 1 };
+          this.$nextTick(() => {
+            this.$forceUpdate();
+          });
         }
       });
       this.$store
