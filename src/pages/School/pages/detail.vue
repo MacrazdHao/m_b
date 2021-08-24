@@ -236,19 +236,18 @@
     </div>
     <TopDrawer ref="reportList" :title="consultStage[reportIndex].label">
       <div class="reportList">
-        <div class="reportItem"><p>2-1报告2-1报告</p></div>
-        <div class="reportItem"><p>2-99报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
-        <div class="reportItem"><p>2-1报告</p></div>
+        <template v-for="(item, index) in reportList">
+          <div class="reportItem" :key="index" @click="getReport(item.nodeId)">
+            <p>
+              {{
+                item.name
+                  ? item.name + $t("management.reportName")
+                  : $t("management.unkonwReportName")
+              }}
+            </p>
+          </div>
+          {{ "" }}
+        </template>
       </div>
     </TopDrawer>
   </div>
@@ -302,6 +301,7 @@ export default {
       ],
       times: [],
       reportIndex: 0,
+      reportList: null,
     };
   },
   computed: {
@@ -393,7 +393,30 @@ export default {
       // });
     },
     showReportList() {
-      this.$refs.reportList.openDrawer();
+      if (!this.reportList) {
+        this.$store
+          .dispatch("school/getStudentReportList", this.$route.query.id)
+          .then((res) => {
+            this.reportList = res.data;
+            if (this.reportList.length == 0) {
+              this.$message.message({
+                text: this.$t("management.getReportListEmptyTips"),
+              });
+              return;
+            }
+            this.$refs.reportList.openDrawer();
+          })
+          .catch((err) => {
+            this.$message.error({
+              text: this.$t("management.getReportListErrorTips"),
+            });
+          });
+      } else this.$refs.reportList.openDrawer();
+    },
+    getReport(nodeId) {
+      window.open(
+        `${window.location.origin}/reportModule?nodeId=${nodeId}`
+      );
     },
     nextPage() {
       this.page = this.page == 1 ? 2 : 1;

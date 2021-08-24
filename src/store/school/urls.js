@@ -9,4 +9,6 @@ export default {
   schoolTemplateList: (schoolId) => `/admin/auth/school/${schoolId}/getSchoolAuth`,
   schoolTemplateAllocateList: (schoolId) => `/admin/auth/school/${schoolId}/getSchoolAuthAllTemplate`,
   saveSchoolTemplateAllocate: '/admin/auth/school/updateSchoolAuth',
+  studentReportList: (userId) => `/admin/cecp/${userId}/profileList`,
+  studentReport: (userId, nodeId) => `admin/cecp/${userId}/profile?nodeId=${nodeId}`,
 }

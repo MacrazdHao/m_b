@@ -1,12 +1,15 @@
 <template>
   <div class="ReportModule">
-    <p class="generateTips" v-show="loadingInfo">
+    <p class="generateTips" v-show="loadingInfo && !loadInfoError">
       {{ $t("reportModule.loadingReportInfoTips") }}
     </p>
-    <p class="generateTips" v-show="!loadingInfo && !generated">
+    <p
+      class="generateTips"
+      v-show="!loadingInfo && !generated && !loadInfoError"
+    >
       {{ $t("reportModule.generatingTips") }}
     </p>
-    <p class="generateTips" v-show="loadInfoError">
+    <p class="generateTips" v-show="!loadingInfo && loadInfoError">
       {{ $t("reportModule.loadReportInfoError") }}
     </p>
     <div class="generateBox" v-if="!loadingInfo" v-show="!generated">
@@ -485,6 +488,9 @@ export default {
     };
   },
   computed: {
+    stateInfo() {
+      return this.$store.state.counseling.stateInfo;
+    },
     loadFinish() {
       return (
         this.loadedProgress ==
@@ -505,7 +511,12 @@ export default {
     initInfo() {
       this.loadingInfo = true;
       this.$store
-        .dispatch("counseling/getCurrentProfile", this.$route.query.nodeId)
+        .dispatch(
+          this.stateInfo.nodeType == 10
+            ? "school/getStudentReport"
+            : "counseling/getCurrentProfile",
+          this.$route.query.nodeId
+        )
         .then((res) => {
           this.$store
             .dispatch("global/getHtmlContent", res.data.reportUrl)
@@ -532,17 +543,19 @@ export default {
                 this.getCovers();
               });
             })
-            .catch((err) => {
+            .catch((err2) => {
               this.loadingInfo = false;
               this.loadInfoError = true;
               this.$message.error({
                 text: this.$t("reportModule.loadReportInfoError"),
               });
-              console.log(err);
+              console.log(err2);
             });
         })
         .catch((err) => {
           console.log(err);
+          this.loadingInfo = false;
+          this.loadInfoError = true;
           this.$message.error({
             text: this.$t("reportModule.loadReportInfoError"),
           });

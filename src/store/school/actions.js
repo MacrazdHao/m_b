@@ -114,4 +114,26 @@ export default {
       });
     });
   },
+  getStudentReportList: ({ commit, state }, userId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.studentReportList(userId)).then(res => {
+        console.log('获取学生报告列表成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取学生报告列表失败', err);
+        reject(err);
+      });
+    });
+  },
+  getStudentReport: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.studentReport(data.userId, data.nodeId)).then(res => {
+        console.log('获取学生报告成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取学生报告失败', err);
+        reject(err);
+      });
+    });
+  },
 }
