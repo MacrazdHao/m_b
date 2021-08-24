@@ -513,7 +513,7 @@ export default {
       this.$set(this.contentInfo, bigChapter, result);
     },
     cancel() {
-      if (this.stageNum != 2) {
+      if (this.stageNum != 2 || !(this.stageNum == 2 && this.liveInfo.status == -1)) {
         this.goBack();
         return;
       }
