@@ -143,13 +143,6 @@ export default {
             }, {
               path: '/consultant'
             }, {
-              path: '/estuary',
-              children: [{
-                path: '/estuaryStudents',
-              }, {
-                path: '/estuaryRecords',
-              }]
-            }, {
               path: '/playback'
             }, {
               path: "/testing",
