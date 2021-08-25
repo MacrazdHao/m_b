@@ -101,7 +101,7 @@ export default {
       // width: calc(100% + 24px) !important;
       .menuBox {
         width: 100% !important;
-        min-width: 0 !important;
+        // min-width: 100% !important;
         .menu-item {
           p {
             text-align: left;
