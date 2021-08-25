@@ -129,6 +129,13 @@ export default {
       tableData: [],
     };
   },
+  watch: {
+    loading(val) {
+      if (val) {
+        this.tableData = [];
+      }
+    },
+  },
   mounted() {
     this.$emit("setSuffixMenu", [this.$t("school.templateList.title")]);
     this.initList();

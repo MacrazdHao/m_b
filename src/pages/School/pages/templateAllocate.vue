@@ -225,6 +225,11 @@ export default {
         this.authStudentCount = 0;
       }
     },
+    loading(val) {
+      if (val) {
+        this.tableData = [];
+      }
+    },
   },
   mounted() {
     this.$emit("setSuffixMenu", [this.$t("school.templateAllocate.title")]);

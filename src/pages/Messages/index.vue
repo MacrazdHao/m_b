@@ -99,6 +99,11 @@ export default {
       this.messages = [];
       this.initList();
     },
+    loading(val) {
+      if (val) {
+        this.tableData = [];
+      }
+    },
   },
   mounted() {
     if (!this.$route.query.timestamp) {

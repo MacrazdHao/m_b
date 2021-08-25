@@ -194,6 +194,11 @@ export default {
       //   this.initList();
       // }
     },
+    loading(val) {
+      if (val) {
+        this.tableData = [];
+      }
+    },
   },
   mounted() {
     this.page = {

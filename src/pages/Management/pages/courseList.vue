@@ -191,6 +191,13 @@ export default {
       },
     };
   },
+  watch: {
+    loading(val) {
+      if (val) {
+        this.tableData = [];
+      }
+    },
+  },
   mounted() {
     this.page = {
       dataNum: 0,
