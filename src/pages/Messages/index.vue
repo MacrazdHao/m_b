@@ -168,13 +168,13 @@ export default {
       });
     },
     readMessage(index) {
-      if (this.messages[index].status) return;
+      if (this.messages[index].readStatus) return;
       this.$store
         .dispatch("user/readMessages", this.messages[index].id)
         .then((res) => {
           this.$set(this.messages, index, {
             ...this.messages[index],
-            status: true,
+            readStatus: true,
           });
           this.$store.dispatch("user/getUnreadNum");
         })
