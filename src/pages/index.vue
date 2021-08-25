@@ -352,7 +352,11 @@ export default {
       });
     },
     goMessages() {
-      this.$router.push({ path: "/index/messages" });
+      console.log(this.$route);
+      this.$router.push({
+        path: "/index/messages",
+        query: { timestamp: new Date().getTime() },
+      });
     },
     goPersonal() {
       if (this.$route.path.indexOf("/index/personal") < 0) {

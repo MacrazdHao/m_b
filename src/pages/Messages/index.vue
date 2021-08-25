@@ -82,7 +82,32 @@ export default {
       },
     };
   },
+  computed: {
+    timestamp() {
+      return this.$route.query.timestamp;
+    },
+  },
+  watch: {
+    timestamp(val) {
+      console.log(val);
+      this.page = {
+        dataNum: 0,
+        total: 10,
+        size: 10,
+        current: 1,
+      };
+      this.messages = [];
+      this.initList();
+    },
+  },
   mounted() {
+    if (!this.$route.query.timestamp) {
+      this.$router.push({
+        path: "/index/messages",
+        query: { timestamp: new Date().getTime() },
+      });
+      return;
+    }
     this.page = {
       dataNum: 0,
       total: 10,
@@ -449,6 +474,7 @@ export default {
             margin-bottom: 18px;
             font-size: 14px;
             line-height: 20px;
+            text-align: left;
             // a {
             //   cursor: pointer;
             //   color: #4b77f6;
