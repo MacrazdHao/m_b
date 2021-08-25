@@ -92,8 +92,8 @@
           <!-- <p @click="logout">登出</p> -->
           <div class="messageIconBox" @click="goMessages">
             <img class="messages" src="@/assets/index/icon_news.svg" />
-            <div class="num">
-              <p>96</p>
+            <div class="num" v-if="$store.state.user.unreadNum > 0">
+              <p>{{ $store.state.user.unreadNum }}</p>
             </div>
           </div>
           <div

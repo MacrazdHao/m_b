@@ -3,7 +3,7 @@ import types from './types';
 const getDefaultState = () => {
   return {
     userinfo: null,
-    messages: []
+    unreadNum: 0
   }
 }
 
@@ -14,7 +14,7 @@ export default {
   [types.SET_USERINFO](state, userinfo) {
     state.userinfo = userinfo;
   },
-  [types.SET_MESSAGES](state, messages) {
-    state.messages = messages;
+  [types.SET_UNREAD_NUM](state, unreadNum) {
+    state.unreadNum = unreadNum;
   }
 }

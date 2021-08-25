@@ -4,5 +4,8 @@ export default {
   },
   messages(state) {
     return state.messages;
+  },
+  unreadNum(state) {
+    return state.unreadNum;
   }
 }

@@ -31,8 +31,8 @@ export default {
         },
         country: {
           label: "学生国籍",
-          china: "中国籍",
-          foreign: "外国籍",
+          china: "中国",
+          foreign: "外国",
         },
         uploadTips: '最多可以上传最近的三份成绩单，格式为pdf',
         uploadButton: '上传',

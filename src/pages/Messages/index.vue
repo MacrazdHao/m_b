@@ -1,61 +1,61 @@
 <template>
   <div class="Messages">
     <div class="messageBox">
-      <div class="message" v-for="(item, index) in messages" :key="index">
-        <div class="messageTitle" @click="showFiles(index)">
-          <div class="titleBox">
-            <p>{{ item.title }}</p>
-            <div v-show="!item.isRead"></div>
+      <p class="loadTips" v-if="loading">
+        {{ $t("messages.emptyTips.loadingList") }}
+      </p>
+      <p class="loadTips" v-if="messages.length == 0 && !error && !loading">
+        {{ $t("messages.emptyTips.emptyList") }}
+      </p>
+      <p class="loadTips" v-if="error">{{ $t("messages.errorTips.nolist") }}</p>
+      <div class="messageItemBox" v-if="!loading">
+        <div class="message" v-for="(item, index) in messages" :key="index">
+          <div class="messageTitle" @click="showMessages(index)">
+            <div class="titleBox">
+              <p>{{ item.title }}</p>
+              <div v-show="!item.readStatus"></div>
+            </div>
+            <div class="timeBox">
+              <p v-if="item.gmtCreate">{{ getDateString(item.gmtCreate) }}</p>
+              <img
+                :class="[opening[index] ? 'pull--show' : 'pull--hide']"
+                src="@/assets/knowledge/icon_pull.svg"
+              />
+            </div>
           </div>
-          <div class="timeBox">
-            <p>{{ item.time }}</p>
-            <img
-              :class="[opening[index] ? 'pull--show' : 'pull--hide']"
-              src="@/assets/knowledge/icon_pull.svg"
-            />
+          <div class="content" :id="`child${item.id}`">
+            <div class="contentHtml" v-html="item.message"></div>
           </div>
-        </div>
-        <div class="content" :id="`child${item.id}`">
-          <div class="contentHtml" v-html="item.content"></div>
         </div>
       </div>
     </div>
     <div class="pagination">
-      <p class="totalNum">
-        {{ $t("global.pagination.totalNum", { num: messages.length }) }}
-      </p>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :pager-count="5"
+      <SPagination
+        :page="page"
         :page-count="page.total"
         :current-page="page.current"
-      >
-      </el-pagination>
-      <div class="jumper">
-        <p>{{ $t("global.pagination.goPage") }}</p>
-        <div>
-          <input
-            v-model="pageNum"
-            type="number"
-            @focus="enterEvent"
-            @blur="removeEnterEvent"
-          />
-        </div>
-        <p>{{ $t("global.pagination.pageUnit") }}</p>
-      </div>
+        @goPage="goPage"
+        @prev-click="prevPage"
+        @next-click="nextPage"
+        @current-change="currentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import SPagination from "@/components/common/pagination";
 import FileBox from "./components/file";
+import DateTools from "@/utils/date";
 export default {
   components: {
     FileBox,
+    SPagination,
   },
   data() {
     return {
+      loading: false,
+      error: false,
       opening: [],
       messages: [
         {
@@ -75,26 +75,74 @@ export default {
       ],
       pageNum: 1,
       page: {
-        total: 100,
+        dataNum: 0,
+        total: 10,
         size: 10,
         current: 1,
       },
     };
   },
   mounted() {
-    this.opening = Array.apply(null, Array(this.messages.length)).map(
-      () => false
-    );
-    // console.log(this.opening);
+    this.page = {
+      dataNum: 0,
+      total: 10,
+      size: 10,
+      current: 1,
+    };
+    this.messages = [];
+    this.initList();
   },
   methods: {
-    showFiles(index) {
+    ...DateTools,
+    initList() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("user/getMessages", {
+          pageIndex: this.page.current,
+          pageSize: this.page.size,
+          type: 1,
+        })
+        .then((res) => {
+          if (res.pageTotal != 0 && res.pageTotal < res.pageIndex) {
+            this.page = {
+              dataNum: res.total,
+              total: res.pageTotal,
+              size: 10,
+              current: res.pageIndex > 1 ? res.pageIndex - 1 : 1,
+            };
+            this.initList();
+            return;
+          }
+          this.page = {
+            dataNum: res.data.total,
+            total: res.data.pages,
+            size: 10,
+            current: this.page.current,
+          };
+          this.messages = res.data.records;
+          this.opening = Array.apply(null, Array(this.messages.length)).map(
+            () => false
+          );
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.messages = [];
+          this.$message.error({
+            text: err || this.$t("messages.errorTips.nolist"),
+          });
+        });
+    },
+    showMessages(index) {
       this.opening[index] = !this.opening[index];
       this.$forceUpdate();
       this.menuAnimate(
         document.getElementById(`child${this.messages[index].id}`),
         !this.opening[index]
       );
+      this.readMessage(index);
     },
     menuAnimate(element, hide) {
       element.style.padding = "12px 30px 0 30px";
@@ -119,21 +167,144 @@ export default {
         element.style.opacity = hide ? "0" : "1";
       });
     },
-    goPage() {
-      this.page = {
-        ...this.page,
-        current: parseInt(this.pageNum),
-      };
+    readMessage(index) {
+      if (this.messages[index].status) return;
+      this.$store
+        .dispatch("user/readMessages", this.messages[index].id)
+        .then((res) => {
+          this.$set(this.messages, index, {
+            ...this.messages[index],
+            status: true,
+          });
+          this.$store.dispatch("user/getUnreadNum");
+        })
+        .catch((err) => {
+          // console.log("错，这是新数据", err);
+        });
     },
-    enterEvent() {
-      document.onkeydown = (event) => {
-        let e = event || window.event;
-        if (e && e.keyCode == 13) {
-          if (this.pageNum > this.page.total) this.pageNum = this.page.total;
-          else if (this.pageNum <= 0 || this.pageNum == "") this.pageNum = 1;
-          this.goPage();
-        }
-      };
+    goPage(pageNum) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("user/getMessages", {
+          pageIndex: parseInt(pageNum),
+          pageSize: this.page.size,
+          type: 1,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.data.total,
+            total: res.data.pages,
+            size: 10,
+            current: parseInt(pageNum),
+          };
+          this.messages = res.data.records;
+          this.opening = Array.apply(null, Array(this.messages.length)).map(
+            () => false
+          );
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.messages = [];
+          this.$message.error({
+            text: err || this.$t("messages.errorTips.nolist"),
+          });
+        });
+    },
+    currentChange(num) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("user/getMessages", {
+          pageIndex: parseInt(num),
+          pageSize: this.page.size,
+          type: 1,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.data.total,
+            total: res.data.pages,
+            size: 10,
+            current: parseInt(num),
+          };
+          this.messages = res.data.records;
+          this.opening = Array.apply(null, Array(this.messages.length)).map(
+            () => false
+          );
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.messages = [];
+          this.$message.error({
+            text: err || this.$t("messages.errorTips.nolist"),
+          });
+        });
+    },
+    prevPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("user/getMessages", {
+          pageIndex: this.page.current - 1,
+          pageSize: this.page.size,
+          type: 1,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.data.total,
+            total: res.data.pages,
+            size: 10,
+            current: this.page.current - 1,
+          };
+          this.messages = res.data.records;
+          this.opening = Array.apply(null, Array(this.messages.length)).map(
+            () => false
+          );
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.messages = [];
+          this.$message.error({
+            text: err || this.$t("messages.errorTips.nolist"),
+          });
+        });
+    },
+    nextPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("user/getMessages", {
+          pageIndex: this.page.current + 1,
+          pageSize: this.page.size,
+          type: 1,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.data.total,
+            total: res.data.pages,
+            size: 10,
+            current: this.page.current + 1,
+          };
+          this.messages = res.data.records;
+          this.opening = Array.apply(null, Array(this.messages.length)).map(
+            () => false
+          );
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.messages = [];
+          this.$message.error({
+            text: err || this.$t("messages.errorTips.nolist"),
+          });
+        });
     },
     removeEnterEvent() {
       document.onkeydown = () => {};
@@ -181,6 +352,12 @@ export default {
   p {
     margin: 0;
   }
+  .loadTips {
+    font-size: 14px;
+    color: #d3d3d3;
+    line-height: 20px;
+    margin-top: 40px;
+  }
   .messageBox {
     width: 100%;
     display: flex;
@@ -192,84 +369,91 @@ export default {
     //     border-bottom: 0px solid #d3d3d3;
     //   }
     // }
-    .message {
+    .messageItemBox {
       width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      .messageTitle {
+      .message {
         width: 100%;
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px 24px;
-        box-sizing: border-box;
-        border-bottom: 1px solid #d3d3d3;
-        cursor: pointer;
-        .titleBox {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          max-width: calc(100% - 200px);
-          p {
-            font-size: 14px;
-            color: #333333;
-            line-height: 20px;
-            text-align: left;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-          div {
-            width: 6px;
-            height: 6px;
-            background: #ff4d4f;
-            border-radius: 6px;
-            margin-left: 16px;
-          }
-        }
-        .timeBox {
-          display: flex;
-          flex-direction: row;
-          p {
-            font-size: 14px;
-            color: #999999;
-            line-height: 20px;
-          }
-          img {
-            width: 12px;
-            margin-left: 12px;
-            transition: all 0.3s;
-          }
-          .pull--show {
-            transform: rotate(360deg);
-          }
-          .pull--hide {
-            transform: rotate(180deg);
-          }
-        }
-      }
-      .content {
-        height: 0;
-        overflow: hidden;
-        padding: 0 30px;
-        border-bottom: 0px solid #d3d3d3;
-        opacity: 0;
-        transition: all 0.3s ease;
-        width: calc(100% - 60px);
-        display: flex;
         flex-direction: column;
-        align-items: flex-start;
-        .contentHtml {
-          margin-bottom: 18px;
-          font-size: 14px;
-          line-height: 20px;
-          // a {
-          //   cursor: pointer;
-          //   color: #4b77f6;
-          // }
+        justify-content: center;
+        align-items: center;
+        .messageTitle {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 24px;
+          box-sizing: border-box;
+          border-bottom: 1px solid #d3d3d3;
+          cursor: pointer;
+          .titleBox {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            max-width: calc(100% - 200px);
+            p {
+              font-size: 14px;
+              color: #333333;
+              line-height: 20px;
+              text-align: left;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+            div {
+              width: 6px;
+              height: 6px;
+              background: #ff4d4f;
+              border-radius: 6px;
+              margin-left: 16px;
+            }
+          }
+          .timeBox {
+            display: flex;
+            flex-direction: row;
+            p {
+              font-size: 14px;
+              color: #999999;
+              line-height: 20px;
+            }
+            img {
+              width: 12px;
+              margin-left: 12px;
+              transition: all 0.3s;
+            }
+            .pull--show {
+              transform: rotate(360deg);
+            }
+            .pull--hide {
+              transform: rotate(180deg);
+            }
+          }
+        }
+        .content {
+          height: 0;
+          overflow: hidden;
+          padding: 0 30px;
+          border-bottom: 0px solid #d3d3d3;
+          opacity: 0;
+          transition: all 0.3s ease;
+          width: calc(100% - 60px);
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          .contentHtml {
+            margin-bottom: 18px;
+            font-size: 14px;
+            line-height: 20px;
+            // a {
+            //   cursor: pointer;
+            //   color: #4b77f6;
+            // }
+          }
         }
       }
     }

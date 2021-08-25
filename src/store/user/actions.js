@@ -73,13 +73,6 @@ export default {
       });
     });
   },
-  getMessages: ({ commit, state }, data) => {
-    return new Promise(resolve => {
-      console.log('获取系统消息')
-      commit(types.SET_MESSAGES, data);
-      resolve();
-    });
-  },
   logout: ({ commit, state }) => {
     let type = getUsertype();
     console.log(type)
@@ -94,6 +87,41 @@ export default {
       }).catch(err => {
         console.log('登出失败', err);
         reject(err);
+      });
+    });
+  },
+  getUnreadNum: ({ commit, state }) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.unreadNum).then(res => {
+        // console.log('获取消息未读数成功', res);
+        commit(types.SET_UNREAD_NUM, res.data);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取消息未读数失败', err);
+        reject(err)
+      });
+    });
+  },
+  getMessages: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.getMessages(data.pageIndex, data.pageSize, data.type)).then(res => {
+        console.log('获取系统消息成功', res);
+        // commit(types.SET_MESSAGES, res.data);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取系统消息失败', err);
+        reject(err)
+      });
+    });
+  },
+  readMessages: ({ commit, state }, msgId) => {
+    return new Promise((resolve, reject) => {
+      request.put(urls.readMessage(msgId)).then(res => {
+        console.log('已读消息成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('已读消息失败', err);
+        reject(err)
       });
     });
   },

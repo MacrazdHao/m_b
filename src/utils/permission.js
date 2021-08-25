@@ -13,11 +13,12 @@ const whiteList = ['/', '/login', '/register', '/register2', '/forget', '/reset'
 
 let getMessages = () => {
   if (window.msgTimeout) clearInterval(window.msgTimeout)
+  // console.log('正在执行')
   // 获取系统消息列表
-  store.dispatch('user/getMessages', { pageIndex: 1, pageSize: 10, queryTime: (new Date()).getTime() })
+  store.dispatch('user/getUnreadNum')
   // 设置系统消息定时任务
   window.msgTimeout = setInterval(() => {
-    store.dispatch('user/getMessages', { pageIndex: 1, pageSize: 10, queryTime: (new Date()).getTime() });
+    store.dispatch('user/getUnreadNum')
   }, 1000 * 30)
 }
 
