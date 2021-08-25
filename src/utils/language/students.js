@@ -7,6 +7,7 @@ export default {
       searchButton: '搜索',
       table: {
         school: "学校",
+        schoolCode: "学校编号",
         code: '编号',
         name: "姓名",
         grade: "年级",
@@ -57,6 +58,7 @@ export default {
       searchButton: 'search',
       table: {
         school: "school",
+        schoolCode: "school code",
         code: "No.",
         name: "name",
         grade: "grade",

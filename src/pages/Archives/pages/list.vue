@@ -2,16 +2,59 @@
   <div class="List">
     <div class="list-content">
       <div class="toolsBar">
+        <!-- <PSelector
+          class="statusSelector"
+          :items="status"
+          :index="statusIndex"
+          :border="true"
+          @handleSelect="handleStatusSelect"
+        /> -->
         <SInput
           class="searchInput"
-          :placeholder="$t('students.list.searchPlaceholder')"
+          :placeholder="$t('live.list.searchPlaceholder')"
           :icon="require('@/assets/student/icon_seach.svg')"
+          :value="value"
+          @input="
+            (text) => {
+              value = text;
+            }
+          "
         />
-        <SButton class="button" :text="$t('students.list.searchButton')" />
+        <SButton
+          class="button"
+          :text="$t('live.list.searchButton')"
+          @btnClick="searchLiveWithKeyword"
+        />
       </div>
       <div class="table">
         <el-table :data="tableData" height="642" style="width: 100%">
-          <el-table-column min-width="100px" fixed>
+          <div slot="empty">
+            <p class="loadTips" v-if="loading">
+              {{ $t("live.list.emptyTips.loadingList") }}
+            </p>
+            <p
+              class="loadTips"
+              v-if="tableData.length == 0 && !loading & !error"
+            >
+              {{ $t("live.list.emptyTips.emptyList") }}
+            </p>
+            <p class="loadTips" v-if="error">
+              {{ $t("live.list.errorTips.nolist") }}
+            </p>
+          </div>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("students.list.table.code") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.userCode }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.name") }}
@@ -19,18 +62,18 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.name) }}
+                {{ overline(scope.row.nickName) }}
               </p>
             </template>
           </el-table-column>
-          <el-table-column min-width="100px" >
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
                 {{ $t("students.list.table.grade") }}
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ overline(scope.row.grade) }}</p>
+              <p class="tableRow-text">{{ overline(scope.row.gradeName) }}</p>
             </template>
           </el-table-column>
           <el-table-column min-width="100px">
@@ -40,7 +83,15 @@
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ overline(scope.row.sex) }}</p>
+              <p class="tableRow-text">
+                {{
+                  $t(
+                    `counseling.step1.baseInfo.sex.${
+                      scope.row.gender == 0 ? "boy" : "girl"
+                    }`
+                  )
+                }}
+              </p>
             </template>
           </el-table-column>
           <el-table-column min-width="100px">
@@ -50,7 +101,15 @@
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ overline(scope.row.country) }}</p>
+              <p class="tableRow-text">
+                {{
+                  $t(
+                    `counseling.step1.baseInfo.country.${
+                      scope.row.nation == 0 ? "china" : "foreign"
+                    }`
+                  )
+                }}
+              </p>
             </template>
           </el-table-column>
           <el-table-column min-width="100px">
@@ -64,7 +123,7 @@
                 class="tableRow-text tableRow-button"
                 @click="toDetail(scope.row)"
               >
-                {{ $t("students.list.table.watchButton") }}
+                {{ $t("students.list.table.editButton") }}
               </p>
             </template>
           </el-table-column>
@@ -72,190 +131,299 @@
       </div>
     </div>
     <div class="pagination">
-      <p class="totalNum">
-        {{ $t("global.pagination.totalNum", { num: page.dataNum }) }}
-      </p>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :pager-count="5"
+      <SPagination
+        :page="page"
         :page-count="page.total"
         :current-page="page.current"
-      >
-      </el-pagination>
-      <div class="jumper">
-        <p>{{ $t("global.pagination.goPage") }}</p>
-        <div>
-          <input
-            v-model="pageNum"
-            type="number"
-            @focus="enterEvent"
-            @blur="removeEnterEvent"
-          />
-        </div>
-        <p>{{ $t("global.pagination.pageUnit") }}</p>
-      </div>
+        @goPage="goPage"
+        @prev-click="prevPage"
+        @next-click="nextPage"
+        @current-change="currentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import SPagination from "@/components/common/pagination";
 import SInput from "../components/input";
 import SButton from "@/components/common/button.vue";
+import PSelector from "@/components/common/selector";
+import Enum from "@/utils/enum";
 export default {
   components: {
+    SPagination,
     SInput,
     SButton,
+    PSelector,
   },
   data() {
     return {
-      value: "",
-      tableData: [
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          archivesPdf: "",
-          step1: "",
-          step2: "",
-          step3: "",
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          archivesPdf: "",
-          step1: "",
-          step2: "",
-          step3: "",
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          archivesPdf: "",
-          step1: "",
-          step2: "",
-          step3: "",
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          archivesPdf: "",
-          step1: "",
-          step2: "",
-          step3: "",
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          archivesPdf: "",
-          step1: "",
-          step2: "",
-          step3: "",
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          archivesPdf: "",
-          step1: "",
-          step2: "",
-          step3: "",
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          archivesPdf: "",
-          step1: "",
-          step2: "",
-          step3: "",
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          archivesPdf: "",
-          step1: "",
-          step2: "",
-          step3: "",
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          archivesPdf: "",
-          step1: "",
-          step2: "",
-          step3: "",
-        },
-        {
-          id: 999,
-          name: "梁湛霞",
-          grade: "高一(三)班",
-          sex: "女生",
-          country: "中国",
-          archivesPdf: "",
-          step1: "",
-          step2: "",
-          step3: "",
-        },
+      loading: false,
+      error: false,
+      status: [
+        { text: this.$t("management.status.all"), value: -1 },
+        { text: this.$t("management.status.noStart"), value: 0 },
+        // { text: this.$t("management.status.collection"), value: 11 },
+        // { text: this.$t("management.status.testing"), value: 12 },
+        // { text: this.$t("management.status.discussion"), value: 13 },
+        // { text: this.$t("management.status.consultation"), value: 21 },
+        // { text: this.$t("management.status.fllowup"), value: 31 },
+        // { text: this.$t("management.status.update"), value: 32 },
+        // { text: this.$t("management.status.asupport"), value: 41 },
+        // { text: this.$t("management.status.support"), value: 42 },
+        // { text: this.$t("management.status.monitoring"), value: 43 },
+        // { text: this.$t("management.status.report"), value: 88 },
+        // { text: this.$t("management.status.end"), value: 99 },
+        { text: this.$t("management.status.consultLabel0"), value: 1 },
+        { text: this.$t("management.status.consultLabel1"), value: 2 },
       ],
+      statusIndex: 2,
+      value: "",
+      tableData: [],
       pageNum: 1,
       page: {
-        dataNum: 1000,
-        total: 100,
+        dataNum: 0,
+        total: 1,
         size: 10,
         current: 1,
       },
     };
   },
+  mounted() {
+    this.page = {
+      dataNum: 0,
+      total: 1,
+      size: 10,
+      current: 1,
+    };
+    this.tableData = [];
+    this.initList();
+  },
   methods: {
+    statusToText(status) {
+      let _status = Enum.getServerNodeStage(status);
+      switch (_status) {
+        case 0:
+          return this.$t("management.status.noStart");
+        case 1:
+          return this.$t("management.status.consultLabel0");
+        case 2:
+          return this.$t("management.status.consultLabel1");
+        // case 11:
+        //   return this.$t("management.status.collection");
+        // case 12:
+        //   return this.$t("management.status.discussion");
+        // case 21:
+        //   return this.$t("management.status.consultation");
+        // case 31:
+        //   return this.$t("management.status.fllowup");
+        // case 32:
+        //   return this.$t("management.status.update");
+        // case 41:
+        //   return this.$t("management.status.asupport");
+        // case 42:
+        //   return this.$t("management.status.support");
+        // case 43:
+        //   return this.$t("management.status.monitoring");
+        // case 88:
+        //   return this.$t("management.status.report");
+        // case 99:
+        //   return this.$t("management.status.end");
+        default:
+          return this.$t("management.status.none");
+      }
+    },
+    handleStatusSelect(index) {
+      this.statusIndex = index;
+      this.page = {
+        dataNum: 0,
+        total: 10,
+        size: 10,
+        current: 1,
+      };
+      this.initList();
+    },
+    initList() {
+      console.log(this.status[this.statusIndex].value);
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("archives/getProfileList", {
+          pageIndex: this.page.current,
+          pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          if (res.pageTotal != 0 && res.pageTotal < res.pageIndex) {
+            this.page = {
+              dataNum: res.total,
+              total: res.pageTotal,
+              size: 10,
+              current: res.pageIndex > 1 ? res.pageIndex - 1 : 1,
+            };
+            this.initList();
+            return;
+          }
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
+    },
+    searchLiveWithKeyword() {
+      if (this.value == "" || this.value) {
+        this.page = {
+          keyword: this.value,
+          dataNum: 0,
+          total: 1,
+          size: 10,
+          current: 1,
+        };
+        this.initList();
+      }
+    },
     toDetail(info) {
-      this.$emit("toDetail", info);
+      // this.$emit("toDetail", info);
+      this.$router.push({
+        path: "/index/archives/archivesDetail",
+        query: {
+          id: info.userId,
+        },
+      });
     },
     overline(text = "") {
+      if (!text) return "";
       return text.substring(0, 40) + (text.length > 30 ? "..." : "");
     },
-    goPage() {
-      this.page = {
-        ...this.page,
-        current: parseInt(this.pageNum),
-      };
+    goPage(pageNum) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("archives/getProfileList", {
+          pageIndex: parseInt(pageNum),
+          pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(pageNum),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
-    enterEvent() {
-      document.onkeydown = (event) => {
-        let e = event || window.event;
-        if (e && e.keyCode == 13) {
-          if (this.pageNum > this.page.total) this.pageNum = this.page.total;
-          else if (this.pageNum <= 0 || this.pageNum == "") this.pageNum = 1;
-          this.goPage();
-        }
-      };
+    currentChange(num) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("archives/getProfileList", {
+          pageIndex: parseInt(num),
+          pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(num),
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
-    removeEnterEvent() {
-      document.onkeydown = () => {};
+    prevPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("archives/getProfileList", {
+          pageIndex: this.page.current - 1,
+          pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current - 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
+    },
+    nextPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("archives/getProfileList", {
+          pageIndex: this.page.current + 1,
+          pageSize: this.page.size,
+          keyword: this.value,
+          nodeType: this.status[this.statusIndex].value,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current + 1,
+          };
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.tableData = [];
+          this.$message.error({
+            text: err || this.$t("live.list.errorTips.nolist"),
+          });
+        });
     },
   },
 };
@@ -317,9 +485,14 @@ export default {
       flex-direction: row;
       width: 100%;
       align-items: center;
+      .statusSelector {
+        width: 120px;
+        height: 36px;
+      }
       .searchInput {
         width: 300px;
         // margin-left: 12px;
+        height: 36px;
       }
       .button {
         padding: 7px 20px;
@@ -330,6 +503,12 @@ export default {
       width: 100%;
       box-sizing: border-box;
       margin-top: 22px;
+      .loadTips {
+        font-size: 14px;
+        color: #d3d3d3;
+        line-height: 20px;
+        margin-top: 18px;
+      }
       .tableHeader-text {
         font-size: 14px;
         font-family: AlibabaPuHuiTiM;
@@ -348,20 +527,33 @@ export default {
       .statusBox {
         display: flex;
         flex-direction: row;
-        align-items: center;
-        .dot--finish {
-          width: 6px;
-          height: 6px;
-          border-radius: 6px;
-          background: #53c41b;
-          margin-right: 4px;
-        }
-        .dot--waiting {
-          width: 6px;
-          height: 6px;
-          border-radius: 6px;
-          background: #d3d3d3;
-          margin-right: 4px;
+        align-items: flex-start;
+        .dotBox {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          height: 20px;
+          .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 6px;
+            background: #d3d3d3;
+            margin-right: 4px;
+          }
+          .dot--finish {
+            width: 6px;
+            height: 6px;
+            border-radius: 6px;
+            background: #53c41b;
+            margin-right: 4px;
+          }
+          .dot--doing {
+            width: 6px;
+            height: 6px;
+            border-radius: 6px;
+            background: #ffbe3d;
+            margin-right: 4px;
+          }
         }
       }
       .tableRow-longText {
@@ -381,13 +573,12 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 24px;
+    // margin-top: 24px;
     .totalNum {
       font-size: 14px;
       color: #666666;
       line-height: 20px;
       margin-right: 18px;
-      white-space: nowrap;
     }
     .jumper {
       display: flex;
@@ -398,7 +589,6 @@ export default {
         font-size: 14px;
         color: #666666;
         line-height: 20px;
-        white-space: nowrap;
       }
       input {
         padding: 0;

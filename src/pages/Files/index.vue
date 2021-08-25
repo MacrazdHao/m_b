@@ -1,39 +1,17 @@
 <template>
   <div class="Files">
     <transition name="slide-fade2">
-      <router-view
-        @toDetail="toDetail"
-        @closeDetail="closeDetail"
-        @setSuffixMenu="setSuffixMenu"
-        :info="detailInfo"
-      />
+      <router-view @setSuffixMenu="setSuffixMenu" />
     </transition>
   </div>
 </template>
 
 <script>
-import Bus from "./utils/bus";
 export default {
-  data() {
-    return {
-      detailInfo: null,
-      detail: false,
-    };
-  },
-  mounted() {
-    this.detailInfo = Bus.getStudentInfo() || null;
-  },
+  data() {},
   methods: {
     setSuffixMenu(arr) {
       this.$emit("setSuffixMenu", arr);
-    },
-    toDetail(info) {
-      this.detailInfo = info;
-      Bus.setStudentInfo(info);
-      this.$router.push({ path: "/index/files/filesDetail" });
-    },
-    closeDetail() {
-      this.$router.push({ path: "/index/files/filesList" });
     },
   },
 };

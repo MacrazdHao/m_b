@@ -12,6 +12,9 @@ import live from './live';
 import management from './management';
 import playback from './playback';
 import modules from './modules';
+import students from './students';
+import archives from './archives';
+import files from './files';
 import module111 from './modules111';
 
 Vue.use(Vuex);
@@ -29,6 +32,9 @@ export default new Vuex.Store({
     management,
     playback,
     modules,
+    students,
+    archives,
+    files,
     module111
   }
 });
