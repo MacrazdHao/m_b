@@ -30,8 +30,8 @@ export default {
     logout() {
       this.$logoutDialog(() => {
         this.$store.dispatch("user/logout").then((res) => {
-          console.log(res);
-          this.$router.push({ path: res.type == 10 ? "/adminEntry" : "/" });
+          if (res.type == 10)
+            window.location.href = `${window.location.origin}/adminEntry`;
         });
       });
     },
