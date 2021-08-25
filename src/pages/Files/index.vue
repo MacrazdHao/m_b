@@ -8,7 +8,9 @@
 
 <script>
 export default {
-  data() {},
+  data() {
+    return{}
+  },
   methods: {
     setSuffixMenu(arr) {
       this.$emit("setSuffixMenu", arr);
