@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import types from './types';
 import urls from './urls';
 import request from '../../utils/request';
@@ -7,58 +8,71 @@ import Enum from '@/utils/enum';
 
 export default {
   schoolLogin: ({ commit, state }, data) => {
+    Vue.prototype.$loading.show();
     return new Promise((resolve, reject) => {
       request.post(urls.schoolLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
         setUsertype(Enum.getLocalUserType(res.data.userType));
+        Vue.prototype.$loading.hide();
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
+        Vue.prototype.$loading.hide();
         reject(err);
       });
     });
   },
   studentLogin: ({ commit, state }, data) => {
+    Vue.prototype.$loading.show();
     return new Promise((resolve, reject) => {
       request.post(urls.studentLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
         setUsertype(Enum.getLocalUserType(res.data.userType));
+        Vue.prototype.$loading.hide();
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
+        Vue.prototype.$loading.hide();
         reject(err);
       });
     });
   },
   consultantLogin: ({ commit }, data) => {
+    Vue.prototype.$loading.show();
     return new Promise((resolve, reject) => {
       request.post(urls.consultantLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
         setUsertype(Enum.getLocalUserType(res.data.userType));
+        Vue.prototype.$loading.hide();
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
+        Vue.prototype.$loading.hide();
         reject(err);
       });
     });
   },
   adminLogin: ({ commit }, data) => {
+    Vue.prototype.$loading.show();
     return new Promise((resolve, reject) => {
       request.post(urls.adminLogin, data).then(res => {
         console.log('登陆成功', res);
         setToken(res.data.token);
         setUsertype(Enum.getLocalUserType(res.data.userType));
+        Vue.prototype.$loading.hide();
         resolve(res);
       }).catch(err => {
         console.log('登录失败', err);
+        Vue.prototype.$loading.hide();
         reject(err);
       });
     });
   },
   getUserinfo: ({ commit, state }, data) => {
+    Vue.prototype.$loading.show();
     // console.log("用户类型", getUsertype());
     let iUrl = getUsertype() < 10 ? urls.userinfo : urls.admininfo;
     return new Promise((resolve, reject) => {
@@ -66,14 +80,17 @@ export default {
         console.log('获取用户信息成功', res);
         res.data.userType = Enum.getLocalUserType(res.data.userType);
         commit(types.SET_USERINFO, res.data);
+        Vue.prototype.$loading.hide();
         resolve(res);
       }).catch(err => {
         console.log('获取用户信息失败', err);
+        Vue.prototype.$loading.hide();
         reject(err);
       });
     });
   },
   logout: ({ commit, state }) => {
+    Vue.prototype.$loading.show();
     let type = getUsertype();
     console.log(type)
     return new Promise((resolve, reject) => {
@@ -83,9 +100,11 @@ export default {
         removeToken();
         removeUsertype();
         commit(types.RESET_STATE);
+        Vue.prototype.$loading.hide();
         resolve({ res, type });
       }).catch(err => {
         console.log('登出失败', err);
+        Vue.prototype.$loading.hide();
         reject(err);
       });
     });

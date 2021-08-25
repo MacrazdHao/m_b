@@ -19,6 +19,7 @@ setTimeout(() => {
 import 'element-ui/lib/theme-chalk/index.css';
 import './utils/permission';
 import _default from './utils/default.js';
+import Loading from './components/Loading/loading.js';
 import Dialog from './components/Dialog/dialog.js';
 import LogoutDialog from './components/LogoutDialog/logoutDialog.js';
 import Message from './components/Message/message.js';
@@ -35,6 +36,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI, { locale: i18n.getLocale() == "zh" ? eleZh : eleEn })
 
 Vue.use(LogoutDialog)
+Vue.use(Loading)
 Vue.use(Dialog)
 Vue.use(Message)
 Vue.use(_default)

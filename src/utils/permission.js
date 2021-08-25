@@ -23,7 +23,6 @@ let getMessages = () => {
 }
 
 router.beforeEach(async (to, from, next) => {
-  // console.log(to);
   let query = to.query;
   if (query.lang && query.lang != store.state.global.language) store.dispatch("global/setLanguage", query.lang)
   NProgress.start()
@@ -51,7 +50,7 @@ router.beforeEach(async (to, from, next) => {
       // 是否以获取用户信息
       if (hasGetUserInfo) {
         // 已获取用户信息
-        getMessages()
+        // getMessages()
         // 组建动态路由
         createDynamicRouter(to, next)
       } else {

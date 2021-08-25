@@ -1,5 +1,5 @@
 // 把除了Entry和Dashboard以外所有页面引入此处
-
+import Vue from 'vue';
 import store from '../store'
 import router from '@/router'
 import routerMapping from './routerMapping'
@@ -46,6 +46,7 @@ export async function createDynamicRouter(to, next, aim) {
     if (aim) next({ path: aim });
     else next();
   } else {
+    Vue.prototype.$loading.show();
     let systemRouterStr2 = [{
       path: '/error',
       children: [{
@@ -59,8 +60,10 @@ export async function createDynamicRouter(to, next, aim) {
       });
       systemRouter = systemRouterStr2;
       routerNext(to, next);
+      Vue.prototype.$loading.hide();
     }).catch(err => {
-      // console.log('获取路由出错', err);
+      console.log('获取路由出错', err);
+      Vue.prototype.$loading.hide();
     });
   }
 }
