@@ -5,7 +5,7 @@
         <SInput
           class="searchInput"
           :placeholder="$t('live.list.searchPlaceholder')"
-          :icon="require('@/assets/student/icon_seach.svg')"
+          :icon="require('@/assets/students/icon_search.svg')"
           :value="keyword"
           @input="
             (text) => {

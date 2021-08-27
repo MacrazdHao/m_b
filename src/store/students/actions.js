@@ -18,4 +18,26 @@ export default {
       });
     })
   },
+  getTemplateList: ({ commit, state }) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.templateList).then(res => {
+        console.log('获取模板列表成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取模板列表失败', err);
+        reject(err);
+      });
+    })
+  },
+  setStudentTemplate: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.setStudentTemplate, data).then(res => {
+        console.log('设置模板成功', data.studentId, res);
+        resolve(res);
+      }).catch(err => {
+        console.log('设置模板失败', data.studentId, err);
+        reject(err);
+      });
+    })
+  },
 }

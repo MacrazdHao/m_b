@@ -168,6 +168,11 @@ export default {
       this.tableData = [];
       this.initList();
     },
+    loading(val) {
+      if (val) {
+        this.tableData = [];
+      }
+    },
   },
   mounted() {
     this.page = {

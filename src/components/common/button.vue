@@ -119,6 +119,17 @@ export default {
 .wathat:active {
   background-color: rgb(226, 229, 240);
 }
+.blueBorderWhiteBg {
+  border: 1px solid rgb(75, 119, 246);
+  background-color: rgb(255, 255, 255);
+  color: #4b77f6;
+}
+.blueBorderWhiteBg:hover {
+  background-color: rgb(250, 250, 250);
+}
+.blueBorderWhiteBg:active {
+  background-color: rgb(240, 240, 240);
+}
 .gray {
   border: 1px solid #eeeeee;
   background-color: rgb(250, 251, 252);

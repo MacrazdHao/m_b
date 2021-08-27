@@ -12,7 +12,7 @@
         <SInput
           class="searchInput"
           :placeholder="$t('live.list.searchPlaceholder')"
-          :icon="require('@/assets/student/icon_seach.svg')"
+          :icon="require('@/assets/students/icon_search.svg')"
           :value="value"
           @input="
             (text) => {
@@ -24,6 +24,18 @@
           class="button"
           :text="$t('live.list.searchButton')"
           @btnClick="searchLiveWithKeyword"
+        />
+        <SButton
+          class="toolbutton"
+          :text="$t('students.list.distributeButton')"
+          theme="blueBorderWhiteBg"
+          @btnClick="distribute"
+        />
+        <SButton
+          class="toolbutton"
+          :text="$t('students.list.exportExcelButton')"
+          theme="blueBorderWhiteBg"
+          @btnClick="exportExcel"
         />
       </div>
       <div class="table">
@@ -42,6 +54,30 @@
               {{ $t("live.list.errorTips.nolist") }}
             </p>
           </div>
+          <el-table-column width="55">
+            <template slot="header" slot-scope="scope">
+              <img
+                class="tableRow-selector"
+                :src="
+                  require(`@/assets/archives/icon_checkbox${
+                    allSelected ? '_selected' : ''
+                  }.svg`)
+                "
+                @click="selectAllStudents"
+              />
+            </template>
+            <template slot-scope="scope">
+              <img
+                class="tableRow-selector"
+                :src="
+                  require(`@/assets/archives/icon_checkbox${
+                    scope.row.selected ? '_selected' : ''
+                  }.svg`)
+                "
+                @click="selectStudent(scope.$index)"
+              />
+            </template>
+          </el-table-column>
           <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
@@ -206,6 +242,12 @@
         @current-change="currentChange"
       />
     </div>
+    <DistributeBox
+      v-if="showDistributeBox"
+      :visible="showDistributeBox"
+      @confirm="setStudentTemplate"
+      @cancel="showDistributeBox = false"
+    />
   </div>
 </template>
 
@@ -215,15 +257,18 @@ import SInput from "../components/input";
 import SButton from "@/components/common/button.vue";
 import PSelector from "@/components/common/selector";
 import Enum from "@/utils/enum";
+import DistributeBox from "../components/distributeBox";
 export default {
   components: {
     SPagination,
     SInput,
     SButton,
     PSelector,
+    DistributeBox,
   },
   data() {
     return {
+      showDistributeBox: false,
       loading: false,
       error: false,
       status: [
@@ -255,6 +300,23 @@ export default {
       },
     };
   },
+  computed: {
+    allSelected() {
+      for (let i = 0; i < this.tableData.length; i++) {
+        if (!this.tableData[i].selected) return false;
+      }
+      return true && this.tableData.length > 0;
+    },
+    hasSelectedStudents() {
+      if (this.allSelected) return true;
+      for (let i = 0; i < this.tableData.length; i++) {
+        if (this.tableData[i].selected) {
+          return true;
+        }
+      }
+      return false;
+    },
+  },
   watch: {
     loading(val) {
       if (val) {
@@ -273,6 +335,57 @@ export default {
     this.initList();
   },
   methods: {
+    exportExcel() {
+      console.log("导入excel");
+    },
+    distribute() {
+      if (!this.hasSelectedStudents) {
+        this.$message.warning({
+          text: this.$t("students.list.selectNoStudentsTips"),
+        });
+        return;
+      }
+      this.showDistributeBox = true;
+    },
+    setStudentTemplate(templateId) {
+      this.$loading.show();
+      this.tableData.forEach(async (item, index) => {
+        if (item.selected) {
+          await this.$store
+            .dispatch("students/setStudentTemplate", {
+              templateId,
+              userId: item.userId,
+            })
+            .then((res) => {})
+            .catch((err) => {
+              this.$message.error({
+                text: this.$t("students.list.setTemplateErrorTips", {
+                  code: item.userCode || "null",
+                  name: item.nickName || "null",
+                }),
+              });
+            });
+        }
+      });
+      this.showDistributeBox = false;
+      this.$loading.hide();
+    },
+    selectStudent(index) {
+      let selected = !this.tableData[index].selected;
+      this.$set(this.tableData, index, {
+        ...this.tableData[index],
+        selected,
+      });
+    },
+    selectAllStudents() {
+      let toggle = this.allSelected;
+      this.tableData.forEach((item, index) => {
+        this.$set(this.tableData, index, {
+          ...this.tableData[index],
+          selected: !toggle,
+        });
+      });
+    },
     statusToText(status) {
       let _status = Enum.getServerNodeStage(status);
       switch (_status) {
@@ -344,6 +457,9 @@ export default {
             size: 10,
             current: this.page.current,
           };
+          for (let i = 0; i < res.data.length; i++) {
+            res.data[i].selected = false;
+          }
           this.tableData = res.data;
           this.loading = false;
         })
@@ -569,6 +685,10 @@ export default {
       .button {
         padding: 7px 20px;
         margin-left: 12px;
+      }
+      .toolbutton {
+        padding: 7px 16px;
+        margin-left: 22px;
       }
     }
     .table {
