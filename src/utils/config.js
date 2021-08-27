@@ -1,5 +1,5 @@
 const baseOssURL = "https://oss.veminar.net";
-const baseURL = 'https://myfellas.net/api';
+const baseURL = 'https://cecp.myfellas.net/api';
 const mockURL = 'http://192.168.0.104:3001/mock/11';
 const testURL = 'http://192.168.0.104:9080';
 const testURL2 = 'http://192.168.0.104:8003';
