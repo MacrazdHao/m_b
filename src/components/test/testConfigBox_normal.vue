@@ -130,7 +130,7 @@
                 class="itemBox"
                 v-if="item.value != languageDuplicateOptions.checkLang"
                 :key="index"
-                @click="selectStandardLang(item.value)"
+                @click="selectDuplicateStandardLang(item.value)"
               >
                 <div class="item">
                   <div class="radio">
@@ -157,7 +157,7 @@
                 class="itemBox"
                 v-if="item.value != languageDuplicateOptions.standardLang"
                 :key="index"
-                @click="selectCheckLang(item.value)"
+                @click="selectDuplicateCheckLang(item.value)"
               >
                 <div class="item">
                   <div class="radio">
@@ -228,13 +228,90 @@
         <p @click="closeLanguageDuplicateBox">取消</p>
       </div>
     </div>
+    <div
+      class="customUrlBox"
+      v-if="languageNoTranslateBoxShow"
+      v-clickoutside="closeLanguageNoTranslateBox"
+    >
+      <div class="header"><p>选择筛选方案</p></div>
+      <div class="content content--column">
+        <!-- <p class="agreement" @click="changeOssAgreement">{{ ossAgreement }}</p>
+        <input
+          v-model="customOssUrl"
+          placeholder="请输入OSS服务器IP:PORT"
+          @keydown="enterOssUrlInput"
+        /> -->
+        <div class="languages">
+          <p>基准语言：</p>
+          <div class="items">
+            <template v-for="(item, index) in $i18n.languages">
+              <div
+                class="itemBox"
+                v-if="item.value != languageNoTranslateOptions.checkLang"
+                :key="index"
+                @click="selectNoTranslateStandardLang(item.value)"
+              >
+                <div class="item">
+                  <div class="radio">
+                    <div
+                      :class="[
+                        item.value == languageNoTranslateOptions.standardLang
+                          ? 'selected'
+                          : '',
+                      ]"
+                    ></div>
+                  </div>
+                  <p>{{ item.cname }}</p>
+                </div>
+              </div>
+              {{ "" }}
+            </template>
+          </div>
+        </div>
+        <div class="languages">
+          <p>排查语言：</p>
+          <div class="items">
+            <template v-for="(item, index) in noTranslateSelections">
+              <div
+                class="itemBox"
+                v-if="item.value != languageNoTranslateOptions.standardLang"
+                :key="index"
+                @click="selectNoTranslateCheckLang(item.value)"
+              >
+                <div class="item">
+                  <div class="radio">
+                    <div
+                      :class="[
+                        item.value == languageNoTranslateOptions.checkLang
+                          ? 'selected'
+                          : '',
+                      ]"
+                    ></div>
+                  </div>
+                  <p>{{ item.cname }}</p>
+                </div>
+              </div>
+              {{ "" }}
+            </template>
+          </div>
+        </div>
+      </div>
+      <div class="buttonBox">
+        <p @click="downloadLanguageNoTranslate">下载</p>
+        <p @click="closeLanguageNoTranslateBox">取消</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Clickoutside from "../common/utilsFromElement/clickoutside";
 import config from "@/utils/config";
-import { getLanguageJSONFile, getDuplicateJSONFile } from "@/utils/languageJSON";
+import {
+  getLanguageJSONFile,
+  getNoTranslateJSONFile,
+  getDuplicateJSONFile,
+} from "@/utils/languageJSON";
 export default {
   directives: { Clickoutside },
   data() {
@@ -245,6 +322,12 @@ export default {
       ossAgreement: "http://",
       customUrlBoxShow: false,
       customOssUrlBoxShow: false,
+      languageNoTranslateBoxShow: false,
+      languageNoTranslateOptions: {
+        standardLang: "",
+        checkLang: "",
+      },
+      generatingLanguageNoTranslateList: false,
       languageDuplicateBoxShow: false,
       languageDuplicateOptions: {
         standardLang: "",
@@ -256,18 +339,6 @@ export default {
       generatingLanguageDuplicateList: false,
       settingMenu: false,
       settingItems: [
-        {
-          title: "下载语言数据查重表",
-          icon: require("@/assets/testmenu/icon_language.svg"),
-          click: () => {
-            console.log(this.$i18n.languages);
-            // getLanguageJSONFile();
-            this.languageDuplicateBoxShow = true;
-          },
-          show: false,
-          customize: false,
-          // options: this.languageOptions(),
-        },
         {
           title: "下载语言数据",
           icon: require("@/assets/testmenu/icon_language.svg"),
@@ -337,6 +408,9 @@ export default {
       }
       return "未检测到语言";
     },
+    noTranslateSelections() {
+      return [{ cname: "全部", value: "allLang" }, ...this.$i18n.languages];
+    },
   },
   watch: {
     settingMenu(val) {
@@ -372,7 +446,7 @@ export default {
         this.generatingLanguageDuplicateList = false;
       });
     },
-    selectStandardLang(lang) {
+    selectDuplicateStandardLang(lang) {
       this.$set(
         this.languageDuplicateOptions,
         "standardLang",
@@ -382,7 +456,7 @@ export default {
         this.$set(this.languageDuplicateOptions, "checkLang", "");
       }
     },
-    selectCheckLang(lang) {
+    selectDuplicateCheckLang(lang) {
       this.$set(
         this.languageDuplicateOptions,
         "checkLang",
@@ -393,19 +467,78 @@ export default {
       }
     },
 
+    closeLanguageNoTranslateBox() {
+      this.languageNoTranslateBoxShow = false;
+    },
+    downloadLanguageNoTranslate() {
+      if (this.generatingLanguageNoTranslateList) {
+        alert("正在生成上一个查重表，请稍后");
+        return;
+      }
+      this.generatingLanguageNoTranslateList = true;
+      if (!this.languageNoTranslateOptions.standardLang) {
+        alert("请选择基准语言");
+        return;
+      }
+      if (!this.languageNoTranslateOptions.checkLang) {
+        alert("请选择排查语言");
+        return;
+      }
+      getNoTranslateJSONFile(this.languageNoTranslateOptions, () => {
+        this.generatingLanguageNoTranslateList = false;
+      });
+    },
+    selectNoTranslateStandardLang(lang) {
+      this.$set(
+        this.languageNoTranslateOptions,
+        "standardLang",
+        this.languageNoTranslateOptions.standardLang == lang ? "" : lang
+      );
+      if (this.languageNoTranslateOptions.checkLang == lang) {
+        this.$set(this.languageNoTranslateOptions, "checkLang", "");
+      }
+    },
+    selectNoTranslateCheckLang(lang) {
+      this.$set(
+        this.languageNoTranslateOptions,
+        "checkLang",
+        this.languageNoTranslateOptions.checkLang == lang ? "" : lang
+      );
+      if (this.languageNoTranslateOptions.standardLang == lang) {
+        this.$set(this.languageNoTranslateOptions, "standardLang", "");
+      }
+    },
+
     languageOptions() {
-      let options = [];
+      let options = [
+        {
+          title: "未翻译的文案",
+          icon: require("@/assets/testmenu/icon_language.svg"),
+          callback: () => {
+            console.log(this.$i18n.languages);
+            this.languageNoTranslateBoxShow = true;
+          },
+        },
+        {
+          title: "文案查重",
+          icon: require("@/assets/testmenu/icon_language.svg"),
+          callback: () => {
+            console.log(this.$i18n.languages);
+            this.languageDuplicateBoxShow = true;
+          },
+        },
+      ];
       for (let i = 0; i < this.$i18n.languages.length; i++) {
         let item = this.$i18n.languages[i];
         options.push({
-          title: item.cname,
+          title: item.cname + "文案",
           attach: item.value,
           value: item.value,
           callback: () => getLanguageJSONFile(item.value),
         });
       }
       options.push({
-        title: "全部语言",
+        title: "全部语言文案",
         attach: "",
         value: "all",
         callback: () =>

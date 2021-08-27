@@ -6,6 +6,7 @@ Vue.use(VueI18n);
 
 const files = require.context('.', true, /\.js$/);
 
+// 翻译文案中的key不要使用和语言key相同的字符串，否则会引起测试工具中的语言文案筛选工具的生成结果
 const languages = [{ value: 'zh', cname: '中文' }, { value: 'en', cname: '英语' }]
 
 const messages = (() => {

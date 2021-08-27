@@ -1,16 +1,21 @@
+import i18n from '@/utils/language/index';
 const files = require.context('./language', true, /\.js$/);
 // import allText from "@/language.json";
 
 let languageJSON = {};
 
+let languages = i18n.languages.map((item, index) => {
+  return item.value;
+});
+
 let keys2 = files.keys();
 
 async function getJSON(language) {
   return new Promise(async (resolve, reject) => {
-    console.log(keys2, keys2.length)
+    // console.log(keys2, keys2.length)
     for (let i = 0; i < keys2.length; i++) {
       let key = keys2[i];
-      console.log(key);
+      // console.log(key);
       if (key == './index.js') continue;
       const temp = key.replace('./', '').replace('.js', '').split('/');
       await import(`./language/${temp}`).then(res => {
@@ -93,12 +98,11 @@ function getDuplicate(options) {
             }
           }
         }
-
         break;
       case checkLang: break;
       default:
         let _path = [...path, key];
-        getDuplicate({ data: data[key], path: _path, withPath, checkLang, noRepeat });
+        getDuplicate({ data: data[key], path: _path, withPath, checkLang, standardLang, noRepeat });
         break;
     }
   }
@@ -113,8 +117,86 @@ function getTwoVersionDuplicate() {
   return result;
 }
 
+let noTranslate = {};
+function getNoTranslate(options) {
+  let { data, path, standardLang, checkLang, getAll } = options;
+  path = path || [];
+  standardLang = standardLang || "zh";
+  checkLang = checkLang || "en";
+  getAll = getAll || false;
+  // 找出两边字符串一样的，或只有一边是有内容，或只有一边是有该字段的
+  switch (getAll) {
+    case false:
+      for (let key in data) {
+        switch (key) {
+          case standardLang:
+            if (data[standardLang] == data[checkLang] || !data[checkLang]) {
+              noTranslate[data[standardLang]] = [...(noTranslate[data[standardLang]] || []), {
+                text: data[checkLang] || null,
+                path: path.join("."),
+              }]
+            }
+            break;
+          case checkLang: break;
+          default:
+            let _path = [...path, key];
+            getNoTranslate({ data: data[key], path: _path, standardLang, checkLang, getAll });
+            break;
+        }
+      }
+      break;
+    case true:
+      for (let key in data) {
+        if (key == standardLang) {
+          for (let i = 0; i < languages.length; i++) {
+            console.log(languages[i])
+            if (languages[i] == standardLang) continue;
+            else {
+              let _checkLang = languages[i];
+              if (data[standardLang] == data[_checkLang] || !data[_checkLang]) {
+                noTranslate[data[standardLang]] = [...(noTranslate[data[standardLang]] || []), {
+                  lang: languages[i],
+                  text: data[_checkLang] || null,
+                  path: path.join("."),
+                }]
+              }
+            }
+          }
+        } else if (languages.indexOf(key) == -1) {
+          let _path = [...path, key];
+          getNoTranslate({ data: data[key], path: _path, standardLang, checkLang, getAll });
+        }
+      }
+  }
+}
+
+export function getNoTranslateJSONFile(options, callback) {
+  languageJSON = {};
+  getJSON(options.checkLang == 'allLang' ? languages : [options.standardLang, options.checkLang]).then(res => {
+    noTranslate = {};
+    let { standardLang, checkLang, getAll } = options;
+    standardLang = standardLang || "zh";
+    checkLang = checkLang || "en";
+    getAll = checkLang == 'allLang';
+  console.log(checkLang)
+    console.log(getAll)
+    getNoTranslate({ ...options, getAll, data: res });
+    let str = JSON.stringify(noTranslate);
+    let blob = new Blob([str], { type: "text/plain;charset=utf-8" });
+    let downLink = document.createElement('a');
+    downLink.download = "noTranslate.json";
+    downLink.href = URL.createObjectURL(blob);
+    document.body.appendChild(downLink);
+    downLink.click();
+    document.body.removeChild(downLink);
+    callback();
+    return true;
+  });
+}
+
 export function getDuplicateJSONFile(options, callback) {
-  getJSON(language).then(res => {
+  languageJSON = {};
+  getJSON([options.standardLang, options.checkLang]).then(res => {
     duplicate = {};
     let { checkLang, standardLang, withPath, twoVersionFilter, noRepeat } = options;
     checkLang = checkLang || "en";
@@ -125,18 +207,19 @@ export function getDuplicateJSONFile(options, callback) {
     getDuplicate({ data: res, withPath, checkLang, noRepeat });
     let str = JSON.stringify(twoVersionFilter ? getTwoVersionDuplicate() : duplicate);
     let blob = new Blob([str], { type: "text/plain;charset=utf-8" });
-    let downLink = document.createElement('a')
-    downLink.download = "duplicate.json"
-    downLink.href = URL.createObjectURL(blob)
-    document.body.appendChild(downLink)
-    downLink.click()
-    document.body.removeChild(downLink)
-    callback()
+    let downLink = document.createElement('a');
+    downLink.download = "duplicate.json";
+    downLink.href = URL.createObjectURL(blob);
+    document.body.appendChild(downLink);
+    downLink.click();
+    document.body.removeChild(downLink);
+    callback();
     return true
   });
 }
 
 export function getLanguageJSONFile(language) {
+  languageJSON = {};
   getJSON(language).then(data => {
     let str = JSON.stringify(data);
     let blob = new Blob([str], { type: "text/plain;charset=utf-8" });
