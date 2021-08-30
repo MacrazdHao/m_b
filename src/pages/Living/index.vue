@@ -416,9 +416,10 @@ export default {
     },
     // 设备(摄像头、麦克风)检测完成
     async checkFinish(cameraId) {
-      this.loading = this.$loading({
-        text: this.$t("living.loadingData"),
-      });
+      // this.loading = this.$loading({
+      //   text: this.$t("living.loadingData"),
+      // });
+      this.$loading.show();
       this.userNum = 1;
       this.checkBoxShow = false;
       this.cameraId = cameraId;
@@ -429,13 +430,15 @@ export default {
         // 未开始直播时，学生会先进入RTC房间，但老师不会，作用是利用stream-added事件实时监听何时开始直播
         this.joinRTC();
       } else {
-        this.loading.close();
+        // this.loading.close();
+        this.$loading.hide();
       }
     },
     async settingFinish(useCamera, useAudio, cameraId) {
-      this.loading = this.$loading({
-        text: this.$t("living.loadingData"),
-      });
+      // this.loading = this.$loading({
+      //   text: this.$t("living.loadingData"),
+      // });
+      this.$loading.show();
       this.settingBoxShow = false;
       this.useCamera = useCamera;
       this.useAudio = useAudio;
@@ -455,7 +458,8 @@ export default {
         this.cameraId = cameraId;
         this.changeMode(this.mode);
       }
-      this.loading.close();
+      // this.loading.close();
+      this.$loading.hide();
     },
     openCamera() {
       if (!this.status) {
@@ -563,7 +567,8 @@ export default {
 
     getInitInfo(callback = () => {}) {
       let errCallback = (err) => {
-        this.loading.close();
+        // this.loading.close();
+        this.$loading.hide();
         console.log("获取直播间信息失败", err);
         this.$dialog
           .message({
@@ -908,7 +913,8 @@ export default {
                     this.rtc.params.uid = uid;
                     console.log("远程数量:", this.rtc.remoteStreams.length);
                     this.userNum += this.rtc.remoteStreams.length;
-                    this.loading.close();
+                    // this.loading.close();
+                    this.$loading.hide();
                     if (this.status) this.changeMode(this.mode);
                   },
                   (err) => {
@@ -923,12 +929,14 @@ export default {
                     text: this.$t("living.enterLiveFail"),
                     confirm: () => {
                       // history.go(0);
-                      this.loading.close();
+                      // this.loading.close();
+                      this.$loading.hide();
                       this._goBack();
                     },
                     cancel: () => {
                       // history.go(0);
-                      this.loading.close();
+                      // this.loading.close();
+                      this.$loading.hide();
                       this._goBack();
                     },
                   })
@@ -1121,7 +1129,8 @@ export default {
                 );
                 this.loadingVideo = false;
               });
-              this.loading.close();
+              // this.loading.close();
+              this.$loading.hide();
               this.waitingPublish = true;
             }
           );
@@ -1129,7 +1138,8 @@ export default {
         (err) => {
           console.error("初始化本地流失败 ", err);
           this.rtc.published = true;
-          this.loading.close();
+          // this.loading.close();
+          this.$loading.hide();
           this.$message.error({
             text: this.$t("living.publishFail"),
           });
