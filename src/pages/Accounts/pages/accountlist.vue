@@ -486,6 +486,9 @@ export default {
     .el-table th {
       background-color: #f6f8fa;
     }
+    .el-table .cell {
+      overflow: initial;
+    }
     .el-table th:nth-last-child(2) {
       .cell {
         justify-content: flex-end;

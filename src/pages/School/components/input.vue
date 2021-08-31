@@ -275,7 +275,7 @@ export default {
     width: 100%;
     height: fit-content;
     max-height: 212px;
-    overflow-y: scroll;
+    overflow-y: auto;
     background-color: #fff;
     margin-top: 6px;
     // min-width: 120px;

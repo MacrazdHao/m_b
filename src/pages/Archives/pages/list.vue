@@ -23,7 +23,7 @@
         <SButton
           class="button"
           :text="$t('live.list.searchButton')"
-          @btnClick="searchLiveWithKeyword"
+          @btnClick="searchWithKeyword"
         />
       </div>
       <div class="table">
@@ -291,7 +291,7 @@ export default {
           });
         });
     },
-    searchLiveWithKeyword() {
+    searchWithKeyword() {
       if (this.value == "" || this.value) {
         this.page = {
           keyword: this.value,
@@ -466,6 +466,9 @@ export default {
     }
     .el-table th {
       background-color: #f6f8fa;
+    }
+    .el-table .cell {
+      overflow: initial;
     }
   }
 }

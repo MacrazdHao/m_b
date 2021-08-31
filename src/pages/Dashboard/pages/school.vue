@@ -32,7 +32,7 @@
       <div class="info-item">
         <div class="titleBox">
           <p class="title">{{ $t("dashboard.school.fileNum.title") }}</p>
-          <div class="moreButton">
+          <div class="moreButton" @click="goProfiles">
             <p>{{ $t("dashboard.school.moreButton") }}</p>
             <img src="@/assets/dashboard/icon_view.svg" />
           </div>
@@ -55,7 +55,7 @@
       <div class="info-item">
         <div class="titleBox">
           <p class="title">{{ $t("dashboard.school.accountManage.title") }}</p>
-          <div class="moreButton">
+          <div class="moreButton" @click="goAccountManagement">
             <p>{{ $t("dashboard.school.moreButton") }}</p>
             <img src="@/assets/dashboard/icon_view.svg" />
           </div>
@@ -226,6 +226,12 @@ export default {
     toCalendar(item, index) {
       if ((item > 25 && index < 7) || (item < 13 && index > 28)) return;
       this.$router.push({ path: "/index/dashboard/schedules" });
+    },
+    goAccountManagement() {
+      this.$router.push({ path: "/index/accounts/admin" });
+    },
+    goProfiles() {
+      this.$router.push({ path: "/index/archives/archivesList" });
     },
   },
 };
