@@ -143,6 +143,17 @@ export default {
             }, {
               path: '/consultant'
             }, {
+              path: '/estuary',
+              children: [{
+                path: '/estuaryStudents',
+              }, {
+                path: '/estuaryRecords',
+              }]
+            }, {
+              path: '/estuaryConsultant'
+            }, {
+              path: '/estuaryStudent'
+            }, {
               path: '/playback'
             }, {
               path: "/testing",
@@ -183,7 +194,7 @@ export default {
     return new Promise((resolve, reject) => {
       request.post(urls.uploadAvatar, data, { "Content-Type": "multipart/form-data" }).then(res => {
         if (res.data.url) {
-          res.data.url = request.custom.ossUrl + res.data.url;
+          res.data.url = res.data.url;
         }
         console.log(request.custom)
         resolve(res);

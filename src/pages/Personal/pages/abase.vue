@@ -3,7 +3,7 @@
     <p class="title">{{ $t("personal.base.title") }}</p>
     <div class="avatarBox">
       <p class="title">{{ $t("personal.base.avatarTitle") }}</p>
-      <img :src="avatar" />
+      <img :src="fullAvatar" />
       <PButton
         class="upload"
         :text="$t('personal.base.avatarButton')"
@@ -62,11 +62,18 @@ export default {
   },
   data() {
     return {
-      avatar: this.$store.state.user.userinfo.avatar || this.$_default.avatar,
+      avatar: this.$store.state.user.userinfo.avatar,
       name: "",
       account: "",
       uploading: false,
     };
+  },
+  computed: {
+    fullAvatar() {
+      return this.avatar
+        ? this.$_default.ossUrl + this.avatar
+        : this.$_default.avatar;
+    },
   },
   mounted() {
     console.log(this.$store.state.user.userinfo.account);

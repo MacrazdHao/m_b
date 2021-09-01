@@ -5,20 +5,35 @@
   >
     <img class="labelIcon" v-if="icon" :src="icon" @click="copy_info" />
     <input
+      :class="[hasUnit ? 'inputWithUnit' : '']"
       :ref="`input${time}`"
       :placeholder="placeholder"
       :disabled="disabled"
-      :readonly="readonly || false"
+      :readonly="readonly || false || timer"
       :maxlength="maxLength"
       :type="type || 'text'"
       :max="maxNumber"
       :min="minNumber"
       v-bind:value="value"
+      @click="openDatePicker"
       @keydown="enterEvent"
       @input="inputHandler"
       @focus="handleFocus"
       @blur="handleInputBlur"
     />
+    <div class="unitText" v-if="hasUnit">
+      <p>{{ unitText }}</p>
+    </div>
+    <el-date-picker
+      class="timepicker"
+      v-if="timer"
+      v-show="false"
+      v-model="timerValue"
+      type="datetime"
+      :picker-options="pickerOptions"
+      ref="datePicker"
+    >
+    </el-date-picker>
     <img
       class="copyButton"
       v-if="copy"
@@ -28,9 +43,12 @@
     <p class="length" v-if="showLength && maxLength">
       {{ value.length }}/{{ maxLength }}
     </p>
-    <div class="associate" ref="associate" 
+    <div
+      class="associate"
+      ref="associate"
       v-if="associate && showList"
-      @scroll="associateLoadMore">
+      @scroll="associateLoadMore"
+    >
       <p class="loadTips" v-show="!value">
         {{ noKeyText }}
       </p>
@@ -85,12 +103,42 @@ export default {
     "type",
     "maxNumber",
     "minNumber",
+    "timer",
+    "hasUnit",
+    "unitText",
   ],
   data() {
     return {
       focusStatus: false,
       time: Math.random().toString(36).slice(2),
       showList: false,
+      timerValue: "",
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: this.$t("global.date.today"),
+            onClick(picker) {
+              picker.$emit("pick", new Date());
+            },
+          },
+          {
+            text: this.$t("global.date.yesterday"),
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit("pick", date);
+            },
+          },
+          {
+            text: this.$t("global.date.aweekago"),
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", date);
+            },
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -105,11 +153,20 @@ export default {
         this.menuAnimate(this.$refs["associate"], false);
       }, 0);
     },
+    timerValue(val) {
+      this.valueTmp = val;
+      this.$emit("input", val);
+    },
   },
   mounted() {
     // console.log("input内部", this.asssociateList);
   },
   methods: {
+    openDatePicker() {
+      if (!this.timer) return;
+      console.log(this.$refs.datePicker);
+      this.$refs.datePicker.showPicker();
+    },
     focus() {
       this.$refs[`input${this.time}`].focus();
     },
@@ -217,6 +274,30 @@ export default {
   transition: all 0.1s;
   border-radius: 2px;
   position: relative;
+  .unitText {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 42px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid #d9d9d9;
+    p {
+      font-size: 14px;
+      color: #333333;
+      line-height: 20px;
+    }
+  }
+  .timepicker {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
   p {
     margin: 0;
     color: #333333;
@@ -239,6 +320,9 @@ export default {
     color: #999999;
     line-height: 20px;
     margin-left: 12px;
+  }
+  .inputWithUnit {
+    width: calc(100% - 42px);
   }
   input {
     background: none;

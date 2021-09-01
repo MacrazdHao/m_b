@@ -130,7 +130,7 @@ export default {
       padding: 32px 32px 65px 32px;
       box-sizing: border-box;
       height: calc(100% - 200px);
-      overflow: scroll;
+      overflow: auto;
     }
     .buttonBox {
       display: flex;

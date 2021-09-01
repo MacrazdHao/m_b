@@ -691,6 +691,61 @@ export default {
     }
   },
   // 子级
+  '/estuaryConsultant': {
+    path: "estuaryConsultant",
+    name: "estuaryConsultant",
+    component: "EstuaryConsultant",
+    meta: {
+      title: "菁英计划",
+      enTitle: 'Estuary',
+      icon: "icon_estuary",
+    }
+  },
+  // 子级
+  '/estuaryStudent': {
+    path: "estuaryStudent",
+    name: "estuaryStudent",
+    component: "EstuaryStudent",
+    meta: {
+      title: "菁英计划",
+      enTitle: 'Estuary',
+      icon: "icon_estuary",
+    }
+  },
+  // 子级
+  '/estuary': {
+    path: "estuary",
+    name: "estuary",
+    component: "Estuary",
+    meta: {
+      title: "菁英计划",
+      enTitle: 'Estuary',
+      icon: "icon_estuary",
+    }
+  },
+  // 子子级
+  '/estuaryStudents': {
+    path: "estuaryStudents",
+    name: "estuaryStudents",
+    component: "pages/students",
+    meta: {
+      title: "学生信息",
+      enTitle: ' Consultation Students',
+      icon: "icon_estuary",
+    }
+  },
+  // 子子级
+  '/estuaryRecords': {
+    path: "estuaryRecords",
+    name: "estuaryRecords",
+    component: "pages/records",
+    meta: {
+      title: "咨询记录",
+      enTitle: ' Consultation Records',
+      icon: "icon_estuary",
+    }
+  },
+  // 子级
   '/playback': {
     path: "playback",
     name: "playback",

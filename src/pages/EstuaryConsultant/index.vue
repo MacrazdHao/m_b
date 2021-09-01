@@ -1,14 +1,14 @@
 <template>
-  <div class="Playback">
+  <div class="Live">
     <div class="list-content">
       <div class="toolsBar">
-        <!-- <PSelector
+        <PSelector
           class="statusSelector"
           :items="status"
           :index="statusIndex"
           :border="true"
           @handleSelect="handleStatusSelect"
-        /> -->
+        />
         <SInput
           class="searchInput"
           :placeholder="$t('live.list.searchPlaceholder')"
@@ -25,11 +25,6 @@
           :text="$t('live.list.searchButton')"
           @btnClick="searchWithKeyword"
         />
-        <!-- <SButton
-          class="button"
-          :text="$t('live.list.searchButton')"
-          @btnClick="showRecords"
-        /> -->
       </div>
       <div class="table">
         <el-table :data="tableData" height="642" style="width: 100%">
@@ -47,63 +42,138 @@
               {{ $t("live.list.errorTips.nolist") }}
             </p>
           </div>
-          <el-table-column>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("live.list.table.school") }}
-              </p>
-            </template>
-            <template slot-scope="scope">
-              <p class="tableRow-text">{{ scope.row.schoolName }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template slot="header" slot-scope="scope">
-              <p class="tableHeader-text">
-                {{ $t("live.list.table.name") }}
+                {{ $t("estuary.records.studentCode") }}
               </p>
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.nickName) }}
+                {{ scope.row.userCode }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("estuary.records.studentName") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.nickName }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("estuary.records.times") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.totalConsultNum || 0 }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("estuary.records.finishedTimes") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{
+                  scope.row.currentConsultNum > 0
+                    ? scope.row.currentConsultNum - 1
+                    : 0
+                }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("estuary.records.theme") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.liveName || "-" }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("estuary.records.nextTime") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{
+                  scope.row.nextConsultTime > 0
+                    ? getDateString(
+                        scope.row.nextConsultTime,
+                        "YYYY-MM-DD hh:mm"
+                      )
+                    : $t("estuary.records.hasNotNextTime")
+                }}
               </p>
             </template>
           </el-table-column>
           <el-table-column>
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("live.list.table.grade") }}
+                {{ $t("live.list.table.status") }}
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ overline(scope.row.gradeName) }}</p>
+              <div class="statusBox">
+                <div
+                  :class="[
+                    scope.row.liveStatus == 1 ? 'dot--finish' : 'dot--waiting',
+                  ]"
+                ></div>
+                <p class="tableRow-text">
+                  {{
+                    $t(
+                      `live.list.table.statusText.${
+                        scope.row.liveStatus == -1
+                          ? "end"
+                          : scope.row.liveStatus == 1
+                          ? "living"
+                          : "noStart"
+                      }`
+                    )
+                  }}
+                </p>
+              </div>
             </template>
           </el-table-column>
           <el-table-column>
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("live.list.table.process") }}
-              </p>
-            </template>
-            <template slot-scope="scope">
-              <p class="tableRow-text">
-                {{ statusToText(scope.row.nodeType) }}
-              </p>
-            </template>
-          </el-table-column>
-          <el-table-column width="80">
-            <template slot="header" slot-scope="scope">
-              <p class="tableHeader-text">
-                {{ $t("playback.list.table.options") }}
+                {{ $t("live.list.table.options") }}
               </p>
             </template>
             <template slot-scope="scope">
               <div class="buttons">
                 <p
-                  :class="['tableRow-text', 'tableRow-button']"
-                  @click="showRecords(scope.row.userId)"
+                  :class="[
+                    'tableRow-text',
+                    'tableRow-button',
+                    scope.row.nextConsultTime - 15 * 60 * 1000 >
+                      new Date().getTime() || scope.row.liveStatus == -1
+                      ? 'tableRow-button--disabled'
+                      : '',
+                  ]"
+                  @click="toLiving(scope.row)"
                 >
-                  {{ $t("playback.list.table.watchButton") }}
+                  {{ $t("live.list.table.watchButton") }}
                 </p>
               </div>
             </template>
@@ -122,34 +192,21 @@
         @current-change="currentChange"
       />
     </div>
-    <RightDrawer ref="playbackList" :title="$t('playback.list.list.title')">
-      <div class="recordsList">
-        <p class="subtitle">{{ $t("playback.list.list.subtitle") }}</p>
-        <div class="record" v-for="(item, index) in recordList" :key="index">
-          <p class="processTitle">{{ item.liveName }}</p>
-          <p class="playbackButton" @click="watchRecord(item.videoRecord)">
-            {{ $t("playback.list.playbackButton") }}
-          </p>
-        </div>
-      </div>
-    </RightDrawer>
   </div>
 </template>
 
 <script>
+import SPagination from "@/components/common/pagination";
 import SInput from "./components/input";
 import SButton from "@/components/common/button.vue";
-import RightDrawer from "@/components/common/rightDrawer.vue";
 import PSelector from "@/components/common/selector";
-import SPagination from "@/components/common/pagination";
 import DateUtils from "@/utils/date";
 export default {
   components: {
+    SPagination,
     SInput,
     SButton,
-    RightDrawer,
     PSelector,
-    SPagination,
   },
   data() {
     return {
@@ -170,8 +227,6 @@ export default {
         size: 10,
         current: 1,
       },
-      recordList: [],
-      loadedRecordList: false,
     };
   },
   watch: {
@@ -193,34 +248,6 @@ export default {
   },
   methods: {
     ...DateUtils,
-    statusToText(status) {
-      switch (status) {
-        case 0:
-          return this.$t("management.status.noStart");
-        case 11:
-          return this.$t("management.status.collection");
-        case 12:
-          return this.$t("management.status.discussion");
-        case 21:
-          return this.$t("management.status.consultation");
-        case 31:
-          return this.$t("management.status.fllowup");
-        case 32:
-          return this.$t("management.status.update");
-        case 41:
-          return this.$t("management.status.asupport");
-        case 42:
-          return this.$t("management.status.support");
-        case 43:
-          return this.$t("management.status.monitoring");
-        case 88:
-          return this.$t("management.status.report");
-        case 99:
-          return this.$t("management.status.end");
-        default:
-          return this.$t("management.status.none");
-      }
-    },
     handleStatusSelect(index) {
       this.statusIndex = index;
       this.page = {
@@ -236,7 +263,7 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("playback/getLiveList", {
+        .dispatch("estuary/getConsultantLiveList", {
           pageIndex: this.page.current,
           pageSize: this.page.size,
           keyword: this.value,
@@ -283,30 +310,22 @@ export default {
         this.initList();
       }
     },
-    showRecords(studentId) {
-      this.loadedRecordList = false;
-      this.$store
-        .dispatch("playback/getRecordList", studentId)
-        .then((res) => {
-          this.loadedRecordList = true;
-          this.recordList = res.data;
-          this.$refs.playbackList.openDrawer();
-        })
-        .catch((err) => {
-          console.log(err);
-          this.$message.error({
-            text: this.$t("playback.list.getRecordListErrorTips"),
-          });
-        });
-    },
-    watchRecord(url) {
-      if(!url) {
-          this.$message.warning({
-            text: this.$t("playback.list.unavailableRecordTips"),
-          });
+    toLiving(info) {
+      if (info.liveStatus == -1) {
+        this.$message.warning({ text: this.$t("live.list.table.liveEndTips") });
         return;
       }
-      window.open(this.$_default.ossUrl + url);
+      if (info.nextConsultTime - 15 * 60 * 1000 > new Date().getTime()) {
+        this.$message.warning({
+          text: this.$t("live.list.table.liveNoStartTips"),
+        });
+        return;
+      }
+      // 从此处进入直播需要传入liveName
+      this.$router.push({
+        name: "living",
+        query: { roomId: info.liveId, estuary: 1 },
+      });
     },
     overline(text = "") {
       if (!text) return "";
@@ -316,7 +335,7 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("playback/getLiveList", {
+        .dispatch("estuary/getConsultantLiveList", {
           pageIndex: parseInt(pageNum),
           pageSize: this.page.size,
           keyword: this.value,
@@ -345,7 +364,7 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("playback/getLiveList", {
+        .dispatch("estuary/getConsultantLiveList", {
           pageIndex: parseInt(num),
           pageSize: this.page.size,
           keyword: this.value,
@@ -374,7 +393,7 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("playback/getLiveList", {
+        .dispatch("estuary/getConsultantLiveList", {
           pageIndex: this.page.current - 1,
           pageSize: this.page.size,
           keyword: this.value,
@@ -403,7 +422,7 @@ export default {
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("playback/getLiveList", {
+        .dispatch("estuary/getConsultantLiveList", {
           pageIndex: this.page.current + 1,
           pageSize: this.page.size,
           keyword: this.value,
@@ -432,7 +451,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.Playback {
+.Live {
   .toolsBar {
     .el-select .el-input.is-focus .el-input__inner {
       border-color: #4b78f6;
@@ -475,7 +494,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.Playback {
+.Live {
   // height: 792px;
   box-shadow: 0px 2px 6px 0px rgba(224, 224, 224, 0.5);
   background: #fff;
@@ -503,21 +522,27 @@ export default {
       .statusSelector {
         width: 120px;
         height: 36px;
-        margin-right: 12px;
       }
       .searchInput {
         width: 300px;
+        margin-left: 12px;
         height: 36px;
-        margin-right: 12px;
       }
       .button {
         padding: 7px 20px;
+        margin-left: 12px;
       }
     }
     .table {
       width: 100%;
       box-sizing: border-box;
       margin-top: 22px;
+      .loadTips {
+        font-size: 14px;
+        color: #d3d3d3;
+        line-height: 20px;
+        margin-top: 18px;
+      }
       .tableHeader-text {
         font-size: 14px;
         font-family: AlibabaPuHuiTiM;
@@ -578,37 +603,6 @@ export default {
         .tableRow-button + .tableRow-button {
           margin-left: 30px;
         }
-      }
-    }
-  }
-  .recordsList {
-    width: 380px;
-    padding: 0 24px 0 30px;
-    margin-bottom: 30px;
-    box-sizing: border-box;
-    .subtitle {
-      font-size: 16px;
-      color: #333333;
-      line-height: 22px;
-      text-align: left;
-      margin-bottom: 8px;
-    }
-    .record {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid #d3d3d3;
-      .processTitle {
-        font-size: 14px;
-        color: #333333;
-        line-height: 20px;
-      }
-      .playbackButton {
-        font-size: 14px;
-        color: #4b77f6;
-        line-height: 20px;
-        cursor: pointer;
       }
     }
   }

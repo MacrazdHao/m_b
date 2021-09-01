@@ -1,5 +1,5 @@
 <template>
-  <div class="Playback">
+  <div class="List">
     <div class="list-content">
       <div class="toolsBar">
         <!-- <PSelector
@@ -25,11 +25,6 @@
           :text="$t('live.list.searchButton')"
           @btnClick="searchWithKeyword"
         />
-        <!-- <SButton
-          class="button"
-          :text="$t('live.list.searchButton')"
-          @btnClick="showRecords"
-        /> -->
       </div>
       <div class="table">
         <el-table :data="tableData" height="642" style="width: 100%">
@@ -47,47 +42,110 @@
               {{ $t("live.list.errorTips.nolist") }}
             </p>
           </div>
-          <el-table-column>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("live.list.table.school") }}
-              </p>
-            </template>
-            <template slot-scope="scope">
-              <p class="tableRow-text">{{ scope.row.schoolName }}</p>
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template slot="header" slot-scope="scope">
-              <p class="tableHeader-text">
-                {{ $t("live.list.table.name") }}
+                {{ $t("estuary.records.studentName") }}
               </p>
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ overline(scope.row.nickName) }}
+                {{ scope.row.studentInfo.nickName }}
               </p>
             </template>
           </el-table-column>
-          <el-table-column>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("live.list.table.grade") }}
+                {{ $t("estuary.records.studentCode") }}
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">{{ overline(scope.row.gradeName) }}</p>
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.studentInfo.userCode }}
+              </p>
             </template>
           </el-table-column>
-          <el-table-column>
+          <el-table-column min-width="100px">
             <template slot="header" slot-scope="scope">
               <p class="tableHeader-text">
-                {{ $t("live.list.table.process") }}
+                {{ $t("estuary.records.consultantName") }}
               </p>
             </template>
             <template slot-scope="scope">
-              <p class="tableRow-text">
-                {{ statusToText(scope.row.nodeType) }}
+              <p class="tableRow-text tableRow-name">
+                {{
+                  scope.row.consultantInfo
+                    ? scope.row.consultantInfo.nickName
+                    : $t("estuary.records.hasNotConsultant")
+                }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("estuary.records.consultantCode") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{
+                  scope.row.consultantInfo
+                    ? scope.row.consultantInfo.userCode
+                    : "-"
+                }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("estuary.records.times") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{ scope.row.totalConsultNum }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("estuary.records.finishedTimes") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{
+                  scope.row.currentConsultNum > 0
+                    ? scope.row.currentConsultNum - 1
+                    : 0
+                }}
+              </p>
+            </template>
+          </el-table-column>
+          <el-table-column min-width="100px">
+            <template slot="header" slot-scope="scope">
+              <p class="tableHeader-text">
+                {{ $t("estuary.records.nextTime") }}
+              </p>
+            </template>
+            <template slot-scope="scope">
+              <p class="tableRow-text tableRow-name">
+                {{
+                  scope.row.nextConsultTime > 0
+                    ? `${getDateString(
+                        scope.row.nextConsultTime,
+                        "YYYY-MM-DD hh:mm"
+                      )}-${getDateString(
+                        scope.row.nextConsultTime +
+                          scope.row.nextConsultTimeLength * 60 * 60 * 1000,
+                        "hh:mm"
+                      )}`
+                    : $t("estuary.records.hasNotNextTime")
+                }}
               </p>
             </template>
           </el-table-column>
@@ -101,7 +159,7 @@
               <div class="buttons">
                 <p
                   :class="['tableRow-text', 'tableRow-button']"
-                  @click="showRecords(scope.row.userId)"
+                  @click="showRecords(scope.row.recordId)"
                 >
                   {{ $t("playback.list.table.watchButton") }}
                 </p>
@@ -124,9 +182,17 @@
     </div>
     <RightDrawer ref="playbackList" :title="$t('playback.list.list.title')">
       <div class="recordsList">
-        <p class="subtitle">{{ $t("playback.list.list.subtitle") }}</p>
+        <p class="subtitle">{{ $t("estuary.records.recordsListSubtitle") }}</p>
         <div class="record" v-for="(item, index) in recordList" :key="index">
-          <p class="processTitle">{{ item.liveName }}</p>
+          <div class="infoBox">
+            <p class="processTitle">{{ item.liveName }}</p>
+            <p class="consultTime">
+              {{ getDateString(item.consultTime, "YYYY-MM-DD hh:mm") }}
+            </p>
+            <p class="consultTimes">
+              {{ item.currentConsultNum }}{{ $t("modules.list.table.unit") }}
+            </p>
+          </div>
           <p class="playbackButton" @click="watchRecord(item.videoRecord)">
             {{ $t("playback.list.playbackButton") }}
           </p>
@@ -137,33 +203,46 @@
 </template>
 
 <script>
-import SInput from "./components/input";
-import SButton from "@/components/common/button.vue";
-import RightDrawer from "@/components/common/rightDrawer.vue";
-import PSelector from "@/components/common/selector";
 import SPagination from "@/components/common/pagination";
-import DateUtils from "@/utils/date";
+import SInput from "../components/input";
+import SButton from "@/components/common/button.vue";
+import PSelector from "@/components/common/selector";
+import RightDrawer from "@/components/common/rightDrawer.vue";
+import Enum from "@/utils/enum";
+import DateTools from "@/utils/date";
 export default {
   components: {
+    SPagination,
     SInput,
     SButton,
-    RightDrawer,
     PSelector,
-    SPagination,
+    RightDrawer,
   },
   data() {
     return {
       loading: false,
       error: false,
       status: [
-        { text: this.$t("live.list.status.all"), value: -2 },
-        { text: this.$t("live.list.status.living"), value: 1 },
-        { text: this.$t("live.list.status.notStart"), value: 0 },
-        { text: this.$t("live.list.status.end"), value: -1 },
+        { text: this.$t("management.status.all"), value: -1 },
+        { text: this.$t("management.status.noStart"), value: 0 },
+        // { text: this.$t("management.status.collection"), value: 11 },
+        // { text: this.$t("management.status.testing"), value: 12 },
+        // { text: this.$t("management.status.discussion"), value: 13 },
+        // { text: this.$t("management.status.consultation"), value: 21 },
+        // { text: this.$t("management.status.fllowup"), value: 31 },
+        // { text: this.$t("management.status.update"), value: 32 },
+        // { text: this.$t("management.status.asupport"), value: 41 },
+        // { text: this.$t("management.status.support"), value: 42 },
+        // { text: this.$t("management.status.monitoring"), value: 43 },
+        // { text: this.$t("management.status.report"), value: 88 },
+        // { text: this.$t("management.status.end"), value: 99 },
+        { text: this.$t("management.status.consultLabel0"), value: 1 },
+        { text: this.$t("management.status.consultLabel1"), value: 2 },
       ],
-      statusIndex: 0,
+      statusIndex: 2,
       value: "",
       tableData: [],
+      pageNum: 1,
       page: {
         dataNum: 0,
         total: 1,
@@ -192,31 +271,36 @@ export default {
     this.initList();
   },
   methods: {
-    ...DateUtils,
+    ...DateTools,
     statusToText(status) {
-      switch (status) {
+      let _status = Enum.getServerNodeStage(status);
+      switch (_status) {
         case 0:
           return this.$t("management.status.noStart");
-        case 11:
-          return this.$t("management.status.collection");
-        case 12:
-          return this.$t("management.status.discussion");
-        case 21:
-          return this.$t("management.status.consultation");
-        case 31:
-          return this.$t("management.status.fllowup");
-        case 32:
-          return this.$t("management.status.update");
-        case 41:
-          return this.$t("management.status.asupport");
-        case 42:
-          return this.$t("management.status.support");
-        case 43:
-          return this.$t("management.status.monitoring");
-        case 88:
-          return this.$t("management.status.report");
-        case 99:
-          return this.$t("management.status.end");
+        case 1:
+          return this.$t("management.status.consultLabel0");
+        case 2:
+          return this.$t("management.status.consultLabel1");
+        // case 11:
+        //   return this.$t("management.status.collection");
+        // case 12:
+        //   return this.$t("management.status.discussion");
+        // case 21:
+        //   return this.$t("management.status.consultation");
+        // case 31:
+        //   return this.$t("management.status.fllowup");
+        // case 32:
+        //   return this.$t("management.status.update");
+        // case 41:
+        //   return this.$t("management.status.asupport");
+        // case 42:
+        //   return this.$t("management.status.support");
+        // case 43:
+        //   return this.$t("management.status.monitoring");
+        // case 88:
+        //   return this.$t("management.status.report");
+        // case 99:
+        //   return this.$t("management.status.end");
         default:
           return this.$t("management.status.none");
       }
@@ -233,14 +317,15 @@ export default {
     },
     initList() {
       console.log(this.status[this.statusIndex].value);
+      this.tableData = [];
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("playback/getLiveList", {
+        .dispatch("estuary/getStudentList", {
           pageIndex: this.page.current,
           pageSize: this.page.size,
           keyword: this.value,
-          status: this.status[this.statusIndex].value,
+          nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
           if (res.pageTotal != 0 && res.pageTotal < res.pageIndex) {
@@ -283,10 +368,10 @@ export default {
         this.initList();
       }
     },
-    showRecords(studentId) {
+    showRecords(recordId) {
       this.loadedRecordList = false;
       this.$store
-        .dispatch("playback/getRecordList", studentId)
+        .dispatch("estuary/getStudentPlayback", recordId)
         .then((res) => {
           this.loadedRecordList = true;
           this.recordList = res.data;
@@ -308,19 +393,16 @@ export default {
       }
       window.open(this.$_default.ossUrl + url);
     },
-    overline(text = "") {
-      if (!text) return "";
-      return text.substring(0, 40) + (text.length > 30 ? "..." : "");
-    },
     goPage(pageNum) {
+      this.tableData = [];
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("playback/getLiveList", {
+        .dispatch("estuary/getStudentList", {
           pageIndex: parseInt(pageNum),
           pageSize: this.page.size,
           keyword: this.value,
-          status: this.status[this.statusIndex].value,
+          nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
           this.page = {
@@ -342,14 +424,15 @@ export default {
         });
     },
     currentChange(num) {
+      this.tableData = [];
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("playback/getLiveList", {
+        .dispatch("estuary/getStudentList", {
           pageIndex: parseInt(num),
           pageSize: this.page.size,
           keyword: this.value,
-          status: this.status[this.statusIndex].value,
+          nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
           this.page = {
@@ -371,14 +454,15 @@ export default {
         });
     },
     prevPage() {
+      this.tableData = [];
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("playback/getLiveList", {
+        .dispatch("estuary/getStudentList", {
           pageIndex: this.page.current - 1,
           pageSize: this.page.size,
           keyword: this.value,
-          status: this.status[this.statusIndex].value,
+          nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
           this.page = {
@@ -400,14 +484,15 @@ export default {
         });
     },
     nextPage() {
+      this.tableData = [];
       this.error = false;
       this.loading = true;
       this.$store
-        .dispatch("playback/getLiveList", {
+        .dispatch("estuary/getStudentList", {
           pageIndex: this.page.current + 1,
           pageSize: this.page.size,
           keyword: this.value,
-          status: this.status[this.statusIndex].value,
+          nodeType: this.status[this.statusIndex].value,
         })
         .then((res) => {
           this.page = {
@@ -432,7 +517,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.Playback {
+.List {
   .toolsBar {
     .el-select .el-input.is-focus .el-input__inner {
       border-color: #4b78f6;
@@ -463,11 +548,6 @@ export default {
     .el-table th {
       background-color: #f6f8fa;
     }
-    // .el-table th:nth-last-child(2) {
-    //   .cell {
-    //     justify-content: flex-end;
-    //   }
-    // }
     .el-table .cell {
       overflow: initial;
     }
@@ -475,11 +555,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.Playback {
-  // height: 792px;
-  box-shadow: 0px 2px 6px 0px rgba(224, 224, 224, 0.5);
-  background: #fff;
-  margin-bottom: 24px;
+.List {
   width: 100%;
   padding: 22px 24px 14px 24px;
   box-sizing: border-box;
@@ -503,21 +579,27 @@ export default {
       .statusSelector {
         width: 120px;
         height: 36px;
-        margin-right: 12px;
       }
       .searchInput {
         width: 300px;
+        // margin-left: 12px;
         height: 36px;
-        margin-right: 12px;
       }
       .button {
         padding: 7px 20px;
+        margin-left: 12px;
       }
     }
     .table {
       width: 100%;
       box-sizing: border-box;
       margin-top: 22px;
+      .loadTips {
+        font-size: 14px;
+        color: #d3d3d3;
+        line-height: 20px;
+        margin-top: 18px;
+      }
       .tableHeader-text {
         font-size: 14px;
         font-family: AlibabaPuHuiTiM;
@@ -536,20 +618,33 @@ export default {
       .statusBox {
         display: flex;
         flex-direction: row;
-        align-items: center;
-        .dot--finish {
-          width: 6px;
-          height: 6px;
-          border-radius: 6px;
-          background: #53c41b;
-          margin-right: 4px;
-        }
-        .dot--waiting {
-          width: 6px;
-          height: 6px;
-          border-radius: 6px;
-          background: #d3d3d3;
-          margin-right: 4px;
+        align-items: flex-start;
+        .dotBox {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          height: 20px;
+          .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 6px;
+            background: #d3d3d3;
+            margin-right: 4px;
+          }
+          .dot--finish {
+            width: 6px;
+            height: 6px;
+            border-radius: 6px;
+            background: #53c41b;
+            margin-right: 4px;
+          }
+          .dot--doing {
+            width: 6px;
+            height: 6px;
+            border-radius: 6px;
+            background: #ffbe3d;
+            margin-right: 4px;
+          }
         }
       }
       .tableRow-longText {
@@ -563,26 +658,64 @@ export default {
         cursor: pointer;
         white-space: nowrap;
       }
-      .tableRow-button--disabled {
-        color: #999999 !important;
-      }
-      .buttons {
-        display: flex;
-        flex-direction: row;
-        // justify-content: flex-end;
-        .tableRow-button {
-          color: #4b77f6;
-          cursor: pointer;
-          white-space: nowrap;
-        }
-        .tableRow-button + .tableRow-button {
-          margin-left: 30px;
-        }
-      }
     }
   }
+  .pagination {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    // margin-top: 24px;
+    .totalNum {
+      font-size: 14px;
+      color: #666666;
+      line-height: 20px;
+      margin-right: 18px;
+    }
+    .jumper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: 18px;
+      p {
+        font-size: 14px;
+        color: #666666;
+        line-height: 20px;
+      }
+      input {
+        padding: 0;
+        margin: 0;
+        margin-left: 8px;
+        margin-right: 8px;
+        padding-left: 4px;
+        padding-right: 4px;
+        width: 46px;
+        height: 28px;
+        border-radius: 4px;
+        border: 1px solid #dddfe6;
+        box-sizing: border-box;
+        transition: all 0.1s;
+        background: none;
+        outline: none;
+        font-size: 14px;
+        color: #666666;
+        line-height: 20px;
+        text-align: center;
+      }
+      input:focus {
+        border: 1px solid #4b78f6;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    }
+    // }
+  }
   .recordsList {
-    width: 380px;
+    width: 623px;
     padding: 0 24px 0 30px;
     margin-bottom: 30px;
     box-sizing: border-box;
@@ -599,16 +732,38 @@ export default {
       justify-content: space-between;
       padding: 12px 0;
       border-bottom: 1px solid #d3d3d3;
-      .processTitle {
-        font-size: 14px;
-        color: #333333;
-        line-height: 20px;
+      .infoBox {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        p {
+          font-size: 14px;
+          color: #333333;
+          line-height: 20px;
+        }
+        .processTitle {
+          width: 231px;
+          text-align: left;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .consultTime {
+          flex: 1;
+          text-align: left;
+          margin-left: 12px;
+        }
+        .consultTimes {
+          text-align: right;
+        }
       }
       .playbackButton {
         font-size: 14px;
         color: #4b77f6;
         line-height: 20px;
         cursor: pointer;
+        margin-left: 20px;
       }
     }
   }

@@ -18,6 +18,7 @@ export default {
         subtitle: '咨询阶段'
       },
       getRecordListErrorTips: '获取直播回看列表失败，请重试',
+      unavailableRecordTips: '回看视频不可用',
       playbackButton: '回看'
     },
   },
@@ -40,6 +41,7 @@ export default {
         subtitle: 'consultation phase'
       },
       getRecordListErrorTips: 'Failed to get the live broadcast view list, please try again',
+      unavailableRecordTips: '回看视频不可用',
       playbackButton: 'playback'
     },
   }

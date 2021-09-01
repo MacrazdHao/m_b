@@ -375,29 +375,34 @@ export default {
   },
   methods: {
     statusToText(status) {
-      switch (status) {
+      let _status = Enum.getServerNodeStage(status);
+      switch (_status) {
         case 0:
           return this.$t("management.status.noStart");
-        case 11:
-          return this.$t("management.status.collection");
-        case 12:
-          return this.$t("management.status.discussion");
-        case 21:
-          return this.$t("management.status.consultation");
-        case 31:
-          return this.$t("management.status.fllowup");
-        case 32:
-          return this.$t("management.status.update");
-        case 41:
-          return this.$t("management.status.asupport");
-        case 42:
-          return this.$t("management.status.support");
-        case 43:
-          return this.$t("management.status.monitoring");
-        case 88:
-          return this.$t("management.status.report");
-        case 99:
-          return this.$t("management.status.end");
+        case 1:
+          return this.$t("management.status.consultLabel0");
+        case 2:
+          return this.$t("management.status.consultLabel1");
+        // case 11:
+        //   return this.$t("management.status.collection");
+        // case 12:
+        //   return this.$t("management.status.discussion");
+        // case 21:
+        //   return this.$t("management.status.consultation");
+        // case 31:
+        //   return this.$t("management.status.fllowup");
+        // case 32:
+        //   return this.$t("management.status.update");
+        // case 41:
+        //   return this.$t("management.status.asupport");
+        // case 42:
+        //   return this.$t("management.status.support");
+        // case 43:
+        //   return this.$t("management.status.monitoring");
+        // case 88:
+        //   return this.$t("management.status.report");
+        // case 99:
+        //   return this.$t("management.status.end");
         default:
           return this.$t("management.status.none");
       }

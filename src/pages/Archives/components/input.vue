@@ -37,7 +37,9 @@
     <p class="length" v-if="showLength && maxLength">
       {{ value.length }}/{{ maxLength }}
     </p>
-    <div class="associate" ref="associate" v-if="associate && showList">
+    <div class="associate" ref="associate" 
+      v-if="associate && showList"
+      @scroll="associateLoadMore">
       <p class="loadTips" v-show="!value">
         {{ noKeyText }}
       </p>
@@ -235,6 +237,14 @@ export default {
       if (this.associate) this.closeMenu();
       this.focusStatus = false;
     },
+    associateLoadMore(e) {
+      if (
+        e.target.scrollTop / 34 >= this.searchResult.length - 6 &&
+        this.searchResult.length < this.page.dataNum
+      ) {
+        this.$emit("associateLoadMore", e);
+      }
+    },
   },
 };
 </script>
@@ -348,6 +358,7 @@ export default {
         width: 100%;
         font-size: 14px;
         line-height: 20px;
+        height: 20px;
       }
     }
     .associate-item:hover {
