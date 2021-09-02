@@ -1,0 +1,224 @@
+{
+  "进入直播": [
+    {
+      "text": "进入直播",
+      "path": "estuary.records.toLivingButton"
+    }
+  ],
+  "学生姓名": [
+    {
+      "text": "学生姓名",
+      "path": "estuary.records.studentName"
+    }
+  ],
+  "直播主题": [
+    {
+      "text": "直播主题",
+      "path": "estuary.records.theme"
+    }
+  ],
+  "未指定": [
+    {
+      "text": "未指定",
+      "path": "estuary.records.hasNotConsultant"
+    }
+  ],
+  "更换咨询师": [
+    {
+      "text": "更换咨询师",
+      "path": "estuary.records.setConsultantButton"
+    },
+    {
+      "text": "更换咨询师",
+      "path": "estuary.setConsultantBox.title"
+    }
+  ],
+  "设置咨询次数": [
+    {
+      "text": "设置咨询次数",
+      "path": "estuary.records.setConsultTimesButton"
+    },
+    {
+      "text": "设置咨询次数",
+      "path": "estuary.setConsultTimesBox.title"
+    },
+    {
+      "text": "设置咨询次数",
+      "path": "estuary.setConsultTimesBox.consultTimesLabel"
+    }
+  ],
+  "设置咨询时间": [
+    {
+      "text": "设置咨询时间",
+      "path": "estuary.records.setTimeButton"
+    },
+    {
+      "text": "设置咨询时间",
+      "path": "estuary.setConsultTimeBox.title"
+    },
+    {
+      "text": "设置咨询时间",
+      "path": "estuary.setConsultTimeBox.consultTimeLabel"
+    }
+  ],
+  "历史咨询时间": [
+    {
+      "text": "历史咨询时间",
+      "path": "estuary.records.recordsListSubtitle"
+    }
+  ],
+  "选择咨询师": [
+    {
+      "text": "选择咨询师",
+      "path": "estuary.setConsultantBox.consultantLabel"
+    }
+  ],
+  "请选择咨询师": [
+    {
+      "text": "请选择咨询师",
+      "path": "estuary.setConsultantBox.consultantPlaceholder"
+    }
+  ],
+  "请输入关键字进行检索": [
+    {
+      "text": "请输入关键字进行检索",
+      "path": "estuary.setConsultantBox.noKeyTips"
+    }
+  ],
+  "检索中...": [
+    {
+      "text": "检索中...",
+      "path": "estuary.setConsultantBox.searchingTips"
+    }
+  ],
+  "检索失败，请重试": [
+    {
+      "text": "检索失败，请重试",
+      "path": "estuary.setConsultantBox.searchingErrorTips"
+    }
+  ],
+  "暂无符合条件的咨询师": [
+    {
+      "text": "暂无符合条件的咨询师",
+      "path": "estuary.setConsultantBox.searchingEmptyTips"
+    }
+  ],
+  "更改失败，请重试": [
+    {
+      "text": "更改失败，请重试",
+      "path": "estuary.setConsultantBox.saveErrorTips"
+    },
+    {
+      "text": "更改失败，请重试",
+      "path": "estuary.setConsultTimesBox.saveErrorTips"
+    },
+    {
+      "text": "更改失败，请重试",
+      "path": "estuary.setConsultTimeBox.saveErrorTips"
+    }
+  ],
+  "更改成功": [
+    {
+      "text": "更改成功",
+      "path": "estuary.setConsultantBox.saveSuccessTips"
+    },
+    {
+      "text": "更改成功",
+      "path": "estuary.setConsultTimesBox.saveSuccessTips"
+    },
+    {
+      "text": "更改成功",
+      "path": "estuary.setConsultTimeBox.saveSuccessTips"
+    }
+  ],
+  "请输入次数": [
+    {
+      "text": "请输入次数",
+      "path": "estuary.setConsultTimesBox.consultTimesPlaceholder"
+    }
+  ],
+  "变更的次数不得小于当前正在咨询的次数": [
+    {
+      "text": "变更的次数不得小于当前正在咨询的次数",
+      "path": "estuary.setConsultTimesBox.lessThanCurrentTimesTips"
+    }
+  ],
+  "设置直播主题": [
+    {
+      "text": "设置直播主题",
+      "path": "estuary.setConsultTimeBox.consultThemeLabel"
+    }
+  ],
+  "请设置直播主题": [
+    {
+      "text": "请设置直播主题",
+      "path": "estuary.setConsultTimeBox.consultThemePlaceholder"
+    }
+  ],
+  "设置咨询时长": [
+    {
+      "text": "设置咨询时长",
+      "path": "estuary.setConsultTimeBox.consultTimeLongLabel"
+    }
+  ],
+  "请输入时长": [
+    {
+      "text": "请输入时长",
+      "path": "estuary.setConsultTimeBox.consultTimeLongPlaceholder"
+    }
+  ],
+  "请设置咨询时间": [
+    {
+      "text": "请设置咨询时间",
+      "path": "estuary.setConsultTimeBox.consultTimePlaceholder"
+    }
+  ],
+  "小时": [
+    {
+      "text": "小时",
+      "path": "estuary.setConsultTimeBox.hourUnit"
+    }
+  ],
+  "获取咨询详情失败，请重试": [
+    {
+      "text": "获取咨询详情失败，请重试",
+      "path": "estuary.setConsultTimeBox.getConsultInfoErrorTips"
+    }
+  ],
+  "咨询时长不得小于一小时": [
+    {
+      "text": "咨询时长不得小于一小时",
+      "path": "estuary.setConsultTimeBox.lessThanOneHourTips"
+    }
+  ],
+  "myFellas": [
+    {
+      "text": "myFellas",
+      "path": "global.title"
+    }
+  ],
+  "保存后，报告内容将不可更改": [
+    {
+      "text": "保存后，报告内容将不可更改",
+      "path": "management.saveTips1"
+    }
+  ],
+  "回看视频不可用": [
+    {
+      "text": "回看视频不可用",
+      "path": "playback.list.unavailableRecordTips"
+    }
+  ],
+  "编号 {code} 学生 {name} 分配失败，请重试": [
+    {
+      "text": "编号 {code} 学生 {name} 分配失败，请重试",
+      "path": "students.list.setTemplateErrorTips"
+    }
+  ],
+  "编号 {code} 学生 {name} 分配成功": [
+    {
+      "text": "编号 {code} 学生 {name} 分配成功",
+      "path": "students.list.setTemplateSuccessTips"
+    }
+  ]
+}

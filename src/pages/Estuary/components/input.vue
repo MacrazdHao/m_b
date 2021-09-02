@@ -49,10 +49,10 @@
       v-if="associate && showList"
       @scroll="associateLoadMore"
     >
-      <p class="loadTips" v-show="!value">
+      <p class="loadTips" v-show="!value && !hasInitData">
         {{ noKeyText }}
       </p>
-      <p class="loadTips" v-show="loading && value">
+      <p class="loadTips" v-show="loading">
         {{ loadingText }}
       </p>
       <p class="loadTips" v-show="error && value">
@@ -60,13 +60,13 @@
       </p>
       <p
         class="loadTips"
-        v-show="asssociateList.length == 0 && !loading && !error && value"
+        v-show="associateList.length == 0 && !loading && !error && value"
       >
         {{ emptyText }}
       </p>
       <div
         class="associate-item"
-        v-for="(item, index) in asssociateList"
+        v-for="(item, index) in associateList"
         :key="index"
         @click="handleSelect(index, item)"
       >
@@ -90,10 +90,12 @@ export default {
     "copyTips",
     "copyErrTips",
     "associate",
-    "asssociateList",
+    "associateList",
+    "associatePageInfo",
     "associateItemTextField",
     "loading",
     "error",
+    "hasInitData",
     "noKeyText",
     "loadingText",
     "errorText",
@@ -147,7 +149,7 @@ export default {
     },
   },
   watch: {
-    asssociateList(val) {
+    associateList(val) {
       // console.log("数据变更");
       setTimeout(() => {
         this.menuAnimate(this.$refs["associate"], false);
@@ -159,7 +161,7 @@ export default {
     },
   },
   mounted() {
-    // console.log("input内部", this.asssociateList);
+    // console.log("input内部", this.associateList);
   },
   methods: {
     openDatePicker() {
@@ -222,7 +224,7 @@ export default {
     },
     menuAnimate(element, hide) {
       if (!element) return;
-      let _height = 34 * (this.asssociateList.length || 1) + 8;
+      let _height = 34 * (this.associateList.length || 1) + 8;
       element.style.padding = "4px 0";
       let targetHeight = (_height > 212 ? 212 : _height) + "px";
       element.style.height = hide ? targetHeight : "0";
@@ -252,8 +254,8 @@ export default {
     },
     associateLoadMore(e) {
       if (
-        e.target.scrollTop / 34 >= this.searchResult.length - 6 &&
-        this.searchResult.length < this.page.dataNum
+        e.target.scrollTop / 34 >= this.associateList.length - 6 &&
+        this.associateList.length < this.associatePageInfo.dataNum
       ) {
         this.$emit("associateLoadMore", e);
       }

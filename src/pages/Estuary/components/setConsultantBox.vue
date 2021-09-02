@@ -26,10 +26,12 @@
             :placeholder="$t('estuary.setConsultantBox.consultantPlaceholder')"
             :value="consultantName"
             :associate="true"
-            :asssociateList="searchResult"
-            associateItemTextField="nickName"
+            :associateList="searchResult"
+            :associatePageInfo="page"
+            associateItemTextField="showText"
             :loading="searching"
             :error="searchError"
+            :hasInitData="true"
             :noKeyText="$t('estuary.setConsultantBox.noKeyTips')"
             :loadingText="$t('estuary.setConsultantBox.searchingTips')"
             :errorText="$t('estuary.setConsultantBox.searchingErrorTips')"
@@ -82,21 +84,35 @@ export default {
   },
   watch: {
     consultantName(val) {
+      this.initList();
+    },
+  },
+  mounted() {
+    console.log("初始信息", this.initInfo);
+    this.initList();
+  },
+  methods: {
+    initList() {
       this.selectedResult = null;
       this.searchResult = [];
       // this.searchEmpty = false;
       this.searchError = false;
-      if (!val) return;
+      // if (!val) return;
       this.searching = true;
       this.pageNum = 1;
       this.$store
         .dispatch("estuary/getConsultantList", {
           pageIndex: 1,
           pageSize: this.page.size,
-          keyword: val,
+          keyword: this.consultantName,
         })
         .then((res) => {
-          this.searchResult = res.data;
+          this.searchResult = res.data.map((item, index) => {
+            return {
+              ...item,
+              showText: `${item.userCode || "null"} ${item.nickName}`,
+            };
+          });
           this.page = {
             dataNum: res.total,
             total: res.pageTotal,
@@ -112,11 +128,6 @@ export default {
           this.searchError = true;
         });
     },
-  },
-  mounted() {
-    console.log("初始信息", this.initInfo);
-  },
-  methods: {
     associateLoadMore(e) {
       this.$store
         .dispatch("estuary/getConsultantList", {
@@ -125,7 +136,15 @@ export default {
           keyword: this.consultantName,
         })
         .then((res) => {
-          this.searchResult = [...this.searchResult, ...res.data];
+          this.searchResult = [
+            ...this.searchResult,
+            ...res.data.map((item, index) => {
+              return {
+                ...item,
+                showText: `${item.userCode || "null"} ${item.nickName}`,
+              };
+            }),
+          ];
           // this.searching = false;
           this.page = {
             dataNum: res.total,

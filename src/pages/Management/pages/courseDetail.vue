@@ -7,7 +7,7 @@
           <p class="title">{{ $t("management.reportTitle") }}</p>
         </div>
         <div class="subtitle">{{ $t("management.reportSubtitle") }}</div>
-        <div class="form">
+        <div class="form" style="flex-direction: row;">
           <CButton
             class="button"
             :text="$t('school.detail.reportButton')"

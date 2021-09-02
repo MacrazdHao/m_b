@@ -303,24 +303,33 @@ export default {
   methods: {
     ...DateTools,
     setConsultant(info) {
-      let data = new FormData();
-      data.append("newConsultantId", info.userId);
-      data.append("recordId", this.editTarget.recordId);
-      this.$store
-        .dispatch("estuary/setConsultant", data)
-        .then((res) => {
-          this.$message.message({
-            text: this.$t("estuary.setConsultantBox.saveSuccessTips"),
-          });
-          this.showSetConsultantBox = false;
-          this.editTarget = null;
-          this.initList();
-        })
-        .catch((err) => {
-          this.$message.error({
-            text: this.$t("estuary.setConsultantBox.saveErrorTips"),
-          });
-        });
+      this.$dialog.message({
+        text: this.$t("estuary.setConsultantBox.confirmTips", {
+          code: info.userCode || "null",
+          name: info.nickName,
+        }),
+        confirm: () => {
+          let data = new FormData();
+          data.append("newConsultantId", info.userId);
+          data.append("recordId", this.editTarget.recordId);
+          this.$store
+            .dispatch("estuary/setConsultant", data)
+            .then((res) => {
+              this.$message.message({
+                text: this.$t("estuary.setConsultantBox.saveSuccessTips"),
+              });
+              this.showSetConsultantBox = false;
+              this.editTarget = null;
+              this.initList();
+            })
+            .catch((err) => {
+              this.$message.error({
+                text: this.$t("estuary.setConsultantBox.saveErrorTips"),
+              });
+            });
+        },
+        cancel: () => {},
+      });
     },
     setConsultTimes(totalConsultNum) {
       let data = new FormData();
