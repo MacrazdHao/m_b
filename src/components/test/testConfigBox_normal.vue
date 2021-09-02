@@ -571,6 +571,12 @@ export default {
           callback: () => config.setURL(config.urls.wenjieURL),
         },
         {
+          title: "豆豆",
+          attach: this.getIP_PORT(config.urls.doudouURL),
+          value: config.urls.doudouURL,
+          callback: () => config.setURL(config.urls.doudouURL),
+        },
+        {
           title: "测试",
           attach: this.getIP_PORT(config.urls.testURL2),
           value: config.urls.testURL2,
