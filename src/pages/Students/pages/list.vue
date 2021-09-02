@@ -351,11 +351,11 @@ export default {
       this.$loading.show();
       this.tableData.forEach(async (item, index) => {
         if (item.selected) {
+          let data = new FormData();
+          data.append("templateId", templateId);
+          data.append("studentId", item.userId);
           await this.$store
-            .dispatch("students/setStudentTemplate", {
-              templateId,
-              userId: item.userId,
-            })
+            .dispatch("students/setStudentTemplate", data)
             .then((res) => {})
             .catch((err) => {
               this.$message.error({

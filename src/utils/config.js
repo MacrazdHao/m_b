@@ -10,7 +10,7 @@ const wenjieURL = 'http://192.168.1.17:9080';
 const haoranURL = 'http://192.168.1.45:9081';
 const ossURL = "http://192.168.0.104:32747";
 
-let _URL = process.env.NODE_ENV == "development" ? localStorage.getItem("myfellas_requestURL") || doudouURL : baseURL;
+let _URL = process.env.NODE_ENV == "development" ? localStorage.getItem("myfellas_requestURL") || luohuanURL2 : baseURL;
 let _ossURL = process.env.NODE_ENV == "development" ? localStorage.getItem("myfellas_ossURL") || ossURL : baseOssURL;
 
 export default {

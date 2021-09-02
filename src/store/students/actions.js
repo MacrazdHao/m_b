@@ -31,7 +31,7 @@ export default {
   },
   setStudentTemplate: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
-      request.post(urls.setStudentTemplate, data).then(res => {
+      request.post(urls.setStudentTemplate, data, { "Content-Type": "multipart/form-data" }).then(res => {
         console.log('设置模板成功', data.studentId, res);
         resolve(res);
       }).catch(err => {
