@@ -30,7 +30,7 @@ _Message.install = (Vue) => {
       instance.messageNum = messageNum;
       instance.callback = (num) => {
         _options.callback();
-        console.log(num);
+        // console.log(num);
         if (num == messageNum) {
           messageNum = 0;
         }

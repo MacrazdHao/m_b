@@ -349,26 +349,46 @@ export default {
     },
     setStudentTemplate(templateId) {
       this.$loading.show();
-      this.tableData.forEach(async (item, index) => {
+      let requests = [];
+      this.tableData.forEach((item, index) => {
         if (item.selected) {
-          let data = new FormData();
-          data.append("templateId", templateId);
-          data.append("studentId", item.userId);
-          await this.$store
-            .dispatch("students/setStudentTemplate", data)
-            .then((res) => {})
-            .catch((err) => {
-              this.$message.error({
-                text: this.$t("students.list.setTemplateErrorTips", {
-                  code: item.userCode || "null",
-                  name: item.nickName || "null",
-                }),
-              });
-            });
+          requests.push(
+            new Promise((resolve, reject) => {
+              let data = new FormData();
+              data.append("templateId", templateId);
+              data.append("studentId", item.userId);
+              this.$store
+                .dispatch("students/setStudentTemplate", data)
+                .then((res) => {
+                  this.$message.message({
+                    text: this.$t("students.list.setTemplateSuccessTips", {
+                      code: item.userCode || "null",
+                      name: item.nickName || "null",
+                    }),
+                  });
+                  resolve();
+                })
+                .catch((err) => {
+                  this.$message.error({
+                    text: this.$t("students.list.setTemplateErrorTips", {
+                      code: item.userCode || "null",
+                      name: item.nickName || "null",
+                    }),
+                  });
+                  resolve();
+                });
+            })
+          );
         }
       });
       this.showDistributeBox = false;
-      this.$loading.hide();
+      Promise.all(requests)
+        .then((res) => {
+          this.$loading.hide();
+        })
+        .catch((err) => {
+          this.$loading.hide();
+        });
     },
     selectStudent(index) {
       let selected = !this.tableData[index].selected;
