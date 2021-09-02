@@ -90,7 +90,7 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text tableRow-name">
-                {{ scope.row.liveName || "-" }}
+                {{ scope.row.nextConsultTitle || "-" }}
               </p>
             </template>
           </el-table-column>
@@ -191,7 +191,7 @@ export default {
         });
         return;
       }
-      // 从此处进入直播需要传入liveName
+      // 从此处进入直播需要传入nextConsultTitle
       this.$router.push({
         name: "living",
         query: { roomId: info.liveId, estuary: 1 },
