@@ -149,7 +149,7 @@ import CButton from "@/components/common/button.vue";
 import FormInput from "../components/input.vue";
 import FormRadio from "../components/radio.vue";
 import FormTextarea from "../components/textarea.vue";
-import FileBox from "../components/file";
+import FileBox from "@/components/common/file";
 export default {
   components: {
     // Dialog,

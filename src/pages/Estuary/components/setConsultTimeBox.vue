@@ -83,7 +83,7 @@
 
 <script>
 import CustomDialog from "@/components/common/customDialog";
-import DatePicker from "./datePicker";
+import DatePicker from "@/components/common/datePicker";
 import PInput from "./input";
 export default {
   props: ["visible", "initInfo"],

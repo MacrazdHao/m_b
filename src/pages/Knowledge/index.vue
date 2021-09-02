@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import FileBox from "./components/file";
+import FileBox from "@/components/common/file";
 export default {
   components: {
     FileBox,

@@ -45,7 +45,7 @@
 
 <script>
 import SPagination from "@/components/common/pagination";
-import FileBox from "./components/file";
+import FileBox from "@/components/common/file";
 import DateTools from "@/utils/date";
 export default {
   components: {
