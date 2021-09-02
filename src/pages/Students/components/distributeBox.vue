@@ -2,7 +2,7 @@
   <div class="DistributeBox">
     <CustomDialog
       class="distributeDialog"
-      v-show="!loadingInfo"
+      v-if="!loadingInfo"
       :visible="show"
       :title="$t('students.list.distributeButton')"
       @confirm="confirmBtn"
@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      loadingInfo: false,
+      loadingInfo: true,
       templates: [],
       selected: null,
     };
@@ -67,15 +67,18 @@ export default {
   },
   methods: {
     initList() {
+      this.loadingInfo = true;
       this.$store
         .dispatch("students/getTemplateList")
         .then((res) => {
           this.templates = res.data;
+          this.loadingInfo = false;
         })
         .catch((err) => {
           this.$message.error({
             text: this.$t("students.list.getTemplateListErrorTips"),
           });
+          this.cancelBtn();
         });
     },
     confirmBtn() {
