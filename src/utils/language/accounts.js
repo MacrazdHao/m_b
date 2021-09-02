@@ -67,7 +67,8 @@ export default {
       accountType: {
         admin: '管理员账号',
         school: '学校账号',
-        teacher: '老师账号'
+        teacher: '老师账号',
+        unknow: '未知账号',
       },
       editButton: '编辑',
       deleteButton: '删除',
@@ -178,7 +179,8 @@ export default {
       accountType: {
         admin: 'admin account',
         school: 'school account',
-        teacher: 'teacher account'
+        teacher: 'teacher account',
+        unknow: 'unknow account',
       },
       editButton: 'edit',
       deleteButton: 'delete',
@@ -194,7 +196,7 @@ export default {
         confirmButton: 'confirm',
         cancelButton: 'cancel'
       },
-      batchSelectedEmpty: '请至少选择一个账号',
+      batchSelectedEmpty: 'Please Select Your Account',
       deleteTips: 'After deletion, the account personal information will also be deleted',
       deleteTips2: 'Please carefully confirm whether you want to delete the account?',
       emptyTips: {

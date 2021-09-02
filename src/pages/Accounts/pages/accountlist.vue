@@ -33,11 +33,7 @@
             </template>
             <template slot-scope="scope">
               <p class="tableRow-text">
-                {{
-                  overline(
-                    $tc(`accounts.accountlist.accountType.${$route.meta.type}`)
-                  )
-                }}
+                {{ userTypeToText(scope.row.userType) }}
               </p>
             </template>
           </el-table-column>
@@ -236,6 +232,19 @@ export default {
             text: this.$t("accounts.accountlist.errorTips.nolist") + err,
           });
         });
+    },
+    userTypeToText(userType) {
+      switch (userType) {
+        case 1:
+          return this.$route.meta.type == "admin"
+            ? this.$t(`accounts.accountlist.accountType.school`)
+            : this.$t(`accounts.accountlist.accountType.admin`);
+        case 2:
+          return this.$t(`accounts.accountlist.accountType.teacher`);
+        case 10:
+          return this.$t(`accounts.accountlist.accountType.admin`);
+        default: return this.$t(`accounts.accountlist.accountType.unknow`);
+      }
     },
     editAccount(index) {
       console.log(index);
