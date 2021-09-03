@@ -19,6 +19,8 @@
       type: 一模多用时，用于区分使用该模板的不同页面的特殊标识,
       defaultPrevPath: （数组）默认上级页面的路径，用于无历史操作时的$router返回操作
       defaultPrevName: （数组）默认上级页面的名称，用于无历史操作时的$router返回操作
+      showTopParentTitleInHeader: 用于子子级页面，可以添加于子级页面统一设置子子级，也可添加于子子级页面单独设置，访问子子级页面时标题栏显示最上级（子级）路由的title，可以添加于子级页面统一设置子子级，也可添加于子子级页面单独设置
+      showChildTitleInHeaderWithParentTitle: 用于子子级页面，可以添加于子级页面统一设置子子级，也可添加于子子级页面单独设置，与showTopParentTitleInHeader联用，访问子子级页面时标题栏显示最上级（子级）路由的title，同时后续会并接当前子子级页面的标题
     }
   }
 }
@@ -286,6 +288,7 @@ export default {
       enTitle: 'Personal Center',
       icon: "icon_knowledge",
       notShowInMenu: true,
+      showTopParentTitleInHeader: true,
     }
   },
   // 子子级
@@ -358,7 +361,8 @@ export default {
       title: '账号管理',
       enTitle: 'Account Management',
       icon: "icon_accounts",
-      notShowChildren: true
+      notShowChildren: true,
+      showTopParentTitleInHeader: true,
     }
   },
   // 子子级
@@ -491,6 +495,8 @@ export default {
       title: "档案管理",
       enTitle: 'File Management',
       icon: "icon_management",
+      showTopParentTitleInHeader: true,
+      showChildTitleInHeaderWithParentTitle: true,
     }
   },
   // 子子级
@@ -710,6 +716,30 @@ export default {
       title: "菁英计划",
       enTitle: 'Estuary',
       icon: "icon_estuary",
+      showTopParentTitleInHeader: true,
+      showChildTitleInHeaderWithParentTitle: true,
+    }
+  },
+  // 子子级
+  '/estuaryStudentBase': {
+    path: "estuaryStudentBase",
+    name: "estuaryStudentBase",
+    component: "pages/base",
+    meta: {
+      title: "基本信息",
+      enTitle: 'Basic Info',
+      icon: "icon_estuary",
+    }
+  },
+  // 子子级
+  '/estuaryStudentLive': {
+    path: "estuaryStudentLive",
+    name: "estuaryStudentLive",
+    component: "pages/live",
+    meta: {
+      title: "菁英咨询",
+      enTitle: 'Estuary Consult',
+      icon: "icon_estuary",
     }
   },
   // 子级
@@ -732,6 +762,8 @@ export default {
       title: "学生信息",
       enTitle: ' Consultation Students',
       icon: "icon_estuary",
+      showTopParentTitleInHeader: true,
+      showChildTitleInHeaderWithParentTitle: true,
     }
   },
   // 子子级
@@ -743,6 +775,8 @@ export default {
       title: "咨询记录",
       enTitle: ' Consultation Records',
       icon: "icon_estuary",
+      showTopParentTitleInHeader: true,
+      showChildTitleInHeaderWithParentTitle: true,
     }
   },
   // 子级

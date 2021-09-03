@@ -195,17 +195,35 @@ export default {
     pageTitle() {
       // 定制header标题
       let title = this.language == "zh" ? "title" : "enTitle";
-      switch (this.$route.matched[1].name) {
-        case "personal":
-          return this.$route.matched[1].meta[title];
-        case "accounts":
-          return this.$route.matched[1].meta[title];
-        case "management":
+      if (
+        (this.$route.meta.showTopParentTitleInHeader ||
+          this.$route.matched[1].meta.showTopParentTitleInHeader) &&
+        this.$route.matched.length > 2
+      ) {
+        if (
+          this.$route.meta.showChildTitleInHeaderWithParentTitle ||
+          this.$route.matched[1].meta.showChildTitleInHeaderWithParentTitle
+        ) {
           this.suffixMenu = [this.$route.meta[title]];
-          return this.$route.matched[1].meta[title];
-        default:
-          return this.$route.meta[title];
+        }
+        return this.$route.matched[1].meta[title];
+      } else {
+        return this.$route.meta[title];
       }
+      // switch (this.$route.matched[1].name) {
+      //   case "personal":
+      //     return this.$route.matched[1].meta[title];
+      //   case "accounts":
+      //     return this.$route.matched[1].meta[title];
+      //   case "management":
+      //     this.suffixMenu = [this.$route.meta[title]];
+      //     return this.$route.matched[1].meta[title];
+      //   case "estuaryStudent":
+      //     this.suffixMenu = [this.$route.meta[title]];
+      //     return this.$route.matched[1].meta[title];
+      //   default:
+      //     return this.$route.meta[title];
+      // }
     },
     navigation() {
       return this.pagePath.length == 0
@@ -220,6 +238,9 @@ export default {
         this.routeChanged();
       },
       immediate: true,
+    },
+    suffixMenu(val) {
+      console.log(val);
     },
   },
   mounted() {
