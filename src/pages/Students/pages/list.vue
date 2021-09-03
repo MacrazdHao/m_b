@@ -69,10 +69,7 @@
             <template slot-scope="scope">
               <img
                 class="tableRow-selector"
-                v-if="
-                  scope.row.nodeType == -1 ||
-                  scope.row.nodeType === null
-                "
+                v-if="scope.row.nodeType == -1 || scope.row.nodeType === null"
                 :src="
                   require(`@/assets/archives/icon_checkbox${
                     scope.row.selected ? '_selected' : ''
@@ -401,6 +398,7 @@ export default {
       this.showDistributeBox = false;
       Promise.all(requests)
         .then((res) => {
+          this.initList();
           this.$loading.hide();
         })
         .catch((err) => {
