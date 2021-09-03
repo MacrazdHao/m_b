@@ -53,7 +53,6 @@ export default {
     noReport: '未出报告',
     finishReport: '完成报告',
     watchScoreButton: '查看',
-
     reportTitle: '报告回看',
     reportSubtitle: '点击可查看过往咨询报告',
     unkonwReportName: '未知报告',
@@ -143,7 +142,6 @@ export default {
     noReport: 'Report Uncompleted',
     finishReport: 'Report Completed',
     watchScoreButton: 'View',
-
     reportTitle: 'Report Access',
     unkonwReportName: 'Unknow Report',
     reportName: 'Report',
@@ -167,7 +165,7 @@ export default {
     advisePlaceholder: 'Please Type In Your Suggestions',
     announceLabel: 'Content Preview',
     announcePlaceholder: 'Please Insert Consultation Content',
-    saveTips1: '保存后，报告内容将不可更改',
+    saveTips1: 'Report cannot be revised once saved',
     saveTips2: 'Please Confirm Your Content Before Submission',
     cancelTips1: 'The Report Will Be Canceled Upon Cancelation',
     cancelTips2: 'Confirm To Cancel and Return To Previous Page',
