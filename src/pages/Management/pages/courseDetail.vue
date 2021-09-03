@@ -605,7 +605,7 @@ export default {
   .Textarea {
     p {
       min-width: 98px !important;
-      width: 98px !important;
+      // width: 98px !important;
     }
     .textareaBox {
       margin-left: 0 !important;
