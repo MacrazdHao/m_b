@@ -239,9 +239,6 @@ export default {
       },
       immediate: true,
     },
-    suffixMenu(val) {
-      console.log(val);
-    },
   },
   mounted() {
     // console.log(this.$_default);
@@ -270,15 +267,18 @@ export default {
         !this.$route.matched[this.$route.matched.length - 2].meta
           .notShowChildren
       ) {
+        // 此处为左侧菜单的页面的处理逻辑
         if (
           this.$route.matched.length > 2 &&
           !this.$route.matched[1].meta.notShowInMenu
         ) {
+          // 此处为左侧菜单的子页面的处理逻辑
           this.pagePath = this.$route.matched.slice(
             1,
             this.$route.matched.length
           );
           if (initial) {
+            // 初次加载时，自动展开当前页面的父菜单
             setTimeout(() => {
               if (this.pagePath[0]) {
                 this.childrenMenu[this.pagePath[0].meta.id] =
@@ -293,6 +293,7 @@ export default {
           }
         }
         if (this.$route.meta.notShowThisChild) {
+          // 此处为左侧菜单的页面但并非其子菜单，而是内置页面的处理逻辑
           let group = this.$route.meta.group;
           let route = this.$route.matched;
           let menu = this.$store.state.global.menu;
@@ -318,6 +319,7 @@ export default {
         }
         this.pageName = this.$route.meta.id;
       } else {
+        // 此处为非左侧菜单的页面的处理逻辑
         this.pageName =
           this.$route.matched[this.$route.matched.length - 2].meta.id;
       }
