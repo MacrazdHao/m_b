@@ -116,10 +116,14 @@
               <p class="tableRow-text tableRow-name">
                 {{
                   scope.row.nextConsultTime > 0
-                    ? getDateString(
+                    ? `${getDateString(
                         scope.row.nextConsultTime,
                         "YYYY-MM-DD hh:mm"
-                      )
+                      )}-${getDateString(
+                        scope.row.nextConsultTime +
+                          scope.row.nextConsultTimeLength * 60 * 60 * 1000,
+                        "hh:mm"
+                      )}`
                     : $t("estuary.records.hasNotNextTime")
                 }}
               </p>
