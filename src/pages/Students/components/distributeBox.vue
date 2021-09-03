@@ -82,7 +82,7 @@ export default {
         });
     },
     confirmBtn() {
-      if (this.selected == null) {
+      if (this.selected === null) {
         this.$message.warning({
           text: this.$t("students.list.selectNoTemplateTips"),
         });

@@ -69,10 +69,22 @@
             <template slot-scope="scope">
               <img
                 class="tableRow-selector"
+                v-if="
+                  scope.row.nodeType == -1 ||
+                  scope.row.nodeType === null
+                "
                 :src="
                   require(`@/assets/archives/icon_checkbox${
                     scope.row.selected ? '_selected' : ''
                   }.svg`)
+                "
+                @click="selectStudent(scope.$index)"
+              />
+              <img
+                class="tableRow-selector"
+                v-else
+                :src="
+                  require(`@/assets/archives/icon_checkbox_selected_disabled.svg`)
                 "
                 @click="selectStudent(scope.$index)"
               />
@@ -303,6 +315,11 @@ export default {
   computed: {
     allSelected() {
       for (let i = 0; i < this.tableData.length; i++) {
+        if (
+          this.tableData[i].nodeType != -1 &&
+          this.tableData[i].nodeType !== null
+        )
+          continue;
         if (!this.tableData[i].selected) return false;
       }
       return true && this.tableData.length > 0;
@@ -391,6 +408,11 @@ export default {
         });
     },
     selectStudent(index) {
+      if (
+        this.tableData[index].nodeType != -1 &&
+        this.tableData[index].nodeType !== null
+      )
+        return;
       let selected = !this.tableData[index].selected;
       this.$set(this.tableData, index, {
         ...this.tableData[index],
@@ -400,10 +422,15 @@ export default {
     selectAllStudents() {
       let toggle = this.allSelected;
       this.tableData.forEach((item, index) => {
-        this.$set(this.tableData, index, {
-          ...this.tableData[index],
-          selected: !toggle,
-        });
+        if (
+          this.tableData[index].nodeType == -1 ||
+          this.tableData[index].nodeType === null
+        ) {
+          this.$set(this.tableData, index, {
+            ...this.tableData[index],
+            selected: !toggle,
+          });
+        }
       });
     },
     statusToText(status) {
