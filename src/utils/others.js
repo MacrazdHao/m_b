@@ -84,3 +84,9 @@ export function numToChinese(num) {
   }
   return overWan ? getWan(overWan) + "万" + getWan(noWan) : getWan(num);
 }
+export function getFileSizeString(size, pointLength) {
+  let unit;
+  let units = ['B', 'KB', 'MB', 'GB'];
+  while ((unit = units.shift()) && size > 1024) size = size / 1024;
+  return (unit === 'B' ? size : size.toFixed(pointLength === undefined ? 2 : pointLength)) + unit;
+}

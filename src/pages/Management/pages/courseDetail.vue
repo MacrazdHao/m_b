@@ -550,13 +550,13 @@ export default {
                 this.$route.query.id
               );
               this.$message.message({
-                text: this.$t("management.saveStudentScheduleSuccessTips"),
+                text: this.$t("management.saveStudentReportSuccessTips"),
               });
               this.goBack();
             })
             .catch((err) => {
               this.$message.error({
-                text: this.$t("management.saveStudentProfileErrorTips"),
+                text: this.$t("management.saveStudentReportErrorTips"),
               });
             });
         },

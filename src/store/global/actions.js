@@ -152,7 +152,12 @@ export default {
             }, {
               path: '/estuaryConsultant'
             }, {
-              path: '/estuaryStudent'
+              path: '/estuaryStudent',
+              children: [{
+                path: '/estuaryStudentBase',
+              }, {
+                path: '/estuaryStudentLive',
+              }]
             }, {
               path: '/playback'
             }, {

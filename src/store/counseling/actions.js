@@ -64,4 +64,20 @@ export default {
       });
     });
   },
+  uploadScoreFile: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.uploadScoreFile, data.file, {
+        "Content-Type": "multipart/form-data",
+        timeout: 600000,
+        onUploadProgress: data.progressCallback
+      }).then(res => {
+        if (res.data.url) {
+          res.data.url = res.data.url;
+        }
+        resolve(res);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  },
 }

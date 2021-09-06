@@ -2,9 +2,16 @@
   <div class="File">
     <div class="infoBox">
       <img :src="require(`@/assets/knowledge/${svgIcon}.svg`)" />
-      <div>
+      <div class="detail">
         <p class="name">{{ info.fileName }}</p>
         <p class="size">{{ info.fileSize }}</p>
+        <Progress
+          class="progress"
+          v-show="info.uploadProgress >= 0 && info.uploadProgress < 100"
+          :width="132"
+          :progress="info.uploadProgress"
+          :error="info.uploadError"
+        />
       </div>
     </div>
     <KButton
@@ -14,6 +21,7 @@
       lineHeight="17px"
       :text="buttonText"
       v-if="!hideButton"
+      :disable="disableButton"
       @btnClick="handleClick"
     />
   </div>
@@ -21,10 +29,12 @@
 
 <script>
 import KButton from "@/components/common/button";
+import Progress from "@/components/common/progress";
 export default {
-  props: ["info", "hideButton", "buttonText"],
+  props: ["info", "hideButton", "buttonText", "disableButton"],
   components: {
     KButton,
+    Progress,
   },
   computed: {
     svgIcon() {
@@ -73,7 +83,7 @@ export default {
     img {
       width: 48px;
     }
-    div {
+    .detail {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -81,6 +91,7 @@ export default {
       padding: 6px 8px;
       width: 148px;
       box-sizing: border-box;
+      position: relative;
       .name {
         font-size: 12px;
         color: #333333;
@@ -96,6 +107,12 @@ export default {
         font-size: 12px;
         color: #999999;
         line-height: 17px;
+      }
+      .progress {
+        position: absolute;
+        bottom: 6px;
+        left: 8px;
+        z-index: 10;
       }
     }
   }

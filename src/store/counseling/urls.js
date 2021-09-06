@@ -4,4 +4,5 @@ export default {
   consultStatus: '/cecp/onion/getOnionLiveInfo',
   currentProfile: (nodeId) => `/student/cecp/profile?nodeId=${nodeId}`,
   allConsultStageInfo: '/cecp/instance/getCecpInstantStatusAll',
+  uploadScoreFile: '/cecp/oss/student/uploadStudentGradleFile',
 }

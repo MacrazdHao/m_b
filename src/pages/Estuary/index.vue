@@ -9,9 +9,7 @@
 <script>
 export default {
   data() {
-    return {
-      detailInfo: null,
-    };
+    return {};
   },
   mounted() {},
   methods: {
