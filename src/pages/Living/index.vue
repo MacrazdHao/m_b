@@ -279,6 +279,7 @@
 
 <script>
 import LButton from "@/components/common/button";
+import Enum from "@/utils/enum";
 import CheckBox from "./components/CheckBox";
 import SettingBox from "./components/SettingBox";
 import AgoraRTC from "agora-rtc-sdk";
