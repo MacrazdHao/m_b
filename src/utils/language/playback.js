@@ -41,7 +41,7 @@ export default {
         subtitle: 'consultation phase'
       },
       getRecordListErrorTips: 'Failed to get the live broadcast view list, please try again',
-      unavailableRecordTips: '回看视频不可用',
+      unavailableRecordTips: 'Unable To Replay Video',
       playbackButton: 'playback'
     },
   }

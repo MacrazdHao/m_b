@@ -66,8 +66,8 @@ export default {
       distributeButton: 'Consultancy Allocation',
       exportExcelButton: 'Import Excel',
       getTemplateListErrorTips: 'Failed To Obtain Template List, Please Retry',
-      setTemplateErrorTips: '编号 {code} 学生 {name} 分配失败，请重试',
-      setTemplateSuccessTips: '编号 {code} 学生 {name} 分配成功',
+      setTemplateErrorTips: '{Code}{Name) Matched Unsuccessfully, Please Retry',
+      setTemplateSuccessTips: '{Code} {Name) Matched Successfully',
       selectNoTemplateTips: 'Please Select Your Template',
       selectNoStudentsTips: 'Please Select Your Student',
       table: {

@@ -13,7 +13,7 @@
       {{ $t("reportModule.loadReportInfoError") }}
     </p>
     <div class="generateBox" v-if="!loadingInfo" v-show="!generated">
-      <Cover class="cover progressItem qualityScale" />
+      <Cover class="cover progressItem qualityScale" :data="coverInfo" />
       <div v-if="finishedContentHeight" ref="pages" @click="generateReport">
         <Catalogue
           class="page qualityScale"
@@ -496,6 +496,15 @@ export default {
         this.loadedProgress ==
         document.getElementsByClassName("progressItem").length
       );
+    },
+    coverInfo(){
+      return {
+        title: null,
+        userCode: null,
+        consultant: null,
+        date: this.date,
+        scope: null,
+      }
     },
   },
   watch: {
