@@ -3,6 +3,17 @@ import urls from './urls';
 import request from '../../utils/request';
 
 export default {
+  getEstuaryRecordDetail: ({ commit, state }, recordId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.estuaryRecordDetail(recordId)).then(res => {
+        console.log('获取咨询信息成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取咨询信息失败', err);
+        reject(err);
+      });
+    })
+  },
   getStudentList: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
       request.get(urls.studentList(data.pageIndex, data.pageSize, data.keyword)).then(res => {

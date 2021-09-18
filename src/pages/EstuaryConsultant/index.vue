@@ -326,10 +326,19 @@ export default {
         return;
       }
       // 从此处进入直播需要传入nextConsultTitle
-      this.$router.push({
-        name: "estuaryLiving",
-        query: { roomId: info.liveId },
-      });
+      this.$store
+        .dispatch("estuary/getEstuaryRecordDetail", info.recordId)
+        .then((res) => {
+          this.$router.push({
+            name: "estuaryLiving",
+            query: { roomId: info.liveId },
+          });
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("living.getLiveInfoError"),
+          });
+        });
     },
     overline(text = "") {
       if (!text) return "";
