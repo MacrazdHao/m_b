@@ -7,7 +7,7 @@
           theme="blue"
           :disable="
             tableData.length == 0 ||
-            !info.nextConsultTime ||
+            !tableData[0].nextConsultTime ||
             tableData[0].liveStatus == -1 ||
             tableData[0].nextConsultTime - 15 * 60 * 1000 > new Date().getTime()
           "
@@ -190,7 +190,10 @@ export default {
         this.$message.warning({ text: this.$t("live.list.table.liveEndTips") });
         return;
       }
-      if (info.nextConsultTime - 15 * 60 * 1000 > new Date().getTime()) {
+      if (
+        !info.nextConsultTime ||
+        info.nextConsultTime - 15 * 60 * 1000 > new Date().getTime()
+      ) {
         this.$message.warning({
           text: this.$t("live.list.table.liveNoStartTips"),
         });
