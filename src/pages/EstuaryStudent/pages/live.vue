@@ -7,6 +7,7 @@
           theme="blue"
           :disable="
             tableData.length == 0 ||
+            info.nextConsultTime ||
             tableData[0].liveStatus == -1 ||
             tableData[0].nextConsultTime - 15 * 60 * 1000 > new Date().getTime()
           "
