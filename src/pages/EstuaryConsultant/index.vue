@@ -319,7 +319,10 @@ export default {
         this.$message.warning({ text: this.$t("live.list.table.liveEndTips") });
         return;
       }
-      if (info.nextConsultTime - 15 * 60 * 1000 > new Date().getTime()) {
+      if (
+        info.nextConsultTime &&
+        info.nextConsultTime - 15 * 60 * 1000 > new Date().getTime()
+      ) {
         this.$message.warning({
           text: this.$t("live.list.table.liveNoStartTips"),
         });
