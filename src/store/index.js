@@ -16,6 +16,7 @@ import students from './students';
 import archives from './archives';
 import files from './files';
 import estuary from './estuary';
+import estuaryLiving from './estuaryLiving';
 import module111 from './modules111';
 
 Vue.use(Vuex);
@@ -37,6 +38,7 @@ export default new Vuex.Store({
     archives,
     files,
     estuary,
+    estuaryLiving,
     module111
   }
 });

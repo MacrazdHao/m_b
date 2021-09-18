@@ -327,8 +327,8 @@ export default {
       }
       // 从此处进入直播需要传入nextConsultTitle
       this.$router.push({
-        name: "living",
-        query: { roomId: info.liveId, estuary: 1 },
+        name: "estuaryLiving",
+        query: { roomId: info.liveId },
       });
     },
     overline(text = "") {

@@ -53,6 +53,17 @@ export default {
     // redirect: 'dashboard',
   },
   // 顶级
+  '/estuaryLiving': {
+    path: '/estuaryLiving',
+    name: 'estuaryLiving',
+    component: 'EstuaryLiving',
+    meta: {
+      // defaultPrevPath: ["", "/consultLive", "/live"],
+      defaultPrevName: ["index"],
+    }
+    // redirect: 'dashboard',
+  },
+  // 顶级
   '/index': {
     path: '/index',
     name: 'index',

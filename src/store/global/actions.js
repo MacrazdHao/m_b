@@ -171,6 +171,8 @@ export default {
         }, {
           path: '/living'
         }, {
+          path: '/estuaryLiving'
+        }, {
           path: '/reportModule'
         }]
         commit(types.SET_MENU, res);
