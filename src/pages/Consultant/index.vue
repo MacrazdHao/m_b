@@ -233,6 +233,7 @@ export default {
         .dispatch("consultant/getConsultantList", {
           pageIndex: parseInt(pageNum),
           pageSize: this.page.size,
+          keyword: this.keyword || "",
         })
         .then((res) => {
           this.page = {
@@ -259,6 +260,7 @@ export default {
         .dispatch("consultant/getConsultantList", {
           pageIndex: parseInt(num),
           pageSize: this.page.size,
+          keyword: this.keyword || "",
         })
         .then((res) => {
           this.page = {
@@ -285,6 +287,7 @@ export default {
         .dispatch("consultant/getConsultantList", {
           pageIndex: this.page.current - 1,
           pageSize: this.page.size,
+          keyword: this.keyword || "",
         })
         .then((res) => {
           this.page = {
@@ -311,6 +314,7 @@ export default {
         .dispatch("consultant/getConsultantList", {
           pageIndex: this.page.current + 1,
           pageSize: this.page.size,
+          keyword: this.keyword || "",
         })
         .then((res) => {
           this.page = {
