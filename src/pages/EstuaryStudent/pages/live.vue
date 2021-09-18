@@ -7,7 +7,7 @@
           theme="blue"
           :disable="
             tableData.length == 0 ||
-            tableData[0].status == -1 ||
+            tableData[0].liveStatus == -1 ||
             tableData[0].nextConsultTime - 15 * 60 * 1000 > new Date().getTime()
           "
           :text="$t('estuary.records.toLivingButton')"
@@ -185,7 +185,7 @@ export default {
     },
     toLiving() {
       let info = this.tableData[0];
-      if (info.status == -1) {
+      if (info.liveStatus == -1) {
         this.$message.warning({ text: this.$t("live.list.table.liveEndTips") });
         return;
       }
