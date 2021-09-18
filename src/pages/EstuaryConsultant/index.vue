@@ -170,8 +170,10 @@
                   :class="[
                     'tableRow-text',
                     'tableRow-button',
+                    !info.nextConsultTime ||
                     scope.row.nextConsultTime - 15 * 60 * 1000 >
-                      new Date().getTime() || scope.row.liveStatus == -1
+                      new Date().getTime() ||
+                    scope.row.liveStatus == -1
                       ? 'tableRow-button--disabled'
                       : '',
                   ]"
@@ -320,7 +322,7 @@ export default {
         return;
       }
       if (
-        info.nextConsultTime &&
+        !info.nextConsultTime &&
         info.nextConsultTime - 15 * 60 * 1000 > new Date().getTime()
       ) {
         this.$message.warning({
