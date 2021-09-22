@@ -698,8 +698,10 @@ export default {
                     showCancel: false,
                     showClose: false,
                   });
-                  this.rtc.remoteStreams[0].stop();
-                  this.rtc.remoteStreams[0].close();
+                  if (this.rtc.remoteStreams.length > 0) {
+                    this.rtc.remoteStreams[0].stop();
+                    this.rtc.remoteStreams[0].close();
+                  }
                   this.rtc.remoteStreams = [];
                   this.rtc.localStream.stop();
                   this.rtc.localStream.close();
