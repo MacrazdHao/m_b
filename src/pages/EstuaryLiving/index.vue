@@ -102,6 +102,7 @@
           <div
             class="teacherVideo"
             id="teacherVideo"
+            v-if="username != hostId"
             v-show="
               ((localVideoFinished && username == hostId) ||
                 (remoteVideoFinished && username != hostId)) &&
@@ -109,6 +110,21 @@
                 (rtc.remoteStreams.length > 0 &&
                   username != hostId &&
                   !remoteMuteVideo))
+            "
+          ></div>
+          <div
+            class="teacherVideo"
+            id="studentVideo"
+            v-else
+            v-show="
+              (((localVideoFinished && username != hostId) ||
+                (remoteVideoFinished && username == hostId)) &&
+                rtc.published &&
+                username != hostId &&
+                useCamera) ||
+              (rtc.remoteStreams.length > 0 &&
+                username == hostId &&
+                !remoteMuteVideo)
             "
           ></div>
         </div>
@@ -204,6 +220,7 @@
           <div
             class="studentVideo"
             id="studentVideo"
+            v-if="username == hostId"
             v-show="
               (((localVideoFinished && username != hostId) ||
                 (remoteVideoFinished && username == hostId)) &&
@@ -213,6 +230,19 @@
               (rtc.remoteStreams.length > 0 &&
                 username == hostId &&
                 !remoteMuteVideo)
+            "
+          ></div>
+          <div
+            class="studentVideo"
+            id="teacherVideo"
+            v-else
+            v-show="
+              ((localVideoFinished && username == hostId) ||
+                (remoteVideoFinished && username != hostId)) &&
+              ((rtc.published && username == hostId && useCamera) ||
+                (rtc.remoteStreams.length > 0 &&
+                  username != hostId &&
+                  !remoteMuteVideo))
             "
           ></div>
         </div>
