@@ -112,11 +112,7 @@
         </div>
         <div
           class="controlBox"
-          v-show="
-            remoteVideoFinished &&
-            rtc.remoteStreams.length > 0 &&
-            !remoteMuteVideo
-          "
+          v-show="remoteVideoFinished && rtc.remoteStreams.length > 0"
         >
           <div class="volumnBox">
             <img
