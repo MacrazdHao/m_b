@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="content">
-      <div class="menuBox" v-if="hostId == username">
+      <div class="menuBox">
         <div
           :class="['menuItem', mode == 1 ? 'menuItem--selected' : '']"
           @click="changeMode(1, true)"

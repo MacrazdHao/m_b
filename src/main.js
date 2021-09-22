@@ -15,7 +15,7 @@ setTimeout(() => {
   import("./assets/font.css").then(() => {
     console.log("字体完成");
   });
-})
+});
 import 'element-ui/lib/theme-chalk/index.css';
 import './utils/permission';
 import _default from './utils/default.js';
