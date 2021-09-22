@@ -100,56 +100,49 @@
         <div
           class="controlBox"
           v-show="
-            ((localVideoFinished && username == hostId) ||
-              (remoteVideoFinished && username != hostId)) &&
-            ((rtc.published && username == hostId && useCamera) ||
-              (rtc.remoteStreams.length > 0 &&
-                username != hostId &&
-                !remoteMuteVideo))
+            (((localVideoFinished && username != hostId) ||
+              (remoteVideoFinished && username == hostId)) &&
+              rtc.published &&
+              username != hostId &&
+              useCamera) ||
+            (rtc.remoteStreams.length > 0 &&
+              username == hostId &&
+              !remoteMuteVideo)
           "
         >
-          <div class="volumnBox">
-            <img
-              v-if="
-                (hostId != username && !remoteMuteAudio) ||
-                (hostId == username && !localMuteAudio)
-              "
-              src="@/assets/living/icon_volume.svg"
-              @click="toggleAudio(0)"
-            />
-            <img
-              v-else-if="
-                (hostId != username && remoteMuteAudio) ||
-                (hostId == username && localMuteAudio)
-              "
-              src="@/assets/living/icon_volume_closed.svg"
-              @click="toggleAudio(0)"
-            />
-            <div
-              class="volume"
-              v-show="
-                (hostId != username && rtc.remoteStreams.length > 0) ||
-                (hostId == username && rtc.published)
-              "
-            >
-              <div
-                :class="[
-                  'volume-item',
-                  (hostId == username ? localVolume : remoteVolume) >= item
-                    ? 'volume-item--green'
-                    : '',
-                ]"
-                v-for="item in 10"
-                :key="item"
-              ></div>
-            </div>
-          </div>
+          <img
+            v-if="
+              (hostId != username && !localMuteAudio) ||
+              (hostId == username && !remoteMuteAudio)
+            "
+            src="@/assets/living/icon_volume.svg"
+            @click="toggleAudio(1)"
+          />
+          <img
+            v-else-if="
+              (hostId != username && localMuteAudio) ||
+              (hostId == username && remoteMuteAudio)
+            "
+            src="@/assets/living/icon_volume_closed.svg"
+            @click="toggleAudio(1)"
+          />
           <div
-            class="fullscreenButton"
-            v-if="studentId == username"
-            @click="fullScreen"
+            class="volume"
+            v-show="
+              (hostId == username && rtc.remoteStreams.length > 0) ||
+              (hostId != username && rtc.published)
+            "
           >
-            <p class="text">{{ $t("living.fullscreenButton") }}</p>
+            <div
+              :class="[
+                'volume-item',
+                (hostId != username ? localVolume : remoteVolume) >= item
+                  ? 'volume-item--green'
+                  : '',
+              ]"
+              v-for="item in 10"
+              :key="item"
+            ></div>
           </div>
         </div>
       </div>
@@ -219,49 +212,52 @@
         <div
           class="controlBox"
           v-show="
-            (((localVideoFinished && username != hostId) ||
-              (remoteVideoFinished && username == hostId)) &&
-              rtc.published &&
-              username != hostId &&
-              useCamera) ||
-            (rtc.remoteStreams.length > 0 &&
-              username == hostId &&
-              !remoteMuteVideo)
+            ((localVideoFinished && username == hostId) ||
+              (remoteVideoFinished && username != hostId)) &&
+            ((rtc.published && username == hostId && useCamera) ||
+              (rtc.remoteStreams.length > 0 &&
+                username != hostId &&
+                !remoteMuteVideo))
           "
         >
-          <img
-            v-if="
-              (hostId != username && !localMuteAudio) ||
-              (hostId == username && !remoteMuteAudio)
-            "
-            src="@/assets/living/icon_volume.svg"
-            @click="toggleAudio(1)"
-          />
-          <img
-            v-else-if="
-              (hostId != username && localMuteAudio) ||
-              (hostId == username && remoteMuteAudio)
-            "
-            src="@/assets/living/icon_volume_closed.svg"
-            @click="toggleAudio(1)"
-          />
-          <div
-            class="volume"
-            v-show="
-              (hostId == username && rtc.remoteStreams.length > 0) ||
-              (hostId != username && rtc.published)
-            "
-          >
+          <div class="volumnBox">
+            <img
+              v-if="
+                (hostId != username && !remoteMuteAudio) ||
+                (hostId == username && !localMuteAudio)
+              "
+              src="@/assets/living/icon_volume.svg"
+              @click="toggleAudio(0)"
+            />
+            <img
+              v-else-if="
+                (hostId != username && remoteMuteAudio) ||
+                (hostId == username && localMuteAudio)
+              "
+              src="@/assets/living/icon_volume_closed.svg"
+              @click="toggleAudio(0)"
+            />
             <div
-              :class="[
-                'volume-item',
-                (hostId != username ? localVolume : remoteVolume) >= item
-                  ? 'volume-item--green'
-                  : '',
-              ]"
-              v-for="item in 10"
-              :key="item"
-            ></div>
+              class="volume"
+              v-show="
+                (hostId != username && rtc.remoteStreams.length > 0) ||
+                (hostId == username && rtc.published)
+              "
+            >
+              <div
+                :class="[
+                  'volume-item',
+                  (hostId == username ? localVolume : remoteVolume) >= item
+                    ? 'volume-item--green'
+                    : '',
+                ]"
+                v-for="item in 10"
+                :key="item"
+              ></div>
+            </div>
+          </div>
+          <div class="fullscreenButton" @click="fullScreen">
+            <p class="text">{{ $t("living.fullscreenButton") }}</p>
           </div>
         </div>
       </div>
@@ -641,12 +637,15 @@ export default {
         });
     },
     fullScreen() {
+      // let dom = document.getElementById(
+      //   `video${
+      //     this.hostId == this.username
+      //       ? this.rtc.localStream.getId()
+      //       : this.rtc.remoteStreams[0].getId()
+      //   }`
+      // );
       let dom = document.getElementById(
-        `video${
-          this.hostId == this.username
-            ? this.rtc.localStream.getId()
-            : this.rtc.remoteStreams[0].getId()
-        }`
+        `video${this.rtc.remoteStreams[0].getId()}`
       );
       // dom.controls = false;
       console.log("这是视频dom", dom);
