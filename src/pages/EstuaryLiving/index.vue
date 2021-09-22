@@ -70,21 +70,6 @@
         <div class="liveBox">
           <div
             class="openBox"
-            v-show="
-              (username == hostId && !rtc.published) ||
-              (!useCamera && username == hostId && rtc.published)
-            "
-          >
-            <p>{{ $t("living.cameraClosing") }}</p>
-            <LButton
-              class="cameraButton"
-              theme="blue"
-              :text="$t('living.cameraButton')"
-              @btnClick="openCamera"
-            />
-          </div>
-          <div
-            class="openBox"
             v-show="rtc.remoteStreams.length == 0 && username != hostId"
           >
             <p>{{ $t("living.waitingTeacher") }}</p>
@@ -102,7 +87,6 @@
           <div
             class="teacherVideo"
             id="teacherVideo"
-            v-if="username != hostId"
             v-show="
               ((localVideoFinished && username == hostId) ||
                 (remoteVideoFinished && username != hostId)) &&
@@ -110,21 +94,6 @@
                 (rtc.remoteStreams.length > 0 &&
                   username != hostId &&
                   !remoteMuteVideo))
-            "
-          ></div>
-          <div
-            class="teacherVideo"
-            id="studentVideo"
-            v-else
-            v-show="
-              (((localVideoFinished && username != hostId) ||
-                (remoteVideoFinished && username == hostId)) &&
-                rtc.published &&
-                username != hostId &&
-                useCamera) ||
-              (rtc.remoteStreams.length > 0 &&
-                username == hostId &&
-                !remoteMuteVideo)
             "
           ></div>
         </div>
@@ -189,6 +158,21 @@
           <div
             class="openBox"
             v-show="
+              (username == hostId && !rtc.published) ||
+              (!useCamera && username == hostId && rtc.published)
+            "
+          >
+            <p>{{ $t("living.cameraClosing") }}</p>
+            <LButton
+              class="cameraButton"
+              theme="blue"
+              :text="$t('living.cameraButton')"
+              @btnClick="openCamera"
+            />
+          </div>
+          <div
+            class="openBox"
+            v-show="
               (username != hostId && !rtc.published) ||
               (!useCamera && username != hostId && rtc.published)
             "
@@ -220,7 +204,6 @@
           <div
             class="studentVideo"
             id="studentVideo"
-            v-if="username == hostId"
             v-show="
               (((localVideoFinished && username != hostId) ||
                 (remoteVideoFinished && username == hostId)) &&
@@ -230,19 +213,6 @@
               (rtc.remoteStreams.length > 0 &&
                 username == hostId &&
                 !remoteMuteVideo)
-            "
-          ></div>
-          <div
-            class="studentVideo"
-            id="teacherVideo"
-            v-else
-            v-show="
-              ((localVideoFinished && username == hostId) ||
-                (remoteVideoFinished && username != hostId)) &&
-              ((rtc.published && username == hostId && useCamera) ||
-                (rtc.remoteStreams.length > 0 &&
-                  username != hostId &&
-                  !remoteMuteVideo))
             "
           ></div>
         </div>
@@ -777,14 +747,17 @@ export default {
             this.remoteMuteVideo = false;
             let remoteStream = evt.stream;
             let id = remoteStream.getId();
-            let videoBox = document.getElementById(
-              id == this.hostId ? "teacherVideo" : "studentVideo"
-            ).children[0];
+            // let videoBox = document.getElementById(
+            //   id == this.hostId ? "teacherVideo" : "studentVideo"
+            // ).children[0];
+            let videoBox = document.getElementById("teacherVideo").children[0];
             console.log("videoBox的内容", videoBox);
             videoBox.style.background = "#333333";
-            let video = document.getElementById(
-              id == this.hostId ? "teacherVideo" : "studentVideo"
-            ).children[0].children[0];
+            // let video = document.getElementById(
+            //   id == this.hostId ? "teacherVideo" : "studentVideo"
+            // ).children[0].children[0];
+            let video =
+              document.getElementById("teacherVideo").children[0].children[0];
             console.log("video的内容", video);
             video.style.left = "0";
             this.remoteVideoFinished = true;
@@ -806,11 +779,12 @@ export default {
             let id = remoteStream.getId();
             this.rtc.remoteStreams.push(remoteStream);
             this.remoteVideoFinished = false;
-            remoteStream.play(
-              id == this.hostId ? "teacherVideo" : "studentVideo",
-              { fit: "contain" },
-              (err) => {}
-            );
+            // remoteStream.play(
+            //   id == this.hostId ? "teacherVideo" : "studentVideo",
+            //   { fit: "contain" },
+            //   (err) => {}
+            // );
+            remoteStream.play("teacherVideo", { fit: "contain" }, (err) => {});
             console.log("订阅远程端口uid: ", id);
             this.$store.dispatch(`estuaryLiving/startRecord`, {
               liveId: this.roomId,
@@ -1132,8 +1106,48 @@ export default {
               max: 1130,
             },
           });
+          // this.rtc.localStream.play(
+          //   this.username == this.hostId ? "teacherVideo" : "studentVideo",
+          //   { fit: "contain" },
+          //   (err) => {
+          //     if (err) {
+          //       if (err.reason) {
+          //         this.$message.error({
+          //           text: this.$t("living.streamPublishFail") + err.reason,
+          //         });
+          //         this.loadingVideo = false;
+          //         return;
+          //       }
+          //     }
+          //     // 对齐视频窗口
+          //     let videoBox = document.getElementById(
+          //       this.username == this.hostId ? "teacherVideo" : "studentVideo"
+          //     ).children[0];
+          //     videoBox.style.background = "#333333";
+          //     let video = document.getElementById(
+          //       this.username == this.hostId ? "teacherVideo" : "studentVideo"
+          //     ).children[0].children[0];
+          //     video.style.transform = "scaleX(1)";
+          //     video.style.left = "0";
+          //     this.localVideoFinished = true;
+          //     this.rtc.client.publish(this.rtc.localStream, (err) => {
+          //       // 本地流推送失败
+          //       console.error(err);
+          //       // ???待补充???
+          //       this.settingFinish(
+          //         this.useCamera,
+          //         this.useAudio,
+          //         this.cameraId
+          //       );
+          //       this.loadingVideo = false;
+          //     });
+          //     // this.loading.close();
+          //     this.$loading.hide();
+          //     this.waitingPublish = true;
+          //   }
+          // );
           this.rtc.localStream.play(
-            this.username == this.hostId ? "teacherVideo" : "studentVideo",
+            "studentVideo",
             { fit: "contain" },
             (err) => {
               if (err) {
@@ -1146,13 +1160,11 @@ export default {
                 }
               }
               // 对齐视频窗口
-              let videoBox = document.getElementById(
-                this.username == this.hostId ? "teacherVideo" : "studentVideo"
-              ).children[0];
+              let videoBox =
+                document.getElementById("studentVideo").children[0];
               videoBox.style.background = "#333333";
-              let video = document.getElementById(
-                this.username == this.hostId ? "teacherVideo" : "studentVideo"
-              ).children[0].children[0];
+              let video =
+                document.getElementById("studentVideo").children[0].children[0];
               video.style.transform = "scaleX(1)";
               video.style.left = "0";
               this.localVideoFinished = true;
