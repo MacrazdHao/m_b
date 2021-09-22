@@ -44,6 +44,9 @@ export default {
       focus: false,
       time: "",
       pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < new Date().getTime() - 24 * 60 * 60 * 1000;
+        },
         shortcuts: [
           {
             text: this.$t("global.date.today"),

@@ -158,7 +158,7 @@
             <template slot-scope="scope">
               <FixedMenu
                 :text="$t('students.list.table.moreButton')"
-                :menu="optionsMenu"
+                :menu="optionsMenu(scope.row)"
                 :extra="scope.row"
               />
             </template>
@@ -255,29 +255,6 @@ export default {
         current: 1,
       },
       editTarget: null,
-      optionsMenu: [
-        {
-          text: this.$t("estuary.records.setConsultantButton"),
-          callback: (info, index) => {
-            this.editTarget = info;
-            this.showSetConsultantBox = true;
-          },
-        },
-        {
-          text: this.$t("estuary.records.setConsultTimesButton"),
-          callback: (info, index) => {
-            this.editTarget = info;
-            this.showSetConsultTimesBox = true;
-          },
-        },
-        {
-          text: this.$t("estuary.records.setTimeButton"),
-          callback: (info, index) => {
-            this.editTarget = info;
-            this.showSetConsultTimeBox = true;
-          },
-        },
-      ],
       showSetConsultantBox: false,
       showSetConsultTimesBox: false,
       showSetConsultTimeBox: false,
@@ -302,6 +279,34 @@ export default {
   },
   methods: {
     ...DateTools,
+    optionsMenu(info) {
+      let options = [
+        {
+          text: this.$t("estuary.records.setConsultantButton"),
+          callback: (info, index) => {
+            this.editTarget = info;
+            this.showSetConsultantBox = true;
+          },
+        },
+        {
+          text: this.$t("estuary.records.setConsultTimesButton"),
+          callback: (info, index) => {
+            this.editTarget = info;
+            this.showSetConsultTimesBox = true;
+          },
+        },
+      ];
+      if (info.currentConsultNum < info.totalConsultNum) {
+        options.push({
+          text: this.$t("estuary.records.setTimeButton"),
+          callback: (info, index) => {
+            this.editTarget = info;
+            this.showSetConsultTimeBox = true;
+          },
+        });
+      }
+      return options;
+    },
     setConsultant(info) {
       this.$dialog.message({
         text: this.$t("estuary.setConsultantBox.confirmTips", {

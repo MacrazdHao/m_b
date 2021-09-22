@@ -7,6 +7,11 @@
       :readonly="readonly"
       :placeholder="placeholder"
       :editable="false"
+      :picker-options="{
+        disabledDate(time) {
+          return time.getTime() < new Date().getTime() - 24 * 60 * 60 * 1000;
+        },
+      }"
       @change="handleChange"
     >
     </el-date-picker>
