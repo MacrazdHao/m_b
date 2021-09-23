@@ -7,7 +7,7 @@ export default {
   playbackList: (index, size, keyword) => `/admin/estuary/list/listEstuaryStudent?pageIndex=${index}&pageSize=${size}&${keyword?`query=${keyword}`:''}`,
   studentPlayback: (recordId) => `/admin/estuary/list/${recordId}/listEstuaryRecordDetail`,
   studentLiveList: '/student/cecp/estuary/estuaryRecord',
-  consultantLiveList: (index, size, status, keyword) => `/consultant/cecp/estuary/listStudent?pageIndex=${index}&pageSize=${size}&liveStatus=${status}&${keyword?`query=${keyword}`:''}`,
+  consultantLiveList: (index, size, status, keyword) => `/consultant/cecp/estuary/listStudent?pageIndex=${index}&pageSize=${size}&liveStatus=${status}&${keyword?`keyword=${keyword}`:''}`,
   consultantList: (index, size, keyword) => `/admin/consultor/list/listAdminConsultor?pageIndex=${index}&pageSize=${size}&${keyword?`query=${keyword}`:''}`,
   estuaryRecordDetail: (recordId) => `/admin/estuary/${recordId}/getEstuaryRecordDetail`,
 }

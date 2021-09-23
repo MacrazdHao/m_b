@@ -296,7 +296,7 @@ export default {
           },
         },
       ];
-      if (info.currentConsultNum < info.totalConsultNum) {
+      if (info.currentConsultNum <= info.totalConsultNum) {
         options.push({
           text: this.$t("estuary.records.setTimeButton"),
           callback: (info, index) => {
