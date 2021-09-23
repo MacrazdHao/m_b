@@ -116,7 +116,7 @@ export default {
       return {
         ...this.consultInfo,
         nextConsultTitle: this.liveName,
-        nextConsultTimeLength: parseInt(this.consultTimeLong),
+        nextConsultTimeLength: parseInt(this.consultTimeLong * 60),
         nextConsultTime: this.consultTime,
       };
     },
