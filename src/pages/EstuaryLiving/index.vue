@@ -224,6 +224,7 @@ import SettingBox from "./components/SettingBox";
 import AgoraRTC from "agora-rtc-sdk";
 import defaultBackMixin from "@/mixins/defaultBack";
 import { getUsertype } from "@/utils/auth";
+import Cookies from "js-cookie";
 export default {
   mixins: [defaultBackMixin],
   components: {

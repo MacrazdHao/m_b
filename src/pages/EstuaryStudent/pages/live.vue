@@ -130,6 +130,7 @@ import SInput from "../components/input";
 import SButton from "@/components/common/button.vue";
 import PSelector from "@/components/common/selector";
 import DateUtils from "@/utils/date";
+import Cookies from "js-cookie";
 export default {
   components: {
     SPagination,
