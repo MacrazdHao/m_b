@@ -149,7 +149,7 @@ export default {
       this.consultTime = new Date(text).getTime();
     },
     confirmBtn() {
-      if (this.consultTimeLong <= 0) {
+      if (this.consultTimeLong <= 1) {
         this.$message.warning({
           text: this.$t("estuary.setConsultTimeBox.lessThanOneHourTips"),
         });
