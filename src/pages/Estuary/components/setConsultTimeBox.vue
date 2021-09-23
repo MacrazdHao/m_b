@@ -132,7 +132,7 @@ export default {
         .dispatch("estuary/getStudentConsultInfo", this._initInfo.recordId)
         .then((res) => {
           this.liveName = res.data.nextConsultTitle;
-          this.consultTimeLong = res.data.nextConsultTimeLength;
+          this.consultTimeLong = (res.data.nextConsultTimeLength / 60).toFixed(2);
           this.consultInfo = res.data;
           this.$nextTick(() => {
             this.$forceUpdate();
