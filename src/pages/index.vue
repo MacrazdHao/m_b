@@ -118,7 +118,8 @@
             <transition name="slide-fade">
               <div class="drawerBox" v-show="userMenuShow">
                 <div class="drawer">
-                  <div
+                  <!-- 后续开通个人中心 -->
+                  <!-- <div
                     class="drawer-item"
                     @click="goPersonal"
                     @mouseenter="userMenuHover = 'center'"
@@ -133,7 +134,7 @@
                       src="@/assets/index/icon_personal_selected.svg"
                     />
                     <p>{{ $t("home.header.personal") }}</p>
-                  </div>
+                  </div> -->
                   <div
                     class="drawer-item"
                     @click="logout"
