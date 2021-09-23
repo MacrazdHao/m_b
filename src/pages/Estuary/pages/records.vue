@@ -187,7 +187,12 @@
           <div class="infoBox">
             <p class="processTitle">{{ item.liveName }}</p>
             <p class="consultTime">
-              {{ getDateString(item.consultTime, "YYYY-MM-DD HH:mm") }}
+              {{
+                `${getDateString(
+                  item.startTime,
+                  "YYYY-MM-DD HH:mm"
+                )}-${getDateString(item.endTime, "HH:mm")}`
+              }}
             </p>
             <p class="consultTimes">
               {{ item.currentConsultNum }}{{ $t("modules.list.table.unit") }}
@@ -385,10 +390,10 @@ export default {
         });
     },
     watchRecord(url) {
-      if(!url) {
-          this.$message.warning({
-            text: this.$t("playback.list.unavailableRecordTips"),
-          });
+      if (!url) {
+        this.$message.warning({
+          text: this.$t("playback.list.unavailableRecordTips"),
+        });
         return;
       }
       window.open(this.$_default.ossUrl + url);
