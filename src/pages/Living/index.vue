@@ -556,6 +556,12 @@ export default {
           studentId: this.studentId,
         })
         .then((res) => {
+          if (!res) {
+            this.changingStatus = false;
+            this.$message.error({ text: this.$t("living.startLiveError") });
+            console.log("开启失败", err);
+            return;
+          }
           console.log("开启成功", res);
           this.status = !this.status;
           if (this.status && this.username == this.hostId) {
