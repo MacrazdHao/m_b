@@ -290,13 +290,9 @@ export default {
   },
   computed: {
     _goBack() {
+      let userType = getUsertype();
       return () => {
-        this._goBack({
-          otherName:
-            this.username == this.hostId
-              ? "estuaryConsultant"
-              : "estuaryStudentLive",
-        });
+        this.goBack({ index: userType == 3 ? 1 : userType == 11 ? 2 : 0 });
       };
     },
   },

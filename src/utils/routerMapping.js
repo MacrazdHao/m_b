@@ -59,7 +59,7 @@ export default {
     component: 'EstuaryLiving',
     meta: {
       // defaultPrevPath: ["", "/consultLive", "/live"],
-      defaultPrevName: ["index"],
+      defaultPrevName: ["index", "estuaryStudentLive", "estuaryConsultant"],
     }
     // redirect: 'dashboard',
   },
