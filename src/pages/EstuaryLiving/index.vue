@@ -315,6 +315,8 @@ export default {
   },
   methods: {
     statusToText(status) {
+      let title = Cookies.get("estuaryLivingTitle");
+      if (title) return title;
       let _status = Enum.getServerNodeStage(status);
       switch (_status) {
         case 0:

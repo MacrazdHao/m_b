@@ -200,6 +200,8 @@ export default {
         return;
       }
       // 从此处进入直播需要传入nextConsultTitle
+      Cookies.remove("estuaryLivingTitle");
+      Cookies.set("estuaryLivingTitle", info.nextConsultTitle);
       this.$router.push({
         name: "estuaryLiving",
         query: { roomId: info.liveId, estuary: 1 },

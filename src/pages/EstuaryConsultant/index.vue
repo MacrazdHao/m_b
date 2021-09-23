@@ -207,6 +207,7 @@ import SInput from "./components/input";
 import SButton from "@/components/common/button.vue";
 import PSelector from "@/components/common/selector";
 import DateUtils from "@/utils/date";
+import Cookies from "js-cookie";
 export default {
   components: {
     SPagination,
@@ -334,6 +335,8 @@ export default {
       this.$store
         .dispatch("estuary/getEstuaryRecordDetail", info.recordId)
         .then((res) => {
+          Cookies.remove("estuaryLivingTitle");
+          Cookies.set("estuaryLivingTitle", info.nextConsultTitle);
           this.$router.push({
             name: "estuaryLiving",
             query: { roomId: info.liveId },
