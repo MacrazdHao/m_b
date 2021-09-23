@@ -88,7 +88,9 @@
               <p class="tableRow-text tableRow-name">
                 {{
                   scope.row.currentConsultNum > 0
-                    ? scope.row.currentConsultNum - 1
+                    ? scope.row.liveStatus == -1
+                      ? scope.row.currentConsultNum
+                      : scope.row.currentConsultNum - 1
                     : 0
                 }}
               </p>
