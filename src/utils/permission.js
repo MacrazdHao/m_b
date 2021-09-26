@@ -57,10 +57,11 @@ router.beforeEach(async (to, from, next) => {
         // 未获取用户信息
         try {
           // 获取用户信息
-          await store.dispatch('user/getUserinfo')
-          getMessages()
-          // 组建动态路由
-          createDynamicRouter(to, next)
+          await store.dispatch('user/getUserinfo').then(res => {
+            getMessages()
+            // 组建动态路由
+            createDynamicRouter(to, next)
+          });
         } catch (error) {
           // 获取用户信息失败
           resetSystemRouter()

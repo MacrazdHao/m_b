@@ -406,6 +406,8 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+  height: 100%;
+  overflow: auto;
   background-color: #f1f2f6;
   p {
     margin: 0;
@@ -414,6 +416,7 @@ export default {
     background-color: #191a23;
     width: 240px;
     height: 100%;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     .logo {
@@ -500,6 +503,8 @@ export default {
   }
   .interface {
     width: calc(100% - 264px);
+    overflow: auto;
+    height: 100%;
     display: flex;
     flex-direction: column;
     .header {

@@ -148,14 +148,14 @@ export default {
         )
         .then((res) => {
           console.log(res);
-          if (this.redirect) {
-            this.$router.push({
-              path: this.redirect,
-              query: this.otherQuery,
-            });
-          } else {
-            this.$router.push({ path: "/index" });
-          }
+          // if (this.redirect) {
+          //   this.$router.push({
+          //     path: this.redirect,
+          //     query: this.otherQuery,
+          //   });
+          // } else {
+            // this.$router.push({ path: "/index" });
+          // }
         })
         .catch((err) => {
           console.log(err);
