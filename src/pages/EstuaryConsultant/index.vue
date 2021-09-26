@@ -124,7 +124,7 @@
                         "YYYY-MM-DD HH:mm"
                       )}-${getDateString(
                         scope.row.nextConsultTime +
-                          scope.row.nextConsultTimeLength * 60 * 60 * 1000,
+                          scope.row.nextConsultTimeLength * 60 * 1000,
                         "HH:mm"
                       )}`
                     : $t("estuary.records.hasNotNextTime")
