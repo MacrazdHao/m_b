@@ -87,7 +87,7 @@ export default {
       let nodeId = null;
       for (
         let i = this.$store.state.counseling.allNodeStatus.length - 1;
-        i > 0;
+        i >= 0;
         i--
       ) {
         let item = this.$store.state.counseling.allNodeStatus[i];
