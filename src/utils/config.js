@@ -23,7 +23,7 @@ export default {
     return process.env.GIT_COMMIT_VERSION;
   },
   getShortVersion: () => {
-    return process.env.GIT_COMMIT_VERSION.substring(process.env.GIT_COMMIT_VERSION.length - 8);
+    return process.env.GIT_COMMIT_VERSION.substring(5, 13);
   },
   setURL: (url) => {
     localStorage.setItem("myfellas_requestURL", url);
