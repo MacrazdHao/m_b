@@ -55,7 +55,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.value);
+    // console.log(this.value);
     this.valueTmp = this.value || "";
   },
   methods: {

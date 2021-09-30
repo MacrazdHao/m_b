@@ -17,6 +17,7 @@ import archives from './archives';
 import files from './files';
 import estuary from './estuary';
 import estuaryLiving from './estuaryLiving';
+import dashboard from './dashboard';
 import module111 from './modules111';
 
 Vue.use(Vuex);
@@ -39,6 +40,7 @@ export default new Vuex.Store({
     files,
     estuary,
     estuaryLiving,
+    dashboard,
     module111
   }
 });

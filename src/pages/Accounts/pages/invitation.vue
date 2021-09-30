@@ -9,9 +9,9 @@
           'font-size': '14px',
           'font-family': 'Roboto-Regular',
           'font-weight': '400',
-          'color': '#333333',
+          color: '#333333',
           'line-height': '16px',
-          'letter-spacing': '2px'
+          'letter-spacing': '2px',
         }"
         :value="icode"
         :disabled="true"
@@ -44,6 +44,19 @@ export default {
   methods: {
     createCode() {
       this.icode = "XJREWT";
+      this.$store
+        .dispatch("accounts/getInviteCode")
+        .then((res) => {
+          this.icode = res.data.inviteCode;
+          this.$message.message({
+            text: this.$t("accounts.invitation.createSuccess"),
+          });
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("accounts.invitation.createFail"),
+          });
+        });
     },
   },
 };

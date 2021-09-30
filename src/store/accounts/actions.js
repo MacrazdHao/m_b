@@ -60,6 +60,17 @@ export default {
       });
     });
   },
+  getInviteCode: ({ commit, state }) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.inviteCode).then(res => {
+        console.log('生成邀请码成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('生成邀请码失败', err);
+        reject(err);
+      });
+    });
+  },
 
   getSchoolList: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {

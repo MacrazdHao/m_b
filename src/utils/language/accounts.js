@@ -106,10 +106,12 @@ export default {
       codeTips: '邀请码有效期为3天，3天后邀请码会自动失效，失效需重新生成邀请码',
       createButton: '生成邀请码',
       copyCodeSuccess: '邀请码已复制',
-      copyCodeFail: '邀请码复制失败，请手动复制'
+      copyCodeFail: '邀请码复制失败，请手动复制',
+      createSuccess: '邀请码生成成功',
+      createFail: '邀请码生成失败，请重试'
     },
     copyAccountSuccess: '账号已复制',
-    copyAccountFail: '账号复制失败，请手动复制'
+    copyAccountFail: '账号复制失败，请手动复制',
   },
   en: {
     title: 'account management',
@@ -218,7 +220,9 @@ export default {
       codeTips: 'The invitation code is valid for 3 days. After 3 days, the invitation code will automatically become invalid. If it becomes invalid, you need to regenerate the invitation code.',
       createButton: 'generate invitation code',
       copyCodeSuccess: 'invitation code copied',
-      copyCodeFail: 'unable to paste invitation code, please try manually'
+      copyCodeFail: 'unable to paste invitation code, please try manually',
+      createSuccess: '邀请码生成成功',
+      createFail: '邀请码生成失败，请重试'
     },
     copyAccountSuccess: 'account copied',
     copyAccountFail: 'copy account failed, please try manually'

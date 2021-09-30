@@ -119,7 +119,7 @@
               <div class="drawerBox" v-show="userMenuShow">
                 <div class="drawer">
                   <!-- 后续开通个人中心 -->
-                  <!-- <div
+                  <div
                     class="drawer-item"
                     @click="goPersonal"
                     @mouseenter="userMenuHover = 'center'"
@@ -134,7 +134,7 @@
                       src="@/assets/index/icon_personal_selected.svg"
                     />
                     <p>{{ $t("home.header.personal") }}</p>
-                  </div> -->
+                  </div>
                   <div
                     class="drawer-item"
                     @click="logout"
@@ -242,7 +242,6 @@ export default {
     },
   },
   mounted() {
-    // console.log(this.$_default);
     for (let i = 0; i < this.$store.state.global.menu.children.length; i++) {
       let item = this.$store.state.global.menu.children[i];
       if (item.children) {

@@ -1,5 +1,6 @@
 export default {
   zh: {
+    getInfoError: '获取控制台信息失败，请刷新页面重试',
     student: {
       process: '进度',
       time: '时间',
@@ -99,6 +100,7 @@ export default {
     }
   },
   en: {
+    getInfoError: '获取控制台信息失败，请刷新页面重试',
     student: {
       process: 'progress',
       time: 'time',

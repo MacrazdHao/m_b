@@ -23,6 +23,12 @@
           <span>{{ `语言：${languageText}` }}</span>
         </p>
       </div>
+      <div class="statusItem">
+        <img class="icon" src="@/assets/testmenu/icon_version.svg" />
+        <p>
+          <span>{{ `版本号：${version}` }}</span>
+        </p>
+      </div>
     </div>
     <div class="menu" v-clickoutside="closeAllMenu">
       <div class="settingBox">
@@ -316,6 +322,7 @@ export default {
   directives: { Clickoutside },
   data() {
     return {
+      version: config.getShortVersion(),
       customUrl: "",
       customOssUrl: "",
       requestAgreement: "http://",

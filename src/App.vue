@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <span v-show="false">{{version}}</span>
     <TestConfigBox />
     <transition name="slide-fade2">
       <router-view style="flex: 1 0 auto" :language="language" />
@@ -8,6 +9,7 @@
 </template>
 
 <script>
+import config from "@/utils/config";
 import languageMixin from "./mixins/language";
 import TestConfigBox from "./components/test/testConfigBox_normal.vue";
 export default {
@@ -18,7 +20,7 @@ export default {
   },
   data() {
     return {
-      showTop: false,
+      version: config.getShortVersion(),
     };
   },
   mounted() {

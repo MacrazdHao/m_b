@@ -33,7 +33,9 @@
     <div class="info-itemBox info-itemBox-1">
       <div class="info-item">
         <div class="titleBox">
-          <p class="title">{{ $t("dashboard.admin.consultantManage.title") }}</p>
+          <p class="title">
+            {{ $t("dashboard.admin.consultantManage.title") }}
+          </p>
           <div class="moreButton">
             <p>{{ $t("dashboard.admin.moreButton") }}</p>
             <img src="@/assets/dashboard/icon_view.svg" />
@@ -111,6 +113,34 @@ export default {
       },
     };
   },
+  mounted() {
+    this.initData();
+  },
+  methods: {
+    initData() {
+      this.$store
+        .dispatch("dashboard/getAdminDashboardData")
+        .then((res) => {
+          this.schoolNum = {
+            school: res.data.schoolNum,
+            newSchool: res.data.curSchoolNum,
+          };
+          this.consultantNum = {
+            consultant: res.data.consultantNum,
+            newConsultant: res.data.curConsultantNum,
+          };
+          this.accountNum = {
+            admin: res.data.adminNum,
+            newAdmin: res.data.curAdminNum,
+          };
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("dashboard.getInfoError"),
+          });
+        });
+    },
+  },
 };
 </script>
 
@@ -142,7 +172,7 @@ export default {
         width: 100%;
         .title {
           font-size: 14px;
-          
+
           white-space: nowrap;
           color: #999999;
           line-height: 20px;
@@ -154,7 +184,7 @@ export default {
           cursor: pointer;
           p {
             font-size: 14px;
-            
+
             white-space: nowrap;
             color: #666666;
             line-height: 20px;
@@ -196,7 +226,7 @@ export default {
         margin-top: 26px;
         font-size: 14px;
         white-space: nowrap;
-        
+
         color: #666666;
         line-height: 20px;
         padding-bottom: 12px;
@@ -228,7 +258,7 @@ export default {
             margin-top: 26px;
             font-size: 14px;
             white-space: nowrap;
-            
+
             color: #666666;
             line-height: 20px;
           }
@@ -249,7 +279,7 @@ export default {
           width: 40.185%;
           .enterTitle {
             font-size: 14px;
-            
+
             white-space: nowrap;
             color: #666666;
             line-height: 20px;
@@ -257,7 +287,7 @@ export default {
           .enterNum {
             margin-left: 10px;
             font-size: 14px;
-            
+
             white-space: nowrap;
             color: #333333;
             line-height: 20px;

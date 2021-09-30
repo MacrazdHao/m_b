@@ -19,6 +19,12 @@ export default {
   getEnv: () => {
     return process.env.NODE_ENV;
   },
+  getFullVersion: () => {
+    return process.env.GIT_COMMIT_VERSION;
+  },
+  getShortVersion: () => {
+    return process.env.GIT_COMMIT_VERSION.substring(process.env.GIT_COMMIT_VERSION.length - 8);
+  },
   setURL: (url) => {
     localStorage.setItem("myfellas_requestURL", url);
     window.location.reload();

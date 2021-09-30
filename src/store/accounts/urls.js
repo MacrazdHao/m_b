@@ -9,4 +9,5 @@ export default {
   editSchoolPassword: (userId) => `/admin/userAdmin/account/${userId}/password`,
   deleteSchoolAccount: (userId) => `/admin/userAdmin/account/${userId}`,
   deleteSchoolAccounts: '/admin/userAdmin/account/batch',
+  inviteCode: '/admin/consultor/inviteCodes',
 }
