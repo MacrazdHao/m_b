@@ -28,6 +28,8 @@ export default {
               }, {
                 path: '/studentDashboard'
               }, {
+                path: '/consultantDashboard'
+              }, {
                 path: '/schedules'
               }]
             }, {

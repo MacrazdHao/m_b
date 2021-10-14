@@ -31,7 +31,7 @@
     <div class="info-itemBox info-itemBox-1">
       <div class="info-item">
         <div class="titleBox">
-          <p class="title">{{ $t("dashboard.school.fileNum.title") }}</p>
+          <p class="title">{{ $t("dashboard.consultant.fileNum.title") }}</p>
           <div class="moreButton" @click="goProfiles">
             <p>{{ $t("dashboard.school.moreButton") }}</p>
             <img src="@/assets/dashboard/icon_view.svg" />
@@ -42,10 +42,11 @@
         <div class="enterNumBox">
           <div class="enterItem">
             <p class="enterTitle">
-              {{ $t("dashboard.school.fileNum.newTitle") }}
+              {{ $t("dashboard.consultant.fileNum.newTitle") }}
             </p>
             <p class="enterNum">
-              {{ fileNum.today }}{{ $t("dashboard.school.fileNum.fileUnit") }}
+              {{ fileNum.today
+              }}{{ $t("dashboard.consultant.fileNum.fileUnit") }}
             </p>
           </div>
         </div>
@@ -62,41 +63,56 @@
         </div>
         <div class="totalBox">
           <div class="totalItem">
-            <p class="num">{{ accountNum.admin }}</p>
+            <p class="num">{{ stageNum.career }}</p>
             <p class="identity">
-              {{ $t("dashboard.school.accountManage.adminTitle") }}
+              {{ $t("dashboard.consultant.stage.career") }}
             </p>
           </div>
           <div class="totalItem">
-            <p class="num">{{ accountNum.admin }}</p>
+            <p class="num">{{ stageNum.course }}</p>
             <p class="identity">
-              {{ $t("dashboard.school.accountManage.teacherTitle") }}
+              {{ $t("dashboard.consultant.stage.course") }}
+            </p>
+          </div>
+          <div class="totalItem">
+            <p class="num">{{ stageNum.estuary }}</p>
+            <p class="identity">
+              {{ $t("dashboard.consultant.stage.estuary") }}
             </p>
           </div>
         </div>
         <div class="enterNumBox">
           <div class="enterItem">
             <p class="enterTitle">
-              {{ $t("dashboard.school.accountManage.newAdmin") }}
+              {{ $t("dashboard.consultant.stage.newItem") }}
             </p>
             <p class="enterNum">
-              {{ accountNum.newAdmin
-              }}{{ $t("dashboard.school.accountManage.peopleUnit") }}
+              {{ stageNum.newCareer
+              }}{{ $t("dashboard.consultant.stage.newUnit") }}
             </p>
           </div>
           <div class="enterItem">
             <p class="enterTitle">
-              {{ $t("dashboard.school.accountManage.newTeacher") }}
+              {{ $t("dashboard.consultant.stage.newItem") }}
             </p>
             <p class="enterNum">
-              {{ accountNum.newTeacher
-              }}{{ $t("dashboard.school.accountManage.peopleUnit") }}
+              {{ stageNum.newCourse
+              }}{{ $t("dashboard.consultant.stage.newUnit") }}
+            </p>
+          </div>
+          <div class="enterItem">
+            <p class="enterTitle">
+              {{ $t("dashboard.consultant.stage.newItem") }}
+            </p>
+            <p class="enterNum">
+              {{ stageNum.newEstuary
+              }}{{ $t("dashboard.consultant.stage.newUnit") }}
             </p>
           </div>
         </div>
       </div>
     </div>
-    <!-- <div class="info-itemBox info-itemBox-1">
+    <div class="info-itemBox info-itemBox-1">
       <div class="info-item">
         <div class="calendarBox">
           <div class="header">
@@ -159,7 +175,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -181,11 +197,13 @@ export default {
         total: 38,
         today: 9,
       },
-      accountNum: {
-        admin: 5,
-        teacher: 8,
-        newAdmin: 3,
-        newTeacher: 0,
+      stageNum: {
+        career: 0,
+        course: 0,
+        estuary: 0,
+        newCareer: 0,
+        newCourse: 0,
+        newEstuary: 0,
       },
       currentYear: new Date().getFullYear(),
       calendarMonth: new Date().getMonth() + 1,
@@ -219,26 +237,29 @@ export default {
     ...DateUtils,
     initData() {
       this.$store
-        .dispatch("dashboard/getSchoolDashboardData")
+        .dispatch("dashboard/getConsultantDashboardData", new Date().getTime())
         .then((res) => {
           this.studentNum = {
-            total: res.data.schoolAccountManagerDTO.totalStudentAccountNum,
-            today: res.data.schoolAccountManagerDTO.todayStudentAccountNum,
+            total: res.data.cecpInstanceSummaryDTO.totalStudentNum,
+            today: res.data.cecpInstanceSummaryDTO.todayStudentNum,
           };
           this.studentChart =
             res.data.cecpInstanceSummaryDTO.lastTwoWeekStudentNum;
           this.fileNum = {
-            total: res.data.schoolAccountManagerDTO.totalProfileNum || 0,
-            today: res.data.schoolAccountManagerDTO.todayProfileNum || 0,
+            total: res.data.cecpInstanceSummaryDTO.toConsultantNum || 0,
+            today: res.data.cecpInstanceSummaryDTO.todayConsultantNum || 0,
           };
-          this.accountNum = {
-            admin: res.data.schoolAccountManagerDTO.totalAdminAccountNum,
-            newAdmin: res.data.schoolAccountManagerDTO.todayAdminAccountNum,
-            teacher: res.data.schoolAccountManagerDTO.totalTeacherAccountNum,
-            newTeacher: res.data.schoolAccountManagerDTO.todayTeacherAccountNum,
+          this.stageNum = {
+            career: res.data.schoolAccountManagerDTO.totalAsteroidNum,
+            newCareer: res.data.schoolAccountManagerDTO.todayAsteroidNum,
+            course: res.data.schoolAccountManagerDTO.totalOnionNum,
+            newCourse: res.data.schoolAccountManagerDTO.todayOnionNum,
+            estuary: res.data.schoolAccountManagerDTO.totalEstuaryNum,
+            newEstuary: res.data.schoolAccountManagerDTO.todayEstuaryNum,
           };
         })
         .catch((err) => {
+          console.log(err);
           this.$message.error({
             text: this.$t("dashboard.getInfoError"),
           });
@@ -376,7 +397,8 @@ export default {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
-          width: 40.185%;
+          width: 33.33%;
+          // flex: 1;
           .num {
             font-size: 28px;
             white-space: nowrap;

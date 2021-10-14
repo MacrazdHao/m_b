@@ -119,6 +119,17 @@ export default {
     }
   },
   // 子子级
+  '/consultantDashboard': {
+    path: "consultantDashboard",
+    name: "consultantDashboard",
+    component: "pages/consultant",
+    meta: {
+      title: '工作台',
+      enTitle: 'Dashboard',
+      icon: "icon_workbench",
+    }
+  },
+  // 子子级
   '/schedules': {
     path: "schedules",
     name: "schedules",

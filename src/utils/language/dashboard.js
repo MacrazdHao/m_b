@@ -71,6 +71,20 @@ export default {
         today: '今天'
       }
     },
+    consultant: {
+      fileNum: {
+        title: 'CECP 待咨询档案',
+        newTitle: '今日完成',
+        fileUnit: '份'
+      },
+      stage: {
+        career: "职业发展咨询",
+        course: "大学课程和学科咨询",
+        estuary: "大学建议和偏好咨询",
+        newItem: '今日新增',
+        newUnit: '个',
+      }
+    },
     admin: {
       moreButton: '查看更多',
       cooperateManage: {
@@ -169,6 +183,20 @@ export default {
         nextMonth: 'next month',
         lastMonth: 'last month',
         today: 'today'
+      }
+    },
+    consultant: {
+      fileNum: {
+        title: 'CECP 待咨询档案',
+        newTitle: '今日完成',
+        fileUnit: '份'
+      },
+      stage: {
+        career: "Career Consultation",
+        course: "Acadmic Advisory",
+        estuary: "University exploration and suggestions",
+        newItem: 'new',
+        newUnit: '',
       }
     },
     admin: {

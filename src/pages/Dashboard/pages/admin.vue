@@ -4,7 +4,7 @@
       <div class="info-item">
         <div class="titleBox">
           <p class="title">{{ $t("dashboard.admin.cooperateManage.title") }}</p>
-          <div class="moreButton">
+          <div class="moreButton" @click="goSchoolList">
             <p>{{ $t("dashboard.admin.moreButton") }}</p>
             <img src="@/assets/dashboard/icon_view.svg" />
           </div>
@@ -36,7 +36,7 @@
           <p class="title">
             {{ $t("dashboard.admin.consultantManage.title") }}
           </p>
-          <div class="moreButton">
+          <div class="moreButton" @click="goConsultantList">
             <p>{{ $t("dashboard.admin.moreButton") }}</p>
             <img src="@/assets/dashboard/icon_view.svg" />
           </div>
@@ -66,7 +66,7 @@
       <div class="info-item">
         <div class="titleBox">
           <p class="title">{{ $t("dashboard.admin.accountManage.title") }}</p>
-          <div class="moreButton">
+          <div class="moreButton" @click="goAccountManagement">
             <p>{{ $t("dashboard.admin.moreButton") }}</p>
             <img src="@/assets/dashboard/icon_view.svg" />
           </div>
@@ -139,6 +139,15 @@ export default {
             text: this.$t("dashboard.getInfoError"),
           });
         });
+    },
+    goSchoolList() {
+      this.$router.push({ path: "/index/school/schoollist" });
+    },
+    goConsultantList() {
+      this.$router.push({ path: "/index/index/consultant" });
+    },
+    goAccountManagement() {
+      this.$router.push({ path: "/index/accounts/admin" });
     },
   },
 };
