@@ -6,10 +6,12 @@
       <div>
         <PInput
           class="input"
-          :value="username"
+          :disabled="hasParentAccount"
+          :value="parentAccount"
           :placeholder="$t('personal.account.parentsUserPlaceholder')"
+          @input="(text) => (parentAccount = text)"
         />
-        <p>@qlsfanglong.com</p>
+        <p>@myfellas.com</p>
       </div>
     </div>
     <div class="inputBox">
@@ -17,8 +19,10 @@
       <div>
         <PInput
           class="input"
-          :value="password"
+          :disabled="hasParentAccount"
+          :value="parentPassword"
           :placeholder="$t('personal.account.passwordPlaceholder')"
+          @input="(text) => (parentPassword = text)"
         />
       </div>
       <p class="tips">{{ $t("personal.account.passwordTips") }}</p>
@@ -32,9 +36,9 @@
           :placeholder="$t('personal.account.createUserPlaceholder')"
           :disabled="true"
         />
-        <p class="delete" v-if="result != ''">
+        <!-- <p class="delete" v-if="result != ''">
           {{ $t("personal.account.deleteButton") }}
-        </p>
+        </p> -->
       </div>
       <p class="tips" v-show="result != ''">
         {{ $t("personal.account.createUserTips") }}
@@ -59,16 +63,67 @@ export default {
   },
   data() {
     return {
-      username: "",
-      password: "",
+      hasParentAccount: false,
+      parentAccount: "",
+      parentPassword: "",
+      studentId: "",
       result: "",
     };
   },
+  computed: {
+    form() {
+      return {
+        parentAccount: this.parentAccount,
+        parentPassword: this.parentPassword,
+        studentId: this.studentId,
+        result: this.result,
+      };
+    },
+  },
+  mounted() {
+    this.initInfo();
+  },
   methods: {
+    initInfo() {
+      if (!this.$store.state.personal.accountInfo) {
+        this.$store
+          .dispatch("personal/getAccountInfo")
+          .then((res) => {
+            for (let key in res.data) {
+              this[key] = res.data[key];
+            }
+            if (res.data.parentAccount) {
+              this.hasParentAccount = true;
+              this.result = `${this.parentAccount}@myfellas.com`;
+            }
+          })
+          .catch((err) => {
+            this.$message.error({
+              text: this.$t("personal.account.getAccountInfoFail"),
+            });
+          });
+      } else {
+        for (let key in this.$store.state.personal.accountInfo) {
+          this[key] = this.$store.state.personal.accountInfo[key];
+        }
+      }
+    },
     createParentsUser() {
-
-    }
-  }
+      this.$store
+        .dispatch("personal/saveAccountInfo", this.form)
+        .then((res) => {
+          this.result = `${this.parentAccount}@myfellas.com`;
+          this.$message.message({
+            text: this.$t("personal.account.createAccountSuccess"),
+          });
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("personal.account.createAccountFail"),
+          });
+        });
+    },
+  },
 };
 </script>
 

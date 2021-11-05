@@ -87,7 +87,7 @@ export default {
     },
     schoolAccount() {
       let userType = getUsertype();
-      return userType == 1 || userType == 2;
+      return userType == 1;
     },
   },
   watch: {
@@ -97,7 +97,32 @@ export default {
       }
     },
   },
+  mounted() {
+    this.initInfo();
+  },
   methods: {
+    initInfo() {
+      if (!this.$store.state.personal.securityInfo) {
+        this.$store
+          .dispatch(
+            this.schoolAccount
+              ? "personal/getSchoolSecurityInfo"
+              : "personal/getSecurityInfo"
+          )
+          .then((res) => {
+            this.strengthLevel = res.data.passwordStrength + 1;
+          })
+          .catch((err) => {
+            this.$message.error({
+              text: this.$t("personal.base.failTips.getBaseInfoFail"),
+            });
+          });
+      } else {
+        for (let key in this.$store.state.personal.securityInfo) {
+          this[key] = this.$store.state.personal.securityInfo[key] + 1;
+        }
+      }
+    },
     editEmail() {
       if (this.email) this.showEmailBox = true;
       else this.showBindEmailBox = true;
@@ -115,6 +140,20 @@ export default {
           this.$message.message({
             text: this.$t("personal.safe.updateUserinfoSuccessTips"),
           });
+          this.$store
+            .dispatch(
+              this.schoolAccount
+                ? "personal/getSchoolSecurityInfo"
+                : "personal/getSecurityInfo"
+            )
+            .then((res) => {
+              this.strengthLevel = res.data.passwordStrength + 1;
+            })
+            .catch((err) => {
+              this.$message.error({
+                text: this.$t("personal.base.failTips.getBaseInfoFail"),
+              });
+            });
         })
         .catch((err) => {
           this.$message.message({

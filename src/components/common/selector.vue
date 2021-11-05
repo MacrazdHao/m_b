@@ -44,6 +44,13 @@ export default {
       menuFocus: false,
     };
   },
+  watch: {
+    index(val) {
+      if (val != this.indexTmp) {
+        this.indexTmp = val;
+      }
+    },
+  },
   mounted() {
     this.indexTmp = this.index;
     for (let i = 0; i < this.items.length; i++) {

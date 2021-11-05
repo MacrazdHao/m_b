@@ -62,6 +62,7 @@ export default {
       padding-right: 12px;
       flex: 1;
       height: 32px;
+      line-height: 32px;
       border-radius: 2px;
       border: 1px solid #d9d9d9;
       // border: 0;

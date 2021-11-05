@@ -11,15 +11,18 @@ export default {
       emailPlaceholder: '请输入您的邮箱',
       saveButton: '保存',
       successTips: {
+        saveBaseInfoSuccess: "保存基本信息成功",
         uploadSuccess: "上传成功",
         saveSuccess: '信息已保存',
       },
       failTips: {
+        saveBaseInfoFail: "保存基本信息失败，请重试",
+        getBaseInfoFail: "获取基本信息失败，请刷新重试",
         uploadBig: "图片过大，请重新选择",
         uploadType: "请选择png或jpg格式图片",
         uploadFail: "上传失败，请重试",
         saveFail: "保存失败，请重试"
-      }
+      },
     },
     sbase: {
       nameLabel: '名称',
@@ -47,12 +50,15 @@ export default {
       createUserTips: '家长账号只能创建一个',
       deleteButton: '删除',
       createButton: '生成账号',
+      getAccountInfoFail: "获取账号信息失败，请刷新重试",
+      createAccountSuccess: "生成账号成功",
+      createAccountFail: "生成账号失败，请重试",
     },
     safe: {
       title: '安全设置',
       userTitle: '账户密码',
       strengthTips: '当前密码强度：{strength}',
-      strength: '强 | 中 | 弱',
+      strength: '弱 | 中 | 强 | 很强',
       emailTitle: '邮箱账号',
       emailTips: '已绑定邮箱：',
       noEmailTips: '还没绑定邮箱',
@@ -126,10 +132,13 @@ export default {
       emailPlaceholder: 'please enter your address',
       saveButton: 'save',
       successTips: {
+        saveBaseInfoSuccess: "保存基本信息成功",
         uploadSuccess: "upload successfully",
         saveSuccess: 'saved successfully',
       },
       failTips: {
+        saveBaseInfoFail: "保存基本信息失败，请重试",
+        getBaseInfoFail: "获取基本信息失败，请刷新重试",
         uploadBig: "failed to save, please retry",
         uploadType: "Please select png or jpg format picture",
         uploadFail: "unable to uplod, please retry",
@@ -162,12 +171,15 @@ export default {
       createUserTips: 'Parents can only create one account',
       deleteButton: 'delete',
       createButton: 'generate account',
+      getAccountInfoFail: "获取账号信息失败，请刷新重试",
+      createAccountSuccess: "生成账号成功",
+      createAccountFail: "生成账号失败，请重试",
     },
     safe: {
       title: 'safety settings',
       userTitle: 'user password',
       strengthTips: 'Current password strength: {strength}',
-      strength: 'strong | medium | weak',
+      strength: 'weak | medium | strong | very strong',
       emailTitle: 'email address',
       emailTips: 'bind email：',
       noEmailTips: 'Email hasn\'t been bound yet',

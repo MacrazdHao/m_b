@@ -195,6 +195,7 @@ export default {
   }
   .coverBox {
     width: fit-content;
+    min-width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;

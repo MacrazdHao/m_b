@@ -2,11 +2,12 @@
   <div :class="['Input', focus ? 'Input--focus' : '']">
     <input
       :id="`input${time}`"
-      v-model="valueTmp"
+      v-bind:value="value"
       :placeholder="placeholder"
       :disabled="disabled"
       @focus="focus = true"
       @blur="focus = false"
+      @input="inputHandler"
     />
     <img v-if="copy" src="@/assets/archives/icon_copy.svg" @click="copy_info" />
   </div>
@@ -24,20 +25,15 @@ export default {
   ],
   data() {
     return {
-      valueTmp: "",
       focus: false,
       time: Math.random().toString(36).slice(2),
     };
   },
-  watch: {
-    valueTmp(val) {
-      this.$emit("input", val);
-    },
-  },
-  mounted() {
-    this.valueTmp = this.value;
-  },
   methods: {
+    inputHandler(e) {
+      this.$emit("input", e.target.value);
+      this.showList = true;
+    },
     copy_info() {
       let text = document.getElementById(`input${this.time}`);
       text.disabled = false;

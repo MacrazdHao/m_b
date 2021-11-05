@@ -16,12 +16,14 @@
         <div class="buttonBox">
           <CButton
             class="button"
+            v-if="!hideCancel"
             :text="cancelText || _i18n.t('global.dialog.cancel')"
             theme="white"
             @btnClick="closeBtn"
           />
           <CButton
             class="button"
+            v-if="!hideConfirm"
             :text="confirmText || _i18n.t('global.dialog.confirm')"
             theme="blue"
             @btnClick="confirmBtn"
@@ -36,7 +38,14 @@
 import CButton from "@/components/common/button.vue";
 import i18n from "@/utils/language";
 export default {
-  props: ["visible", "title", "cancelText", "confirmText"],
+  props: [
+    "visible",
+    "title",
+    "cancelText",
+    "confirmText",
+    "hideConfirm",
+    "hideCancel",
+  ],
   components: {
     CButton,
   },
@@ -53,6 +62,7 @@ export default {
   },
   watch: {
     visible(val) {
+      this.show = val;
       if (val) {
         document.body.style.overflow = "hidden";
       } else {
