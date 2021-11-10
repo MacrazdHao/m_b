@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     handleClick() {
-      this.$emit("btnClick", info);
+      this.$emit("btnClick", this.info);
     },
   },
 };

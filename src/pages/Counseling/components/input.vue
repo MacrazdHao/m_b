@@ -1,6 +1,6 @@
 <template>
   <div class="Input">
-    <p>{{ label }}：</p>
+    <p>{{ label }}</p>
     <input v-model="valueTmp" :placeholder="placeholder" :disabled="disabled" />
   </div>
 </template>
@@ -48,9 +48,7 @@ export default {
     box-sizing: border-box;
     // background: #000;
     font-size: 14px;
-    
     line-height: 20px;
-    margin-left: 29px;
     border-radius: 2px;
     border: 1px solid #d9d9d9;
     transition: all 0.1s;

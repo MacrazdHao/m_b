@@ -3,11 +3,12 @@
     <p class="title">{{ $t("personal.base.title") }}</p>
     <div class="avatarBox">
       <p class="title">{{ $t("personal.base.avatarTitle") }}</p>
-      <img :src="avatarUrl || this.$_default.avatar" />
+      <img :src="avatar" />
       <PButton
         class="upload"
         :text="$t('personal.base.avatarButton')"
         :icon="require('@/assets/personal/icon_upload.svg')"
+        @btnClick="uploadAvatar"
       />
     </div>
     <div class="inputBox">
@@ -32,6 +33,13 @@
       class="save"
       :text="$t('personal.base.saveButton')"
       @btnClick="saveInfo"
+    />
+    <input
+      ref="imupload"
+      type="file"
+      @change="uploadFile"
+      v-show="false"
+      accept=".png,.jpg"
     />
   </div>
 </template>
@@ -62,6 +70,13 @@ export default {
         email: this.email,
       };
     },
+    avatar() {
+      if (this.avatarUrl) {
+        return this.$_default.ossUrl + this.avatarUrl;
+      } else {
+        return this.$_default.avatar;
+      }
+    },
   },
   mounted() {
     this.initInfo();
@@ -72,7 +87,6 @@ export default {
         switch (parseInt(getUsertype())) {
           // 租户（学校）
           case 1:
-            console.log('1')
             return "personal/getSchoolBaseInfo";
           // 老师、学生、家长
           case 2:
@@ -105,6 +119,56 @@ export default {
           this[key] = this.$store.state.personal.baseInfo[key];
         }
       }
+    },
+    uploadAvatar() {
+      this.$refs.imupload.click();
+    },
+    uploadFile(e) {
+      let file = e.target;
+      if (!file || file.files.length == 0) return;
+      if (
+        (file.files[0].size > 20 * 1024 * 1024 && this.uploadType == "file") ||
+        (file.files[0].size > 5 * 1024 * 1024 && this.uploadType == "picture")
+      ) {
+        this.$message.warning({
+          text: this.$t("personal.base.failTips.uploadBig"),
+        });
+        return;
+      }
+      this.uploading = true;
+      let reader = new FileReader();
+      reader.readAsDataURL(file.files[0]);
+
+      let fileName = file.files[0].name;
+      let fileType = fileName.substring(
+        fileName.lastIndexOf(".") + 1,
+        fileName.length
+      );
+      if (fileType != "png" && fileType != "jpg") {
+        this.$message.warning({
+          text: this.$t("personal.base.failTips.uploadType"),
+        });
+        return;
+      }
+      if (!file.files || !file.files[0]) {
+        return;
+      }
+      let fd = new FormData();
+      fd.append("file", file.files[0]);
+      this.$store
+        .dispatch("global/uploadUserAvatar", fd)
+        .then((res) => {
+          console.log(res);
+          this.avatarUrl = res.data.url;
+          this.$message.message({
+            text: this.$t("personal.base.successTips.uploadSuccess"),
+          });
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("personal.base.failTips.uploadFail"),
+          });
+        });
     },
     saveInfo() {
       let path = (() => {

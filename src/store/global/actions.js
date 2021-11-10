@@ -3,6 +3,7 @@ import urls from './urls';
 import request from '../../utils/request';
 import * as cookie from 'js-cookie';
 import config from '@/utils/config';
+import RouterMode from "@/utils/routerMode";
 
 export default {
   test: ({ commit, state }, data) => {
@@ -14,7 +15,7 @@ export default {
   },
   getMenu: ({ commit, state }, data) => {
     return new Promise(resolve => {
-      if (process.env.NODE_ENV == "development") {
+      if (RouterMode.routerSetting.getRouterMode() == RouterMode.routerSetting.routerModes.testMode) {
         console.log('获取菜单路由')
         let res = [{
           path: '/index',
@@ -176,7 +177,7 @@ export default {
           path: '/estuaryLiving'
         }, {
           path: '/reportModule'
-        }]
+        }];
         commit(types.SET_MENU, res);
         resolve(res);
       } else {
@@ -202,6 +203,32 @@ export default {
   uploadAvatar: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
       request.post(urls.uploadAvatar, data, { "Content-Type": "multipart/form-data" }).then(res => {
+        if (res.data.url) {
+          res.data.url = res.data.url;
+        }
+        console.log(request.custom)
+        resolve(res);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  },
+  uploadUserAvatar: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.uploadUserAvatar, data, { "Content-Type": "multipart/form-data" }).then(res => {
+        if (res.data.url) {
+          res.data.url = res.data.url;
+        }
+        console.log(request.custom)
+        resolve(res);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  },
+  uploadAdminAvatar: ({ commit, state }, data) => {
+    return new Promise((resolve, reject) => {
+      request.post(urls.uploadAdminAvatar, data, { "Content-Type": "multipart/form-data" }).then(res => {
         if (res.data.url) {
           res.data.url = res.data.url;
         }

@@ -34,6 +34,8 @@ export default {
           china: "中国",
           foreign: "外国",
         },
+        uploadingFile: '正在上传上一个文件，请稍后再试',
+        deletingFile: '正在删除上一个文件，请稍后再试',
         uploadTips: '最多可以上传最近的三份成绩单，格式为pdf',
         uploadButton: '上传',
         deleteButton: '删除'
@@ -158,6 +160,8 @@ export default {
           china: "chinese",
           foreign: "foreign",
         },
+        uploadingFile: '正在上传上一个文件，请稍后再试',
+        deletingFile: '正在删除上一个文件，请稍后再试',
         uploadTips: 'You can upload up to three recent transcripts in pdf format',
         uploadButton: 'upload',
         deleteButton: 'delete'

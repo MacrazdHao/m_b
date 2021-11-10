@@ -89,6 +89,10 @@ export default {
       let userType = getUsertype();
       return userType == 1;
     },
+    isAdmin() {
+      let userType = getUsertype();
+      return userType == 10;
+    },
   },
   watch: {
     showEmailCodeBox(val) {
@@ -107,6 +111,8 @@ export default {
           .dispatch(
             this.schoolAccount
               ? "personal/getSchoolSecurityInfo"
+              : this.isAdmin
+              ? "personal/getAdminInfo"
               : "personal/getSecurityInfo"
           )
           .then((res) => {
@@ -144,6 +150,8 @@ export default {
             .dispatch(
               this.schoolAccount
                 ? "personal/getSchoolSecurityInfo"
+                : this.isAdmin
+                ? "personal/getAdminInfo"
                 : "personal/getSecurityInfo"
             )
             .then((res) => {

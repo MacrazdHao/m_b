@@ -3,7 +3,7 @@
     <p class="title">{{ $t("personal.base.title") }}</p>
     <div class="avatarBox">
       <p class="title">{{ $t("personal.base.avatarTitle") }}</p>
-      <img :src="fullAvatar" />
+      <img :src="avatar" />
       <PButton
         class="upload"
         :text="$t('personal.base.avatarButton')"
@@ -20,7 +20,7 @@
           :placeholder="$t('personal.base.namePlaceholder')"
           @input="
             (text) => {
-              name = text;
+              nickName = text;
             }
           "
         />
@@ -29,11 +29,7 @@
     <div class="inputBox">
       <p class="title">{{ $t("personal.cbase.accountLabel") }}</p>
       <div>
-        <PInput
-          class="input"
-          :value="$store.state.user.userinfo.account"
-          :disabled="true"
-        />
+        <PInput class="input" :value="username" :disabled="true" />
       </div>
     </div>
     <PButton
@@ -62,23 +58,55 @@ export default {
   },
   data() {
     return {
-      avatar: this.$store.state.user.userinfo.avatar,
-      name: "",
-      account: "",
-      uploading: false,
+      userId: "",
+      avatarUrl: null,
+      username: "",
+      nickName: "",
+      email: "",
     };
   },
   computed: {
-    fullAvatar() {
-      return this.avatar
-        ? this.$_default.ossUrl + this.avatar
-        : this.$_default.avatar;
+    form() {
+      return {
+        userId: this.userId,
+        avatarUrl: this.avatarUrl,
+        username: this.username,
+        nickName: this.nickName,
+        email: this.email,
+      };
+    },
+    avatar() {
+      if (this.avatarUrl) {
+        return this.$_default.ossUrl + this.avatarUrl;
+      } else {
+        return this.$_default.avatar;
+      }
     },
   },
   mounted() {
-    console.log(this.$store.state.user.userinfo.account);
+    this.initInfo();
   },
   methods: {
+    initInfo() {
+      if (!this.$store.state.personal.baseInfo) {
+        this.$store
+          .dispatch("personal/getAdminBaseInfo")
+          .then((res) => {
+            for (let key in res.data) {
+              this[key] = res.data[key];
+            }
+          })
+          .catch((err) => {
+            this.$message.error({
+              text: this.$t("personal.base.failTips.getBaseInfoFail"),
+            });
+          });
+      } else {
+        for (let key in this.$store.state.personal.baseInfo) {
+          this[key] = this.$store.state.personal.baseInfo[key];
+        }
+      }
+    },
     uploadAvatar() {
       this.$refs.imupload.click();
     },
@@ -115,10 +143,10 @@ export default {
       let fd = new FormData();
       fd.append("file", file.files[0]);
       this.$store
-        .dispatch("global/uploadAvatar", fd)
+        .dispatch("global/uploadAdminAvatar", fd)
         .then((res) => {
           console.log(res);
-          this.avatar = res.data.url;
+          this.avatarUrl = res.data.url;
           this.$message.message({
             text: this.$t("personal.base.successTips.uploadSuccess"),
           });
@@ -131,21 +159,15 @@ export default {
     },
     saveInfo() {
       this.$store
-        .dispatch("user/editAdminPersonalBase", {
-          avatar: this.avatar,
-          nickName: this.name,
-          userCode: this.$store.state.user.userinfo.userCode,
-          userId: this.$store.state.user.userinfo.userId,
-        })
+        .dispatch("personal/saveAdminBaseInfo", this.form)
         .then((res) => {
-          console.log(res);
           this.$message.message({
-            text: this.$t("personal.base.successTips.saveSuccess"),
+            text: this.$t("personal.base.successTips.saveBaseInfoSuccess"),
           });
         })
         .catch((err) => {
           this.$message.error({
-            text: this.$t("personal.base.failTips.saveFail"),
+            text: this.$t("personal.base.failTips.saveBaseInfoFail"),
           });
         });
     },

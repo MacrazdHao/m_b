@@ -77,7 +77,7 @@
                       :disableButton="
                         item2.uploadProgress < 100 && !item2.uploadError
                       "
-                      @btnClick="deleteFile(index)"
+                      @btnClick="(info) => deleteFile(index2, info)"
                     />
                   </div>
                   {{ "" }}
@@ -173,6 +173,8 @@ export default {
   },
   data() {
     return {
+      uploading: false,
+      deleting: false,
       sexData: [
         { name: this.$t("counseling.step1.baseInfo.sex.boy"), value: 0 },
         { name: this.$t("counseling.step1.baseInfo.sex.girl"), value: 1 },
@@ -204,7 +206,6 @@ export default {
       return this.$i18n.locale;
     },
     form() {
-      console.log(this.stateInfo);
       return {
         extracurricularStudy: this.extracurricular,
         gender: this.sex.value,
@@ -260,6 +261,18 @@ export default {
       this.$refs.fileUpload.click();
     },
     uploadFile(e) {
+      if (this.uploading) {
+        this.$message.warning({
+          text: this.$t("counseling.step1.baseInfo.uploadingFile"),
+        });
+        return;
+      }
+      if (this.scoreFiles.length == 3) {
+        this.$message.warning({
+          text: this.$t("counseling.step1.baseInfo.uploadTips"),
+        });
+        return;
+      }
       let file = e.target;
       if (!file || file.files.length == 0) return;
       if (file.files[0].size > 20 * 1024 * 1024) {
@@ -317,6 +330,8 @@ export default {
             fileURL: res.data.url,
             uploadProgress: 100,
           });
+          this.$refs.fileUpload.value = "";
+          this.uploading = false;
         })
         .catch((err) => {
           this.$message.error({
@@ -326,9 +341,23 @@ export default {
             ...this.scoreFiles[index],
             uploadError: true,
           });
+          this.$refs.fileUpload.value = "";
+          this.uploading = false;
         });
     },
-    deleteFile(index) {},
+    deleteFile(index, info) {
+      if (this.deleting) {
+        this.$message.warning({
+          text: this.$t("counseling.step1.baseInfo.deletingFile"),
+        });
+        return;
+      }
+      this.deleting = true;
+      this.scoreFiles = this.scoreFiles.filter((value, _index) => {
+        return _index != index;
+      });
+      this.deleting = false;
+    },
     submit() {
       this.$store
         .dispatch("counseling/submitBaseInfo", this.form)

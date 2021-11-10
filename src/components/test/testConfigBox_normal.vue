@@ -31,6 +31,12 @@
           </p>
         </div>
         <div class="statusItem">
+          <img class="icon" src="@/assets/testmenu/icon_version.svg" />
+          <p>
+            <span>{{ `路由模式：${routerMode}` }}</span>
+          </p>
+        </div>
+        <div class="statusItem">
           <img class="icon" src="@/assets/testmenu/icon_language.svg" />
           <p>
             <span>{{ `语言：${languageText}` }}</span>
@@ -331,6 +337,7 @@
 <script>
 import Clickoutside from "../common/utilsFromElement/clickoutside";
 import config from "@/utils/config";
+import RouterMode from "@/utils/routerMode";
 import {
   getLanguageJSONFile,
   getNoTranslateJSONFile,
@@ -341,6 +348,7 @@ export default {
   data() {
     return {
       version: config.getShortVersion(),
+      routerMode: RouterMode.routerSetting.getRouterMode(),
       customUrl: "",
       customOssUrl: "",
       requestAgreement: "http://",
@@ -397,6 +405,14 @@ export default {
           others: {
             customClick: this.showCustomOssUrl,
           },
+        },
+        {
+          title: "切换路由模式",
+          icon: require("@/assets/testmenu/icon_version.svg"),
+          click: () => {},
+          show: false,
+          customize: false,
+          options: this.routerModeOptions(),
         },
       ],
     };
@@ -617,6 +633,28 @@ export default {
           attach: this.getIP_PORT(config.urls.ossURL),
           value: config.urls.ossURL,
           callback: () => config.setOSSURL(config.urls.ossURL),
+        },
+      ];
+    },
+    routerModeOptions() {
+      return [
+        {
+          title: "测试模式",
+          attach: RouterMode.routerSetting.routerModes.testMode,
+          value: RouterMode.routerSetting.routerModes.testMode,
+          callback: () =>
+            RouterMode.routerSetting.setRouterMode(
+              RouterMode.routerSetting.routerModes.testMode
+            ),
+        },
+        {
+          title: "普通模式",
+          attach: RouterMode.routerSetting.routerModes.permissionMode,
+          value: RouterMode.routerSetting.routerModes.permissionMode,
+          callback: () =>
+            RouterMode.routerSetting.setRouterMode(
+              RouterMode.routerSetting.routerModes.permissionMode
+            ),
         },
       ];
     },

@@ -233,7 +233,7 @@
                 class="tableRow-text tableRow-button"
                 @click="toDetail(scope.row)"
               >
-                {{ $t("students.list.table.editButton") }}
+                {{ $t("students.list.table.watchButton") }}
               </p>
             </template>
           </el-table-column>

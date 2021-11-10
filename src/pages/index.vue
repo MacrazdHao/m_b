@@ -1,7 +1,10 @@
 <template>
   <div class="Index" id="index">
-    <div class="menu">
-      <img class="logo" src="@/assets/index/logo.svg" />
+    <div :class="['menu', showMenu ? 'menu--show' : 'menu--hide']">
+      <img class="logo" v-if="showMenu" src="@/assets/index/logo.svg" />
+      <div class="miniLogoBox" v-else>
+        <img class="" src="@/assets/index/logo_mini.svg" />
+      </div>
       <div class="route">
         <div
           class="menu-item"
@@ -14,6 +17,7 @@
                 'button',
                 pageName == item.meta.id ? 'button--selected' : '',
                 childrenMenu[item.meta.id] ? 'cmenu--selected' : '',
+                showMenu ? '' : 'button--miniMenu',
               ]"
               @click="selectItem([item], `/index/${item.path}`)"
             >
@@ -25,7 +29,7 @@
                     }.svg`)
                   "
                 />
-                <p>
+                <p :class="[showMenu ? '' : 'button-title--menuHiding']">
                   {{ language == "zh" ? item.meta.title : item.meta.enTitle }}
                 </p>
               </div>
@@ -35,15 +39,53 @@
                   childrenMenu[item.meta.id]
                     ? 'cmenuIcon--open'
                     : 'cmenuIcon--close',
+                  showMenu ? '' : 'cmenuIcon--menuHiding',
                 ]"
-                v-if="item.children && !item.meta.notShowChildren"
+                v-if="item.children && !item.meta.notShowChildren && showMenu"
                 :src="require(`@/assets/index/icon_pull.svg`)"
               />
+              <div
+                class="fixedChildren"
+                :data-routeid="item.meta.id"
+                :id="`/index/${item.path}`"
+                v-if="!showMenu && !item.meta.notShowChildren"
+              >
+                <div class="fixedChildrenInbox">
+                  <div v-for="(item2, index2) in item.children" :key="index2">
+                    <div
+                      :class="[
+                        'fixedChildrenButton',
+                        pageName == item2.meta.id
+                          ? 'fixedChildrenButton--selected'
+                          : '',
+                      ]"
+                      v-if="index2 > 0 && !item2.meta.notShowThisChild"
+                      @click="
+                        selectItem(
+                          [item, item2],
+                          `/index/${item.path}/${item2.path}`
+                        )
+                      "
+                    >
+                      <div class="fixedChildrenButton-title">
+                        <p>
+                          {{
+                            language == "zh"
+                              ? item2.meta.title
+                              : item2.meta.enTitle
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div
               class="children"
               :data-routeid="item.meta.id"
               :id="`/index/${item.path}`"
+              v-show="showMenu"
               v-if="!item.meta.notShowChildren"
             >
               <div v-for="(item2, index2) in item.children" :key="index2">
@@ -78,6 +120,11 @@
     <div class="interface">
       <div class="header">
         <div class="titleBox">
+          <img
+            :class="['menuToggle', showMenu ? '' : 'menuToggle--hiding']"
+            src="@/assets/index/icon_menu_toggle.svg"
+            @click="miniMenuToggle"
+          />
           <p class="title">{{ pageTitle }}</p>
           <div
             class="suffixMenu"
@@ -89,7 +136,6 @@
           </div>
         </div>
         <div class="toolsBar">
-          <!-- <p @click="logout">登出</p> -->
           <div class="messageIconBox" @click="goMessages">
             <img class="messages" src="@/assets/index/icon_news.svg" />
             <div class="num" v-if="$store.state.user.unreadNum > 0">
@@ -118,7 +164,6 @@
             <transition name="slide-fade">
               <div class="drawerBox" v-show="userMenuShow">
                 <div class="drawer">
-                  <!-- 后续开通个人中心 -->
                   <div
                     class="drawer-item"
                     @click="goPersonal"
@@ -175,10 +220,12 @@
 // import redirectMixin from "@/mixins/redirect";
 import { getUsertype } from "@/utils/auth";
 import languageMixin from "@/mixins/language";
+import Cookies from "js-cookie";
 export default {
   mixins: [languageMixin],
   data() {
     return {
+      showMenu: true,
       initial: true,
       pageName: "Dashboard",
       // pChildrenIsShow: "",
@@ -236,9 +283,17 @@ export default {
     $route: {
       handler: function (route) {
         this.suffixMenu = [];
+        if (
+          document.getElementsByClassName("interface")[0] &&
+          document.getElementsByClassName("interface")[0].scrollTop
+        )
+          document.getElementsByClassName("interface")[0].scrollTop = 0;
         this.routeChanged();
       },
       immediate: true,
+    },
+    showMenu(val) {
+      Cookies.set("myfellasPsychicMenuStatus", val);
     },
   },
   mounted() {
@@ -289,6 +344,9 @@ export default {
                   !this.childrenMenu[this.pagePath[0].meta.id]
                 );
               }
+              this.showMenu = JSON.parse(
+                Cookies.get("myfellasPsychicMenuStatus")
+              );
             }, 0);
           }
         }
@@ -336,12 +394,18 @@ export default {
         element.style.height = hide ? "0" : targetHeight;
       }, 0);
     },
+    miniMenuToggle() {
+      this.showMenu = !this.showMenu;
+      // 切换回普通菜单时，恢复到切换为mini菜单时的普通菜单中所有子菜单伸缩状态
+      this.routeChanged();
+    },
     selectItem(items, path) {
       if (!items[0].meta.notShowChildren) {
         if (items[0].children && items.length == 1) {
           // 打开子菜单
           this.pagePath = items;
-          if (this.pagePath[0]) {
+          // mini菜单时，不进行原子菜单伸缩动画
+          if (this.pagePath[0] && this.showMenu) {
             this.childrenMenu[this.pagePath[0].meta.id] =
               !this.childrenMenu[this.pagePath[0].meta.id];
             this.$forceUpdate();
@@ -406,22 +470,40 @@ export default {
   justify-content: space-between;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
   background-color: #f1f2f6;
+  position: relative;
   p {
     margin: 0;
+    user-select: none;
+  }
+  .menu--hide {
+    width: 52px !important;
   }
   .menu {
     background-color: #191a23;
     width: 240px;
     height: 100%;
-    overflow: auto;
+    overflow: auto initial;
     display: flex;
     flex-direction: column;
+    transition: 0.3s all;
     .logo {
       width: 149px;
       margin: 14px 20px 14px;
       cursor: pointer;
+    }
+    .miniLogoBox {
+      width: 100%;
+      padding: 18px 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      .logo--mini {
+        width: 30px;
+        height: 24px;
+      }
     }
     .route {
       height: 100%;
@@ -429,7 +511,11 @@ export default {
         .menu-item-inbox {
           display: flex;
           flex-direction: column;
+          .button--miniMenu {
+            padding: 15px 19px !important;
+          }
           .button {
+            position: relative;
             // max-height: 100px;
             width: 100%;
             box-sizing: border-box;
@@ -448,14 +534,24 @@ export default {
                 width: 14px;
                 // height: 14px;
               }
+              .button-title--menuHiding {
+                opacity: 0;
+              }
               p {
                 margin-left: 8px;
                 font-size: 14px;
                 color: #cccccc;
                 line-height: 20px;
+                white-space: nowrap;
+                transition: 0.3s all;
+                opacity: 1;
               }
             }
+            .cmenuIcon--menuHiding {
+              opacity: 0;
+            }
             .cmenuIcon {
+              opacity: 1;
               width: 14px;
               transition: all 0.3s;
             }
@@ -467,9 +563,57 @@ export default {
               // 调转箭头动画
               transform: rotate(180deg);
             }
+            .fixedChildren {
+              padding-left: 8px;
+              position: absolute;
+              top: 0;
+              right: 0px;
+              transform: translate(100%);
+              opacity: 0;
+              z-index: -10;
+              transition: 0.2s all;
+              .fixedChildrenInbox {
+                width: 160px;
+                background: #191a23;
+                border-radius: 6px;
+                overflow: hidden;
+                .fixedChildrenButton:hover {
+                  background-color: #4b78f6;
+                  .fixedChildrenButton-title {
+                    p {
+                      color: #fff;
+                    }
+                  }
+                }
+                .fixedChildrenButton--selected,
+                .fixedChildrenButton--selected:hover {
+                  background-color: #4b78f6;
+                  .fixedChildrenButton-title {
+                    p {
+                      color: #fff !important;
+                    }
+                  }
+                }
+                .fixedChildrenButton {
+                  width: 100%;
+                  padding: 12px 0;
+                  .fixedChildrenButton-title {
+                    p {
+                      font-size: 14px;
+                      color: #cccccc;
+                      line-height: 20px;
+                    }
+                  }
+                }
+              }
+            }
           }
-          .button:hover {
+          .button--miniMenu:hover {
             background-color: #242531;
+            .fixedChildren {
+              z-index: 100;
+              opacity: 0.9;
+            }
           }
           .button--selected,
           .button--selected:hover {
@@ -501,11 +645,14 @@ export default {
     }
   }
   .interface {
-    width: calc(100% - 264px);
+    // width: calc(100% - 264px);
+    margin-left: 24px;
+    flex: 1;
     overflow: auto;
     height: 100%;
     display: flex;
     flex-direction: column;
+    // transition: .3s all;
     .header {
       display: flex;
       flex-direction: row;
@@ -519,6 +666,16 @@ export default {
       .titleBox {
         display: flex;
         flex-direction: row;
+        align-items: center;
+        .menuToggle--hiding {
+          transform: rotate(180deg);
+        }
+        .menuToggle {
+          width: 22px;
+          height: 18px;
+          margin-right: 20px;
+          cursor: pointer;
+        }
         .title {
           font-size: 18px;
           line-height: 25px;
@@ -660,6 +817,7 @@ export default {
       margin-top: 24px;
       margin-right: 24px;
       width: calc(100% - 24px);
+      flex: 1;
     }
   }
 }

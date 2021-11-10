@@ -45,6 +45,8 @@ export default {
       }
     },
     detail: {
+      getStudentInfoFail: '获取学生信息失败，请重试',
+      noScoreTips: '暂无该学生的成绩信息',
       backButton: '返回'
     },
     process: {
@@ -79,7 +81,7 @@ export default {
         sex: "gender",
         country: "country",
         score:
-        "academic scoresheet",
+          "academic scoresheet",
         selfAssess:
           "Self-evaluation",
         extraStudy: "Extra-curricular program",
@@ -103,6 +105,7 @@ export default {
       }
     },
     detail: {
+      getStudentInfoFail: '获取学生信息失败，请重试',
       backButton: 'return'
     },
     process: {
