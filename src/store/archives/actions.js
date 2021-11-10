@@ -13,4 +13,15 @@ export default {
       });
     })
   },
+  getStudentInfo: ({ commit, state }, userId) => {
+    return new Promise((resolve, reject) => {
+      request.get(urls.studentInfo(userId)).then(res => {
+        console.log('获取学生信息成功', res);
+        resolve(res);
+      }).catch(err => {
+        console.log('获取学生信息失败', err);
+        reject(err);
+      });
+    })
+  },
 }

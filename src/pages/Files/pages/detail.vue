@@ -1,5 +1,5 @@
 <template>
-  <div class="Detail" v-if="info">
+  <div class="Detail" v-if="loaded">
     <div class="content">
       <div class="content-item baseInfoBox">
         <div class="title-box">
@@ -8,34 +8,44 @@
         </div>
         <div class="form">
           <div class="form-item">
-            <p class="item-label">
-              {{ $t("counseling.step1.baseInfo.school.label") }}：
-            </p>
-            <p class="item-content">{{ info.school }}</p>
+            <p class="item-label">{{ $t("students.detail.studentCode") }}：</p>
+            <p class="item-content">{{ userCode }}</p>
           </div>
           <div class="form-item">
             <p class="item-label">
               {{ $t("counseling.step1.baseInfo.name.label") }}：
             </p>
-            <p class="item-content">{{ info.name }}</p>
+            <p class="item-content">{{ nickName }}</p>
           </div>
           <div class="form-item">
             <p class="item-label">
               {{ $t("counseling.step1.baseInfo.class.label") }}：
             </p>
-            <p class="item-content">{{ info.grade }}</p>
+            <p class="item-content">{{ gradeName }}</p>
           </div>
           <div class="form-item">
             <p class="item-label">
               {{ $t("counseling.step1.baseInfo.sex.label") }}：
             </p>
-            <p class="item-content">{{ info.sex }}</p>
+            <p class="item-content">
+              {{
+                gender == 0
+                  ? $t("counseling.step1.baseInfo.sex.boy")
+                  : $t("counseling.step1.baseInfo.sex.girl")
+              }}
+            </p>
           </div>
           <div class="form-item">
             <p class="item-label">
               {{ $t("counseling.step1.baseInfo.country.label") }}：
             </p>
-            <p class="item-content">{{ info.country }}</p>
+            <p class="item-content">
+              {{
+                nation == 0
+                  ? $t("counseling.step1.baseInfo.country.china")
+                  : $t("counseling.step1.baseInfo.country.foreign")
+              }}
+            </p>
           </div>
         </div>
       </div>
@@ -45,21 +55,44 @@
           <p class="title">{{ $t("counseling.step1.academic.title") }}</p>
         </div>
         <div class="form">
-          <FormTextarea
-            class="formInput"
-            :label="$t('counseling.step1.academic.score.label')"
-            :placeholder="$t('counseling.step1.academic.score.placeholder')"
-            :value="info.score"
-            :maxLength="500"
-            :disabled="true"
-          />
+          <div class="scoreBox">
+            <p class="label">
+              {{ $t("counseling.step1.academic.score.label") }}：
+            </p>
+            <div class="scoreUploadBox">
+              <p class="uploadTips">
+                {{ $t("students.detail.noScoreTips") }}
+              </p>
+              <!-- <CButton
+                class="uploadButton"
+                :text="$t('counseling.step1.baseInfo.uploadButton')"
+                theme="wathat"
+                @btnClick="uploadScoreFile"
+              /> -->
+              <div class="filesBox">
+                <template v-for="(item2, index2) in scoreFiles">
+                  <div class="file" :key="index2">
+                    <FileBox
+                      :info="item2"
+                      :buttonText="$t('counseling.step1.baseInfo.deleteButton')"
+                      :disableButton="
+                        item2.uploadProgress < 100 && !item2.uploadError
+                      "
+                      @btnClick="watchScore"
+                    />
+                  </div>
+                  {{ "" }}
+                </template>
+              </div>
+            </div>
+          </div>
           <FormTextarea
             class="formInput"
             :label="$t('counseling.step1.academic.evaluation.label')"
             :placeholder="
               $t('counseling.step1.academic.evaluation.placeholder')
             "
-            :value="info.selfAssess"
+            :value="selfEvaluation"
             :maxLength="800"
             :disabled="true"
           />
@@ -69,7 +102,7 @@
             :placeholder="
               $t('counseling.step1.academic.extracurricular.placeholder')
             "
-            :value="info.extraStudy"
+            :value="extracurricularStudy"
             :maxLength="800"
             :disabled="true"
           />
@@ -85,7 +118,7 @@
             class="formInput"
             :label="$t('counseling.step1.hobby.book.label')"
             :placeholder="$t('counseling.step1.hobby.book.placeholder')"
-            :value="info.books"
+            :value="readingCategory"
             :maxLength="500"
             :disabled="true"
           />
@@ -93,10 +126,30 @@
             class="formInput"
             :label="$t('counseling.step1.hobby.sport.label')"
             :placeholder="$t('counseling.step1.hobby.sport.placeholder')"
-            :value="info.sports"
+            :value="sportHobby"
             :maxLength="800"
             :disabled="true"
           />
+        </div>
+      </div>
+      <div class="content-item baseInfoBox">
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ $t("students.detail.careerConsult") }}</p>
+        </div>
+        <div class="form">
+          <div class="form-item">
+            <p class="item-label" style="min-width: 138px">{{ $t("students.detail.consultLabel0") }}：</p>
+            <p class="item-content">{{ null||0 }}{{ $t("modules.list.table.unit") }}</p>
+          </div>
+          <div class="form-item">
+            <p class="item-label" style="min-width: 138px">{{ $t("students.detail.consultLabel1") }}：</p>
+            <p class="item-content">{{ null||0 }}{{ $t("modules.list.table.unit") }}</p>
+          </div>
+          <div class="form-item">
+            <p class="item-label" style="min-width: 138px">{{ $t("students.detail.consultLabel2") }}：</p>
+            <p class="item-content">{{ null||0 }}{{ $t("modules.list.table.unit") }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -116,26 +169,74 @@ import CButton from "@/components/common/button.vue";
 import FormInput from "../components/input.vue";
 // import FormRadio from "../components/radio.vue";
 import FormTextarea from "../components/textarea.vue";
+import FileBox from "@/components/common/file";
+import { getFileSizeString } from "@/utils/others";
 export default {
-  props: ["info"],
   components: {
     // Dialog,
     FormInput,
     // FormRadio,
     FormTextarea,
     CButton,
+    FileBox,
   },
-  watch: {
-    info(val) {
-      if (!val) return;
-      this.$emit("setSuffixMenu", [this.info.name]);
+  data() {
+    return {
+      loaded: false,
+      extracurricularStudy: "",
+      gender: null,
+      gradeId: null,
+      gradeName: null,
+      nation: null,
+      nickName: "",
+      readingCategory: "",
+      schoolId: null,
+      schoolName: null,
+      selfEvaluation: "",
+      sportHobby: "",
+      subjectAchievement: [],
+      userCode: "",
+    };
+  },
+  computed: {
+    scoreFiles() {
+      return this.subjectAchievement.map((value, index) => {
+        return {
+          fileURL: this.$_default.ossUrl + value.url,
+          fileName: value.name,
+          fileType: value.originFormat,
+          fileSize: getFileSizeString(parseInt(value.size), 2),
+          fileSizeNumber: parseInt(value.size),
+          uploadProgress: 100,
+          uploadError: false,
+        };
+      });
     },
   },
   mounted() {
-    if (!this.info) return;
-    this.$emit("setSuffixMenu", [this.info.name]);
+    this.initInfo();
   },
   methods: {
+    initInfo() {
+      this.loaded = false;
+      this.$store
+        .dispatch("students/getStudentInfo", this.$route.query.id)
+        .then((res) => {
+          this.$emit("setSuffixMenu", [res.data.nickName]);
+          for (let key in res.data) {
+            this[key] = res.data[key];
+          }
+          this.loaded = true;
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("students.detail.getStudentInfoFail"),
+          });
+        });
+    },
+    watchScore(info) {
+      window.open(info.url);
+    },
     goBack() {
       this.$emit("closeDetail");
     },
@@ -213,6 +314,7 @@ export default {
             font-size: 14px;
             color: #333333;
             line-height: 20px;
+            text-align: left;
           }
           .item-content {
             font-size: 14px;
@@ -225,6 +327,44 @@ export default {
         }
         .formInput + .formInput {
           margin-top: 24px;
+        }
+        .scoreBox {
+          display: flex;
+          flex-direction: row;
+          margin-left: 10px;
+          .label {
+            font-size: 14px;
+            color: #333333;
+            line-height: 20px;
+            white-space: nowrap;
+          }
+          .scoreUploadBox {
+            margin-left: 29px;
+            .uploadTips {
+              font-size: 14px;
+              color: #999999;
+              line-height: 20px;
+              text-align: left;
+            }
+            .uploadButton {
+              margin-top: 12px;
+            }
+            .filesBox {
+              // display: flex;
+              // flex-direction: row;
+              // flex-wrap: wrap;
+              margin-top: 16px;
+              margin-bottom: 6px;
+              letter-spacing: 60px;
+              text-align: left;
+              .file {
+                display: inline-block;
+                // margin-right: 60px;
+                margin-bottom: 18px;
+                letter-spacing: normal;
+              }
+            }
+          }
         }
       }
     }

@@ -8,6 +8,10 @@
         </div>
         <div class="form">
           <div class="form-item">
+            <p class="item-label">{{ $t("students.detail.studentCode") }}：</p>
+            <p class="item-content">{{ userCode }}</p>
+          </div>
+          <div class="form-item">
             <p class="item-label">
               {{ $t("counseling.step1.baseInfo.name.label") }}：
             </p>
@@ -126,6 +130,26 @@
             :maxLength="800"
             :disabled="true"
           />
+        </div>
+      </div>
+      <div class="content-item baseInfoBox">
+        <div class="title-box">
+          <div class="leftline"></div>
+          <p class="title">{{ $t("students.detail.careerConsult") }}</p>
+        </div>
+        <div class="form">
+          <div class="form-item">
+            <p class="item-label" style="min-width: 138px">{{ $t("students.detail.consultLabel0") }}：</p>
+            <p class="item-content">{{ null||0 }}{{ $t("modules.list.table.unit") }}</p>
+          </div>
+          <div class="form-item">
+            <p class="item-label" style="min-width: 138px">{{ $t("students.detail.consultLabel1") }}：</p>
+            <p class="item-content">{{ null||0 }}{{ $t("modules.list.table.unit") }}</p>
+          </div>
+          <div class="form-item">
+            <p class="item-label" style="min-width: 138px">{{ $t("students.detail.consultLabel2") }}：</p>
+            <p class="item-content">{{ null||0 }}{{ $t("modules.list.table.unit") }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -290,6 +314,7 @@ export default {
             font-size: 14px;
             color: #333333;
             line-height: 20px;
+            text-align: left;
           }
           .item-content {
             font-size: 14px;

@@ -45,9 +45,14 @@ export default {
       }
     },
     detail: {
+      studentCode: "学生编号",
       getStudentInfoFail: '获取学生信息失败，请重试',
       noScoreTips: '暂无该学生的成绩信息',
-      backButton: '返回'
+      backButton: '返回',
+      careerConsult: '生涯咨询',
+      consultLabel0: '职业发展咨询',
+      consultLabel1: '大学课程和学科咨询',
+      consultLabel2: '大学建议和偏好咨询',
     },
     process: {
       processTitle: '阶段分配',
@@ -105,8 +110,14 @@ export default {
       }
     },
     detail: {
+      studentCode: "学生编号",
       getStudentInfoFail: '获取学生信息失败，请重试',
-      backButton: 'return'
+      noScoreTips: '暂无该学生的成绩信息',
+      backButton: 'return',
+      careerConsult: '生涯咨询',
+      consultLabel0: 'Career Consultation',
+      consultLabel1: 'Acadmic Advisory',
+      consultLabel2: 'University exploration and suggestions',
     },
     process: {
       processTitle: 'process allocation',
