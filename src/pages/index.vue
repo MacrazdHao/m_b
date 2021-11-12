@@ -585,8 +585,15 @@ export default {
                     }
                   }
                 }
-                .fixedChildrenButton--selected,
                 .fixedChildrenButton--selected:hover {
+                  background-color: rgb(93, 134, 248);
+                  .button-title {
+                    p {
+                      color: #fff;
+                    }
+                  }
+                }
+                .fixedChildrenButton--selected {
                   background-color: #4b78f6;
                   .fixedChildrenButton-title {
                     p {
@@ -608,6 +615,13 @@ export default {
               }
             }
           }
+          .button:hover {
+            background-color: #20202c;
+            .fixedChildren {
+              z-index: 100;
+              opacity: 0.9;
+            }
+          }
           .button--miniMenu:hover {
             background-color: #242531;
             .fixedChildren {
@@ -615,8 +629,15 @@ export default {
               opacity: 0.9;
             }
           }
-          .button--selected,
           .button--selected:hover {
+            background-color: rgb(93, 134, 248);
+            .button-title {
+              p {
+                color: #fff;
+              }
+            }
+          }
+          .button--selected {
             background-color: #4b78f6;
             .button-title {
               p {
@@ -637,6 +658,25 @@ export default {
             transition: 0.3s height ease-in-out;
             overflow: hidden;
             background: #1f212c;
+            .button:hover {
+              background-color: rgb(39, 39, 53);
+            }
+            .button--selected:hover {
+              background-color: rgb(93, 134, 248);
+              .button-title {
+                p {
+                  color: #fff;
+                }
+              }
+            }
+            .button--selected {
+              background-color: #4b78f6;
+              .button-title {
+                p {
+                  color: #fff;
+                }
+              }
+            }
           }
           .hide {
           }
