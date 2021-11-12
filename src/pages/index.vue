@@ -653,6 +653,14 @@ export default {
               }
             }
           }
+          .cmenu--selected:hover {
+            background-color: #13141b;
+            .button-title {
+              p {
+                color: #fff;
+              }
+            }
+          }
           .children {
             height: 0;
             transition: 0.3s height ease-in-out;
