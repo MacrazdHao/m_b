@@ -196,7 +196,7 @@ export default {
   },
   saveConsultantBaseInfo: ({ commit, state }, data) => {
     return new Promise((resolve, reject) => {
-      request.put(urls.consultantBaseInfo).then(res => {
+      request.put(urls.consultantBaseInfo, data).then(res => {
         console.log('保存咨询师基本信息成功', res);
         commit(types.SET_BASEINFO, data);
         resolve(res);

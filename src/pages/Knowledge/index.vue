@@ -8,286 +8,168 @@
             <div v-show="!item.isRead"></div>
           </div>
           <div class="timeBox">
-            <p>{{ item.time }}</p>
+            <p>{{ item.time || "" }}</p>
             <img
               :class="[opening[index] ? 'pull--show' : 'pull--hide']"
               src="@/assets/knowledge/icon_pull.svg"
             />
           </div>
         </div>
-        <div class="fileList" :id="`child${item.id}`">
+        <div class="fileList" :id="`child${item.id || index}`">
           <p class="tips">{{ $t("knowledge.fileTips") }}：</p>
           <div class="filesBox">
-            <div
+            <!-- <div
               class="file"
               v-for="(item2, index2) in item.files"
               :key="index2"
             >
               <FileBox :info="item2" />
+            </div> -->
+            <div class="file">
+              <FileBox
+                :info="{
+                  fileName: item.reportName,
+                  fileType: 'pdf',
+                }"
+                :buttonText="$t('knowledge.watchButton')"
+                @btnClick="watchReport(index)"
+              />
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="pagination">
-      <p class="totalNum">
-        {{ $t("global.pagination.totalNum", { num: messages.length }) }}
-      </p>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :pager-count="5"
+      <SPagination
+        :page="page"
         :page-count="page.total"
         :current-page="page.current"
-      >
-      </el-pagination>
-      <div class="jumper">
-        <p>{{ $t("global.pagination.goPage") }}</p>
-        <div>
-          <input
-            v-model="pageNum"
-            type="number"
-            @focus="enterEvent"
-            @blur="removeEnterEvent"
-          />
-        </div>
-        <p>{{ $t("global.pagination.pageUnit") }}</p>
-      </div>
+        @goPage="goPage"
+        @prev-click="prevPage"
+        @next-click="nextPage"
+        @current-change="currentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import SPagination from "@/components/common/pagination";
 import FileBox from "@/components/common/file";
+import DateTools from "@/utils/date";
 export default {
   components: {
     FileBox,
+    SPagination,
   },
   data() {
     return {
+      loading: false,
+      error: false,
       opening: [],
-      messages: [
-        {
-          id: 100,
-          title: "方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: false,
-          files: [
-            {
-              fileURL: "",
-              fileName: "财务报告1.pdf",
-              fileType: "pdf",
-              fileSize: "9.03MB",
-            },
-            {
-              fileURL: "",
-              fileName: "财务报告2.pdf",
-              fileType: "pdf",
-              fileSize: "9.03MB",
-            },
-            {
-              fileURL: "",
-              fileName: "财务报告3.pdf",
-              fileType: "pdf",
-              fileSize: "9.03MB",
-            },
-            {
-              fileURL: "",
-              fileName: "财务报告4.pdf",
-              fileType: "pdf",
-              fileSize: "9.03MB",
-            },
-            {
-              fileURL: "",
-              fileName: "财务报告5.pdf",
-              fileType: "pdf",
-              fileSize: "9.03MB",
-            },
-          ],
-        },
-        {
-          id: 999,
-          title:
-            "方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: true,
-          files: [
-            {
-              fileURL: "",
-              fileName:
-                "超级天下无敌终极宇宙第一绝无仅有无与伦比超凡脱俗纯粹强劲到极致百分之百比珍珠还真的财务报告.pdf",
-              fileType: "pdf",
-              fileSize: "999.99MB",
-            },
-          ],
-        },
-        {
-          id: 9999,
-          title:
-            "方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: true,
-          files: [
-            {
-              fileURL: "",
-              fileName:
-                "超级天下无敌终极宇宙第一绝无仅有无与伦比超凡脱俗纯粹强劲到极致百分之百比珍珠还真的财务报告.pdf",
-              fileType: "pdf",
-              fileSize: "999.99MB",
-            },
-          ],
-        },
-        {
-          id: 99999,
-          title:
-            "方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: true,
-          files: [
-            {
-              fileURL: "",
-              fileName:
-                "超级天下无敌终极宇宙第一绝无仅有无与伦比超凡脱俗纯粹强劲到极致百分之百比珍珠还真的财务报告.pdf",
-              fileType: "pdf",
-              fileSize: "999.99MB",
-            },
-          ],
-        },
-        {
-          id: 999999,
-          title:
-            "方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: true,
-          files: [
-            {
-              fileURL: "",
-              fileName:
-                "超级天下无敌终极宇宙第一绝无仅有无与伦比超凡脱俗纯粹强劲到极致百分之百比珍珠还真的财务报告.pdf",
-              fileType: "pdf",
-              fileSize: "999.99MB",
-            },
-          ],
-        },
-        {
-          id: 9599,
-          title:
-            "方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: true,
-          files: [
-            {
-              fileURL: "",
-              fileName:
-                "超级天下无敌终极宇宙第一绝无仅有无与伦比超凡脱俗纯粹强劲到极致百分之百比珍珠还真的财务报告.pdf",
-              fileType: "pdf",
-              fileSize: "999.99MB",
-            },
-          ],
-        },
-        {
-          id: 9899,
-          title:
-            "方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: true,
-          files: [
-            {
-              fileURL: "",
-              fileName:
-                "超级天下无敌终极宇宙第一绝无仅有无与伦比超凡脱俗纯粹强劲到极致百分之百比珍珠还真的财务报告.pdf",
-              fileType: "pdf",
-              fileSize: "999.99MB",
-            },
-          ],
-        },
-        {
-          id: 975899,
-          title:
-            "方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: true,
-          files: [
-            {
-              fileURL: "",
-              fileName:
-                "超级天下无敌终极宇宙第一绝无仅有无与伦比超凡脱俗纯粹强劲到极致百分之百比珍珠还真的财务报告.pdf",
-              fileType: "pdf",
-              fileSize: "999.99MB",
-            },
-          ],
-        },
-        {
-          id: 923142199,
-          title:
-            "方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: true,
-          files: [
-            {
-              fileURL: "",
-              fileName:
-                "超级天下无敌终极宇宙第一绝无仅有无与伦比超凡脱俗纯粹强劲到极致百分之百比珍珠还真的财务报告.pdf",
-              fileType: "pdf",
-              fileSize: "999.99MB",
-            },
-          ],
-        },
-        {
-          id: 9324199,
-          title:
-            "方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: true,
-          files: [
-            {
-              fileURL: "",
-              fileName:
-                "超级天下无敌终极宇宙第一绝无仅有无与伦比超凡脱俗纯粹强劲到极致百分之百比珍珠还真的财务报告.pdf",
-              fileType: "pdf",
-              fileSize: "999.99MB",
-            },
-          ],
-        },
-        {
-          id: 9976439,
-          title:
-            "方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅方龙，您好，生涯文档已完成，请您查阅",
-          time: "2020-09-21 16:47",
-          isRead: true,
-          files: [
-            {
-              fileURL: "",
-              fileName:
-                "超级天下无敌终极宇宙第一绝无仅有无与伦比超凡脱俗纯粹强劲到极致百分之百比珍珠还真的财务报告.pdf",
-              fileType: "pdf",
-              fileSize: "999.99MB",
-            },
-          ],
-        },
-      ],
+      messages: [],
       pageNum: 1,
       page: {
-        total: 100,
+        dataNum: 0,
+        total: 10,
         size: 10,
         current: 1,
       },
     };
   },
+  computed: {
+    timestamp() {
+      return this.$route.query.timestamp;
+    },
+  },
+  watch: {
+    timestamp(val) {
+      console.log(val);
+      this.page = {
+        dataNum: 0,
+        total: 10,
+        size: 10,
+        current: 1,
+      };
+      this.messages = [];
+      this.initList();
+    },
+    loading(val) {
+      if (val) {
+        this.tableData = [];
+      }
+    },
+  },
   mounted() {
-    this.opening = Array.apply(null, Array(this.messages.length)).map(
-      () => false
-    );
-    // console.log(this.opening);
+    if (!this.$route.query.timestamp) {
+      this.$router.push({
+        path: "/index/knowledge",
+        query: { timestamp: new Date().getTime() },
+      });
+      return;
+    }
+    this.page = {
+      dataNum: 0,
+      total: 10,
+      size: 10,
+      current: 1,
+    };
+    this.messages = [];
+    this.initList();
   },
   methods: {
+    ...DateTools,
+    initList() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("knowledge/getMessages", {
+          pageIndex: this.page.current,
+          pageSize: this.page.size,
+          type: 1,
+        })
+        .then((res) => {
+          if (res.pageTotal != 0 && res.pageTotal < res.pageIndex) {
+            this.page = {
+              dataNum: res.total,
+              total: res.pageTotal,
+              size: 10,
+              current: res.pageIndex > 1 ? res.pageIndex - 1 : 1,
+            };
+            this.initList();
+            return;
+          }
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current,
+          };
+          this.messages = res.data;
+          this.opening = Array.apply(null, Array(this.messages.length)).map(
+            () => false
+          );
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.messages = [];
+          this.$message.error({
+            text: err || this.$t("messages.errorTips.nolist"),
+          });
+        });
+    },
     showFiles(index) {
       this.opening[index] = !this.opening[index];
       this.$forceUpdate();
       this.menuAnimate(
-        document.getElementById(`child${this.messages[index].id}`),
+        document.getElementById(`child${this.messages[index].id || index}`),
         !this.opening[index]
       );
+    },
+    watchReport(index) {
+      // 待修改：查看报告
     },
     menuAnimate(element, hide) {
       element.style.padding = "12px 30px 0 30px";
@@ -312,21 +194,144 @@ export default {
         element.style.opacity = hide ? "0" : "1";
       });
     },
-    goPage() {
-      this.page = {
-        ...this.page,
-        current: parseInt(this.pageNum),
-      };
+    readMessage(index) {
+      if (this.messages[index].readStatus) return;
+      this.$store
+        .dispatch("knowledge/readMessages", this.messages[index].id)
+        .then((res) => {
+          this.$set(this.messages, index, {
+            ...this.messages[index],
+            readStatus: true,
+          });
+          this.$store.dispatch("knowledge/getUnreadNum");
+        })
+        .catch((err) => {
+          // console.log("错，这是新数据", err);
+        });
     },
-    enterEvent() {
-      document.onkeydown = (event) => {
-        let e = event || window.event;
-        if (e && e.keyCode == 13) {
-          if (this.pageNum > this.page.total) this.pageNum = this.page.total;
-          else if (this.pageNum <= 0 || this.pageNum == "") this.pageNum = 1;
-          this.goPage();
-        }
-      };
+    goPage(pageNum) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("knowledge/getMessages", {
+          pageIndex: parseInt(pageNum),
+          pageSize: this.page.size,
+          type: 1,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(pageNum),
+          };
+          this.messages = res.data;
+          this.opening = Array.apply(null, Array(this.messages.length)).map(
+            () => false
+          );
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.messages = [];
+          this.$message.error({
+            text: err || this.$t("messages.errorTips.nolist"),
+          });
+        });
+    },
+    currentChange(num) {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("knowledge/getMessages", {
+          pageIndex: parseInt(num),
+          pageSize: this.page.size,
+          type: 1,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: parseInt(num),
+          };
+          this.messages = res.data;
+          this.opening = Array.apply(null, Array(this.messages.length)).map(
+            () => false
+          );
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.messages = [];
+          this.$message.error({
+            text: err || this.$t("messages.errorTips.nolist"),
+          });
+        });
+    },
+    prevPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("knowledge/getMessages", {
+          pageIndex: this.page.current - 1,
+          pageSize: this.page.size,
+          type: 1,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current - 1,
+          };
+          this.messages = res.data;
+          this.opening = Array.apply(null, Array(this.messages.length)).map(
+            () => false
+          );
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.messages = [];
+          this.$message.error({
+            text: err || this.$t("messages.errorTips.nolist"),
+          });
+        });
+    },
+    nextPage() {
+      this.error = false;
+      this.loading = true;
+      this.$store
+        .dispatch("knowledge/getMessages", {
+          pageIndex: this.page.current + 1,
+          pageSize: this.page.size,
+          type: 1,
+        })
+        .then((res) => {
+          this.page = {
+            dataNum: res.total,
+            total: res.pageTotal,
+            size: 10,
+            current: this.page.current + 1,
+          };
+          this.messages = res.data;
+          this.opening = Array.apply(null, Array(this.messages.length)).map(
+            () => false
+          );
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.messages = [];
+          this.$message.error({
+            text: err || this.$t("messages.errorTips.nolist"),
+          });
+        });
     },
     removeEnterEvent() {
       document.onkeydown = () => {};

@@ -16,9 +16,13 @@
       <div>
         <PInput
           class="input"
-          :value="username"
+          :value="nickName"
           :placeholder="$t('personal.sbase.namePlaceholder')"
-          @input="(text) => (username = text)"
+          @input="
+            (text) => {
+              nickName = text;
+            }
+          "
         />
       </div>
     </div>
@@ -59,6 +63,7 @@ export default {
       avatarUrl: null,
       username: "",
       email: "",
+      nickName: "",
     };
   },
   computed: {
@@ -68,6 +73,7 @@ export default {
         avatarUrl: this.avatarUrl,
         username: this.username,
         email: this.email,
+        nickName: this.nickName,
       };
     },
     avatar() {
@@ -100,25 +106,25 @@ export default {
             return "";
         }
       })();
-      console.log(path)
-      if (!this.$store.state.personal.baseInfo) {
-        this.$store
-          .dispatch(path)
-          .then((res) => {
-            for (let key in res.data) {
-              this[key] = res.data[key];
-            }
-          })
-          .catch((err) => {
-            this.$message.error({
-              text: this.$t("personal.base.failTips.getBaseInfoFail"),
-            });
+      console.log(path);
+      // if (!this.$store.state.personal.baseInfo) {
+      this.$store
+        .dispatch(path)
+        .then((res) => {
+          for (let key in res.data) {
+            this[key] = res.data[key];
+          }
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("personal.base.failTips.getBaseInfoFail"),
           });
-      } else {
-        for (let key in this.$store.state.personal.baseInfo) {
-          this[key] = this.$store.state.personal.baseInfo[key];
-        }
-      }
+        });
+      // } else {
+      //   for (let key in this.$store.state.personal.baseInfo) {
+      //     this[key] = this.$store.state.personal.baseInfo[key];
+      //   }
+      // }
     },
     uploadAvatar() {
       this.$refs.imupload.click();
@@ -159,7 +165,7 @@ export default {
         .dispatch("global/uploadUserAvatar", fd)
         .then((res) => {
           console.log(res);
-          this.avatarUrl = res.data.url;
+          this.avatarUrl = res.data.avatarUrl;
           this.$message.message({
             text: this.$t("personal.base.successTips.uploadSuccess"),
           });

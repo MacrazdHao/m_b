@@ -4,10 +4,16 @@
       <img :src="require(`@/assets/knowledge/${svgIcon}.svg`)" />
       <div class="detail">
         <p class="name">{{ info.fileName }}</p>
-        <p class="size">{{ info.fileSize }}</p>
+        <p class="size" v-if="info.fileSize || info.fileSize === 0">
+          {{ info.fileSize }}
+        </p>
         <Progress
           class="progress"
-          v-show="info.uploadProgress >= 0 && info.uploadProgress < 100"
+          v-show="
+            info.uploadProgress &&
+            info.uploadProgress >= 0 &&
+            info.uploadProgress < 100
+          "
           :width="132"
           :progress="info.uploadProgress"
           :error="info.uploadError"

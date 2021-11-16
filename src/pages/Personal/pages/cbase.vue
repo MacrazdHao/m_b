@@ -126,24 +126,24 @@ export default {
   },
   methods: {
     initInfo() {
-      if (!this.$store.state.personal.baseInfo) {
-        this.$store
-          .dispatch("personal/getConsultantBaseInfo")
-          .then((res) => {
-            for (let key in res.data) {
-              this[key] = res.data[key];
-            }
-          })
-          .catch((err) => {
-            this.$message.error({
-              text: this.$t("personal.base.failTips.getBaseInfoFail"),
-            });
+      // if (!this.$store.state.personal.baseInfo) {
+      this.$store
+        .dispatch("personal/getConsultantBaseInfo")
+        .then((res) => {
+          for (let key in res.data) {
+            this[key] = res.data[key];
+          }
+        })
+        .catch((err) => {
+          this.$message.error({
+            text: this.$t("personal.base.failTips.getBaseInfoFail"),
           });
-      } else {
-        for (let key in this.$store.state.personal.baseInfo) {
-          this[key] = this.$store.state.personal.baseInfo[key];
-        }
-      }
+        });
+      // } else {
+      //   for (let key in this.$store.state.personal.baseInfo) {
+      //     this[key] = this.$store.state.personal.baseInfo[key];
+      //   }
+      // }
     },
     uploadAvatar() {
       this.$refs.imupload.click();
@@ -179,12 +179,12 @@ export default {
         return;
       }
       let fd = new FormData();
-      fd.append("file", file.files[0]);
+      fd.append("avatarImg", file.files[0]);
       this.$store
         .dispatch("global/uploadUserAvatar", fd)
         .then((res) => {
           console.log(res);
-          this.avatarUrl = res.data.url;
+          this.avatarUrl = res.data.avatarUrl;
           this.$message.message({
             text: this.$t("personal.base.successTips.uploadSuccess"),
           });
