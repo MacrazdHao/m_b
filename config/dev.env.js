@@ -7,7 +7,11 @@ var fs = require('fs');
 var gitHEAD = fs.readFileSync('.git/HEAD', 'utf-8').trim();
 var ref = gitHEAD.split(': ')[1];
 var develop = gitHEAD.split('/')[2];
-var getVersion = fs.readFileSync('.git/' + ref, 'utf-8').trim();
+try {
+  var getVersion = fs.readFileSync('.git/' + ref, 'utf-8').trim();
+} catch (err) {
+  var getVersion = "new";
+}
 var gitCommitVersion = '"' + develop + ': ' + getVersion + '"';
 
 module.exports = merge(prodEnv, {
