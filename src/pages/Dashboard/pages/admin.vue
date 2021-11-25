@@ -229,6 +229,10 @@ export default {
           width: 4.255%;
           max-width: 24px;
           min-width: 12px;
+          transition: .2s all;
+        }
+        div:hover {
+          background: #68e1ff;
         }
       }
       .fileTitle {

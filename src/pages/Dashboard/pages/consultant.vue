@@ -371,6 +371,10 @@ export default {
           min-width: 12px;
           min-height: 3px;
           cursor: pointer;
+          transition: .2s all;
+        }
+        div:hover {
+          background: #68e1ff;
         }
       }
       .fileTitle {
