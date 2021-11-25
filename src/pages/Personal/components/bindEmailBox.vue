@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     seconds() {
-      return this.$store.state.global.phoneVCodeSeconds;
+      return this.$store.state.global.emailVCodeSeconds;
     },
   },
   watch: {

@@ -37,6 +37,12 @@
           </p>
         </div>
         <div class="statusItem">
+          <img class="icon" src="@/assets/testmenu/icon_version.svg" />
+          <p>
+            <span>{{ `登陆校验模式：${loginMode}` }}</span>
+          </p>
+        </div>
+        <div class="statusItem">
           <img class="icon" src="@/assets/testmenu/icon_language.svg" />
           <p>
             <span>{{ `语言：${languageText}` }}</span>
@@ -338,6 +344,7 @@
 import Clickoutside from "../common/utilsFromElement/clickoutside";
 import config from "@/utils/config";
 import RouterMode from "@/utils/routerMode";
+import LoginMode from "@/utils/loginMode";
 import {
   getLanguageJSONFile,
   getNoTranslateJSONFile,
@@ -349,6 +356,7 @@ export default {
     return {
       version: config.getShortVersion(),
       routerMode: RouterMode.routerSetting.getRouterMode(),
+      loginMode: LoginMode.loginModeSetting.getLoginMode(),
       customUrl: "",
       customOssUrl: "",
       requestAgreement: "http://",
@@ -413,6 +421,14 @@ export default {
           show: false,
           customize: false,
           options: this.routerModeOptions(),
+        },
+        {
+          title: "切换登陆校验模式",
+          icon: require("@/assets/testmenu/icon_version.svg"),
+          click: () => {},
+          show: false,
+          customize: false,
+          options: this.loginModeOptions(),
         },
       ],
     };
@@ -654,6 +670,28 @@ export default {
           callback: () =>
             RouterMode.routerSetting.setRouterMode(
               RouterMode.routerSetting.routerModes.permissionMode
+            ),
+        },
+      ];
+    },
+    loginModeOptions() {
+      return [
+        {
+          title: "无登陆校验模式",
+          attach: LoginMode.loginModeSetting.loginModes.noLoginMode,
+          value: LoginMode.loginModeSetting.loginModes.noLoginMode,
+          callback: () =>
+            LoginMode.loginModeSetting.setLoginMode(
+              LoginMode.loginModeSetting.loginModes.noLoginMode
+            ),
+        },
+        {
+          title: "登陆校验模式",
+          attach: LoginMode.loginModeSetting.loginModes.hasLoginMode,
+          value: LoginMode.loginModeSetting.loginModes.hasLoginMode,
+          callback: () =>
+            LoginMode.loginModeSetting.setLoginMode(
+              LoginMode.loginModeSetting.loginModes.hasLoginMode
             ),
         },
       ];
