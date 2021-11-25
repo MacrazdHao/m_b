@@ -135,7 +135,7 @@
             <p>{{ item }}</p>
           </div>
         </div>
-        <div class="toolsBar">
+        <div class="toolsBar" v-if="isHasLoginMode">
           <div class="messageIconBox" @click="goMessages">
             <img class="messages" src="@/assets/index/icon_news.svg" />
             <div class="num" v-if="$store.state.user.unreadNum > 0">
@@ -221,10 +221,12 @@
 import { getUsertype } from "@/utils/auth";
 import languageMixin from "@/mixins/language";
 import Cookies from "js-cookie";
+import LoginMode from "@/utils/loginMode";
 export default {
   mixins: [languageMixin],
   data() {
     return {
+      loginMode: LoginMode.loginModeSetting.getLoginMode(),
       showMenu: true,
       initial: true,
       pageName: "Dashboard",
@@ -237,6 +239,11 @@ export default {
     };
   },
   computed: {
+    isHasLoginMode() {
+      return (
+        this.LoginMode == LoginMode.loginModeSetting.loginModes.hasLoginMode
+      );
+    },
     // language() {
     //   return this.$store.state.global.language;
     // },
@@ -293,7 +300,7 @@ export default {
       immediate: true,
     },
     showMenu(val) {
-      Cookies.set("myfellasPsychicMenuStatus", val);
+      Cookies.set("myfellasMenuStatus", val);
     },
   },
   mounted() {
@@ -345,7 +352,7 @@ export default {
                 );
               }
               this.showMenu = JSON.parse(
-                Cookies.get("myfellasPsychicMenuStatus")
+                Cookies.get("myfellasMenuStatus")
               );
             }, 0);
           }

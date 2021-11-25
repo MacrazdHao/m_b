@@ -1,7 +1,7 @@
 const hasLoginMode = 'HasLoginMode';
 const noLoginMode = 'NoLoginMode';
 
-let loginMode = process.env.NODE_ENV == "development" ? localStorage.getItem("veminarMini_loginMode") || hasLoginMode : hasLoginMode;
+let loginMode = process.env.NODE_ENV == "development" ? localStorage.getItem("myfellas_loginMode") || hasLoginMode : hasLoginMode;
 
 export default {
   loginModeSetting: {
@@ -10,7 +10,7 @@ export default {
       return loginMode;
     },
     setLoginMode: (_mode) => {
-      localStorage.setItem("veminarMini_loginMode", _mode);
+      localStorage.setItem("myfellas_loginMode", _mode);
       window.location.reload();
     }
   }
