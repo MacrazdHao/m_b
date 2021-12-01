@@ -17,8 +17,10 @@
         width: '12px',
         height: '6px',
       }"
-      :maxHeight="144"
+      :maxHeight="listItemNum * itemHeight + 4"
+      :singleItemHeight="itemHeight"
       :overScroll="true"
+      :minWidth="minWidth || 120"
       @focus="handleFocus"
       @blur="handleBlur"
     />
@@ -33,7 +35,15 @@ import FixedMenu from "@/components/common/fixedMenu.vue";
   }]
 */
 export default {
-  props: ["items", "border", "index", "placeholder"],
+  props: [
+    "items",
+    "border",
+    "index",
+    "placeholder",
+    "singleItemHeight",
+    "showNum",
+    "minWidth",
+  ],
   components: {
     FixedMenu,
   },
@@ -49,6 +59,14 @@ export default {
       if (val != this.indexTmp) {
         this.indexTmp = val;
       }
+    },
+  },
+  computed: {
+    listItemNum() {
+      return this.showNum || 4;
+    },
+    itemHeight() {
+      return this.singleItemHeight || 34;
     },
   },
   mounted() {

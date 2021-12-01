@@ -25,18 +25,22 @@
           'overflow-x': 'hidden',
           'overflow-y':
             overScroll && menuContentHeight > maxHeight ? 'scroll' : 'hidden',
+          minWidth: `${minWidth || 120}px`,
         }"
         ref="menu"
         v-show="showMenu"
       >
         <div
           class="menu-item"
+          :style="{ height: `${itemHeight}px` }"
           :id="`menuItem${index}`"
           v-for="(item, index) in menu"
           :key="index"
           @click="handleSelect(index, item)"
         >
-          <p :id="`menuItemp${index}`">{{ item.text }}</p>
+          <p :id="`menuItemp${index}`">
+            {{ item.text }}
+          </p>
         </div>
       </div>
     </div>
@@ -80,6 +84,14 @@ export default {
       default: null,
       type: Number,
     },
+    minWidth: {
+      default: null,
+      type: Number,
+    },
+    singleItemHeight: {
+      default: null,
+      type: Number,
+    },
     overScroll: {
       default: false,
       type: Boolean,
@@ -91,13 +103,16 @@ export default {
     };
   },
   computed: {
+    itemHeight() {
+      return this.singleItemHeight || 34;
+    },
     height() {
-      if (34 * this.menu.length + 8 < this.maxHeight)
-        return 34 * this.menu.length + 8;
-      else return this.maxHeight || 34 * this.menu.length + 8;
+      if (this.itemHeight * this.menu.length + 8 < this.maxHeight)
+        return this.itemHeight * this.menu.length + 8;
+      else return this.maxHeight || this.itemHeight * this.menu.length + 8;
     },
     menuContentHeight() {
-      return 34 * this.menu.length + 8;
+      return this.itemHeight * this.menu.length + 8;
     },
   },
   watch: {
@@ -207,7 +222,6 @@ export default {
     // overflow: scroll;
     .menuBox {
       margin-top: 6px;
-      min-width: 120px;
       background: #ffffff;
       box-shadow: 0px 4px 8px 0px #e0e0e0;
       border-radius: 2px;
@@ -221,6 +235,9 @@ export default {
         cursor: pointer;
         width: 100%;
         transition: all 0.2s;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         p {
           width: 100%;
           font-size: 14px;
