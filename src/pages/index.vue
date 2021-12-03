@@ -147,20 +147,8 @@
             @mouseenter="userMenuShow = true"
             @mouseleave="userMenuShow = false"
           >
-            <img
-              class="avatar"
-              :src="
-                $store.state.user.userinfo.avatar
-                  ? $_default.ossUrl + $store.state.user.userinfo.avatar
-                  : $_default.avatar
-              "
-            />
-            <p class="nickname">
-              {{
-                $store.state.user.userinfo.nickName ||
-                $t("home.header.defaultName")
-              }}
-            </p>
+            <img class="avatar" :src="toolbarAvatar" />
+            <p class="nickname">{{ toolbarNickName }}</p>
             <transition name="slide-fade">
               <div class="drawerBox" v-show="userMenuShow">
                 <div class="drawer">
@@ -222,11 +210,11 @@ import { getUsertype } from "@/utils/auth";
 import languageMixin from "@/mixins/language";
 import Cookies from "js-cookie";
 import LoginMode from "@/utils/loginMode";
+const menuShowCookiesKey = "myfellasMenuStatus";
 export default {
   mixins: [languageMixin],
   data() {
     return {
-      loginMode: LoginMode.loginModeSetting.getLoginMode(),
       showMenu: true,
       initial: true,
       pageName: "Dashboard",
@@ -239,9 +227,27 @@ export default {
     };
   },
   computed: {
+    toolbarNickName() {
+      if (!this.$store.state.user.userinfo) {
+        return this.$t("home.header.defaultName");
+      }
+      return (
+        this.$store.state.user.userinfo.nickName ||
+        this.$t("home.header.defaultName")
+      );
+    },
+    toolbarAvatar() {
+      if (!this.$store.state.user.userinfo) {
+        return this.$_default.avatar;
+      }
+      return this.$store.state.user.userinfo.avatar
+        ? this.$_default.ossUrl + this.$store.state.user.userinfo.avatar
+        : this.$_default.avatar;
+    },
     isHasLoginMode() {
       return (
-        this.LoginMode == LoginMode.loginModeSetting.loginModes.hasLoginMode
+        LoginMode.loginModeSetting.getLoginMode() ==
+        LoginMode.loginModeSetting.loginModes.hasLoginMode
       );
     },
     // language() {
@@ -300,7 +306,7 @@ export default {
       immediate: true,
     },
     showMenu(val) {
-      Cookies.set("myfellasMenuStatus", val);
+      Cookies.set(menuShowCookiesKey, val);
     },
   },
   mounted() {
@@ -351,9 +357,6 @@ export default {
                   !this.childrenMenu[this.pagePath[0].meta.id]
                 );
               }
-              this.showMenu = JSON.parse(
-                Cookies.get("myfellasMenuStatus")
-              );
             }, 0);
           }
         }
@@ -388,6 +391,12 @@ export default {
         this.pageName =
           this.$route.matched[this.$route.matched.length - 2].meta.id;
       }
+      setTimeout(() => {
+        if (this.initial) {
+          this.showMenu = JSON.parse(Cookies.get(menuShowCookiesKey));
+          this.initial = false;
+        }
+      }, 100);
     },
     setSuffixMenu(arr, merge = false) {
       this.suffixMenu = merge ? [...this.suffixMenu, ...arr] : [...arr];

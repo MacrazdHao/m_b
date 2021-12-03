@@ -143,6 +143,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  background-color: #fff;
   p {
     margin: 0;
   }
