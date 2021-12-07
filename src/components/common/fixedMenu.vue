@@ -29,6 +29,7 @@
         }"
         ref="menu"
         v-show="showMenu"
+        @scroll="scrollToBottom"
       >
         <div
           class="menu-item"
@@ -164,8 +165,21 @@ export default {
       }, 0);
     },
     handleSelect(index, item) {
+      if (item.disabled) {
+        return;
+      }
       item.callback(this.extra, index);
       this.closeMenu();
+    },
+    scrollToBottom() {
+      if (
+        e.target.scrollTop / 34 >= this.associateList.length - 6 &&
+        this.associateList.length < this.associatePageInfo.dataNum
+      ) {
+        try {
+          this.$emit("scrollToBottom", e);
+        } catch (err) {}
+      }
     },
   },
 };

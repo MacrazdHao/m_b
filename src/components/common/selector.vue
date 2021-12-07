@@ -8,7 +8,13 @@
   >
     <FixedMenu
       class="dropper"
-      :text="indexTmp < 0 ? placeholder : items[indexTmp || 0].text"
+      :text="
+        indexTmp < 0
+          ? placeholder
+          : items.length == 0
+          ? ''
+          : items[indexTmp || 0].text
+      "
       :menu="optionsMenu"
       :showIcon="true"
       :iconUrl="require('@/assets/index/icon_pull_gray.svg')"
@@ -23,6 +29,7 @@
       :minWidth="minWidth || 120"
       @focus="handleFocus"
       @blur="handleBlur"
+      @scrollToBottom="scrollToBottom"
     />
   </div>
 </template>
@@ -60,6 +67,15 @@ export default {
         this.indexTmp = val;
       }
     },
+    items(val) {
+      this.optionsMenu = [];
+      this.indexTmp = this.index;
+      for (let i = 0; i < this.items.length; i++) {
+        let tmp = { text: "", callback: this.handleSelect };
+        tmp.text = this.items[i].text;
+        this.optionsMenu.push(tmp);
+      }
+    },
   },
   computed: {
     listItemNum() {
@@ -87,6 +103,9 @@ export default {
     },
     handleBlur(e) {
       this.menuFocus = false;
+    },
+    scrollToBottom() {
+      this.$emit("scrollToBottom", e);
     },
   },
 };
