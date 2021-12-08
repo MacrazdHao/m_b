@@ -104,7 +104,7 @@ export default {
     handleBlur(e) {
       this.menuFocus = false;
     },
-    scrollToBottom() {
+    scrollToBottom(e) {
       this.$emit("scrollToBottom", e);
     },
   },

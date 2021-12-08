@@ -171,10 +171,9 @@ export default {
       item.callback(this.extra, index);
       this.closeMenu();
     },
-    scrollToBottom() {
+    scrollToBottom(e) {
       if (
-        e.target.scrollTop / 34 >= this.associateList.length - 6 &&
-        this.associateList.length < this.associatePageInfo.dataNum
+        e.target.scrollTop / this.itemHeight >= this.menu.length - 6
       ) {
         try {
           this.$emit("scrollToBottom", e);
