@@ -197,7 +197,7 @@
       </div>
       <div class="content">
         <transition name="slide-fade2">
-          <router-view @setSuffixMenu="setSuffixMenu" />
+          <router-view v-if="isReload" @setSuffixMenu="setSuffixMenu" />
         </transition>
       </div>
     </div>
@@ -209,10 +209,11 @@
 import { getUsertype } from "@/utils/auth";
 import languageMixin from "@/mixins/language";
 import Cookies from "js-cookie";
+import reloadMixin from "@/mixins/reload";
 import LoginMode from "@/utils/loginMode";
 const menuShowCookiesKey = "myfellasMenuStatus";
 export default {
-  mixins: [languageMixin],
+  mixins: [languageMixin, reloadMixin],
   data() {
     return {
       showMenu: true,
