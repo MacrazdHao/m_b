@@ -242,7 +242,9 @@ export default {
         return this.$_default.avatar;
       }
       return this.$store.state.user.userinfo.avatar
-        ? this.$_default.ossUrl + this.$store.state.user.userinfo.avatar
+        ? this.$store.state.user.userinfo.avatar.indexOf("http") != -1
+          ? this.$store.state.user.userinfo.avatar
+          : this.$_default.ossUrl + this.$store.state.user.userinfo.avatar
         : this.$_default.avatar;
     },
     isHasLoginMode() {
