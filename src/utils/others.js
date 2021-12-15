@@ -63,24 +63,24 @@ export function letterToNum(letter) {
   }
 }
 export function numToChinese(num) {
-  if (i18n.locale == 'en') return num;
-  let changeNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
-  let unit = ["", "十", "百", "千", "万"];
-  num = parseInt(num);
-  if (num == 0) return changeNum[0];
-  let getWan = (temp) => {
-    let strArr = temp.toString().split("").reverse();
-    // console.log(strArr)
-    let newNum = "";
-    for (var i = 0; i < strArr.length; i++) {
-      newNum = (i == 0 && strArr[i] == 0 ? "" : (i > 0 && strArr[i] == 0 && strArr[i - 1] == 0 ? "" : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i]))) + newNum;
-    }
-    return newNum;
+  const arr1 = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
+  const arr2 = ['', '十', '百', '千']
+  if (!num || isNaN(num)) {
+    return '零'
   }
-  let overWan = Math.floor(num / 10000);
-  let noWan = num % 10000;
-  if (noWan.toString().length < 4) {
-    noWan = "0" + noWan;
+  const english = num.toString().split('')
+  let result = ''
+  for (let i = 0; i < english.length; i++) {
+    const des_i = english.length - 1 - i
+    result = arr2[i] + result
+    const arr1_index = english[des_i]
+    result = arr1[arr1_index] + result
+  }
+  result = result.replace(/零(千|百|十)/g, '零').replace(/十零/g, '十')
+  result = result.replace(/零+/g, '零')
+  result = result.replace(/零+$/, '')
+  result = result.replace(/^一十/g, '十')
+  return result
   }
   return overWan ? getWan(overWan) + "万" + getWan(noWan) : getWan(num);
 }
