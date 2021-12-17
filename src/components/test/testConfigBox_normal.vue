@@ -15,43 +15,59 @@
       </div>
       <div class="statusBox">
         <div class="statusItem">
+          <p
+            class="searchButton"
+            v-show="!showSearch"
+            @click="showSearch = true"
+          >
+            搜索
+          </p>
+          <input
+            class="searchInput"
+            placeholder="输入关键词快捷搜索"
+            v-model="searchKey"
+            v-show="showSearch"
+          />
+          <span class="closeSearchButton" v-show="showSearch" @click="showSearch = false">x</span>
+        </div>
+        <div class="statusItem" v-show="searchAim(0)">
           <img class="icon" src="@/assets/testmenu/icon_server.svg" />
           <p>
             <span>{{
-              `服务器：${status.requestObject.title}(${status.requestObject.value})`
+              `${labels[0]}：${status.requestObject.title}(${status.requestObject.value})`
             }}</span>
           </p>
         </div>
-        <div class="statusItem">
+        <div class="statusItem" v-show="searchAim(1)">
           <img class="icon" src="@/assets/testmenu/icon_server.svg" />
           <p>
             <span>{{
-              `OSS服务器：${status.ossObject.title}(${status.ossObject.value})`
+              `${labels[1]}：${status.ossObject.title}(${status.ossObject.value})`
             }}</span>
           </p>
         </div>
-        <div class="statusItem">
+        <div class="statusItem" v-show="searchAim(2)">
           <img class="icon" src="@/assets/testmenu/icon_version.svg" />
           <p>
-            <span>{{ `路由模式：${routerMode}` }}</span>
+            <span>{{ `${labels[2]}：${routerMode}` }}</span>
           </p>
         </div>
-        <div class="statusItem">
+        <div class="statusItem" v-show="searchAim(3)">
           <img class="icon" src="@/assets/testmenu/icon_version.svg" />
           <p>
-            <span>{{ `登陆校验模式：${loginMode}` }}</span>
+            <span>{{ `${labels[3]}：${loginMode}` }}</span>
           </p>
         </div>
-        <div class="statusItem">
+        <div class="statusItem" v-show="searchAim(4)">
           <img class="icon" src="@/assets/testmenu/icon_language.svg" />
           <p>
-            <span>{{ `语言：${languageText}` }}</span>
+            <span>{{ `${labels[4]}：${languageText}` }}</span>
           </p>
         </div>
-        <div class="statusItem">
+        <div class="statusItem" v-show="searchAim(5)">
           <img class="icon" src="@/assets/testmenu/icon_version.svg" />
           <p>
-            <span>{{ `版本号：${version}` }}</span>
+            <span>{{ `${labels[5]}：${version}` }}</span>
           </p>
         </div>
       </div>
@@ -354,6 +370,16 @@ export default {
   directives: { Clickoutside },
   data() {
     return {
+      labels: [
+        "服务器",
+        "OSS服务器",
+        "路由模式",
+        "登陆校验模式",
+        "语言",
+        "版本号",
+      ],
+      showSearch: false,
+      searchKey: "",
       version: config.getShortVersion(),
       routerMode: RouterMode.routerSetting.getRouterMode(),
       loginMode: LoginMode.loginModeSetting.getLoginMode(),
@@ -483,6 +509,11 @@ export default {
     },
   },
   methods: {
+    searchAim(index) {
+      if (!this.searchKey) return true;
+      if (this.labels[index].indexOf(this.searchKey) != -1) return true;
+      return false;
+    },
     closeLanguageDuplicateBox() {
       this.languageDuplicateBoxShow = false;
     },
@@ -852,6 +883,27 @@ export default {
           width: 14px;
           height: 13px;
           margin-right: 4px;
+        }
+        .searchButton {
+          white-space: nowrap;
+          cursor: pointer;
+          user-select: none;
+          border: 1px solid #333333;
+          padding: 0 2px
+        }
+        .searchInput {
+          width: 130px;
+        }
+        .closeSearchButton {
+          white-space: nowrap;
+          cursor: pointer;
+          user-select: none;
+          // border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          line-height: 16px;
+          overflow: hidden;
+          border: 1px solid #333333;
         }
       }
     }
