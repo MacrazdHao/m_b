@@ -81,9 +81,8 @@ export function numToChinese(num) {
   result = result.replace(/零+$/, '')
   result = result.replace(/^一十/g, '十')
   return result
-  }
-  return overWan ? getWan(overWan) + "万" + getWan(noWan) : getWan(num);
 }
+
 export function getFileSizeString(size, pointLength) {
   let unit;
   let units = ['B', 'KB', 'MB', 'GB'];
