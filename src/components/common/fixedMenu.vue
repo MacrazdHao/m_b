@@ -172,9 +172,7 @@ export default {
       this.closeMenu();
     },
     scrollToBottom(e) {
-      if (
-        e.target.scrollTop / this.itemHeight >= this.menu.length - 6
-      ) {
+      if (e.target.scrollTop / this.itemHeight >= this.menu.length - 6) {
         try {
           this.$emit("scrollToBottom", e);
         } catch (err) {}
@@ -208,6 +206,7 @@ export default {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      user-select: none;
     }
     .pull {
       margin-left: 8px;
@@ -256,6 +255,7 @@ export default {
           font-size: 14px;
           line-height: 20px;
           white-space: nowrap;
+          user-select: none;
         }
       }
       .menu-item:hover {
