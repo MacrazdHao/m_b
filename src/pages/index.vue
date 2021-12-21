@@ -514,11 +514,12 @@ export default {
     }
     .miniLogoBox {
       width: 100%;
-      padding: 18px 0;
+      padding: 18px 11px;
+      box-sizing: border-box;
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       .logo--mini {
         width: 30px;
         height: 24px;
