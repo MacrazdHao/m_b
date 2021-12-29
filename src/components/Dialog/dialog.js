@@ -3,6 +3,7 @@ import Dialog from './dialog.vue';
 const _Dialog = {};
 
 const defaultOptions = {
+  title: "",
   text: "",
   theme: "blue",
   confirm: false,
@@ -12,7 +13,8 @@ const defaultOptions = {
   close: false,
   showConfirm: true,
   showCancel: true,
-  showClose: true
+  showClose: true,
+  reverseButton: false,
 }
 
 _Dialog.install = (Vue) => {
@@ -36,8 +38,10 @@ _Dialog.install = (Vue) => {
           reject("cancel");
         }
         let instance = createDialog();
+        instance.title = _options.title;
         instance.text = (typeof _options.text) == 'string' ? [_options.text] : _options.text;
         instance.theme = _options.theme;
+        instance.reverseButton = _options.reverseButton;
         instance.confirm = () => {
           (_options.confirm ? (() => { console.log(_options.confirm); _options.confirm(); resolve(); }) : resolve)();
         }

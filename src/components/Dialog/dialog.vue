@@ -11,12 +11,20 @@
         </div>
         <div class="content">
           <img :src="require(`@/assets/index/icon_msg_${theme}.svg`)" />
-          <p class="title" v-html="_i18n.t('global.dialog.tipsTitle')"></p>
+          <p
+            class="title"
+            v-html="title || _i18n.t('global.dialog.tipsTitle')"
+          ></p>
           <div class="msg">
             <p v-for="(item, index) in text" :key="index">{{ item }}</p>
           </div>
         </div>
-        <div class="buttonBox">
+        <div
+          class="buttonBox"
+          :style="{
+            flexDirection: reverseButton ? 'row-reverse' : 'row',
+          }"
+        >
           <CButton
             :class="['button', cancelText.length > 2 ? 'shortPadding' : '']"
             :text="cancelText"
@@ -24,6 +32,7 @@
             @btnClick="cancelBtn"
             v-if="showCancel"
           />
+          <div style="width: 24px"></div>
           <CButton
             :class="['button', confirmText.length > 2 ? 'shortPadding' : '']"
             :text="confirmText"
@@ -47,6 +56,7 @@ export default {
   },
   data() {
     return {
+      title: null,
       text: [""],
       theme: "blue",
       confirm: () => {},
@@ -58,6 +68,7 @@ export default {
       showCancel: true,
       showConfirm: true,
       showClose: true,
+      reverseButton: false,
     };
   },
   computed: {
@@ -168,14 +179,10 @@ export default {
     }
     .buttonBox {
       display: flex;
-      flex-direction: row;
       margin-top: 34px;
       justify-content: center;
       .shortPadding {
         padding: 7px 13px;
-      }
-      .button + .button {
-        margin-left: 24px;
       }
     }
   }
