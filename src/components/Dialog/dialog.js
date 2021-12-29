@@ -60,6 +60,11 @@ _Dialog.install = (Vue) => {
         instance.visible = true;
       });
     },
+    success(options) {
+      return new Promise((resolve, reject) => {
+        this.showDialog({ ...options, theme: 'green' }).then(() => { resolve() }).catch(err => { reject(err) });
+      });
+    },
     // message(text, confirm = false, cancel = false, confirmText = "", cancelText = "", close = false) {
     message(options) {
       return new Promise((resolve, reject) => {
@@ -71,7 +76,7 @@ _Dialog.install = (Vue) => {
       return new Promise((resolve, reject) => {
         this.showDialog({ ...options, theme: 'red' }).then(() => { resolve() }).catch(err => { reject(err) });
       });
-    }
+    },
   };
   Vue.prototype.$dialog = DialogMain;
 }

@@ -16,7 +16,7 @@
             v-html="title || _i18n.t('global.dialog.tipsTitle')"
           ></p>
           <div class="msg">
-            <p v-for="(item, index) in text" :key="index">{{ item }}</p>
+            <p v-for="(item, index) in text" :key="index" v-html="item"></p>
           </div>
         </div>
         <div
