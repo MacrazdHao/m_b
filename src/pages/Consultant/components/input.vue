@@ -128,6 +128,7 @@ export default {
     font-size: 14px;
     color: #333333;
     line-height: 18px;
+    height: 18px;
   }
   ::-webkit-input-placeholder {
     /* WebKit, Blink, Edge */

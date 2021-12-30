@@ -122,6 +122,7 @@ export default {
     // background: #000;
     font-size: 14px;
     line-height: 20px;
+    height: 20px;
     // margin-left: 29px;
   }
   ::-webkit-input-placeholder {

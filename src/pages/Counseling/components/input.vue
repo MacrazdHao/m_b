@@ -49,6 +49,7 @@ export default {
     // background: #000;
     font-size: 14px;
     line-height: 20px;
+    height: 20px;
     border-radius: 2px;
     border: 1px solid #d9d9d9;
     transition: all 0.1s;
